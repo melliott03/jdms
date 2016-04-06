@@ -115,6 +115,8 @@ router.get("/", function(req,res){
     'Url' : 'https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml'
   });
 
+  var api = 'AC266d44c5ce01697df6f475b34f850d8f';
+  var auth = 'ee3db5ce904dd188912ea24b1646b46c';
   var options = {
     host: 'api.twilio.com',
     // path: '/2010-04-01/Accounts/<your api key>/Calls.xml',
@@ -124,8 +126,6 @@ router.get("/", function(req,res){
       'Content-Type' : 'application/x-www-form-urlencoded',
       'Content-Length' : postdata.length
     },
-    var api = 'AC266d44c5ce01697df6f475b34f850d8f';
-    var auth = 'ee3db5ce904dd188912ea24b1646b46c';
     auth: api + ':' + auth
   };
 
