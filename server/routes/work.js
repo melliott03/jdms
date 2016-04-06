@@ -95,7 +95,8 @@ router.get("/", function(req,res){
 
     url: "https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml", //"./public/assets/scripts/twiml.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
     to: "+16128121238", //+16122671744  "+16128121238" "+16129631395 Dev" 8023561672 Tommy
-    from: "+17637102473"
+    from: "+17637102473",
+    protocol:'https'
   }, function(err, call) {
     console.log('This call\'s unique ID is: ' + call.sid);
     console.log('This call was created at: ' + call.dateCreated);
