@@ -40,7 +40,7 @@ router.get("/", function(req,res){
 
    //ALL OF THE CODE BELOW WORKS...COMMENTED OUT TO TEST GEOCODER ABOVE
   //EMAIL
-  var sendSMSandVoice = function(){
+  // var sendSMSandVoice = function(){
   var nodemailer = require('nodemailer');
   // create reusable transporter object using the default SMTP transport
   var transporter = nodemailer.createTransport('smtps://modespeaking%40gmail.com:gwtexvqycbstxzvf@smtp.gmail.com');
@@ -93,8 +93,8 @@ router.get("/", function(req,res){
     //     response.send(titles);
     // });
 
-    url: "https://enigmatic-lowlands-90835.herokuapp.com/", //"./public/assets/scripts/twiml.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
-    to: "+16128121238", //+16122671744  "+16128121238" "+16129631395"
+    url: "https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xlm", //"./public/assets/scripts/twiml.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
+    to: "+18023561672", //+16122671744  "+16128121238" "+16129631395" 8023561672
     from: "+17637102473"
   }, function(err, call) {
     console.log('This call\'s unique ID is: ' + call.sid);
@@ -215,7 +215,7 @@ router.get("/", function(req,res){
     //end of query
 
   //MAP TRAFFIC CONDITIONS AND ALERTS
-};//bracket ends function decleration for sendSMSandVoice
+// };//bracket ends function decleration for sendSMSandVoice
 
 // agenda.schedule('1459946405', 'sendSMSandVoice');
 
