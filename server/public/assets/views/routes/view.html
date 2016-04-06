@@ -1,0 +1,42 @@
+<p>Inside Home Partial</p>
+
+<md-content layout-padding>
+    <div style="width : 600px; margin: 0 auto;">
+      <div ng-repeat="pet in pets.response">
+        <md-card>
+            <img ng-src="{{ pet.imageurl }}" class="md-card-image">
+
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">{{ pet.name }}</span>
+              </md-card-title-text>
+            </md-card-title>
+
+            <md-card-content>
+              <div>
+                <p>
+                    Age: {{ pet.age }}
+                </p>
+              </div>
+              <div>
+                <p>
+                    Animal Type: {{ pet.type }}
+                </p>
+              </div>
+              <div>
+                <h4>
+                    DETAILS:
+                </h4>
+                <p>
+                    {{ pet.details }}
+                </p>
+              </div>
+            </md-card-content>
+
+            <md-card-actions layout="row" layout-align="end center">
+              <md-button ng-click="deleteAnimal(pet)">Delete</md-button>
+            </md-card-actions>
+        </md-card>
+      </div>
+    </div>
+</md-content>

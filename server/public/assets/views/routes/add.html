@@ -1,0 +1,50 @@
+<md-content layout-padding>
+    <div style="width : 600px; margin: 0 auto;">
+      <div layout-align="center center" layout="column">
+          <h3 class="md-title">Work Information</h3>
+      </div>
+      <form name="animalEntry">
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Work</label>
+            <input ng-model="animal.name">
+          </md-input-container>
+
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Date & Time</label>
+            <input ng-model="animal.age">
+          </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Work Type</label>
+            <md-select ng-model="animal.type">
+              <md-option ng-repeat="animal in animals" >
+                {{animal}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Other Work Details</label>
+            <input ng-model="animal.details">
+          </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Image URL</label>
+            <input ng-model="animal.imageurl">
+          </md-input-container>
+        </div>
+
+        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+          <md-button ng-click="submit(animal)" class="md-raised">SUBMIT</md-button>
+        </section>
+      </form>
+    </div>
+  </md-content>
+</div>
