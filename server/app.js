@@ -71,13 +71,13 @@ agenda.define('greet the world', function(job, done) {
 });
 
 agenda.define('say hello', function(job, done) {
-  console.log('I waited 5 mins to say hi Mike!');
+  console.log('I waited 1 mins to say hi Mike!');
   done();
 });
 
 agenda.on('ready', function() {
   agenda.schedule('now', 'greet the world');
-  agenda.schedule('in 5 minutes', 'say hello');
+  agenda.schedule('in 1 minutes', 'say hello');
   agenda.start();
 });
 
