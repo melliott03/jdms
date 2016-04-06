@@ -82,63 +82,31 @@ router.get("/", function(req,res){
     // host:'https://enigmatic-lowlands-90835.herokuapp.com',
     // protocol:'https'
     // })
-
+  var https = require('https');
   client = twilio('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c'); //twilio('ACCOUNTSID', 'AUTHTOKEN'),
-  // client.calls.create({ //#BEGIN PHONE CALL
-  //   //https://studentrnd.org/build/tutorial-creating-a-reddit-browser-with-node-js-and-twilio
-  //
-  //   // restler.get('http://reddit.com/.json').on('complete', function(reddit) {
-  //   //     var titles = "<Response>";
-  //   //     for(var i=0; i<5; i++) {
-  //   //         titles += "<Sms>" + reddit.data.children[i].data.title + "</Sms>";
-  //   //     }
-  //   //     titles += "</Response>";
-  //   //     response.send(titles);
-  //   // });
-  //
-  //   url: "https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml", //"./public/assets/scripts/twiml.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
-  //   to: "+16128121238", //+16122671744  "+16128121238" "+16129631395 Dev" 8023561672 Tommy
-  //   from: "+17637102473",
-  //   method: get
-  // }, function(err, call) {
-  //   console.log('This call\'s unique ID is: ' + call.sid);
-  //   console.log('This call was created at: ' + call.dateCreated);
-  //   process.stdout.write(call.sid);
-  //   console.log('Received call from: ' + call.from);
-  //   // console.log('Call duration (in seconds): ' + call.Direction);
-  // }); //#END OF PHONE CALL
+  client.calls.create({//#BEGIN OF PHONE CALL
+    //https://studentrnd.org/build/tutorial-creating-a-reddit-browser-with-node-js-and-twilio
 
+    // restler.get('http://reddit.com/.json').on('complete', function(reddit) {
+    //     var titles = "<Response>";
+    //     for(var i=0; i<5; i++) {
+    //         titles += "<Sms>" + reddit.data.children[i].data.title + "</Sms>";
+    //     }
+    //     titles += "</Response>";
+    //     response.send(titles);
+    // });
 
-  var postdata = qs.stringify({
-    'From' : '+16128121238',
-    'To' : '+17637102473',
-    'Url' : 'https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml'
-  });
-
-  var api = 'AC266d44c5ce01697df6f475b34f850d8f';
-  var auth = 'ee3db5ce904dd188912ea24b1646b46c';
-  var options = {
-    host: 'api.twilio.com',
-    // path: '/2010-04-01/Accounts/<your api key>/Calls.xml',
-    port: 443,
-    method: 'POST',
-    headers: {
-      'Content-Type' : 'application/x-www-form-urlencoded',
-      'Content-Length' : postdata.length
-    },
-    auth: api + ':' + auth
-  };
-
-  var request = https.request(options, function(res){
-    res.setEncoding('utf8');
-    res.on('data', function(chunk){
-      console.log('Response: ' + chunk);
-    })
-  })
-
-  request.write(postdata);
-  request.end();
-
+    url: "https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml", //"./public/assets/scripts/twiml.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
+    to: "+16128121238", //+16122671744  "+16128121238" "+16129631395 Dev" 8023561672 Tommy
+    from: "+17637102473",
+    method: get
+  }, function(err, call) {
+    console.log('This call\'s unique ID is: ' + call.sid);
+    console.log('This call was created at: ' + call.dateCreated);
+    process.stdout.write(call.sid);
+    console.log('Received call from: ' + call.from);
+    // console.log('Call duration (in seconds): ' + call.Direction);
+  }); //#END OF PHONE CALL
 
   // client.calls.get(function(err, response) {
   //   response.calls.forEach(function(call) {
