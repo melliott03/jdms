@@ -63,26 +63,26 @@ var MongoDB = mongoose.connect(mongoURI).connection;
 // var agenda = new Agenda({db: {address: 'mongodb://localhost/work'}});
 
 // var mongoConnectionString = "mongodb://localhost/work";
-// var agenda = new Agenda({db: {address: mongoConnectionString}});
-//
-// agenda.define('greet the world', function(job, done) {
-//   console.log( 'I said hello world rightaway!');
-//   done();
-// });
-//
-// agenda.define('say hello', function(job, done) {
-//   console.log('I waited 5 mins to say hi Mike!');
-//   done();
-// });
-//
-// agenda.on('ready', function() {
-//   agenda.schedule('now', 'greet the world');
-//   agenda.schedule('in 5 minutes', 'say hello');
-//   agenda.start();
-// });
-//
-//
-// console.log('Wait 10 seconds...');
+var agenda = new Agenda({db: {address: mongoURI}});
+
+agenda.define('greet the world', function(job, done) {
+  console.log( 'I said hello world rightaway!');
+  done();
+});
+
+agenda.define('say hello', function(job, done) {
+  console.log('I waited 5 mins to say hi Mike!');
+  done();
+});
+
+agenda.on('ready', function() {
+  agenda.schedule('now', 'greet the world');
+  agenda.schedule('in 5 minutes', 'say hello');
+  agenda.start();
+});
+
+
+console.log('Wait 10 seconds...');
 //#AGENDA ABOVE
 
 MongoDB.on("error", function(err){
