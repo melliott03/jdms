@@ -47,9 +47,15 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 
-//MONGO SETUP
-var mongoURI = "mongodb://localhost/work";
-var MongoDB = mongoose.connect(mongoURI).connection;
+//MONGO SETUP for Heroku mLab
+var mongoURI =
+  process.env.MONGOLAB_URI ||
+  process.env.MONGOHQ_URL ||
+  'mongodb://localhost/work';
+var mongoDB = mongoose.connect(mongoURI).connection;
+
+// var mongoURI = "mongodb://localhost/work";
+// var MongoDB = mongoose.connect(mongoURI).connection;
 
 //#AGENDA BELOW
 // var agenda = new Agenda({db: {address: 'mongodb://localhost/work'}});
