@@ -1,5 +1,5 @@
- <?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
  <Response>
-     <Say>Hello World</Say>
-     <Play>https://api.twilio.com/Cowbell.mp3</Play>
+ <Say>Hello this is a message from Mike's work app. This is a reminder, you have an appointment on April 8 2016 at 10:00 AM. Please arrive 10 minutes early. Thank you!</Say>
+ <Play>https://api.twilio.com/Cowbell.mp3</Play>
  </Response>
