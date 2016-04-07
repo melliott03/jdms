@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 
-router.get("/", function(req,res){
+router.post("/", function(req,res){
 
   // Twilio request authentication with custom URL
     // var options = { url: 'https://enigmatic-lowlands-90835.herokuapp.com/' };
@@ -80,7 +80,7 @@ client.makeCall({
       else {
         res.status(403).send('you are not twilio. Buzz off.');
       }
-    
+
 
 
 });
