@@ -241,42 +241,103 @@ router.get("/", function(req,res){
 // // };
 // // //END PHONE CALL
 
-//START NEW PHONE CALL http://stackoverflow.com/questions/11800385/node-js-and-twilio-integration
-var https = require('https');
-var qs = require('querystring');
-var username = "432asfD";
-var password = "jlkajf32321fd";
-var api = 'AC266d44c5ce01697df6f475b34f850d8f'; //'your api key';
-var auth = 'ee3db5ce904dd188912ea24b1646b46c'; //'your auth token';
+// //START NEW PHONE CALL http://stackoverflow.com/questions/11800385/node-js-and-twilio-integration
+// var https = require('https');
+// var qs = require('querystring');
+// var username = "432asfD";
+// var password = "jlkajf32321fd";
+// var api = 'AC266d44c5ce01697df6f475b34f850d8f'; //'your api key';
+// var auth = 'ee3db5ce904dd188912ea24b1646b46c'; //'your auth token';
+//
+// var postdata = qs.stringify({
+//     'From' : '+17637102473',
+//     'To' : '+16128121238',
+//     'Url' : "https://" + username + ":" + password + "@enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml"
+// });
+//
+// var options = {
+//     host: 'api.twilio.com',
+//     path: '/2010-04-01/Accounts/AC266d44c5ce01697df6f475b34f850d8f/Calls.xml', //'/2010-04-01/Accounts/<your api key>/Calls.xml',
+//     port: 443,
+//     method: 'POST',
+//     headers: {
+//         'Content-Type' : 'application/x-www-form-urlencoded',
+//         'Content-Length' : postdata.length
+//     },
+//     auth: api + ':' + auth
+// };
+//
+// var request = https.request(options, function(res){
+//     res.setEncoding('utf8');
+//     res.on('data', function(chunk){
+//         console.log('Response: ' + chunk);
+//     })
+// })
+//
+// request.write(postdata);
+// request.end();
+// //END NEW PHONE CALL
 
-var postdata = qs.stringify({
-    'From' : '+17637102473',
-    'To' : '+16128121238',
-    'Url' : "https://" + username + ":" + password + "@enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml"
+
+//START ANOTHER PHONE CALL
+
+var sys = require('sys'),
+    TwilioClient = require('twilio').Client,
+    client = new TwilioClient('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c', 'https://enigmatic-lowlands-90835.herokuapp.com'); //TwilioClient(ACCOUNT_SID, AUTH_TOKEN, MY_HOSTNAME);
+
+var phone = client.getPhoneNumber('+17637102473');
+
+phone.setup(function() {
+
+    // Alright, our phone number is set up. Let's, say, make a call:
+    phone.makeCall('+16128121238', null, function(call) {
+
+        // 'call' is an OutgoingCall object. This object is an event emitter.
+        // It emits two events: 'answered' and 'ended'
+        call.on('answered', function(reqParams, res) {
+
+            // reqParams is the body of the request Twilio makes on call pickup.
+            // For instance, reqParams.CallSid, reqParams.CallStatus.
+            // See: http://www.twilio.com/docs/api/2010-04-01/twiml/twilio_request
+            // res is a Twiml.Response object. This object handles generating
+            // a compliant Twiml response.
+
+            console.log('Call answered');
+
+            // We'll append a single Say object to the response:
+            res.append(new Twiml.Say('Hello, there!'));
+
+            // And now we'll send it.
+            res.send();
+        });
+
+        call.on('ended', function(reqParams) {
+            console.log('Call ended');
+        });
+    });
+
+    // But wait! What if our number receives an incoming SMS?
+    phone.on('incomingSms', function(reqParams, res) {
+
+        // As above, reqParams contains the Twilio request parameters.
+        // Res is a Twiml.Response object.
+
+        console.log('Received incoming SMS with text: ' + reqParams.Body);
+        console.log('From: ' + reqParams.From);
+    });
+
+    // Oh, and what if we get an incoming call?
+    phone.on('incomingCall', function(reqParams, res) {
+
+        res.append(new Twiml.Say('Thanks for calling! I think you are beautiful!'));
+        res.send();
+    });
 });
 
-var options = {
-    host: 'api.twilio.com',
-    path: '/2010-04-01/Accounts/AC266d44c5ce01697df6f475b34f850d8f/Calls.xml', //'/2010-04-01/Accounts/<your api key>/Calls.xml',
-    port: 443,
-    method: 'POST',
-    headers: {
-        'Content-Type' : 'application/x-www-form-urlencoded',
-        'Content-Length' : postdata.length
-    },
-    auth: api + ':' + auth
-};
 
-var request = https.request(options, function(res){
-    res.setEncoding('utf8');
-    res.on('data', function(chunk){
-        console.log('Response: ' + chunk);
-    })
-})
+//END ANOTHER PHONE CALL
 
-request.write(postdata);
-request.end();
-//END NEW PHONE CALL
+
 
 });
 
