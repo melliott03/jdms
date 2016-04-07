@@ -225,8 +225,8 @@ router.get("/", function(req,res){
 //
 // // //BEGIN PHONE CALL
 // // var request = require('request'),
-var username = "432asfD",
-var password = "jlkajf32321fd",
+// // username = "432asfD",
+// // password = "jlkajf32321fd",
 // // url = "https://" + username + ":" + password + "@enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml";
 // //
 // // request.post({
@@ -244,7 +244,8 @@ var password = "jlkajf32321fd",
 //START NEW PHONE CALL http://stackoverflow.com/questions/11800385/node-js-and-twilio-integration
 var https = require('https');
 var qs = require('querystring');
-
+var username = "432asfD";
+var password = "jlkajf32321fd";
 var api = 'AC266d44c5ce01697df6f475b34f850d8f'; //'your api key';
 var auth = 'ee3db5ce904dd188912ea24b1646b46c'; //'your auth token';
 
