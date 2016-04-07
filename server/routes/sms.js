@@ -21,17 +21,17 @@ app.use(bodyParser.urlencoded({
 router.get("/", function(req,res){
 
   // Twilio request authentication with custom URL
-    var options = { url: 'https://enigmatic-lowlands-90835.herokuapp.com/' };
-    if (twilio.validateExpressRequest(req, 'ee3db5ce904dd188912ea24b1646b46c', options)) {//'YOUR_TWILIO_AUTH_TOKEN'
-      var resp = new twilio.TwimlResponse();
-      resp.say('express sez - hello twilio!');
-
-      res.type('text/xml');
-      res.send(resp.toString());
-    }
-    else {
-      res.status(403).send('you are not twilio. Buzz off.');
-    }
+    // var options = { url: 'https://enigmatic-lowlands-90835.herokuapp.com/' };
+    // if (twilio.validateExpressRequest(req, 'ee3db5ce904dd188912ea24b1646b46c', options)) {//'YOUR_TWILIO_AUTH_TOKEN'
+    //   var resp = new twilio.TwimlResponse();
+    //   resp.say('express sez - hello twilio!');
+    //
+    //   res.type('text/xml');
+    //   res.send(resp.toString());
+    // }
+    // else {
+    //   res.status(403).send('you are not twilio. Buzz off.');
+    // }
 
 
   //require the Twilio module and create a REST client
@@ -69,6 +69,19 @@ client.makeCall({
 
     //executed when the call has been initiated.
     console.log(responseData.from); // outputs "+14506667788"
+
+      if (twilio.validateExpressRequest(req, 'ee3db5ce904dd188912ea24b1646b46c')) {
+        var resp = new twilio.TwimlResponse();
+        resp.say('express sez - hello twilio!');
+
+        res.type('text/xml');
+        res.send(resp.toString());
+      }
+      else {
+        res.status(403).send('you are not twilio. Buzz off.');
+      }
+    });
+
 
 });
 
