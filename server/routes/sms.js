@@ -63,7 +63,7 @@ client.makeCall({
 
     to:'+16128121238', // Any number Twilio can call
     from: '+17637102473', // A number you bought from Twilio and can use for outbound communication
-    url: 'https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml'//'https://demo.twilio.com/welcome/voice'//'https://432asfD:jlkajf32321fd@enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml' // A URL that produces an XML document (TwiML) which contains instructions for the call
+    url: 'https://enigmatic-lowlands-90835.herokuapp.com/phoneCall'//'https://demo.twilio.com/welcome/voice'//'https://432asfD:jlkajf32321fd@enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml' // A URL that produces an XML document (TwiML) which contains instructions for the call
 
 }, function(err, responseData) {
 

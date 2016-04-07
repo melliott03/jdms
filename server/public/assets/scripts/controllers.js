@@ -42,7 +42,7 @@ myApp.controller("ShowController", ["$scope", "WorkService", function($scope, Wo
 
 myApp.controller("HomeController", ["$scope", "WorkService", function($scope, WorkService){
     console.log("Home Controller");
-    WorkService.getSMS();
+    
 
 }]);
 
