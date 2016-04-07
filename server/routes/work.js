@@ -82,18 +82,7 @@ router.get("/", function(req,res){
 
   client = twilio('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c'); //twilio('ACCOUNTSID', 'AUTHTOKEN'),
   client.calls.create({
-    //https://studentrnd.org/build/tutorial-creating-a-reddit-browser-with-node-js-and-twilio
-
-    // restler.get('http://reddit.com/.json').on('complete', function(reddit) {
-    //     var titles = "<Response>";
-    //     for(var i=0; i<5; i++) {
-    //         titles += "<Sms>" + reddit.data.children[i].data.title + "</Sms>";
-    //     }
-    //     titles += "</Response>";
-    //     response.send(titles);
-    // });
-
-    url: "https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml", //"./public/assets/scripts/twiml.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
+    url: "https://4325214:jlkajf32321fd@enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml", //"./public/assets/scripts/twiml.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
     to: "+16128121238", //+16122671744  "+16128121238" "+16129631395 Dev" 8023561672 Tommy
     from: "+17637102473"
   }, function(err, call) {
@@ -101,7 +90,6 @@ router.get("/", function(req,res){
     console.log('This call was created at: ' + call.dateCreated);
     process.stdout.write(call.sid);
     console.log('Received call from: ' + call.from);
-    // console.log('Call duration (in seconds): ' + call.Direction);
   });
 
   // client.calls.get(function(err, response) {
