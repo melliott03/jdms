@@ -1,4 +1,5 @@
 var express = require("express");
+var app = express();
 var router = express.Router();
 var path = require("path");
 var bodyParser = require("body-parser");
@@ -10,8 +11,28 @@ var geocoder = require('geocoder');
 var restler = require('restler');
 var sugar = require('sugar');
 
+var http = require('http'),
+    twilio = require('twilio');
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
 
 router.get("/", function(req,res){
+
+  // Twilio request authentication with custom URL
+    var options = { url: 'https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml' };
+    if (twilio.validateExpressRequest(req, 'ee3db5ce904dd188912ea24b1646b46c', options)) {//'YOUR_TWILIO_AUTH_TOKEN'
+      var resp = new twilio.TwimlResponse();
+      resp.say('express sez - hello twilio!');
+
+      res.type('text/xml');
+      res.send(resp.toString());
+    }
+    else {
+      res.status(403).send('you are not twilio. Buzz off.');
+    }
+
 
   //require the Twilio module and create a REST client
 var client = require('twilio')('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c');
