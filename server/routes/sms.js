@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({
 router.get("/", function(req,res){
 
   // Twilio request authentication with custom URL
-    var options = { url: 'https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml' };
+    var options = { url: 'https://enigmatic-lowlands-90835.herokuapp.com/' };
     if (twilio.validateExpressRequest(req, 'ee3db5ce904dd188912ea24b1646b46c', options)) {//'YOUR_TWILIO_AUTH_TOKEN'
       var resp = new twilio.TwimlResponse();
       resp.say('express sez - hello twilio!');
