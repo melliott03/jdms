@@ -1,4 +1,4 @@
-myApp.factory("MovieService", ["$http", function($http){
+myApp.factory("WorkService", ["$http", function($http){
     var data = {};
 
     var postMovie = function(data){
@@ -15,9 +15,17 @@ myApp.factory("MovieService", ["$http", function($http){
         });
     };
 
+    var getSMS = function(){
+        $http.get("/sms").then(function(response){
+            console.log(response.data);
+            data.response = response.data;
+        });
+    };
+
     return {
         postMovie : postMovie,
         getMovies : getMovies,
+        getSMS : getSMS,
         data : data
     };
 }]);

@@ -1,4 +1,4 @@
-myApp.controller("AddController", ["$scope", "$http", "MovieService", function($scope, $http, MovieService){
+myApp.controller("AddController", ["$scope", "$http", "WorkService", function($scope, $http, WorkService){
     $scope.movies = {};
     $scope.data = [];
 
@@ -28,18 +28,28 @@ myApp.controller("AddController", ["$scope", "$http", "MovieService", function($
         postObject.Actors = data.Actors;
         postObject.Plot = data.Plot;
 
-        MovieService.postMovie(postObject);
+        WorkService.postMovie(postObject);
     };
 }]);
 
-myApp.controller("ShowController", ["$scope", "MovieService", function($scope, MovieService){
-    MovieService.getMovies();
+myApp.controller("ShowController", ["$scope", "WorkService", function($scope, WorkService){
+    // WorkService.getMovies();//this triggers my other sms and voice calls
+    WorkService.getSMS();
 
-    $scope.data = MovieService.data;
+
+    $scope.data = WorkService.data;
 }]);
 
-myApp.controller("HomeController", ["$scope", "MovieService", function($scope, MovieService){
+myApp.controller("HomeController", ["$scope", "WorkService", function($scope, WorkService){
     console.log("Home Controller");
+    WorkService.getSMS();
+
+}]);
+
+myApp.controller("CommunicationsController", ["$scope", "WorkService", function($scope, WorkService){
+    console.log("Communications Controller");
 
 
+
+    $scope.data = WorkService.data;
 }]);

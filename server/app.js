@@ -18,6 +18,7 @@ var index = require("./routes/index");
 var register = require("./routes/register");
 var work = require("./routes/work");
 var user = require("./routes/user");
+var sms = require("./routes/sms");
 
 var path = require("path");
 
@@ -130,6 +131,7 @@ passport.use("local", new localStrategy({
 app.use("/register", register);
 app.use("/user", user); // START HERE TODAY
 app.use("/work", work);
+app.use("/sms", sms);
 app.use("/", index);
 
 

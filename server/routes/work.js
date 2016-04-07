@@ -281,8 +281,8 @@ router.get("/", function(req,res){
 
 //START ANOTHER PHONE CALL
 
-var sys = require('sys'),
-    TwilioClient = require('twilio').Client,
+var util = require('util'),
+    TwilioClient = require('twilio'),
     client = new TwilioClient('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c', 'https://enigmatic-lowlands-90835.herokuapp.com'); //TwilioClient(ACCOUNT_SID, AUTH_TOKEN, MY_HOSTNAME);
 
 var phone = client.getPhoneNumber('+17637102473');
