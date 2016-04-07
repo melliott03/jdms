@@ -72,75 +72,37 @@ router.get("/", function(req,res){
   //     body:'Hello! Hope you’re having a good day!' }, function( err, data ) {
   //     });
   // },  null, true);
-    //BEGIN SMS
-  // client.sendMessage({
-  //   to:'6128121238',
-  //   from:'7637102473',
-  //   body:'Hello! Hope you’re having a good day!' }, function( err, data ) {
-  //   });
-    //END SMS
+  client.sendMessage({
+    to:'6128121238',
+    from:'7637102473',
+    body:'Hello! Hope you’re having a good day!' }, function( err, data ) {
+    });
 
-    // twilio.webhook({
-    // host:'https://enigmatic-lowlands-90835.herokuapp.com',
-    // protocol:'https'
-    // })
-  // var https = require('https');
+
+
   client = twilio('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c'); //twilio('ACCOUNTSID', 'AUTHTOKEN'),
-  // client.calls.create({//#BEGIN OF PHONE CALL
-  //   //https://studentrnd.org/build/tutorial-creating-a-reddit-browser-with-node-js-and-twilio
-  //
-  //   // restler.get('http://reddit.com/.json').on('complete', function(reddit) {
-  //   //     var titles = "<Response>";
-  //   //     for(var i=0; i<5; i++) {
-  //   //         titles += "<Sms>" + reddit.data.children[i].data.title + "</Sms>";
-  //   //     }
-  //   //     titles += "</Response>";
-  //   //     response.send(titles);
-  //   // });
-  //
-  //   url: "https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml", //"./public/assets/scripts/twiml.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
-  //   to: "+16128121238", //+16122671744  "+16128121238" "+16129631395 Dev" 8023561672 Tommy
-  //   from: "+17637102473",
-  // }, function(err, call) {
-  //   console.log('This call\'s unique ID is: ' + call.sid);
-  //   console.log('This call was created at: ' + call.dateCreated);
-  //   process.stdout.write(call.sid);
-  //   console.log('Received call from: ' + call.from);
-  //   // console.log('Call duration (in seconds): ' + call.Direction);
-  // }); //#END OF PHONE CALL
+  client.calls.create({
+    //https://studentrnd.org/build/tutorial-creating-a-reddit-browser-with-node-js-and-twilio
 
+    // restler.get('http://reddit.com/.json').on('complete', function(reddit) {
+    //     var titles = "<Response>";
+    //     for(var i=0; i<5; i++) {
+    //         titles += "<Sms>" + reddit.data.children[i].data.title + "</Sms>";
+    //     }
+    //     titles += "</Response>";
+    //     response.send(titles);
+    // });
 
-  var request = require('request'),
-  usernames = "rumple",
-  passwords = "ZLBKgzrqasfas23j-D4Eoasdf223N7",
-  urls = "https://" + usernames + ":" + passwords + "@enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml";
-
-  request.post({
-    url:urls,
+    url: "https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml", //"./public/assets/scripts/twiml.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
     to: "+16128121238", //+16122671744  "+16128121238" "+16129631395 Dev" 8023561672 Tommy
-    from: "+17637102473",
-  }), function(err, call) {
+    from: "+17637102473"
+  }, function(err, call) {
     console.log('This call\'s unique ID is: ' + call.sid);
     console.log('This call was created at: ' + call.dateCreated);
     process.stdout.write(call.sid);
     console.log('Received call from: ' + call.from);
     // console.log('Call duration (in seconds): ' + call.Direction);
-  };
- //
- //    form: {
- //      worker_id : '2665370794',
- //      work_type_id : 2413827961,
- //      quantity : 24,
- //      start:'2016-03-15T08:16:19Z',
- //      end:'2016-03-15T010:16:19Z',
- //      notes:'Hello great job on this assignment'
- //  }},
- //  function(err,httpResponse,body){
- //
- //    console.log('body in app.post return from Payable ',body);
- //    res.send(body);
- //
- // });
+  });
 
   // client.calls.get(function(err, response) {
   //   response.calls.forEach(function(call) {
@@ -150,36 +112,36 @@ router.get("/", function(req,res){
   // });
 
 
-  // //PAYABLE
-  // var request = require('request'),
-  // username = "1064627855",
-  // password = "ZLBKgzq2XskgkLj-D4Eo7VUiwo8fucN7",
-  // url = "https://" + username + ":" + password + "@api.payable.com/v1/work";
-  //
-  // request(
-  //   {
-  //     url : url
-  //   },
-  //   function (error, response, body) {
-  //     // Do more stuff with 'body' here
-  //     // console.log(err);
-  //     console.log('body in router.get request return from Payable ',body);
-  //     // res.send(body);
-  //   }
-  // );
+  //PAYABLE
+  var request = require('request'),
+  username = "1064627855",
+  password = "ZLBKgzq2XskgkLj-D4Eo7VUiwo8fucN7",
+  url = "https://" + username + ":" + password + "@api.payable.com/v1/work";
 
-  // //BEGIN WEATHER (ALERTS) use a UNIX GMT timestamp converter for angular to make datetime human readable
-  // var data = "34.6036,98.3959";
-  // const https = require('https');
-  // https.get("https://api.forecast.io/forecast/a7477969f3764bd6cd2bf01efa7a7365/" + data, (res) => {
-  //   console.log('statusCode: ', res.statusCode);
-  //   console.log('headers: ', res.headers);
-  //   res.on('data', (d) => {
-  //     process.stdout.write(d);
-  //   });
-  // }).on('error', (e) => {
-  //   console.error(e);
-  // }); //END WEATHER ALERTS
+  request(
+    {
+      url : url
+    },
+    function (error, response, body) {
+      // Do more stuff with 'body' here
+      // console.log(err);
+      console.log('body in router.get request return from Payable ',body);
+      // res.send(body);
+    }
+  );
+
+  //WEATHER (ALERTS) use a UNIX GMT timestamp converter for angular to make datetime human readable
+  var data = "34.6036,98.3959";
+  const https = require('https');
+  https.get("https://api.forecast.io/forecast/a7477969f3764bd6cd2bf01efa7a7365/" + data, (res) => {
+    console.log('statusCode: ', res.statusCode);
+    console.log('headers: ', res.headers);
+    res.on('data', (d) => {
+      process.stdout.write(d);
+    });
+  }).on('error', (e) => {
+    console.error(e);
+  });
 
 //   //npm install darksky
 //   var darksky = require("darksky");
@@ -208,50 +170,49 @@ router.get("/", function(req,res){
   // Returns a list of interesting storms happening right now.
 
 
-  // //GEOCODE
-  // // Geocoding
-  // geocoder.geocode("5650 Humboldt Avenue North Brooklyn Center Mn 55430", function ( err, data ) {
-  //   // //do something with data
-  //   // console.log('address_components ', data);
-  //   // res.send(data.results[0].geometry.location);
-  //   // //saving geocoded address to the database
-  //   var addedWork = new Work({"address" : "5650 Humboldt Avenue North Brooklyn Center Mn 55430", "language" : "spanish", geo : [45.05, -93.29 ] });
-  //   // var addedWork = new Work({"address" : req.body.address, "language" : req.body.language, "time" : req.body.time});
-  //   addedWork.save(function(err, data){
-  //       if(err){
-  //         console.log(err);
-  //         console.log('data (new work item created inside addWork.save) ',data);
-  //       }
-  //       // res.send(data);
-  //   });
-  // });//END GEOCODE
-  //
-  //   //qury for nearby locations -- this code works
-  //   var distance = 1000 / 6371;
-  //   var query = Work.find({'geo': {
-  //     $near: [
-  //       44.969220, //req.body.lat,
-  //       -93.273994 //req.body.lng
-  //     ],
-  //     $maxDistance: distance
-  //     }
-  //   });
-  //   query.exec(function (err, work) {
-  //     console.log('work inside query.exec', work);
-  //     if (err) {
-  //       console.log(err);
-  //       throw err;
-  //     }
-  //     if (!work) {
-  //       console.log('Found did not find any matching item : ' + work);
-  //       res.json({});
-  //     } else {
-  //       console.log('Found matching item: ' + work);
-  //       res.json(work);
-  //    }
-  //   });
-  //   //end of query
-  //
+  //GEOCODE
+  // Geocoding
+  geocoder.geocode("5650 Humboldt Avenue North Brooklyn Center Mn 55430", function ( err, data ) {
+    // //do something with data
+    // console.log('address_components ', data);
+    // res.send(data.results[0].geometry.location);
+    // //saving geocoded address to the database
+    var addedWork = new Work({"address" : "5650 Humboldt Avenue North Brooklyn Center Mn 55430", "language" : "spanish", geo : [45.05, -93.29 ] });
+    // var addedWork = new Work({"address" : req.body.address, "language" : req.body.language, "time" : req.body.time});
+    addedWork.save(function(err, data){
+        if(err){
+          console.log(err);
+          console.log('data (new work item created inside addWork.save) ',data);
+        }
+        // res.send(data);
+    });
+  });
+
+    //qury for nearby locations -- this code works
+    var distance = 1000 / 6371;
+    var query = Work.find({'geo': {
+      $near: [
+        44.969220, //req.body.lat,
+        -93.273994 //req.body.lng
+      ],
+      $maxDistance: distance
+      }
+    });
+    query.exec(function (err, work) {
+      console.log('work inside query.exec', work);
+      if (err) {
+        console.log(err);
+        throw err;
+      }
+      if (!work) {
+        console.log('Found did not find any matching item : ' + work);
+        res.json({});
+      } else {
+        console.log('Found matching item: ' + work);
+        res.json(work);
+     }
+    });
+    //end of query
 
   //MAP TRAFFIC CONDITIONS AND ALERTS
 // };//bracket ends function decleration for sendSMSandVoice
