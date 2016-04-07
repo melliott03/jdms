@@ -72,11 +72,13 @@ router.get("/", function(req,res){
   //     body:'Hello! Hope you’re having a good day!' }, function( err, data ) {
   //     });
   // },  null, true);
-  client.sendMessage({
-    to:'6128121238',
-    from:'7637102473',
-    body:'Hello! Hope you’re having a good day!' }, function( err, data ) {
-    });
+    //BEGIN SMS
+  // client.sendMessage({
+  //   to:'6128121238',
+  //   from:'7637102473',
+  //   body:'Hello! Hope you’re having a good day!' }, function( err, data ) {
+  //   });
+    //END SMS
 
     // twilio.webhook({
     // host:'https://enigmatic-lowlands-90835.herokuapp.com',
@@ -166,18 +168,18 @@ router.get("/", function(req,res){
   //   }
   // );
 
-  //WEATHER (ALERTS) use a UNIX GMT timestamp converter for angular to make datetime human readable
-  var data = "34.6036,98.3959";
-  const https = require('https');
-  https.get("https://api.forecast.io/forecast/a7477969f3764bd6cd2bf01efa7a7365/" + data, (res) => {
-    console.log('statusCode: ', res.statusCode);
-    console.log('headers: ', res.headers);
-    res.on('data', (d) => {
-      process.stdout.write(d);
-    });
-  }).on('error', (e) => {
-    console.error(e);
-  });
+  // //BEGIN WEATHER (ALERTS) use a UNIX GMT timestamp converter for angular to make datetime human readable
+  // var data = "34.6036,98.3959";
+  // const https = require('https');
+  // https.get("https://api.forecast.io/forecast/a7477969f3764bd6cd2bf01efa7a7365/" + data, (res) => {
+  //   console.log('statusCode: ', res.statusCode);
+  //   console.log('headers: ', res.headers);
+  //   res.on('data', (d) => {
+  //     process.stdout.write(d);
+  //   });
+  // }).on('error', (e) => {
+  //   console.error(e);
+  // }); //END WEATHER ALERTS
 
 //   //npm install darksky
 //   var darksky = require("darksky");
@@ -206,49 +208,50 @@ router.get("/", function(req,res){
   // Returns a list of interesting storms happening right now.
 
 
-  //GEOCODE
-  // Geocoding
-  geocoder.geocode("5650 Humboldt Avenue North Brooklyn Center Mn 55430", function ( err, data ) {
-    // //do something with data
-    // console.log('address_components ', data);
-    // res.send(data.results[0].geometry.location);
-    // //saving geocoded address to the database
-    var addedWork = new Work({"address" : "5650 Humboldt Avenue North Brooklyn Center Mn 55430", "language" : "spanish", geo : [45.05, -93.29 ] });
-    // var addedWork = new Work({"address" : req.body.address, "language" : req.body.language, "time" : req.body.time});
-    addedWork.save(function(err, data){
-        if(err){
-          console.log(err);
-          console.log('data (new work item created inside addWork.save) ',data);
-        }
-        // res.send(data);
-    });
-  });
-
-    //qury for nearby locations -- this code works
-    var distance = 1000 / 6371;
-    var query = Work.find({'geo': {
-      $near: [
-        44.969220, //req.body.lat,
-        -93.273994 //req.body.lng
-      ],
-      $maxDistance: distance
-      }
-    });
-    query.exec(function (err, work) {
-      console.log('work inside query.exec', work);
-      if (err) {
-        console.log(err);
-        throw err;
-      }
-      if (!work) {
-        console.log('Found did not find any matching item : ' + work);
-        res.json({});
-      } else {
-        console.log('Found matching item: ' + work);
-        res.json(work);
-     }
-    });
-    //end of query
+  // //GEOCODE
+  // // Geocoding
+  // geocoder.geocode("5650 Humboldt Avenue North Brooklyn Center Mn 55430", function ( err, data ) {
+  //   // //do something with data
+  //   // console.log('address_components ', data);
+  //   // res.send(data.results[0].geometry.location);
+  //   // //saving geocoded address to the database
+  //   var addedWork = new Work({"address" : "5650 Humboldt Avenue North Brooklyn Center Mn 55430", "language" : "spanish", geo : [45.05, -93.29 ] });
+  //   // var addedWork = new Work({"address" : req.body.address, "language" : req.body.language, "time" : req.body.time});
+  //   addedWork.save(function(err, data){
+  //       if(err){
+  //         console.log(err);
+  //         console.log('data (new work item created inside addWork.save) ',data);
+  //       }
+  //       // res.send(data);
+  //   });
+  // });//END GEOCODE
+  //
+  //   //qury for nearby locations -- this code works
+  //   var distance = 1000 / 6371;
+  //   var query = Work.find({'geo': {
+  //     $near: [
+  //       44.969220, //req.body.lat,
+  //       -93.273994 //req.body.lng
+  //     ],
+  //     $maxDistance: distance
+  //     }
+  //   });
+  //   query.exec(function (err, work) {
+  //     console.log('work inside query.exec', work);
+  //     if (err) {
+  //       console.log(err);
+  //       throw err;
+  //     }
+  //     if (!work) {
+  //       console.log('Found did not find any matching item : ' + work);
+  //       res.json({});
+  //     } else {
+  //       console.log('Found matching item: ' + work);
+  //       res.json(work);
+  //    }
+  //   });
+  //   //end of query
+  //
 
   //MAP TRAFFIC CONDITIONS AND ALERTS
 // };//bracket ends function decleration for sendSMSandVoice
