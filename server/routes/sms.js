@@ -68,7 +68,7 @@ client.makeCall({
 }, function(err, responseData) {
 
     //executed when the call has been initiated.
-    // console.log(responseData.from); // outputs "+14506667788"
+    console.log(responseData.from); // outputs "+14506667788"
 
       if (twilio.validateExpressRequest(req, 'ee3db5ce904dd188912ea24b1646b46c')) {
         var resp = new twilio.TwimlResponse();
