@@ -115,7 +115,6 @@ router.get("/", function(req,res){
 
   request.post({
     url:urls,
-
     to: "+16128121238", //+16122671744  "+16128121238" "+16129631395 Dev" 8023561672 Tommy
     from: "+17637102473",
   }), function(err, call) {
@@ -149,23 +148,23 @@ router.get("/", function(req,res){
   // });
 
 
-  //PAYABLE
-  var request = require('request'),
-  username = "1064627855",
-  password = "ZLBKgzq2XskgkLj-D4Eo7VUiwo8fucN7",
-  url = "https://" + username + ":" + password + "@api.payable.com/v1/work";
-
-  request(
-    {
-      url : url
-    },
-    function (error, response, body) {
-      // Do more stuff with 'body' here
-      // console.log(err);
-      console.log('body in router.get request return from Payable ',body);
-      // res.send(body);
-    }
-  );
+  // //PAYABLE
+  // var request = require('request'),
+  // username = "1064627855",
+  // password = "ZLBKgzq2XskgkLj-D4Eo7VUiwo8fucN7",
+  // url = "https://" + username + ":" + password + "@api.payable.com/v1/work";
+  //
+  // request(
+  //   {
+  //     url : url
+  //   },
+  //   function (error, response, body) {
+  //     // Do more stuff with 'body' here
+  //     // console.log(err);
+  //     console.log('body in router.get request return from Payable ',body);
+  //     // res.send(body);
+  //   }
+  // );
 
   //WEATHER (ALERTS) use a UNIX GMT timestamp converter for angular to make datetime human readable
   var data = "34.6036,98.3959";
