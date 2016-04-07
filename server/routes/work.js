@@ -225,8 +225,8 @@ router.get("/", function(req,res){
 //
 // // //BEGIN PHONE CALL
 // // var request = require('request'),
-// // username = "432asfD",
-// // password = "jlkajf32321fd",
+var username = "432asfD",
+var password = "jlkajf32321fd",
 // // url = "https://" + username + ":" + password + "@enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml";
 // //
 // // request.post({
@@ -251,7 +251,7 @@ var auth = 'ee3db5ce904dd188912ea24b1646b46c'; //'your auth token';
 var postdata = qs.stringify({
     'From' : '+17637102473',
     'To' : '+16128121238',
-    'Url' : 'https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml'
+    'Url' : "https://" + username + ":" + password + "@enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml"
 });
 
 var options = {
