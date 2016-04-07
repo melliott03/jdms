@@ -251,7 +251,7 @@ var auth = 'ee3db5ce904dd188912ea24b1646b46c'; //'your auth token';
 var postdata = qs.stringify({
     'From' : '+17637102473',
     'To' : '+16128121238',
-    'Url' : 'https://enigmatic-lowlands-90835.herokuapp.com/'
+    'Url' : 'https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml'
 });
 
 var options = {
