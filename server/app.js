@@ -19,6 +19,7 @@ var register = require("./routes/register");
 var work = require("./routes/work");
 var user = require("./routes/user");
 var sms = require("./routes/sms");
+var phoneCall = require("./routes/phoneCall");
 
 var path = require("path");
 
@@ -30,7 +31,7 @@ var geocoder = require('geocoder');
 // var twiml = require('./public/assets/scripts/twiml.js');
 var restler = require('restler');
 //end of brought in from previous experiment
-Agenda = require('agenda');//#AGENDA
+var Agenda = require('agenda');//#AGENDA
 
 
 
@@ -132,6 +133,7 @@ app.use("/register", register);
 app.use("/user", user); // START HERE TODAY
 app.use("/work", work);
 app.use("/sms", sms);
+app.use("/phoneCall/:id", phoneCall);
 app.use("/", index);
 
 

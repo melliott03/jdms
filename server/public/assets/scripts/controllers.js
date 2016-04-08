@@ -33,8 +33,8 @@ myApp.controller("AddController", ["$scope", "$http", "WorkService", function($s
 }]);
 
 myApp.controller("ShowController", ["$scope", "WorkService", function($scope, WorkService){
-    // WorkService.getMovies();//this triggers my other sms and voice calls
-    WorkService.getSMS();
+    WorkService.getMovies();//this triggers my other sms and voice calls
+    // WorkService.getSMS(); //this triggers ANOTHER other sms and voice calls
 
 
     $scope.data = WorkService.data;
@@ -42,7 +42,7 @@ myApp.controller("ShowController", ["$scope", "WorkService", function($scope, Wo
 
 myApp.controller("HomeController", ["$scope", "WorkService", function($scope, WorkService){
     console.log("Home Controller");
-    
+
 
 }]);
 

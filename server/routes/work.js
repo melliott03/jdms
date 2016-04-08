@@ -36,6 +36,42 @@ var Work = mongoose.model("Works");
 console.log('currdatetime', Date.now());
 
 router.get("/", function(req,res){
+//   <?xml version="1.0" encoding="UTF-8"?>
+//    <Response>
+//    <Say voice="alice">To get connected to your interpreting sesson, enter your 4 digit key</Say>
+//    <Play>http://demo.twilio.com/docs/classic.mp3</Play>
+//    </Response>
+//
+//
+//    var obj = {
+//   Response: {
+//     Say voice: "John",
+//     address: {
+//       city: "Istanbul"
+//     },
+//     phone: [
+//       { '#text': "555-1234", '@type': 'home' },
+//       { '#text': "555-1235", '@type': 'mobile' }
+//     ],
+//     id: function() {
+//       return 42;
+//     }
+//   }
+// };
+//
+// var builder = require('xmlbuilder');
+// var root = builder.create(obj);
+
+
+  //
+  // var builder = require('xmlbuilder');
+  // var xml = builder.create('root')
+  // .ele('xmlbuilder','encoding')
+  // .ele('repo', {'type': 'git'}, 'git://github.com/oozcitak/xmlbuilder-js.git')
+  // .end({ pretty: true});
+  // console.log(xml);
+
+
 //
 //
 //    //ALL OF THE CODE BELOW WORKS...COMMENTED OUT TO TEST GEOCODER ABOVE
@@ -60,38 +96,41 @@ router.get("/", function(req,res){
 //     console.log('Message sent: ' + info.response);
 //   });
 //
-//   //SMS
-//   var twilio = require('twilio'),
-//   client = twilio('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c'); //twilio('ACCOUNTSID', 'AUTHTOKEN'),
-//   // var cronJob = require('cron').CronJob;
-//
-//   // var textJob = new cronJob( '33 5 * * *', function(){ // represents 33 minutes past 5am
-//   //   client.sendMessage( {
-//   //     to:'6128121238',
-//   //     from:'7637102473',
-//   //     body:'Hello! Hope you’re having a good day!' }, function( err, data ) {
-//   //     });
-//   // },  null, true);
-//   client.sendMessage({
-//     to:'6128121238',
-//     from:'6122844292',
-//     body:'Hello! Hope you’re having a good day!' }, function( err, data ) {
-//     });
-//
-//
-//       //BEGIN CALL
-//   // client = twilio('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c'); //twilio('ACCOUNTSID', 'AUTHTOKEN'),
-//   // client.calls.create({
-//   //   url: "http://432asfD:jlkajf32321fd@enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml", //"./public/assets/scripts/twiml.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
-//   //   to: "+16128121238", //+16122671744  "+16128121238" "+16129631395 Dev" 8023561672 Tommy
-//   //   from: "+17637102473"  //+17637102473  16122844292
-//   // }, function(err, call) {
-//   //   console.log('This call\'s unique ID is: ' + call.sid);
-//   //   console.log('This call was created at: ' + call.dateCreated);
-//   //   process.stdout.write(call.sid);
-//   //   console.log('Received call from: ' + call.from);
-//   // }); //END CALL
-//
+  //SMS
+  var twilio = require('twilio'),
+  client = twilio('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c'); //twilio('ACCOUNTSID', 'AUTHTOKEN'),
+  // var cronJob = require('cron').CronJob;
+
+  // var textJob = new cronJob( '33 5 * * *', function(){ // represents 33 minutes past 5am
+  //   client.sendMessage( {
+  //     to:'6128121238',
+  //     from:'7637102473',
+  //     body:'Hello! Hope you’re having a good day!' }, function( err, data ) {
+  //     });
+  // },  null, true);
+
+  // client.sendMessage({
+  //   to:'6128121238',
+  //   from:'6122844292',
+  //   body:'Hello! Hope you’re having a good day!' }, function( err, data ) {
+  //   });
+
+
+     //BEGIN CALL
+  client = twilio('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c'); //twilio('ACCOUNTSID', 'AUTHTOKEN'),
+  client.calls.create({
+    url: "https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml", //"./public/assets/scripts/twiml.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
+    // url: "https://enigmatic-lowlands-90835.herokuapp.com/phoneCall/?user_id=12345&appointment_id=12345", //"./public/assets/scripts/twiml.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
+    to: "+16128121238", //+16122671744  "+16128121238" "+16129631395 Dev" 8023561672 Tommy
+    from: "+17637102473",  //+17637102473  16122844292
+    method: "GET"
+  }, function(err, call) {
+    console.log('This call\'s unique ID is: ' + call.sid);
+    console.log('This call was created at: ' + call.dateCreated);
+    process.stdout.write(call.sid);
+    console.log('Received call from: ' + call.from);
+  }); //END CALL
+
 //   // client.calls.get(function(err, response) {
 //   //   response.calls.forEach(function(call) {
 //   //     console.log('Received call from: ' + call.from);
@@ -279,63 +318,7 @@ router.get("/", function(req,res){
 // //END NEW PHONE CALL
 
 
-//START ANOTHER PHONE CALL
 
-var util = require('util'),
-    TwilioClient = require('twilio'),
-    client = new TwilioClient('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c', 'https://enigmatic-lowlands-90835.herokuapp.com'); //TwilioClient(ACCOUNT_SID, AUTH_TOKEN, MY_HOSTNAME);
-
-var phone = client.getPhoneNumber('+17637102473');
-
-phone.setup(function() {
-
-    // Alright, our phone number is set up. Let's, say, make a call:
-    phone.makeCall('+16128121238', null, function(call) {
-
-        // 'call' is an OutgoingCall object. This object is an event emitter.
-        // It emits two events: 'answered' and 'ended'
-        call.on('answered', function(reqParams, res) {
-
-            // reqParams is the body of the request Twilio makes on call pickup.
-            // For instance, reqParams.CallSid, reqParams.CallStatus.
-            // See: http://www.twilio.com/docs/api/2010-04-01/twiml/twilio_request
-            // res is a Twiml.Response object. This object handles generating
-            // a compliant Twiml response.
-
-            console.log('Call answered');
-
-            // We'll append a single Say object to the response:
-            res.append(new Twiml.Say('Hello, there!'));
-
-            // And now we'll send it.
-            res.send();
-        });
-
-        call.on('ended', function(reqParams) {
-            console.log('Call ended');
-        });
-    });
-
-    // But wait! What if our number receives an incoming SMS?
-    phone.on('incomingSms', function(reqParams, res) {
-
-        // As above, reqParams contains the Twilio request parameters.
-        // Res is a Twiml.Response object.
-
-        console.log('Received incoming SMS with text: ' + reqParams.Body);
-        console.log('From: ' + reqParams.From);
-    });
-
-    // Oh, and what if we get an incoming call?
-    phone.on('incomingCall', function(reqParams, res) {
-
-        res.append(new Twiml.Say('Thanks for calling! I think you are beautiful!'));
-        res.send();
-    });
-});
-
-
-//END ANOTHER PHONE CALL
 
 
 
@@ -343,6 +326,7 @@ phone.setup(function() {
 
 router.post("/work", function(req,res){
     console.log(req.body);
+
 
 
     var request = require('request'),

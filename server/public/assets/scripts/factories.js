@@ -16,7 +16,7 @@ myApp.factory("WorkService", ["$http", function($http){
     };
 
     var getSMS = function(){
-        $http.post("/sms").then(function(response){
+        $http.get("/sms").then(function(response){
             console.log(response.data);
             data.response = response.data;
         });
