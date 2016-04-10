@@ -22,6 +22,7 @@ var work = require("./routes/work");
 var user = require("./routes/user");
 var sms = require("./routes/sms");
 var phoneCall = require("./routes/phoneCall");
+// var contractors = require("./routes/contractors");
 
 var path = require("path");
 
@@ -137,10 +138,45 @@ passport.use("local", new localStrategy({
     }
 ));
 
+
+// //START SEEDING DATABASE WITH CONTRACTORS
+// // Geocode and save work to database
+//       geocoder.geocode("5650 Humboldt Avenue North, Brooklyn Center, MN 55430", function ( err, geocodedData ) {
+//         var geocodedData = geocodedData.results[0].geometry.location;
+//         var geo = [];
+//             geo[0]=geocodedData.lat;
+//             geo[1]=geocodedData.lng;
+// // saving geocoded address to the database
+// mongoose.model("Contractors", new Schema({
+//   "fname" : String, "lname" : String, "type" : String, "phone" : String, "email" : String,
+// "address" : String, "geo": {
+//     type: [Number],
+//     index: '2d'
+//   }
+// }));
+// var Contractor = mongoose.model("Contractors");
+// var addedContractor = new Contractor({
+//   "fname" : "Michelle", "lname" : "Elliott",
+//   "type" : "Tutor",  "phone" : "16128121238",
+//   "email" : "melliott03@gmail.com",
+//   "address" : "5650 Humboldt Avenue North, Brooklyn Center, MN 55430", geo : geo
+// });
+// addedContractor.save(function(err, data){
+//     if(err){
+//       console.log(err);
+//       console.log('data (new contractor item created inside addContractor.save) ',data);
+//     }
+// });
+// });
+// //END SEEDING DATABASE WITH CONTRACTORS
+
+
+
 app.use("/register", register);
 app.use("/user", user); // START HERE TODAY
 app.use("/work", work);
 app.use("/sms2", sms);
+// app.use("/contractor", contractor);
 app.use("/phoneCall/:id", phoneCall);
 // Create a webhook that handles an incoming SMS
 app.post('/sms', function(request, response) {
