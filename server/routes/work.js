@@ -7,35 +7,122 @@ var Schema = mongoose.Schema;
 var Forecast = require('forecast');//not using
 var darksky = require('darksky');//not using
 var geocoder = require('geocoder');
-// var twiml = require('./public/assets/scripts/twiml.js');
 var restler = require('restler');
-// var User = require("./models/work");
-// var kue = require('kue') //delayed job don't think i'll use this...will use agenda instead
-//   , queue = kue.createQueue();
-// var agenda = require('agenda');
-
-// var mongoConnectionString = "mongodb://127.0.0.1/agenda";
-// var agenda = new Agenda({db: {address: mongoConnectionString}});
-
 var sugar = require('sugar');
+// ---- Modules ---- //
+var newWorkAlert = require('../modules/newWorkAlert');
 
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({extended: true}));
 
-// mongoose.connect('mongodb://localhost/work');
-mongoose.model("Works", new Schema({"address" : String, "language" : String,
-  "geo": {
+mongoose.model("Works", new Schema({
+  "type" : String, "datetime" : String, "endTime" : String,
+"address" : String, "details" : String, "customer_id" : String, "status" : String, "geo": {
     type: [Number],
     index: '2d'
   }
 }));
+
 var Work = mongoose.model("Works");
-
-// agenda.schedule('today at noon', 'printAnalyticsReport', {userCount: 100});
-
 console.log('currdatetime', Date.now());
 
+router.post("/", function(req,res){
+  var type = req.body.type,
+      datetime = req.body.datetime,
+      endTime = req.body.endTime,
+      address = req.body.address,
+      details = req.body.details,
+      customer_id = req.body.customer_id,
+      status = req.body.status;
+// Geocode and save work to database
+      geocoder.geocode(address, function ( err, geocodedData ) {
+        var geocodedData = geocodedData.results[0].geometry.location;
+        var geo = [];
+            geo[0]=geocodedData.lat;
+            geo[1]=geocodedData.lng;
+// saving geocoded address to the database
+        var addedWork = new Work({"type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, geo : geo });
+        addedWork.save(function(err, data){
+            if(err){
+              console.log(err);
+              console.log('data (new work item created inside addWork.save) ',data);
+            }
+            newWorkAlert(addedWork);
+            res.send(data);
+        });
+      });
+/**@todo find all contractors nearby who match work.type then alert them via 1) Email, 2) SMS */
+        // //qury for nearby locations -- this code works
+        // var distance = 1000 / 6371;
+        // var query = Work.find({'geo': {
+        //   $near: [
+        //     44.969220, //req.body.lat,
+        //     -93.273994 //req.body.lng
+        //   ],
+        //   $maxDistance: distance
+        //   }
+        // });
+        // query.exec(function (err, work) {
+        //   console.log('work inside query.exec', work);
+        //   if (err) {
+        //     console.log(err);
+        //     throw err;
+        //   }
+        //   if (!work) {
+        //     console.log('Found did not find any matching item : ' + work);
+        //     res.json({});
+        //   } else {
+        //     console.log('Found matching item: ' + work);
+        //     res.json(work);
+        //  }
+        // });
+        // //end of query
+
+});
+
+
 router.get("/", function(req,res){
+/**@todo find and send all works for this customer */
+
+Work.find(function (err, work) {
+      if (err) {
+        res.send(err, null);
+      }
+      res.send(work);
+    });
+
+});
+
+router.route("/:id")
+    .delete(function(req,res){
+        // console.log("Inside delete on server: ",  req.params.id);
+        Work.findByIdAndRemove(req.params.id, function(err, work){
+            if(err){
+              console.log(err);
+            }
+            res.send(work);
+        });
+    })
+    // update the work with this id (accessed at PUT http://localhost:8080/api/works/:work_id)
+    .put(function(req, res) {
+      console.log('INSIDE cancel on server req.params.id:', req.params.id);
+      Work.findById(req.params.id, function(err, work){
+      console.log('INSIDE cancel on server work:', work);
+
+          if(err){
+            console.log(err);
+          }
+          work.status = 'canceled';
+          // save the work
+            work.save(function(err) {
+                if (err)
+                    res.send(err);
+          res.json({ message: 'work updated!' });
+      });
+    });
+  });
+
+
+
+router.get("/zzzzzzzzzzz", function(req,res){
 //   <?xml version="1.0" encoding="UTF-8"?>
 //    <Response>
 //    <Say voice="alice">To get connected to your interpreting sesson, enter your 4 digit key</Say>
@@ -316,83 +403,7 @@ router.get("/", function(req,res){
 // request.write(postdata);
 // request.end();
 // //END NEW PHONE CALL
-
-
-
-
-
-
 });
-
-router.post("/work", function(req,res){
-    console.log(req.body);
-
-
-
-    var request = require('request'),
-    username = "1064627855",
-    password = "ZLBKgzq2XskgkLj-D4Eo7VUiwo8fucN7",
-    url = "https://" + username + ":" + password + "@api.payable.com/v1/work";
-
-    request.post({
-      url:url,
-      form: {
-        worker_id : '2665370794',
-        work_type_id : 2413827961,
-        quantity : 24,
-        start:'2016-03-15T08:16:19Z',
-        end:'2016-03-15T010:16:19Z',
-        notes:'Hello great job on this assignment'
-    }},
-    function(err,httpResponse,body){
-
-      console.log('body in app.post return from Payable ',body);
-      res.send(body);
-
-   });
-    // request.post(
-    //   {
-    //     url : url,
-    //   },
-    //   function (error, response, body) {
-    //     // Do more stuff with 'body' here
-    //     // console.log(err);
-    //     console.log('body in app.get request return from Payable ',body);
-    //     res.send(body);
-    //   }
-    // );
-
-
-    // var addedMovie = new Movie({"Title" : req.body.Title, "Runtime" : req.body.Runtime, "Rated" : req.body.Rated, "Actors" : req.body.Actors, "Plot": req.body.Plot});
-    // addedMovie.save(function(err, data){
-    //     if(err){
-    //       console.log(err);
-    //     }
-    //
-    //     res.send(data);
-    // });
-
-
-});
-
-/*
-Perform date manipulations based on adding or subtracting time
-
-//First, start with a particular time
-var date = new Date();
-
-//Add two hours
-date.setHours(date.getHours() + 2);
-
-//Go back 3 days
-date.setDate(date.getDate() - 3);
-
-//One minute ago...
-date.setMinutes(date.getMinutes() - 1);
-
-
-*/
-
 
 
 

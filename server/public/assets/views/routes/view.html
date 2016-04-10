@@ -1,42 +1,138 @@
-<p>Inside Home Partial</p>
+<p>Inside User Partial</p>
 
+<!-- END Datatable -->
+<md-toolbar class="md-table-toolbar md-default" ng-show="!options.rowSelection || !selected.length">
+  <div class="md-toolbar-tools">
+    <span>Work</span>
+    <span flex></span>
+    <md-button class="md-icon-button" ng-click="loadStuff()">
+      <md-icon>refresh</md-icon>
+    </md-button>
+    <md-button class="md-icon-button">
+      <md-icon>filter_list</md-icon>
+    </md-button>
+    <md-button class="md-icon-button">
+      <md-icon>more_vert</md-icon>
+    </md-button>
+  </div>
+</md-toolbar>
+
+<md-toolbar class="md-table-toolbar alternate" ng-show="options.rowSelection && selected.length">
+  <div class="md-toolbar-tools">
+    <span>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</span>
+    <span flex></span>
+    <md-button class="md-icon-button">
+      <md-icon>delete</md-icon>
+    </md-button>
+  </div>
+</md-toolbar>
+
+<md-table-container>
+  <table data-md-table data-md-row-select="options.rowSelection" multiple="{{options.multiSelect}}" data-ng-model="selected" md-progress="promise">
+    <!-- <thead md-head md-order="query.order">
+      <tr md-row>
+        <th md-column ng-repeat="column in columns" md-numeric="column.numeric" md-order-by="{{column.orderBy}}">
+          <span>{{column.name}}</span>
+          <span ng-if="column.unit">({{column.unit}})</span>
+        </th>
+      </tr>
+    </thead> -->
+    <thead ng-if="!options.decapitate" md-head data-md-order="query.order" md-on-reorder="onReorder">
+      <tr md-row>
+        <th md-column md:order:by="type"><span>Type</span></th>
+        <th md-column data-md-numeric data-md-order-by="datetime" data-md-desc><span>Date and Time</span></th>
+        <th md-column data-md-numeric data-md-order-by="endTime"><span>End Time</span></th>
+        <th md-column data-md-numeric data-md-order-by="address"><span>Address</span></th>
+        <th md-column data-md-numeric data-md-order-by="details"><span>Details</span></th>
+        <th md-column data-md-numeric data-md-order-by="status"><span>Status</span></th>
+        <th md-column data-md-numeric data-md-order-by="comment">
+          <md-icon>comments</md-icon>
+          <span>Comments</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody md-body>
+      <tr md-row md-select="work" md-select-id="name" data-md-on-select="log" md-on-deselect="deselect" x-md-auto-select="options.autoSelect"  data-ng-repeat="work in works.response | filter: filter.search | orderBy: query.order | limitTo: query.limit : (query.page - 1) * query.limit">
+        <td md-cell>{{work.type}}</td>
+        <td md-cell>{{work.datetime}}</td>
+        <td md-cell>{{work.endTime}}</td>
+        <td md-cell>{{work.address}}</td>
+        <td md-cell>{{work.details}}</td>
+        <td md-cell>{{work.status}}</td>
+        <!-- <td md-cell hide-sm>{{work.details}}</td>
+        <td md-cell hide-sm>{{work.status}}</td> -->
+        <td md-cell ng-click="editComment($event, work)" ng-class="{'md-placeholder': !work.comment}">
+          {{work.comment || 'Add a comment'}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</md-table-container>
+
+<!-- <td md-cell>
+  <md-select ng-model="work.type" placeholder="Other">
+    <md-option ng-value="type" ng-repeat="type in getTypes()">{{type}}</md-option>
+  </md-select>
+</td> -->
+
+<data-md-table-pagination md-limit="query.limit" md-limit-options="limitOptions" md-page="query.page" md-total="{{works.count}}" md-on-paginate="onPaginate" md-page-select="options.pageSelect" md-boundary-links="options.boundaryLinks"></data-md-table-pagination>
+<!-- END Datatable -->
+
+
+<!-- START MD-CARDS -->
 <md-content layout-padding>
-    <div style="width : 600px; margin: 0 auto;">
-      <div ng-repeat="pet in pets.response">
+    <div style="width : 100%; margin: 2vw auto;">
+      <div ng-repeat="work in works.response">
         <md-card>
-            <img ng-src="{{ pet.imageurl }}" class="md-card-image">
-
+          <!-- <p>{{Marketer work.type }}</p> -->
             <md-card-title>
               <md-card-title-text>
-                <span class="md-headline">{{ pet.name }}</span>
+                <span class="md-headline">{{ work.type }}</span>
               </md-card-title-text>
             </md-card-title>
 
             <md-card-content>
               <div>
-                <p>
-                    Age: {{ pet.age }}
-                </p>
+                  <p >{{ work.datetime }} to {{ work.endTime }} |  {{ work.address }}  | {{ work.details }} | {{work.status}}</p>
               </div>
-              <div>
-                <p>
-                    Animal Type: {{ pet.type }}
-                </p>
+              <!-- <div>
+                <p>{{ work.address }}</p>
               </div>
               <div>
                 <h4>
                     DETAILS:
                 </h4>
-                <p>
-                    {{ pet.details }}
-                </p>
-              </div>
+                  <p>{{ work.details }}</p>
+              </div> -->
             </md-card-content>
 
             <md-card-actions layout="row" layout-align="end center">
-              <md-button ng-click="deleteAnimal(pet)">Delete</md-button>
+              <md-button ng-click="deleteWork(work._id)">Delete</md-button>
+              <md-button ng-click="cancelWork(work._id)">Cancel</md-button>
             </md-card-actions>
         </md-card>
       </div>
     </div>
 </md-content>
+<!-- END MD-CARDS -->
+
+<!-- Editing Page Elements with contenteditable -->
+	<h1>AngularJS Edit-in-Place with contenteditable</h1>
+
+	<section>
+		<h2>The contenteditable directive</h2>
+
+		<div contenteditable="true" ng-model="text01">
+		</div>
+	</section>
+
+	<section>
+		<h2>Toggle Editing</h2>
+
+		<button id="editorBtn" type="button" ng-click="toggleEditMode()">{{editmode ? 'Disable Editing' : 'Enable Editing'}}</button>
+		<div id="editor" ng-model="text02" ng-attr-contenteditable="{{ editmode }}">
+		</div>
+	</section>
+
+</div>
+<!-- End Editing Page Elements with contenteditable -->

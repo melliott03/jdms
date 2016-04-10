@@ -10,6 +10,8 @@ var localStrategy = require("passport-local");
 
 var mongoose = require("mongoose");
 
+var twilio = require('twilio');
+
 //MODELS
 var User = require("./models/user");
 
@@ -22,6 +24,10 @@ var sms = require("./routes/sms");
 var phoneCall = require("./routes/phoneCall");
 
 var path = require("path");
+
+var twilio = require("twilio");
+
+var ivr = require("./routes/ivr");
 
 //brought in from previous experiment
 var Schema = mongoose.Schema;
@@ -46,7 +52,7 @@ app.use(session({
 
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: false}));//changed this to false for twilio
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -86,6 +92,8 @@ agenda.on('ready', function() {
 
 console.log('Wait 10 seconds...');
 //#AGENDA ABOVE
+
+
 
 MongoDB.on("error", function(err){
     console.log("Mongo Connection Error: ", err);
@@ -132,8 +140,57 @@ passport.use("local", new localStrategy({
 app.use("/register", register);
 app.use("/user", user); // START HERE TODAY
 app.use("/work", work);
-app.use("/sms", sms);
+app.use("/sms2", sms);
 app.use("/phoneCall/:id", phoneCall);
+// Create a webhook that handles an incoming SMS
+app.post('/sms', function(request, response) {
+    // Create a TwiML response
+    var twiml = new twilio.TwimlResponse();
+    twiml.response('Hello from node.js!');
+
+    // Render the TwiML response as XML
+    response.type('text/xml');
+    response.send(twiml.toString());
+});
+//
+
+//START https://www.twilio.com/blog/2015/09/monitoring-call-progress-events-with-node-js-and-express.html
+// Set Express routes.
+app.post('/events', (req, res) => {
+  var to = req.body.To;
+  var fromNumber = req.body.From;
+  var callStatus = req.body.CallStatus;
+  var callSid = req.body.CallSid;
+
+console.log(to, fromNumber, callStatus, callSid);
+  res.send('Event received');
+});
+//
+app.get('/voice', (req, res) => {
+  //Start of original voice call response
+  console.log('req.query : ', req.query);
+  var name = "Sarah";
+  var address = "5650 Humboldt Avenue North Brooklyn Center, MN 55430";
+  var date = "Monday April 11 3:00PM"
+  // Generate a TwiML response
+  var twiml = new twilio.TwimlResponse();
+  // Talk in a robot voice over the phone.
+  twiml.say('Hello, Good morning  this is a reminder for your work appointment on'+ date +' . This is Mike Elliot saying, we love you. ');
+  // Set the response type as XML.
+  res.header('Content-Type', 'text/xml');
+  // Send the TwiML as the response.
+  res.send(twiml.toString());
+  //END of original voice call response
+
+});
+//END https://www.twilio.com/blog/2015/09/monitoring-call-progress-events-with-node-js-and-express.html
+
+
+app.use('/ivr', ivr);
+
+
+
+
 app.use("/", index);
 
 

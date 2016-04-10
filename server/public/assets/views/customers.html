@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+  <head>
+    <meta charset="utf-8">
+    <title>Users</title>
+
+    <script type="text/javascript" src="/assets/vendors/jquery.min.js"></script>
+    <!-- STYLES -->
+    <link rel="stylesheet" href="/assets/vendors/angular-material/angular-material.min.css">
+
+
+    <!-- SCRIPTS -->
+    <script type="text/javascript" src="/assets/vendors/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/assets/vendors/angular-animate/angular-animate.min.js"></script>
+    <script type="text/javascript" src="/assets/vendors/angular-messages/angular-messages.min.js"></script>
+    <script type="text/javascript" src="/assets/vendors/angular-aria/angular-aria.min.js"></script>
+    <script type="text/javascript" src="/assets/vendors/angular-material/angular-material.min.js"></script>
+    <script type="text/javascript" src="/assets/vendors/angular-route/angular-route.min.js"></script>
+    <!-- <script type="text/javascript" src="/assets/scripts/app.min.js"></script> -->
+
+    <!-- START angular-moment-picker -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
+    <script src="/assets/vendors/angular-moment-picker/angular-moment-picker.min.js"></script>
+    <!-- END angular-moment-picker also see style above -->
+
+    <script type="text/javascript" src="/assets/scripts/app.js"></script>
+    <script type="text/javascript" src="/assets/scripts/controllers.js"></script>
+    <script type="text/javascript" src="/assets/scripts/factories.js"></script>
+
+  </head>
+  <body>
+
+    <div ng-controller="ShowController" layout="column" ng-cloak>
+      <md-toolbar class="md-warn">
+        <div class="md-toolbar-tools">
+          <h2 class="md-flex">Work</h2>
+
+            <md-button><a href="#home">Home(dashboard charts)</a></md-button>
+            <md-button><a href="#work">Work</a></md-button>
+            <md-button><a href="#payment">Payment</a></md-button>
+            <!-- <md-button><a href="#view">*Work(past)(current)</a></md-button>
+            <md-button><a href="#view">*Money</a></md-button> -->
+
+            <p id="welcome" align="right">
+              Hello
+            </p>
+        </div>
+      </md-toolbar>
+      <md-content flex layout-padding>
+
+
+      <script>
+          $(document).ready(function(){
+              $.ajax({
+                  type: "GET",
+                  url: "/user/name",
+                  success: function(response){
+                    console.log(response);
+
+                    $("#welcome").text("Welcome " + response.firstname);
+                  }
+              })
+          });
+      </script>
+            <main ng-view></main>
+            <!--  -->
+          </md-content>
+</div>
+  </body>
+</html>

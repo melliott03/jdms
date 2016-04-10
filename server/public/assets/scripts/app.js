@@ -1,10 +1,16 @@
-var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute']);
+var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table']);
 
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
     $mdThemingProvider.theme('default')
         .primaryPalette('blue-grey')
         .accentPalette('grey');
 }]);
+
+myApp.config(function($mdDateLocaleProvider) {
+    $mdDateLocaleProvider.formatDate = function(date) {
+       return moment(date).format('YYYY-MM-DD');
+    };
+});
 
 myApp.config(["$routeProvider", function($routeProvider){
   $routeProvider.

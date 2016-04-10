@@ -22,6 +22,7 @@ router.get("/name", function(req,res,next){
         firstname: req.user.firstname,
         lastname: req.user.lastname,
         datecreated: req.user.lastlogin,
+        id: req.user._id,
         reminderDateTime: reminderDateTime
     };
     res.json(resUser);

@@ -1,50 +1,80 @@
-<md-content layout-padding>
+<md-content layout-padding ng-controller="AddController">
     <div style="width : 600px; margin: 0 auto;">
       <div layout-align="center center" layout="column">
           <h3 class="md-title">Work Information</h3>
       </div>
-      <form name="animalEntry">
-        <div layout-gt-sm="row">
-          <md-input-container class="md-block" flex-gt-sm>
-            <label>Work</label>
-            <input ng-model="animal.name">
-          </md-input-container>
-
-          <md-input-container class="md-block" flex-gt-sm>
-            <label>Date & Time</label>
-            <input ng-model="animal.age">
-          </md-input-container>
-        </div>
-
+      <form name="workEntry">
         <div layout-gt-sm="row">
           <md-input-container class="md-block" flex-gt-sm>
             <label>Work Type</label>
-            <md-select ng-model="animal.type">
-              <md-option ng-repeat="animal in animals" >
-                {{animal}}
+            <md-select ng-model="work.type">
+              <md-option ng-repeat="work in works" >
+                {{work}}
               </md-option>
             </md-select>
           </md-input-container>
         </div>
+        <!--  -->
+        <div layout-gt-sm="row">
+          <div >
+          <md-input-container class="md-block" flex-gt-sm>
+          <label>Date & Start Time</label>
+          <span class="input-group-addon">
+            <i class="octicon octicon-calendar"></i>
+          </span>
+          <input type="datetime-local"
+          placeholder="Enter date & start time"
+          ng-model="work.date"
+          ng-model-options="{ updateOn: 'blur' }"
+          >
+        </md-input-container>
+        </div>
+
+        <!-- <div>
+        <md-input-container class="md-block" flex-gt-sm>
+        <label>Start Time</label>
+        <input type="time"
+        placeholder="Start Time"
+        ng-model="work.StartTime"
+        ng-model-options="{ updateOn: 'blur' }">
+      </md-input-container>
+      </div> -->
+      <div>
+      <md-input-container class="md-block" flex-gt-sm>
+      <label>End Time</label>
+      <input  type="time"
+      placeholder="End Time"
+      ng-model="work.EndTime"
+      ng-model-options="{ updateOn: 'blur' }">
+    </md-input-container>
+    </div>
+  </div>
+  <!--  -->
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Address</label>
+            <input ng-model="work.address">
+          </md-input-container>
+        </div>
+
 
         <div layout-gt-sm="row">
           <md-input-container class="md-block" flex-gt-sm>
             <label>Other Work Details</label>
-            <input ng-model="animal.details">
+            <input ng-model="work.details">
           </md-input-container>
         </div>
-
-        <div layout-gt-sm="row">
-          <md-input-container class="md-block" flex-gt-sm>
-            <label>Image URL</label>
-            <input ng-model="animal.imageurl">
-          </md-input-container>
-        </div>
-
         <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-          <md-button ng-click="submit(animal)" class="md-raised">SUBMIT</md-button>
+          <md-button ng-click="submit(work)" class="md-raised">SUBMIT</md-button>
         </section>
       </form>
     </div>
   </md-content>
+
+</div>
+
+<div ng-app="myApp" ng-controller="AddController">
+  <md-input-container class="md-block" flex-gt-sm>
+  <md-timepicker ng-model="startTime" md-placeholder="Enter time"></md-timepicker>
+</md-input-container>
 </div>
