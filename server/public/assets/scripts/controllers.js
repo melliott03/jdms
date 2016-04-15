@@ -1,29 +1,38 @@
 myApp.controller("AddController", ["$scope", "$http", "$filter", "WorkService", function($scope, $http, $filter, WorkService){
-    $scope.movies = {};
+
     $scope.data = [];
-    var contractor = WorkService.contractor;
-    var customer = WorkService.customer;
 
     $scope.works = ['Plumber', 'Machenic', 'Marketer', 'Accountant', 'Tutor', 'Painter'];
 
     var workItem={};
     $scope.submit = function(work){
       console.log('work object', work);
+      console.log('work.datetime:', work.date);
+      console.log('work.datetime:', work.date.getTime());
+
+
+
       workItem.type = work.type;
-      workItem.datetime = $filter('date')(work.date, "yyyy-MM-ddTHH:mm:ss.sssZ"); //ISO 8601 datetime string formats (e.g. yyyy-MM-ddTHH:mm:ss.sssZ and its shorter versions like yyyy-MM-ddTHH:mmZ, yyyy-MM-dd or yyyyMMddTHHmmssZ)
+      workItem.datetime = work.date;
+      // workItem.datetime = $filter('date')(work.date, "yyyy-MM-ddTHH:mm:ssZ"); //ISO 8601 datetime string formats (e.g. yyyy-MM-ddTHH:mm:ss.sssZ and its shorter versions like yyyy-MM-ddTHH:mmZ, yyyy-MM-dd or yyyyMMddTHHmmssZ)
+      // console.log('workItem.datetime', workItem.datetime);
+
       // workItem.StartTime = $filter('date')(work.StartTime, "HH:mm");
       workItem.endTime = $filter('date')(work.EndTime, "HH:mm");
       workItem.address = work.address;
       workItem.details = work.details;
-      workItem.customer_id = customer.id;
+      workItem.customer_id = "";
+      workItem.contractor_id = "";
       workItem.status = 'pending';
 
 
+      console.log('Inside AddController WorkService.userObject.id', WorkService.userObject.id);
       console.log('workItem object', workItem);
 
       WorkService.postWork(workItem);
     };
 
+    $scope.logedinUser = WorkService.userObject;
 }]);
 
 myApp.controller("ShowController", ["$scope", "WorkService", function($scope, WorkService){
@@ -35,6 +44,8 @@ myApp.controller("ShowController", ["$scope", "WorkService", function($scope, Wo
     console.log('$scope.works :', $scope.works);
     $scope.deleteWork = WorkService.deleteWork;
     $scope.cancelWork = WorkService.cancelWork;
+    $scope.acceptWork = WorkService.acceptWork;
+    $scope.completeWork = WorkService.completeWork;
 
 // datatable
     $scope.selected = [];
@@ -122,4 +133,37 @@ myApp.controller("CommunicationsController", ["$scope", "WorkService", function(
     console.log("Communications Controller");
 
     $scope.data = WorkService.data;
+}]);
+
+myApp.controller("AuthenticationController", ["$scope", "$location", "AuthenticationService", function($scope, $location, AuthenticationService){
+    console.log("Authentication Controller");
+    var authenticationService = AuthenticationService;
+    $scope.logout = authenticationService.logout;
+}]);
+
+myApp.controller("GoogleController", ["$scope", "$log", function($scope, $log){
+    console.log("Google Controller");
+    $scope.query = "";
+		$scope.paOptions = {
+			updateModel : true
+		};
+		$scope.paTrigger = {};
+		$scope.paDetails = {};
+		$scope.placesCallback = function (error, details) {
+            console.log($scope.query);
+			if (error) {
+				return console.error(error);
+			}
+			$scope.paDetails = details;
+		};
+}]);
+
+myApp.controller("GoogleDisplayController", ["$scope", function($scope, NgMap){
+  console.log("Google Map Display Controller");
+
+  NgMap.getMap().then(function(map) {
+    console.log(map.getCenter());
+    console.log('markers', map.markers);
+    console.log('shapes', map.shapes);
+  });
 }]);

@@ -1,0 +1,82 @@
+{
+  "_args": [
+    [
+      "ng-places-autocomplete",
+      "/Users/mikeelliott/AtomProjects/04052016_1_work"
+    ]
+  ],
+  "_from": "ng-places-autocomplete@latest",
+  "_id": "ng-places-autocomplete@1.2.1",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/ng-places-autocomplete",
+  "_npmUser": {
+    "email": "david.losert@gmx.de",
+    "name": "charminbear"
+  },
+  "_npmVersion": "1.4.23",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "ng-places-autocomplete",
+    "raw": "ng-places-autocomplete",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/ng-places-autocomplete/-/ng-places-autocomplete-1.2.1.tgz",
+  "_shasum": "5c053c3bdb56577953770b80d02819ed0c5b0066",
+  "_shrinkwrap": null,
+  "_spec": "ng-places-autocomplete",
+  "_where": "/Users/mikeelliott/AtomProjects/04052016_1_work",
+  "author": {
+    "name": "David Losert",
+    "url": "david.losert@gmx.de"
+  },
+  "bugs": {
+    "url": "https://github.com/Charminbear/ngPlacesAutocomplete/issues"
+  },
+  "dependencies": {},
+  "description": "A Directive to easily add the autocomplete feature of the Google Places Service to a textbox.",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "gulp": "^3.8.8",
+    "gulp-angular-injector": "^1.0.0",
+    "gulp-jsmin": "^0.1.4",
+    "gulp-load-plugins": "^0.7.0",
+    "gulp-ngmin": "^0.3.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^1.0.1"
+  },
+  "directories": {
+    "example": "example"
+  },
+  "dist": {
+    "shasum": "5c053c3bdb56577953770b80d02819ed0c5b0066",
+    "tarball": "https://registry.npmjs.org/ng-places-autocomplete/-/ng-places-autocomplete-1.2.1.tgz"
+  },
+  "gitHead": "1359caad5343e6209dbea11bed20b28b187b2a66",
+  "homepage": "https://github.com/Charminbear/ngPlacesAutocomplete",
+  "license": "MIT",
+  "main": "ngPlacesAutocomplete.js",
+  "maintainers": [
+    {
+      "name": "charminbear",
+      "email": "david.losert@gmx.de"
+    }
+  ],
+  "name": "ng-places-autocomplete",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Charminbear/ngPlacesAutocomplete.git"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "version": "1.2.1"
+}

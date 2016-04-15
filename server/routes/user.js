@@ -8,13 +8,13 @@ router.get("/", function(req,res,next){
 });
 
 router.get("/name", function(req,res,next){
-    console.log("Hi class! ", req.isAuthenticated());
-    var reminderDateTime =  req.user.lastlogin;
-        console.log('Date.create(reminderDateTime):' ,Date.create(reminderDateTime));
-        console.log('(8).hoursBefore(reminderDateTime):' ,(2).hoursBefore(reminderDateTime));
-        reminderDateTime = (2).hoursBefore(reminderDateTime);
-    var milliseconds = reminderDateTime.getTime();
-        console.log(' (2).hoursBefore(reminderDateTime) in milliseconds:' , milliseconds);
+    console.log("IS USER AUTHENTICATED?", req.isAuthenticated());
+    // var reminderDateTime =  req.user.lastlogin;
+    //     console.log('Date.create(reminderDateTime):' ,Date.create(reminderDateTime));
+    //     console.log('(8).hoursBefore(reminderDateTime):' ,(2).hoursBefore(reminderDateTime));
+    //     reminderDateTime = (2).hoursBefore(reminderDateTime);
+    // var milliseconds = reminderDateTime.getTime();
+    //     console.log(' (2).hoursBefore(reminderDateTime) in milliseconds:' , milliseconds);
 
         // reminderDateTime = reminderDateTime.setHours(reminderDateTime.getHours() - 12);
     var resUser = {

@@ -42,10 +42,10 @@
         <th md-column md:order:by="type"><span>Type</span></th>
         <th md-column data-md-numeric data-md-order-by="datetime" data-md-desc><span>Date and Time</span></th>
         <th md-column data-md-numeric data-md-order-by="endTime"><span>End Time</span></th>
-        <th md-column data-md-numeric data-md-order-by="address"><span>Address</span></th>
-        <th md-column data-md-numeric data-md-order-by="details"><span>Details</span></th>
-        <th md-column data-md-numeric data-md-order-by="status"><span>Status</span></th>
-        <th md-column data-md-numeric data-md-order-by="comment">
+        <th md-column data-md-order-by="address"><span>Address</span></th>
+        <th md-column data-md-order-by="details"><span>Details</span></th>
+        <th md-column data-md-order-by="status"><span>Status</span></th>
+        <th md-column data-md-order-by="comment">
           <md-icon>comments</md-icon>
           <span>Comments</span>
         </th>
@@ -93,8 +93,16 @@
 
             <md-card-content>
               <div>
-                  <p >{{ work.datetime }} to {{ work.endTime }} |  {{ work.address }}  | {{ work.details }} | {{work.status}}</p>
+                  <h1 >{{ work.datetime }} to {{ work.endTime }} |  {{ work.address }}  | {{ work.details }} | {{work.status}} | {{ work.geo }} | {{ work.weather }}</h1>
               </div>
+            <ng-map zoom="11" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP"> <!-- TERRAIN TRAFFIC SATELLITE CONSTANT -->
+             <marker position="{{ work.geo }}"  centered="true"></marker>
+           </ng-map>
+             <!-- <ng-map zoom="11" center="current" map-type-id="MapTypeId.SATELLITE">
+              <marker position="current" animation="Animation.BOUNCE" centered="true"></marker>
+            </ng-map> -->
+
+
               <!-- <div>
                 <p>{{ work.address }}</p>
               </div>
@@ -109,6 +117,8 @@
             <md-card-actions layout="row" layout-align="end center">
               <md-button ng-click="deleteWork(work._id)">Delete</md-button>
               <md-button ng-click="cancelWork(work._id)">Cancel</md-button>
+              <md-button ng-click="acceptWork(work)">Accept</md-button>
+              <md-button ng-click="completeWork(work)">Complete</md-button>
             </md-card-actions>
         </md-card>
       </div>

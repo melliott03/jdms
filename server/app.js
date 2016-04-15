@@ -1,12 +1,15 @@
 var express = require("express");
 var app = express();
+var db = require("./modules/db");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var http = require ('http');
 
+//PASSPORT
 var passport = require("passport");
 var session = require("express-session");
 var localStrategy = require("passport-local");
+var Strategy = require('passport-local').Strategy;//from gitHub Tutorial
 
 var mongoose = require("mongoose");
 
@@ -22,6 +25,8 @@ var work = require("./routes/work");
 var user = require("./routes/user");
 var sms = require("./routes/sms");
 var phoneCall = require("./routes/phoneCall");
+// var weather = require("./routes/weather");
+
 // var contractors = require("./routes/contractors");
 
 var path = require("path");
@@ -30,8 +35,8 @@ var twilio = require("twilio");
 
 var ivr = require("./routes/ivr");
 
-//brought in from previous experiment
-var Schema = mongoose.Schema;
+// //brought in from previous experiment
+// var Schema = mongoose.Schema;
 var Forecast = require('forecast');//not using
 var darksky = require('darksky');//not using
 var geocoder = require('geocoder');
@@ -48,7 +53,7 @@ app.use(session({
     key: "user",
     resave: true,
     s: false,
-    cookie: {maxAge: 60000, secure: false}
+    cookie: {maxAge: 365 * 24 * 60 * 60 * 1000, secure: false}
 }));
 
 app.use(cookieParser());
@@ -57,13 +62,13 @@ app.use(bodyParser.urlencoded({extended: false}));//changed this to false for tw
 app.use(passport.initialize());
 app.use(passport.session());
 
-//MONGO SETUP for Heroku mLab
-var mongoURI =
-  process.env.MONGOLAB_URI ||
-  process.env.MONGOHQ_URL ||
-  'mongodb://localhost/work';
-
-var MongoDB = mongoose.connect(mongoURI).connection;
+// //MONGO SETUP for Heroku mLab
+// var mongoURI =
+//   process.env.MONGOLAB_URI ||
+//   process.env.MONGOHQ_URL ||
+//   'mongodb://localhost/work';
+//
+// var MongoDB = mongoose.connect(mongoURI).connection;
 
 // var mongoURI = "mongodb://localhost/work";
 // var MongoDB = mongoose.connect(mongoURI).connection;
@@ -72,37 +77,37 @@ var MongoDB = mongoose.connect(mongoURI).connection;
 // var agenda = new Agenda({db: {address: 'mongodb://localhost/work'}});
 
 // var mongoConnectionString = "mongodb://localhost/work";
-var agenda = new Agenda({db: {address: mongoURI}});
+// var agenda = new Agenda({db: {address: mongoURI}});
+//
+// agenda.define('greet the world', function(job, done) {
+//   // console.log( 'I said hello world rightaway!');
+//   done();
+// });
+//
+// agenda.define('say hello', function(job, done) {
+//   // console.log('I waited 1 mins to say hi Mike!');
+//   done();
+// });
+//
+// agenda.on('ready', function() {
+//   agenda.schedule('now', 'greet the world');
+//   agenda.schedule('in 1 minutes', 'say hello');
+//   agenda.start();
+// });
 
-agenda.define('greet the world', function(job, done) {
-  console.log( 'I said hello world rightaway!');
-  done();
-});
 
-agenda.define('say hello', function(job, done) {
-  console.log('I waited 1 mins to say hi Mike!');
-  done();
-});
-
-agenda.on('ready', function() {
-  agenda.schedule('now', 'greet the world');
-  agenda.schedule('in 1 minutes', 'say hello');
-  agenda.start();
-});
-
-
-console.log('Wait 10 seconds...');
+// console.log('Wait 10 seconds...');
 //#AGENDA ABOVE
 
 
 
-MongoDB.on("error", function(err){
-    console.log("Mongo Connection Error: ", err);
-});
-
-MongoDB.once("open", function(err){
-    console.log("Mongo Connection Open");
-});
+// MongoDB.on("error", function(err){
+//     console.log("Mongo Connection Error: ", err);
+// });
+//
+// MongoDB.once("open", function(err){
+//     console.log("Mongo Connection Open");
+// });
 
 //PASSPORT SESSION
 passport.serializeUser(function(user, done){
@@ -169,13 +174,13 @@ passport.use("local", new localStrategy({
 // });
 // });
 // //END SEEDING DATABASE WITH CONTRACTORS
-
-
-
+// app.use(express.favicon(path.join(__dirname, 'public/images/favicon.ico')));
 app.use("/register", register);
 app.use("/user", user); // START HERE TODAY
 app.use("/work", work);
 app.use("/sms2", sms);
+// app.use("/weather", weather);
+
 // app.use("/contractor", contractor);
 app.use("/phoneCall/:id", phoneCall);
 // Create a webhook that handles an incoming SMS
@@ -225,12 +230,29 @@ app.get('/voice', (req, res) => {
 app.use('/ivr', ivr);
 
 
+app.get('/logout', function(req, res){
+  console.log('inside /logout on server before LOGOUT', req.user);
+  req.logOut();
+  console.log('inside /logout on server AFTER LOGOUT', req.user);
+  // req.session.destroy();
+  res.redirect("/");
+});
 
+// app.get('/logout', function(req, res){
+//   console.log('inside /logout on server before LOGOUT', req.user);
+//   req.logout(function(req, res){
+//     console.log('inside /logout on server before LOGOUT', req.user);
+//     console.log('inside /logout on server AFTER LOGOUT', req.user);
+//     // req.session.destroy();
+//     res.redirect("/");
+//   });
+//
+// });
 
 app.use("/", index);
 
 
-app.set("port", (process.env.PORT || 5000));
+app.set("port", (process.env.PORT || 5100));
 
 app.listen(app.get("port"), function(){
     console.log("Listening on port: ", app.get("port"));

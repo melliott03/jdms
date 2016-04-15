@@ -2,16 +2,28 @@
 <html ng-app="myApp">
   <head>
     <meta charset="utf-8">
-    <title>Home Page</title>
+    <title>Home Page!!!</title>
     <!-- <script type="text/javascript" src="/assets/vendors/angular.min.js"></script>
     <script type="text/javascript" src="/assets/vendors/angular-route.min.js"></script> -->
     <!-- <script type="text/javascript" src="/assets/scripts/app.js"></script>
     <script type="text/javascript" src="/assets/scripts/controllers.js"></script>
     <script type="text/javascript" src="/assets/scripts/factories.js"></script> -->
 
+    <!-- MAPS -->
+    <script src="https://maps.google.com/maps/api/js?libraries=placeses,visualization,drawing,geometry,places"></script>
+    <!-- <script src="https://code.angularjs.org/1.3.15/angular.js"></script>
+    <script src="https://rawgit.com/allenhwkim/angularjs-google-maps/master/build/scripts/ng-map.js"></script> -->
+
+
     <!-- START Style for angular-moment-picker also see style above -->
     <link href="/assets/vendors/angular-moment-picker/angular-moment-picker.min.css" rel="stylesheet">
     <!-- END Style for angular-moment-picker also see scripts below -->
+<!-- @TODO remove api key by moving this into the controller and placing the key in .env -->
+    <!-- Google Auto Complete Address -->
+    <!-- <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB5GSiF0fh0og5Lbx_CYsqUvNyiDv4XhRI&libraries=places"></script> -->
+
+    <!-- GoogleMap Display http://angular-ui.github.io/angular-google-maps/?JRwnVeTsM4n98QWm-oHQDw&ved=0CBMQFjAAOAo&usg=AFQjCNGZWf3yx7Vg-YGZEM9xiHCJLP3Oeg#!/use -->
+    <script type="text/javascript" src="/assets/vendors/lodash/lodash.min.js"></script>
 
     <!-- START angular-material-data-table, script below-->
     <link rel="stylesheet" type="text/css" href="/assets/vendors/angular-material-data-table/md-data-table.min.css" >
@@ -30,6 +42,17 @@
     <script type="text/javascript" src="/assets/vendors/angular-material/angular-material.min.js"></script>
     <script type="text/javascript" src="/assets/vendors/angular-route/angular-route.min.js"></script>
     <!-- <script type="text/javascript" src="/assets/scripts/app.min.js"></script> -->
+
+    <!-- <link rel="stylesheet" type="text/css" href="/assets/vendors/angular-material-data-table/md-data-table.min.css" > -->
+    <script type="text/javascript" src="/assets/vendors/ngmap/build/scripts/ng-map.min.js"></script>
+
+
+    <!-- GoogleMap Display http://angular-ui.github.io/angular-google-maps/?JRwnVeTsM4n98QWm-oHQDw&ved=0CBMQFjAAOAo&usg=AFQjCNGZWf3yx7Vg-YGZEM9xiHCJLP3Oeg#!/use -->
+    <script src="/assets/vendors/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
+    <script src="/assets/vendors/angular-google-maps/dist/angular-google-maps.min.js"></script>
+
+    <!-- Google Auto Complete Address -->
+    <script type="text/javascript" src="/assets/vendors/ng-places-autocomplete/ngPlacesAutocomplete.min.js"></script>
 
     <!-- START angular-moment-picker -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
@@ -53,7 +76,7 @@
     <div ng-controller="HomeController">
 
     <md-button>Work</md-button>
-    <md-button class="md-primary md-raised" ng-click="showTabDialog($event)" >
+    <md-button class="md-primary" ng-click="showTabDialog($event)" >
       Login/Register
     </md-button>
 
@@ -64,19 +87,34 @@
 <!-- START OF VIDEO IN BACKGROUND EXAMPLE -->
     <header>
       <section class="video-container">
-        <div class="filter"></div>
-        <video autoplay loop id="video">
+        <!-- <div class="filter"></div> -->
+        <!-- <video autoplay loop id="video">
           <source src="http://dfcb.github.io/BigVideo.js/vids/dock.mp4" type="video/mp4">
-        </video>
+        </video> -->
+        <ng-map zoom="11" center="[40.74, -74.18]" map-type-id="MapTypeId.SATELLITE">
+         <marker position="current" animation="Animation.BOUNCE" centered="true"></marker>
+       </ng-map>
+       <p>Next Map</p>
+        <ng-map center="[40.74, -74.18]">
+          <marker position="40.74,-74.18" title="Hello Mike!"></marker>
+        </ng-map>
+        <p>Next Map</p>
+        <ng-map center="-25.363882,131.044922" zoom="4">
+        <marker position="-25.363882,131.044922" title="Hello World!"></marker>
+      </ng-map>
+
       </section>
     </header>
 
     <footer>
       <div class="container">
         <p>Copyright 2016 Work, LLC.</p>
+
       </div>
     </footer>
     <!-- END OF VIDEO IN BACKGROUND EXAMPLE -->
 </div><!-- END OF HomeController -->
+
+
   </body>
 </html>

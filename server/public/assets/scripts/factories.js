@@ -1,45 +1,48 @@
 myApp.factory("WorkService", ["$http", function($http){
     var data = {};
-
-    var customer = {
-      username: "mshell",
-      firstname: "Michelle",
-      lastname: "Wang",
-      datecreated: "2016-04-05T19:27:24.601Z",
-      reminderDateTime: "2016-04-05T17:27:24.601Z",
-      id: "5704119cba665bdb454ccbe9"
-    };
-    var contractor = {
-      username: "Ab",
-      firstname: "Ab",
-      lastname: "Sonie",
-      datecreated: "2016-04-09T14:05:45.214Z",
-      reminderDateTime: "2016-04-09T12:05:45.214Z",
-      id: "57090c39560cecb28ac576fe"
-    };
+    var userObject = {};
 
     var postWork = function(data){
         $http.post("/work", data).then(function(response){
             console.log("WORK SAVED! ", response);
-            data.response = response.data;
+            data.postedWork = response.data;
             // getWorks();
+        });
+    };
+
+    var getUser = function(){
+        $http.get("/user/name").then(function(response){
+            console.log(response.data);
+            userObject.response = response.data;
+            console.log('userObject ', userObject);
+
         });
     };
 
     var getWorks = function(){
         $http.get("/work").then(function(response){
-            console.log(response.data);
             data.response = response.data;
+            console.log('W E A T H E R !!! !!!!!  ::  ', response.data.weather);
+
+            // getWeather(response.data);
+            // console.log(response.data);
         });
     };
 
-    // var deleteWork = function(work_id){
-    // console.log("Deleting work", work_id);
-    // $http.delete("/work/" + work_id).then(function(response){
-    //     console.log("Deleted : ", response.data);
-    //     getWorks();
-    // });
+    // var getWeather = function(work){
+    //     $http.post("/weather", work).then(function(response){
+    //         console.log(response.data);
+    //         data.response = response.data;
+    //     });
     // };
+
+    var deleteWork = function(work_id){
+    console.log("Deleting work", work_id);
+    $http.delete("/work/" + work_id).then(function(response){
+        console.log("Deleted : ", response.data);
+        getWorks();
+    });
+    };
     var cancelWork = function(work_id){
     console.log("Canceling work", work_id);
     $http.put("/work/" + work_id).then(function(response){
@@ -47,18 +50,32 @@ myApp.factory("WorkService", ["$http", function($http){
         getWorks();
     });
     };
-    var updateWork = function(work_id){
-    console.log("Deleting work", work_id);
-    $http.put("/work/" + work_id).then(function(response){
-        console.log("Updated : ", response.data);
+    var acceptWork = function(work){
+    console.log("inside acceptWork in factory", work);
+    $http.put("/work/accept/", work).then(function(response){
+        console.log("accepted back from server : ", response.data);
         getWorks();
     });
     };
+    var completeWork = function(work){
+    console.log("inside completeWork in factory", work);
+    $http.put("/work/complete", work).then(function(response){
+        console.log("complete back from server : ", response.data);
+        getWorks();
+    });
+    };
+    // var updateWork = function(work_id){
+    // console.log("Deleting work", work_id);
+    // $http.put("/work/" + work_id).then(function(response){
+    //     console.log("Updated : ", response.data);
+    //     getWorks();
+    // });
+    // };
 
     var getSMS = function(){
         $http.get("/sms").then(function(response){
             console.log(response.data);
-            data.response = response.data;
+            data.sms = response.data;
         });
     };
     var travelTimeReturned={};
@@ -69,16 +86,38 @@ myApp.factory("WorkService", ["$http", function($http){
        });
       //  console.log('in getData allPetsReturned outside getcall', allPetsReturned);
     };
+    // var getForecast={};
+    // var getForecast = function(lat, long, time){
+    //    $http.get("/travelTime").then(function(response){
+    //       travelTimeReturned.theTime = response.data;
+    //       console.log('INSIDE RETURN FROM /travelTime');
+    //    });
+    //   //  console.log('in getData allPetsReturned outside getcall', allPetsReturned);
+    // };
 
+    getUser();
     return {
         postWork : postWork,
         getWorks : getWorks,
-        // deleteWork : deleteWork,
+        deleteWork : deleteWork,
+        acceptWork : acceptWork,
+        completeWork : completeWork,
         cancelWork : cancelWork,
         getSMS : getSMS,
         getTravelTime : getTravelTime,
         data : data,
-        customer : customer,
-        contractor : contractor
+        userObject : userObject
+    };
+}]);
+
+myApp.factory("AuthenticationService", ["$http", "$location", function($http, $location){
+    var logout = function(){
+       $http.get("/logout").then(function(response){
+         console.log('in factory back grom loging out');
+       });
+    };
+
+    return {
+        logout : logout
     };
 }]);

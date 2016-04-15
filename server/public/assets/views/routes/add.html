@@ -27,6 +27,7 @@
           ng-model="work.date"
           ng-model-options="{ updateOn: 'blur' }"
           >
+          <md-datepicker ng-model="work.date"></md-datepicker>
         </md-input-container>
         </div>
 
@@ -50,12 +51,29 @@
     </div>
   </div>
   <!--  -->
-        <div layout-gt-sm="row">
-          <md-input-container class="md-block" flex-gt-sm>
-            <label>Address</label>
-            <input ng-model="work.address">
+
+
+        <!-- GoogleAutoComplete -->
+        <div ng-controller="GoogleController">
+          <div layout-gt-sm="row">
+        	<md-input-container class="md-block" flex-gt-sm>
+              <input type="text" ng-model="work.address"
+            		   ng-places-autocomplete
+            		   ng-model="query"
+            		   pa-options="paOptions"
+            		   pa-on-place-ready="placesCallback"
+            		   pa-trigger="paTrigger"
+            			/>
           </md-input-container>
+        		<md-button ng-click="paTrigger()">Send</md-button>
+          </div>
+        <div>
+        		<h1>Details: </h1>
+
+        		<p>{{paDetails}}</p>
+        	</div>
         </div>
+        <!-- End GoogleAutoComplete -->
 
 
         <div layout-gt-sm="row">
