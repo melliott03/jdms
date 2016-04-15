@@ -1,5 +1,12 @@
 <p>Inside User Partial</p>
 
+<!-- CHARTS -->
+<md-content layout="row" layout-sm="column" layout-padding>
+ <!-- style="height:200px; width:100%;" -->
+<div ng-controller="ChartController">
+<div google-chart chart="chartObject" flex></div>
+<div google-chart chart="chartObject_column" flex></div>
+</md-content>
 <!-- END Datatable -->
 <md-toolbar class="md-table-toolbar md-default" ng-show="!options.rowSelection || !selected.length">
   <div class="md-toolbar-tools">
@@ -93,11 +100,12 @@
 
             <md-card-content>
               <div>
-                  <h1 >{{ work.datetime }} to {{ work.endTime }} |  {{ work.address }}  | {{ work.details }} | {{work.status}} | {{ work.geo }} | {{ work.weather }}</h1>
+                  <h1 >{{ work.datetime }} to {{ work.endTime }} |  {{ work.address }}  | {{ work.details }} | {{work.status}} | {{ work.geo }} | {{ work.weather[0].daily.data[0].summary }}</h1>
               </div>
-            <ng-map zoom="11" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP"> <!-- TERRAIN TRAFFIC SATELLITE CONSTANT -->
+            <ng-map zoom="11" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP" style="height:200px; width:200;"> <!-- TERRAIN TRAFFIC SATELLITE CONSTANT -->
              <marker position="{{ work.geo }}"  centered="true"></marker>
            </ng-map>
+           </div>
              <!-- <ng-map zoom="11" center="current" map-type-id="MapTypeId.SATELLITE">
               <marker position="current" animation="Animation.BOUNCE" centered="true"></marker>
             </ng-map> -->
@@ -127,7 +135,7 @@
 <!-- END MD-CARDS -->
 
 <!-- Editing Page Elements with contenteditable -->
-	<h1>AngularJS Edit-in-Place with contenteditable</h1>
+	<!-- <h1>AngularJS Edit-in-Place with contenteditable</h1>
 
 	<section>
 		<h2>The contenteditable directive</h2>
@@ -144,5 +152,5 @@
 		</div>
 	</section>
 
-</div>
+</div> -->
 <!-- End Editing Page Elements with contenteditable -->

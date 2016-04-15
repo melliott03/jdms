@@ -9,7 +9,7 @@ var http = require ('http');
 var passport = require("passport");
 var session = require("express-session");
 var localStrategy = require("passport-local");
-var Strategy = require('passport-local').Strategy;//from gitHub Tutorial
+// var Strategy = require('passport-local').Strategy;//from gitHub Tutorial
 
 var mongoose = require("mongoose");
 

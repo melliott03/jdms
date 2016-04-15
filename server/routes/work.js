@@ -115,7 +115,7 @@ router.post("/", function(req,res){
     workdatetime = (2).hoursBefore(workdatetime);
     unixtime = workdatetime.getTime();
     unixtime = ""+unixtime;
-    unixtime = unixtime.slice(0, - 3);
+    unixtime = '2013-05-06T12:00:00-0400'; // '1461067200' or unixtime.slice(0, - 3);
     console.log(' (2).hoursBefore(workdatetime) in milliseconds:' , unixtime);
     var latLonTime = ""+geo[0]+","+geo[1]+","+unixtime; //"34.6036,98.3959"
 
@@ -125,7 +125,7 @@ router.post("/", function(req,res){
       timeout: 1000
     },
     forecast = new Forecast(options);
-
+    var past = Math.round((new Date()).getTime() / 1000) - 57600;
     var getForecast = function(latitude, longitude, time){
       forecast.getAtTime(latitude, longitude, time, function (err, res, data) {
         if (err) throw err;
@@ -146,7 +146,7 @@ router.post("/", function(req,res){
         });//END addedWork.save
       });//END forecast.getAtTime
     }//END var getForecast
-    getForecast(lat,lon,unixtime);
+    getForecast(lat,lon,past);
   });//END geocoder.geocode
 });// END router.post
 

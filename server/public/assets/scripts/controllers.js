@@ -167,3 +167,82 @@ myApp.controller("GoogleDisplayController", ["$scope", function($scope, NgMap){
     console.log('shapes', map.shapes);
   });
 }]);
+
+myApp.controller("ChartController", ["$scope", function($scope){
+  console.log("Chart Controller");
+
+  $scope.chartObject = {};
+
+   $scope.chartObject.type = "PieChart";
+
+   $scope.onions = [
+       {v: "Tutor"},
+       {v: 3},
+   ];
+
+   $scope.chartObject.data = {"cols": [
+       {id: "t", label: "Topping", type: "string"},
+       {id: "s", label: "Slices", type: "number"}
+   ], "rows": [
+       {c: [
+           {v: "Mechanic"},
+           {v: 3},
+       ]},
+       {c: $scope.onions},
+       {c: [
+           {v: "Accountant"},
+           {v: 31}
+       ]},
+       {c: [
+           {v: "Marketer"},
+           {v: 1},
+       ]},
+       {c: [
+           {v: "Other"},
+           {v: 2},
+       ]}
+   ]};
+
+   $scope.chartObject.options = {
+       'title': 'Work by type'
+   };
+
+// BEGIN CHARTOBJECT_COLUMN
+$scope.chartObject_column = {};
+
+   $scope.chartObject_column.type = "ColumnChart";
+
+   $scope.onions = [
+       {v: "Tutor"},
+       {v: 3},
+   ];
+
+   $scope.chartObject_column.data = {"cols": [
+       {id: "t", label: "Topping", type: "string"},
+       {id: "s", label: "Slices", type: "number"}
+   ], "rows": [
+       {c: [
+           {v: "Mechanic"},
+           {v: 3},
+       ]},
+       {c: $scope.onions},
+       {c: [
+           {v: "Accountant"},
+           {v: 31}
+       ]},
+       {c: [
+           {v: "Marketer"},
+           {v: 1},
+       ]},
+       {c: [
+           {v: "Other"},
+           {v: 2},
+       ]}
+   ]};
+
+   $scope.chartObject_column.options = {
+       'title': 'Work by type'
+   };
+//END
+
+}]);
