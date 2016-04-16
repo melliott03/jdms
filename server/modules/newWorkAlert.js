@@ -48,13 +48,13 @@ var newWorkAlert = function(addedWork){
   // /*@todo send them sms and email with work details*/
 
   var sendEmail = function(contractors){
+    var nodemailer = require('nodemailer');
 
     for (var i = 0; i < contractors.length; i++) {
           contractorFname = contractors[i].fname;
           contractorLname = contractors[i].lname;
           contractorEmail = contractors[i].email;
 
-      var nodemailer = require('nodemailer');
       // create reusable transporter object using the default SMTP transport
       var transporter = nodemailer.createTransport('smtps://modespeaking%40gmail.com:gwtexvqycbstxzvf@smtp.gmail.com');
       // setup e-mail data with unicode symbols
@@ -75,28 +75,32 @@ var newWorkAlert = function(addedWork){
         console.log('Message sent: ' + info.response);
       });
     }
-  }
-  var sendSMS = function(phoneNumber){
+  }//End sendEmail function
+
+  var sendSMS = function(contractors){
+    console.log('NUMBER OF CONTRACTORS TO SMS AND EMAIL: ',contractors.length);
+    for (var i = 0; i < contractors.length; i++) {
+          contractorFname = contractors[i].fname;
+          contractorLname = contractors[i].lname;
+          contractorEmail = contractors[i].email;
+
       //SMS
-      var twilio = require('twilio'),
-      client = twilio('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c'); //twilio('ACCOUNTSID', 'AUTHTOKEN'),
-      // var cronJob = require('cron').CronJob;
+      var accountSid = 'AC266d44c5ce01697df6f475b34f850d8f';
+      var authToken = "ee3db5ce904dd188912ea24b1646b46c"; //"{{ auth_token }}";
+      var client = require('twilio')(accountSid, authToken);
 
-      // var textJob = new cronJob( '33 5 * * *', function(){ // represents 33 minutes past 5am
-      //   client.sendMessage( {
-      //     to:'6128121238',
-      //     from:'7637102473',
-      //     body:'Hello! Hope you’re having a good day!' }, function( err, data ) {
-      //     });
-      // },  null, true);
-
-      client.sendMessage({
-        to: phoneNumber,
-        from:'6122844292',
-        body:'Hello '+contractorFname+'  '+contractorLname+' 🐴 New work availible. TYPE: '
-        +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime }, function( err, data ) {
-        });
-  }
-}
+      client.messages.create({
+          body: 'Hello '+ contractorFname +'  '+ contractorLname +'🐴 New work availible. TYPE: '
+          +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime, // plaintext body
+          html: '<b>Hello '+ contractorFname +'  '+ contractorLname +' 🐴 New work availible. TYPE: '
+          +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+"</b>", // html body
+          to: "+16128121238",
+          from: "+16122844292"
+      }, function(err, message) {
+          process.stdout.write(message.sid);
+      }); //End client.messages.create function
+  }//End forloop
+}//End sendSMS function
+}//End var newWorkAlert function
 
 module.exports = newWorkAlert;
