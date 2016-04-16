@@ -45,7 +45,7 @@ router.route("/accept/")
         if(err){
           console.log(err);
         }
-        work.contractor_id = req.user._id;
+        work.contractor_id = "570aabd2810d0828a73f6a78"; // req.user._id
         work.status = "Accept";
         // save the work
         work.save(function(err) {
@@ -283,22 +283,29 @@ var acceptedWorkReminder =  function(acceptedWork, contractor){
     });
   }
   var smsReminder = function(addedWork, contractor){
-    console.log('inside smsReminder contractor:',contractor)
+    console.log('INSIDE smsReminder FUNCTION: contractor ',contractor);
+    console.log('INSIDE smsReminder FUNCTION: addedWork ',addedWork);
+
     contractorFname = contractor.fname;
     contractorLname = contractor.lname;
     contractorEmail = contractor.email;
     contractorPhone = contractor.phone;
+      //SMS
+      var accountSid = 'AC266d44c5ce01697df6f475b34f850d8f';
+      var authToken = "ee3db5ce904dd188912ea24b1646b46c"; //"{{ auth_token }}";
+      var client = require('twilio')(accountSid, authToken);
 
-    //SMS
-
-
-    client.sendMessage({
-      to: contractorPhone,
-      from:'6122844292',
-      body:'Hello '+contractorFname+'  '+contractorLname+' 🐴 This is a remider of your upcoming appointment: '
-      +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime }, function( err, data ) {
-      });
-    }
+      client.messages.create({
+          body: 'Hello '+contractorFname+'  '+contractorLname+' 🐴 This is a remider of your upcoming appointment: '
+          +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime, // plaintext body
+          html: '<b>Hello '+ contractorFname +'  '+ contractorLname +' 🐴 This is a remider of your upcoming appointment: '
+          +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+"</b>", // html body
+          to: "+16128121238",
+          from: "+16122844292"
+      }, function(err, message) {
+          process.stdout.write(message.sid);
+      }); //End client.messages.create function
+}//End sendSMS function
 
   var phoneReminder =  function(addedWork, contractor){
     contractorFname = contractor.fname;
