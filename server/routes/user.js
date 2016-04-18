@@ -22,6 +22,12 @@ router.get("/name", function(req,res,next){
         firstname: req.user.firstname,
         lastname: req.user.lastname,
         datecreated: req.user.lastlogin,
+        phone: req.user.phone,
+        address: req.user.address,
+        type: req.user.type,
+        email: req.user.email,
+        geo: req.user.geo,
+        role: req.user.role,
         id: req.user._id,
         // reminderDateTime: reminderDateTime
     };

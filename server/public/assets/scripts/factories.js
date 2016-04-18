@@ -1,11 +1,14 @@
 myApp.factory("WorkService", ["$http", function($http){
+    var postedWork = {};
     var data = {};
     var userObject = {};
+    var availibleWorkObject = {};
+    var contractorWorkObject = {};
 
     var postWork = function(data){
         $http.post("/work", data).then(function(response){
             console.log("WORK SAVED! ", response);
-            data.postedWork = response.data;
+            postedWork.data = response.data;
             // getWorks();
         });
     };
@@ -22,19 +25,30 @@ myApp.factory("WorkService", ["$http", function($http){
     var getWorks = function(){
         $http.get("/work").then(function(response){
             data.response = response.data;
-            console.log('W E A T H E R !!! !!!!!  ::  ', response.data.weather);
+            console.log('RETRUN OF GET WROKS FUNCTION !!! !!!!!  ::  ', response.data);
 
             // getWeather(response.data);
             // console.log(response.data);
         });
     };
 
-    // var getWeather = function(work){
-    //     $http.post("/weather", work).then(function(response){
-    //         console.log(response.data);
-    //         data.response = response.data;
-    //     });
-    // };
+
+    var getAvailibleWorks = function(){
+        $http.get("/work/availibleWork").then(function(response){
+            availibleWorkObject.data = response.data;
+            console.log('A V A I L I B L E  W O R K  ::  ', response.data);
+
+        });
+    };
+
+    var getContractorWork = function(){
+        $http.get("/work/contractorWork").then(function(response){
+            contractorWorkObject.data = response.data;
+            console.log('C O N T R A C T O R   W O R K  ::  ', response.data);
+
+        });
+    };
+
 
     var deleteWork = function(work_id){
     console.log("Deleting work", work_id);
@@ -55,6 +69,9 @@ myApp.factory("WorkService", ["$http", function($http){
     $http.put("/work/accept/", work).then(function(response){
         console.log("accepted back from server : ", response.data);
         getWorks();
+        getContractorWork();
+        getAvailibleWorks();
+
     });
     };
     var completeWork = function(work){
@@ -98,6 +115,7 @@ myApp.factory("WorkService", ["$http", function($http){
     getUser();
     return {
         postWork : postWork,
+        postedWork : postedWork,
         getWorks : getWorks,
         deleteWork : deleteWork,
         acceptWork : acceptWork,
@@ -106,7 +124,11 @@ myApp.factory("WorkService", ["$http", function($http){
         getSMS : getSMS,
         getTravelTime : getTravelTime,
         data : data,
-        userObject : userObject
+        userObject : userObject,
+        availibleWorkObject : availibleWorkObject,
+        getAvailibleWorks : getAvailibleWorks,
+        getContractorWork : getContractorWork,
+        contractorWorkObject : contractorWorkObject
     };
 }]);
 

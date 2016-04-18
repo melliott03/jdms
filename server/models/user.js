@@ -8,11 +8,21 @@ var UserSchema = new Schema({
     password: {type: String, required: true},
     firstname: {type: String, required: true},
     lastname: {type: String, required: true},
-    lastlogin: {type: Date, default: Date.now }
+    phone: {type: String, required: true},
+    address: {type: String, required: true},
+    type: {type: String, required: true},
+    email: {type: String, required: true},
+    role: {type: String, required: true},
+    lastlogin: {type: Date, default: Date.now },
+    geo: {
+        type: [Number],
+        index: '2d'
+      }
 });
 
 UserSchema.pre("save", function(next){
     console.log("Made it into Pre!");
+    console.log(" 'this' inside Pre!", this);
     var user = this;
 
     if(!user.isModified("password")) return next;

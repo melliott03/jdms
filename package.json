@@ -27,6 +27,7 @@
     "cookie-parser": "^1.4.1",
     "cron": "^1.1.0",
     "darksky": "^0.1.2",
+    "dotenv": "^1.2.0",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
@@ -51,11 +52,10 @@
     "request": "^2.69.0",
     "restler": "^3.4.0",
     "sugar": "^1.4.1",
+    "twilio": "^3.0.0-edge",
     "twilio-heroku": "^0.3.2",
     "waze-travel-time": "0.0.3",
     "xml2js": "^0.4.16",
-    "xmlbuilder": "^8.2.0",
-    "dotenv": "^1.2.0",
-    "twilio": "^3.0.0-edge"
+    "xmlbuilder": "^8.2.0"
   }
 }

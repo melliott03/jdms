@@ -45,7 +45,7 @@ router.route("/accept/")
         if(err){
           console.log(err);
         }
-        work.contractor_id = "570aabd2810d0828a73f6a78"; // req.user._id
+        work.contractor_id = req.user._id; // req.user._id
         work.status = "Accept";
         // save the work
         work.save(function(err) {
@@ -78,9 +78,11 @@ router.route("/complete")
     work.status = 'complete';
     // save the work
     work.save(function(err) {
+      console.log('WORK UPDATED WITH COMPLETE !!!!!!!');
+      postToPayable();
       if (err)
       res.send(err);
-      res.json({ message: 'work updated with accept!' });
+      res.json({ message: 'WORK UPDATED WITH COMPLETE !!!!!!!' });
     });
   });
 });
@@ -151,6 +153,64 @@ router.post("/", function(req,res){
 });// END router.post
 
 
+router.get("/availibleWork", function(req,res){
+console.log('INSIDE get availibleWork on work req.user._id: ',req.user);
+console.log('INSIDE get availibleWork on work req.user.geo[0]: ',req.user.geo[0]);
+console.log('INSIDE get availibleWork on work req.user.geo[1]: ',req.user.geo[1]);
+
+      var distance = 1000 / 3963.2;
+      var query = Work.find({'geo': {
+        $near: [
+          req.user.geo[0],
+          req.user.geo[1]
+        ],
+        $maxDistance: distance
+        }
+        /**@todo figureout how to compair where contractor.type equals addedWork.type*/
+      }).where('type').equals(req.user.type).where('status').ne('Accept');
+      query.exec(function (err, availibleWorks) {
+        console.log(' inside query.exec contractors nearby : ', availibleWorks);
+        if (err) {
+          console.log(err);
+          throw err;
+        }
+        if (!availibleWorks) {
+          console.log('Did not find any matching item : ',  availibleWorks);
+          res.json({});
+        } else {
+          console.log('Found matching works in contractor area: ', availibleWorks);
+          // res.send(availibleWorks);
+          res.json(availibleWorks);
+       }
+      });
+});
+
+router.get("/contractorWork", function(req,res){
+
+    Work.find(function (err, work) {
+      if (err) {
+        res.send(err, null);
+      }
+      console.log("req.user._id", req.user._id);
+      console.log("FOUND ALL WORKS CONTRACTOR ACCEPTED", work);
+      res.send(work);
+    }).where('contractor_id').equals(''+req.user._id);
+      // query.exec(function (err, contractorWork) {
+      //   console.log(' inside query.exec contractors nearby : ', contractorWork);
+      //   if (err) {
+      //     console.log(err);
+      //     throw err;
+      //   }
+      //   if (!contractorWork) {
+      //     console.log('Did not find any matching item : ',  contractorWork);
+      //     res.json({});
+      //   } else {
+      //     console.log("Found all the contractor's work which they have accepted: ", contractorWork);
+      //     res.send(contractorWork);
+      //     // res.json(contractorWork);
+      //  }
+      // });
+});
 
 
 router.get("/", function(req,res){
@@ -162,55 +222,12 @@ Work.find(function (err, work) {
       if (err) {
         res.send(err, null);
       }
-
-      // var weatherProcess = function(resSend){
-      //   for (var i = 0; i < work.length; i++) {
-      //     var singleWork = work[i];
-      //     var lat = singleWork.geo[0],
-      //         lon = singleWork.geo[1],
-      //         time = '1461067200';
-      //
-      //         //WEATHER (ALERTS) use a UNIX GMT timestamp converter for angular to make datetime human readable
-      //           var data = ""+lat+","+lon+","+time; //"34.6036,98.3959"
-      //           console.log('data before http call',data);
-      //           const https = require('https');
-      //           https.get("https://api.forecast.io/forecast/a7477969f3764bd6cd2bf01efa7a7365/" + data, (res) => {
-      //             console.log('statusCode: ', res.statusCode);
-      //             console.log('headers: ', res.headers);
-      //             res.on('data', (d) => {
-      //               process.stdout.write(d);
-      //             });
-      //           }).on('error', (e) => {
-      //             console.error(e);
-      //           }); // END WEATHER
-
-
-              // var Forecast = require('forecast.io');
-              // var options = {
-              //   APIKey: 'a7477969f3764bd6cd2bf01efa7a7365', //process.env.FORECAST_API_KEY
-              //   timeout: 1000
-              // },
-              // forecast = new Forecast(options);
-              // forecast.getAtTime(lat, lon, time, function (err, res, data) {
-              //   if (err) throw err;
-              //   // console.log('data inside forecast.js: ', data);
-              //   // console.log('data inside work:  ', data);
-              //   work.weather = data;
-              //   workArray.push(work);
-              // });
-        // }//End of forloop
-        // return workArray;
-    // }//End of function defination
-      // weatherProcess();//function call
       res.send(work);
       var resSend = function(){
         console.log('workArray :', workArray);
         res.send(workArray);
       };
     }).or([{ customer_id: ''+req.user._id }, { contractor_id: ''+req.user._id }]);
-    // .where(''+req.user._id).equals('customer_id').or('contractor_id');
-    // .or('customer_id').equals(req.user._id);
-    // console.log('work', work);
 });
 
 
@@ -357,6 +374,31 @@ var acceptedWorkReminder =  function(acceptedWork, contractor){
   });
 }
 
+
+var postToPayable = function(){
+  var request = require('request'),
+  username = "1064627855",
+  password = "ZLBKgzq2XskgkLj-D4Eo7VUiwo8fucN7",
+  url = "https://" + username + ":" + password + "@api.payable.com/v1/work";
+
+  request.post({
+    url:url,
+    form: {
+      worker_id : '2665370794',
+      work_type_id : 2413827961,
+      quantity : 24,
+      start:'2016-03-17T08:16:19Z',
+      end:'2016-03-17T010:16:19Z',
+      notes:'Hello great job on this assignment Ben',
+      amount: 500
+  }},
+  function(err,httpResponse,body){
+
+    console.log('body in app.post return from Payable ',body);
+    // res.send(body);
+
+ });
+}
 
 
 module.exports = router;

@@ -1,72 +1,4 @@
 
-<!-- START TWILIO VIDEO  -->
-           <md-card-content>
-<div>
-  <div id="remote-media"></div>
-  <div id="controls">
-    <div id="preview">
-      <p class="instructions">Video</p>
-      <div id="local-media"></div>
-      <button id="button-preview">Preview My Camera</button>
-    </div>
-  </div><!-- /controls -->
-  <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script> -->
-
-  <script src="/quickstart.js"></script>
-</div>
-               </md-card-content>
-<!-- END TWILIO VIDEO -->
-
-
-<!--  NG DIALOG  -->
-<div ng-controller="VideoDialogController" layout="row" ng-cloak style="height: 300px">
-  <md-content></md-content>
-  <style>
-      .edgePadding {
-        padding-left: 25px;
-        padding-right: 25px;
-      }
-  </style>
-  <!-- <div layout="column" layout-align="center center"
-       style="background-color: #f2f2f2" class="md-padding">
-    <span id="left">left</span>
-  </div> -->
-  <div layout="column" layout-align="center start" layout-padding flex>
-    <div class="dialog-demo-content" layout="column" layout-align="center center" style="width:100%">
-      <md-button class="md-primary md-raised edgePadding" ng-click="openFromLeft($event)" >
-        
-      </md-button>
-    </div>
-  </div>
-  <!-- <div layout="column" layout-align="center center"
-       style="background-color: #f2f2f2" class="md-padding">
-    <span id="right">right</span>
-  </div> -->
-</div>
-<!-- END NG-DIALOG -->
-
-
-<!-- ng-if="contractor && contractor" -->
-<!-- <div ng-if="contractor()">
-  <md-button><a href="#home">Shoes-contractor</a></md-button>
-  <md-button><a href="#add">Boat</a></md-button>
-  <md-button><a href="#view">Trees</a></md-button>
-</div>
-<div ng-if="customer()">
-  <md-button><a href="#home">Shoes-customer</a></md-button>
-  <md-button><a href="#add">Boat</a></md-button>
-  <md-button><a href="#view">Trees</a></md-button>
-</div> -->
-
-<!-- <div ng-if="customer && customer" ng-include="/home.html'"></div> -->
-
-<!-- CHARTS -->
-<md-content layout="row" layout-sm="column" layout-padding>
- <!-- style="height:200px; width:100%;" -->
-<div ng-controller="ChartController">
-<div google-chart chart="chartObject" flex></div>
-<div google-chart chart="chartObject_column" flex></div>
-</md-content>
 <!-- END Datatable -->
 <md-toolbar class="md-table-toolbar md-default" ng-show="!options.rowSelection || !selected.length">
   <div class="md-toolbar-tools">
@@ -119,7 +51,7 @@
       </tr>
     </thead>
     <tbody md-body>
-      <tr md-row md-select="work" md-select-id="name" data-md-on-select="log" md-on-deselect="deselect" x-md-auto-select="options.autoSelect"  data-ng-repeat="work in works.response | filter: filter.search | orderBy: query.order | limitTo: query.limit : (query.page - 1) * query.limit">
+      <tr md-row md-select="work" md-select-id="name" data-md-on-select="log" md-on-deselect="deselect" x-md-auto-select="options.autoSelect"  data-ng-repeat="work in availibleWorks.data | filter: filter.search | orderBy: query.order | limitTo: query.limit : (query.page - 1) * query.limit">
         <td md-cell>{{work.type}}</td>
         <td md-cell>{{work.datetime}}</td>
         <td md-cell>{{work.endTime}}</td>
@@ -149,7 +81,7 @@
 <!-- START MD-CARDS -->
 <md-content layout-padding>
     <div style="width : 100%; margin: 2vw auto;">
-      <div ng-repeat="work in works.response">
+      <div ng-repeat="work in availibleWorks.data">
         <md-card>
           <!-- <p>{{Marketer work.type }}</p> -->
             <md-card-title>
@@ -198,8 +130,8 @@
             </md-card-content>
 
             <md-card-actions layout="row" layout-align="end center">
-              <md-button ng-click="deleteWork(work._id)">Delete</md-button>
-              <md-button ng-click="cancelWork(work._id)">Cancel</md-button>
+              <md-button ng-click="acceptWork(work)">Accept</md-button>
+              <md-button ng-click="completeWork(work)">Complete</md-button>
             </md-card-actions>
         </md-card>
       </div>

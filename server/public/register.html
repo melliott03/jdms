@@ -18,7 +18,22 @@
           <input type="text" name="firstname" id="firstname" />
           <label for="lastname">LAST NAME: </label>
           <input type="text" name="lastname" id="lastname" />
+          <label for="phone">PHONE: </label>
+          <input type="text" name="phone" id="phone" />
+          <label for="email">EMAIL: </label>
+          <input type="text" name="email" id="email" />
+          <label for="address">ADDRESS: </label>
+          <input type="text" name="address" id="address" />
+          <label for="type">FIELD: </label>
+          <input type="text" name="type" id="type" />
+          <p ng-show="content == 'contractor'">This is the first content!</p>
+
+          <input type="radio" name="role" value="contractor" ng-model="content">Contractor<br>
+
+            <input type="radio" name="role" value="customer" ng-model="content">Customer<br>
+
           <input type="submit" value="Register" />
+
       </form>
   </body>
 </html>

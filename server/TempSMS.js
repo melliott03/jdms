@@ -42,3 +42,67 @@ var sendSMS = function(phoneNumber){
       console.log('message.sid:',message);
     });
   }//End of sendSMS function
+
+
+
+// send reminder sms in work.js (i'm storing here old version as I am replacing)
+var smsReminder = function(addedWork, contractor){
+  console.log('inside smsReminder contractor:',contractor)
+  contractorFname = contractor.fname;
+  contractorLname = contractor.lname;
+  contractorEmail = contractor.email;
+  contractorPhone = contractor.phone;
+
+  //SMS
+
+
+  client.sendMessage({
+    to: contractorPhone,
+    from:'6122844292',
+    body:'Hello '+contractorFname+'  '+contractorLname+' 🐴 This is a remider of your upcoming appointment: '
+    +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime }, function( err, data ) {
+    });
+  }
+
+
+  //TEMP SERVER CODE
+  var contractorOrCustomer = function(req, res){
+    console.log('req.user.role:', req.user);
+    if (req.user.role == 'contractor'){
+        var obj =  {
+            successRedirect: "/assets/views/contractors.html",
+            failureRedirect: "/"
+        }
+      return  obj;
+    }else if (req.user.role == 'customer') {
+      var obj =  {
+          successRedirect: "/assets/views/customers.html",
+          failureRedirect: "/"
+      }
+      return  obj;
+    }
+  }
+
+  //write post here
+  router.post("/", function(req,res,next){
+    console.log('req.user.role:', req.user);
+    if (req.user.role == 'contractor'){
+      passport.authenticate("local",
+  }); passport.authenticate("local", contractorOrCustomer(req,res)));
+
+
+  //Second version
+  router.post("/", function(req,res,next){
+    console.log('req.user.role:', req);
+    if (req.user.role == 'contractor'){
+      passport.authenticate("local", {
+          successRedirect: "/assets/views/contractors.html",
+          failureRedirect: "/"
+      });
+    }else if (req.user.role == 'customer') {
+      passport.authenticate("local", {
+          successRedirect: "/assets/views/customers.html",
+          failureRedirect: "/"
+      });
+    }
+  });

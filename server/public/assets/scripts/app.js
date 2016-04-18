@@ -25,6 +25,12 @@ myApp.config(["$routeProvider", function($routeProvider){
       when("/home", {
           templateUrl: "/assets/views/routes/home.html",
           controller: "HomeController"
+      }).when("/availibleView", {
+          templateUrl: "/assets/views/routes/availibleView.html",
+          controller: "ShowController"
+      }).when("/acceptedView", {
+          templateUrl: "/assets/views/routes/accepted.html",
+          controller: "ShowController"
       }).
       when("/add", {
           templateUrl: "/assets/views/routes/add.html",

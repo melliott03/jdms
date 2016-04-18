@@ -1,64 +1,7 @@
-
-<!-- START TWILIO VIDEO  -->
-           <md-card-content>
-<div>
-  <div id="remote-media"></div>
-  <div id="controls">
-    <div id="preview">
-      <p class="instructions">Video</p>
-      <div id="local-media"></div>
-      <button id="button-preview">Preview My Camera</button>
-    </div>
-  </div><!-- /controls -->
-  <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script> -->
-
-  <script src="/quickstart.js"></script>
-</div>
-               </md-card-content>
-<!-- END TWILIO VIDEO -->
+<p>Contractor View</p>
 
 
-<!--  NG DIALOG  -->
-<div ng-controller="VideoDialogController" layout="row" ng-cloak style="height: 300px">
-  <md-content></md-content>
-  <style>
-      .edgePadding {
-        padding-left: 25px;
-        padding-right: 25px;
-      }
-  </style>
-  <!-- <div layout="column" layout-align="center center"
-       style="background-color: #f2f2f2" class="md-padding">
-    <span id="left">left</span>
-  </div> -->
-  <div layout="column" layout-align="center start" layout-padding flex>
-    <div class="dialog-demo-content" layout="column" layout-align="center center" style="width:100%">
-      <md-button class="md-primary md-raised edgePadding" ng-click="openFromLeft($event)" >
-        
-      </md-button>
-    </div>
-  </div>
-  <!-- <div layout="column" layout-align="center center"
-       style="background-color: #f2f2f2" class="md-padding">
-    <span id="right">right</span>
-  </div> -->
-</div>
-<!-- END NG-DIALOG -->
 
-
-<!-- ng-if="contractor && contractor" -->
-<!-- <div ng-if="contractor()">
-  <md-button><a href="#home">Shoes-contractor</a></md-button>
-  <md-button><a href="#add">Boat</a></md-button>
-  <md-button><a href="#view">Trees</a></md-button>
-</div>
-<div ng-if="customer()">
-  <md-button><a href="#home">Shoes-customer</a></md-button>
-  <md-button><a href="#add">Boat</a></md-button>
-  <md-button><a href="#view">Trees</a></md-button>
-</div> -->
-
-<!-- <div ng-if="customer && customer" ng-include="/home.html'"></div> -->
 
 <!-- CHARTS -->
 <md-content layout="row" layout-sm="column" layout-padding>
@@ -169,15 +112,25 @@
            <!-- START TWILIO VIDEO  -->
                       <md-card-content>
            <div>
+             <div id="remote-media"></div>
              <div id="controls">
+               <div id="preview">
+                 <p class="instructions">Hello Beautiful</p>
+                 <div id="local-media"></div>
+                 <button id="button-preview">Preview My Camera</button>
+               </div>
                <div id="invite-controls">
                  <p class="instructions">Invite another Video Client</p>
+                 <input id="invite-to" type="text"  placeholder="Identity to send an invite to" />
                  <button id="button-invite" value="{{work.contractor_id}}">Send Invite</button>
                </div>
                <div id="log">
                  <p>&gt;&nbsp;<span id="log-content">Preparing to listen</span>...</p>
                </div>
              </div><!-- /controls -->
+             <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script> -->
+
+             <script src="/quickstart.js"></script>
            </div>
                           </md-card-content>
            <!-- END TWILIO VIDEO -->
@@ -200,6 +153,8 @@
             <md-card-actions layout="row" layout-align="end center">
               <md-button ng-click="deleteWork(work._id)">Delete</md-button>
               <md-button ng-click="cancelWork(work._id)">Cancel</md-button>
+              <md-button ng-click="acceptWork(work)">Accept</md-button>
+              <md-button ng-click="completeWork(work)">Complete</md-button>
             </md-card-actions>
         </md-card>
       </div>

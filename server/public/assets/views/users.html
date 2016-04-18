@@ -78,9 +78,8 @@
   </head>
   <body ng-cloak>
     <div ng-controller="AuthenticationController ">
-      <md-button class="md-warn " ng-click="logout()" >
+      <md-button class="md-warn"  href="/logout">
         logout
-        <!-- <a href="/">logout</a> -->
       </md-button>
     </div>
     <div ng-controller="ShowController" layout="column" ng-cloak>
@@ -88,9 +87,17 @@
         <div class="md-toolbar-tools">
           <h2 class="md-flex">Work</h2>
 
-            <md-button><a href="#home">HOME</a></md-button>
-            <md-button><a href="#add">ADD</a></md-button>
-            <md-button><a href="#view">VIEW</a></md-button>
+            <div ng-if="contractor()">
+              <md-button><a href="#home">HOME</a></md-button>
+              <md-button><a href="#acceptedView">ACCEPTED </a></md-button>
+              <md-button><a href="#availibleView">NEW </a></md-button>
+            </div>
+            <div ng-if="customer()">
+              <md-button><a href="#home">HOME</a></md-button>
+              <md-button><a href="#add">ADD</a></md-button>
+              <md-button><a href="#view">VIEW</a></md-button>
+            </div>
+
             <!-- <md-button><a href="#view">*Work(past)(current)</a></md-button>
             <md-button><a href="#view">*Money</a></md-button> -->
 
@@ -99,7 +106,7 @@
             </p> -->
             <div ng-controller="AddController">
             <p  align="right">
-              Hello {{logedinUser.response.firstname}}
+              Hello {{logedinUser.response.firstname}}  ({{logedinUser.response.role}})
             </p>
           </div>
         </div>
@@ -109,6 +116,13 @@
             <main ng-view></main>
             <!--  -->
           </md-content>
+
+
+          <!-- <div ng-if="{{logedinUser.response.role}} && contractor" ng-include="/add.html'"></div>
+          <div ng-if="{{logedinUser.response.role}} && customer" ng-include="/home.html'"></div> -->
+
+
+
 </div>
   </body>
 </html>

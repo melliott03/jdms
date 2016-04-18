@@ -8,7 +8,7 @@ var http = require ('http');
 var path = require('path');//Twilio Video
 var AccessToken = require('twilio').AccessToken;//Twilio Video
 var ConversationsGrant = AccessToken.ConversationsGrant;//Twilio Video
-var randomUsername = require('./randos');//Twilio Video
+// var randomUsername = require('./randos');//Twilio Video
 
 app.use(express.static(path.join(__dirname, 'public')));//Twilio Video
 
@@ -152,6 +152,7 @@ passport.use("local", new localStrategy({
 ));
 
 
+
 // //START SEEDING DATABASE WITH CONTRACTORS
 // // Geocode and save work to database
 //       geocoder.geocode("5650 Humboldt Avenue North, Brooklyn Center, MN 55430", function ( err, geocodedData ) {
@@ -183,10 +184,22 @@ passport.use("local", new localStrategy({
 // });
 // //END SEEDING DATABASE WITH CONTRACTORS
 // app.use(express.favicon(path.join(__dirname, 'public/images/favicon.ico')));
+
+
+var isAuthenticated = function (req, res, next) {
+  if (req.isAuthenticated()){
+    return next();
+  }
+  res.redirect('/');
+}
+
 app.use("/register", register);
-app.use("/user", user); // START HERE TODAY
+app.use("/user", isAuthenticated, user); // START HERE TODAY
 app.use("/work", work);
 app.use("/sms2", sms);
+
+
+
 // app.use("/weather", weather);
 
 // app.use("/contractor", contractor);
@@ -237,13 +250,15 @@ app.get('/voice', (req, res) => {
 
 app.use('/ivr', ivr);
 
+// app.get('/logout', logout());
 
 app.get('/logout', function(req, res){
   console.log('inside /logout on server before LOGOUT', req.user);
-  req.logOut();
+  req.logout();
   console.log('inside /logout on server AFTER LOGOUT', req.user);
-  // req.session.destroy();
-  res.redirect("/");
+  console.log('inside /logout on server BEFORE req.session.destroy:', req.session);
+  req.session.destroy();
+  res.redirect('/');
 });
 
 // app.get('/logout', function(req, res){

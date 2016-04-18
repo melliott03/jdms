@@ -39,6 +39,29 @@ myApp.controller("ShowController", ["$scope", "WorkService", function($scope, Wo
     // WorkService.getMovies();//this triggers my other sms and voice calls
     // WorkService.getSMS(); //this triggers ANOTHER other sms and voice calls
     WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
+    WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
+    WorkService.getContractorWork(); //gets all the work contractor has accepted
+
+    $scope.contractor = function(){
+      if(WorkService.userObject.response.role == "contractor" ){
+          return true;
+    }else{
+          return false;
+    }
+  }
+
+  $scope.customer = function(){
+    if(WorkService.userObject.response.role == "customer" ){
+        return true;
+  }else{
+        return false;
+  }
+}
+
+    // console.log('WorkService.userObject.response.role:', WorkService.userObject.response.role);
+    $scope.contractorWorks = WorkService.contractorWorkObject;
+    $scope.availibleWorks = WorkService.availibleWorkObject;
+    console.log('$scope.availibleWorks :', $scope.availibleWorks);
 
     $scope.works = WorkService.data;
     console.log('$scope.works :', $scope.works);
@@ -61,7 +84,7 @@ myApp.controller("ShowController", ["$scope", "WorkService", function($scope, Wo
   }
 
   $scope.getTypes = function () {
-    return ['Plumber', 'Machenic', 'Marketer', 'Accountant', 'Tutor', 'Painter'];
+    return ['Plumer', 'Machenic', 'Marketer', 'Accountant', 'Tutor', 'Painter'];
     // $scope.promise = $nutrition.desserts.get($scope.query, success).$promise;
   };
   //End datatable
@@ -181,8 +204,8 @@ myApp.controller("ChartController", ["$scope", function($scope){
    ];
 
    $scope.chartObject.data = {"cols": [
-       {id: "t", label: "Topping", type: "string"},
-       {id: "s", label: "Slices", type: "number"}
+       {id: "t", label: "Work", type: "string"},
+       {id: "s", label: "Fields", type: "number"}
    ], "rows": [
        {c: [
            {v: "Mechanic"},
@@ -218,8 +241,8 @@ $scope.chartObject_column = {};
    ];
 
    $scope.chartObject_column.data = {"cols": [
-       {id: "t", label: "Topping", type: "string"},
-       {id: "s", label: "Slices", type: "number"}
+       {id: "t", label: "Work", type: "string"},
+       {id: "s", label: "Fields", type: "number"}
    ], "rows": [
        {c: [
            {v: "Mechanic"},
@@ -243,6 +266,79 @@ $scope.chartObject_column = {};
    $scope.chartObject_column.options = {
        'title': 'Work by type'
    };
+//END
+
+}]);
+
+
+myApp.controller("VideoDialogController", ["$scope", "$mdDialog", function($scope, $mdDialog){
+  console.log(" Video Dialog Controller");
+
+// BEGIN
+$scope.openFromLeft = function(ev) {
+  $mdDialog.show({
+    controller: DialogController,
+    templateUrl: 'video.tmpl.html',
+    parent: angular.element(document.body),
+    targetEvent: ev,
+    clickOutsideToClose:true
+  });
+    // $mdDialog.show(
+    //   $mdDialog.alert()
+    //     .clickOutsideToClose(true)
+    //     // .templateUrl('tabDialog.tmpl.html')
+    //     // .htmlContent('tabDialog.tmpl.html')
+    //
+    //     .title('Video Conference')
+    //     .textContent('Smiles are free')
+    //     .ariaLabel('Video Conference')
+    //     .ok('Close')
+    //     // You can specify either sting with query selector
+    //     .openFrom('#center')
+    //     // or an element
+    //     .closeTo(angular.element(document.querySelector('#bottom')))
+    // );
+  };
+  $scope.openOffscreen = function() {
+    $mdDialog.show({
+      controller: DialogController,
+      templateUrl: 'tabDialog.tmpl.html',
+      parent: angular.element(document.body),
+      targetEvent: ev,
+      clickOutsideToClose:true
+    });
+    $mdDialog.show(
+      $mdDialog.alert()
+        .clickOutsideToClose(true)
+        .htmlContent('<p>tabDialog.tmpl.html</p>')
+        // .templateUrl('tabDialog.tmpl.html')
+        // .title('Opening from offscreen')
+        .textContent('<p>tabDialog.tmpl.html</p>')
+        .ariaLabel('Offscreen Demo')
+        .ok('Amazing!')
+        // Or you can specify the rect to do the transition from
+        .openFrom({
+          top: -50,
+          width: 30,
+          height: 80
+        })
+        .closeTo({
+          left: 1500
+        })
+    );
+  };
+
+  function DialogController($scope, $mdDialog) {
+    $scope.hide = function() {
+      $mdDialog.hide();
+    };
+    $scope.cancel = function() {
+      $mdDialog.cancel();
+    };
+    $scope.answer = function(answer) {
+      $mdDialog.hide(answer);
+    };
+  }
 //END
 
 }]);

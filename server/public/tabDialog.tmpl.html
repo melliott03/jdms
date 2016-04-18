@@ -2,7 +2,7 @@
 
     <md-toolbar>
       <div class="md-toolbar-tools">
-        <h2>Login or Register</h2>
+        <h2></h2>
         <span flex></span>
         <md-button class="md-icon-button" ng-click="cancel()">
           <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
@@ -10,31 +10,104 @@
       </div>
     </md-toolbar>
     <md-dialog-content style="max-width:800px;max-height:810px; ">
+
+
       <md-tabs md-dynamic-height md-border-bottom>
         <md-tab label="Login">
-          <md-content class="md-padding">
+          <div layout="column" ng-cloak class="md-inline-form">
+            <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
             <form action="/" method="post">
-                <label for="username">USERNAME: </md-label>
-                <input type="text" name="username" id="username" />
-                <label for="password">PASSWORD: </md-label>
-                <input type="text" name="password" id="password" />
-                <input type="submit" value="Login" />
-            </form>          </md-content>
-        </md-tab>
-        <md-tab label="Register">
-          <md-content class="md-padding">
-            <form action="/register" method="post">
+                    <md-input-container>
                 <label for="username">USERNAME: </label>
                 <input type="text" name="username" id="username" />
+                    </md-input-container>
+                    <md-input-container>
                 <label for="password">PASSWORD: </label>
-                <input type="text" name="password" id="password" />
+                <input type="password" name="password" id="password" />
+                    </md-input-container>
+                <md-button class="md-raised md-primary" type="submit" value="Login" >Submit</md-button>
+            </form>
+            </md-content>
+          </div>
+        </md-tab>
+        <md-tab label="Register">
+          <div layout="column" ng-cloak class="md-inline-form">
+            <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+            <form action="/register" method="post">
+                  <md-input-container>
+                <label for="username">USERNAME: </label>
+                <input type="text" name="username" id="username" class="md-block" flex-gt-sm required/>
+                  </md-input-container>
+                  <md-input-container>
+                <label for="password">PASSWORD: </label>
+                <input type="text" name="password" id="password" class="md-block" flex-gt-sm required/>
+                  </md-input-container>
+                  <md-input-container>
                 <label for="firstname">FIRST NAME: </label>
-                <input type="text" name="firstname" id="firstname" />
+                <input type="text" name="firstname" id="firstname" class="md-block" flex-gt-sm required/>
+                  </md-input-container>
+                  <md-input-container>
                 <label for="lastname">LAST NAME: </label>
-                <input type="text" name="lastname" id="lastname" />
-                <input type="submit" value="Register" />
+                <input type="text" name="lastname" id="lastname" class="md-block" flex-gt-sm required/>
+                  </md-input-container>
+                  <md-input-container>
+                <label for="phone">PHONE: </label>
+                <input type="text" name="phone" id="phone" class="md-block" flex-gt-sm required/>
+                  </md-input-container>
+                  <md-input-container>
+                <label for="email">EMAIL: </label>
+                <input type="email" name="email" id="email" class="md-block" flex-gt-sm required/>
+                  </md-input-container>
+                  <md-input-container>
+                <!-- <label for="address">ADDRESS: </label>
+                <input type="text" name="address" id="address" class="md-block" flex-gt-sm required/> -->
+                <!-- GoogleAutoComplete -->
+                <div ng-controller="GoogleController">
+                  <div layout-gt-sm="row">
+                  <md-input-container class="md-block" flex-gt-sm>
+                      <input type="text" ng-model="work.address" value="address"
+                           ng-places-autocomplete
+                           ng-model="query"
+                           pa-options="paOptions"
+                           pa-on-place-ready="placesCallback"
+                           pa-trigger="paTrigger"
+                          />
+                  </md-input-container>
+                    <md-button ng-click="paTrigger()">Send</md-button>
+                  </div>
+                  <input type="text" name="geo" id="geo" class="md-block" value="{{paDetails.geometry.access_points[0].location}}" hidden flex-gt-sm />
+                  <input type="text" name="address" id="address" class="md-block" value="{{paDetails.formatted_address}}" hidden flex-gt-sm />
+
+                  <div>
+                    <h1>Details: </h1>
+
+                    <p>{{paDetails.geometry.access_points[0].location}}</p>
+                  </div>
+                </div>
+                <!-- End GoogleAutoComplete -->
+                  </md-input-container>
+
+                  <md-input-container>
+                <input type="radio" name="role" value="customer" class="md-block" flex-gt-sm ng-model="content" >Customer<br>
+                <input type="radio" name="role" value="contractor" class="md-block" flex-gt-sm ng-model="content" required>Contractor<br>
+                </md-input-container>
+                  <div ng-show="content == 'contractor'">
+                      <md-input-container>
+                    <!-- <label for="type">FIELD: </label> -->
+                    <select type="text" name="type" id="type" class="md-block" flex-gt-sm >
+                      <option>Accountant</option>
+                      <option>Tutor</option>
+                      <option>Machenic</option>
+                      <option>Plumber</option>
+                      <option>Marketer</option>
+                    </select>
+                      </md-input-container>
+                  </div>
+                <md-button class="md-raised md-primary" type="submit" value="Register">Register</md-button>
+
             </form>
           </md-content>
+          </div>
         </md-tab>
       </md-tabs>
     </md-dialog-content>

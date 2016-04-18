@@ -16,7 +16,7 @@ var newWorkAlert = function(addedWork){
   // //qury for nearby locations -- this code works
   var matchingContractors;
 
-      var distance = 1000 / 6371;
+      var distance = 1000 / 3963.2;
       var query = Contractor.find({'geo': {
         $near: [
           addedWork.geo[0],
