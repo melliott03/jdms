@@ -16,7 +16,7 @@ var getForecast = require('../modules/forecast');
 // var restrict = require("../modules/restrict"); // restricts user to be logedin to access route
 
 // ---- Models ---- //
-var Contractor = require('../models/contractor');
+// var Contractor = require('../models/contractor');
 var User = require('../models/user');
 var Work = require('../models/work');
 
@@ -53,7 +53,7 @@ router.route("/accept/")
           res.send(err);
           console.log('2nd INSIDE accept after save on server work:', work);
 
-          Contractor.findById(work.contractor_id, function(err, contractor){
+          User.findById(work.contractor_id, function(err, contractor){
             console.log('INSIDE accept on server work.contractor_id contractor:', contractor);
             if(err){
               console.log(err);
@@ -303,8 +303,8 @@ var acceptedWorkReminder =  function(acceptedWork, contractor){
     console.log('INSIDE smsReminder FUNCTION: contractor ',contractor);
     console.log('INSIDE smsReminder FUNCTION: addedWork ',addedWork);
 
-    contractorFname = contractor.fname;
-    contractorLname = contractor.lname;
+    contractorFname = contractor.firstname;
+    contractorLname = contractor.lastname;
     contractorEmail = contractor.email;
     contractorPhone = contractor.phone;
       //SMS
@@ -329,10 +329,15 @@ var acceptedWorkReminder =  function(acceptedWork, contractor){
     contractorLname = contractor.lname;
     contractorEmail = contractor.email;
     contractorPhone = contractor.phone;
+    contractor_id = contractor._id;
+    var work_id =  addedWork._id;
+
 
     //BEGIN CALL
     client.calls.create({
-      url: "https://enigmatic-lowlands-90835.herokuapp.com/phoneCall/?user_id=12345", //"https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
+      url: "https://8f7e319b.ngrok.io/voice/?user_id="+contractor_id+"&work_id="+work_id, //"https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
+              //https://8f7e319b.ngrok.io/ivr/welcome
+      // url: "https://8f7e319b.ngrok.io/phoneCall/?user_id=12345", //"https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
       to: contractorPhone, //+16122671744  "+16128121238" "+16129631395 Dev" 8023561672 Tommy
       from: "+17637102473",  //+17637102473  16122844292
       method: "GET"

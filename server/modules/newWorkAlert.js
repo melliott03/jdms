@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-
-var Contractor = require('../models/contractor');
+// var User = require('../models/user');
+// var Contractor = require('../models/contractor');
 var User = require('../models/user');
 var Work = require('../models/work');
 
@@ -17,7 +17,7 @@ var newWorkAlert = function(addedWork){
   var matchingContractors;
 
       var distance = 1000 / 3963.2;
-      var query = Contractor.find({'geo': {
+      var query = User.find({'geo': {
         $near: [
           addedWork.geo[0],
           addedWork.geo[1]
@@ -51,8 +51,8 @@ var newWorkAlert = function(addedWork){
     var nodemailer = require('nodemailer');
 
     for (var i = 0; i < contractors.length; i++) {
-          contractorFname = contractors[i].fname;
-          contractorLname = contractors[i].lname;
+          contractorFname = contractors[i].firstname;
+          contractorLname = contractors[i].lastname;
           contractorEmail = contractors[i].email;
 
       // create reusable transporter object using the default SMTP transport
@@ -78,10 +78,10 @@ var newWorkAlert = function(addedWork){
   }//End sendEmail function
 
   var sendSMS = function(contractors){
-    console.log('NUMBER OF CONTRACTORS TO SMS AND EMAIL: ',contractors.length);
+    console.log('NUMBER OF CONTRACTORS TO SMS AND EMAIL: ',contractors.length + 1);
     for (var i = 0; i < contractors.length; i++) {
-          contractorFname = contractors[i].fname;
-          contractorLname = contractors[i].lname;
+          contractorFname = contractors[i].firstname;
+          contractorLname = contractors[i].lastname;
           contractorEmail = contractors[i].email;
 
       //SMS

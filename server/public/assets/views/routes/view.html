@@ -1,51 +1,4 @@
 
-<!-- START TWILIO VIDEO  -->
-           <md-card-content>
-<div>
-  <div id="remote-media"></div>
-  <div id="controls">
-    <div id="preview">
-      <p class="instructions">Video</p>
-      <div id="local-media"></div>
-      <button id="button-preview">Preview My Camera</button>
-    </div>
-  </div><!-- /controls -->
-  <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script> -->
-
-  <script src="/quickstart.js"></script>
-</div>
-               </md-card-content>
-<!-- END TWILIO VIDEO -->
-
-
-<!--  NG DIALOG  -->
-<div ng-controller="VideoDialogController" layout="row" ng-cloak style="height: 300px">
-  <md-content></md-content>
-  <style>
-      .edgePadding {
-        padding-left: 25px;
-        padding-right: 25px;
-      }
-  </style>
-  <!-- <div layout="column" layout-align="center center"
-       style="background-color: #f2f2f2" class="md-padding">
-    <span id="left">left</span>
-  </div> -->
-  <div layout="column" layout-align="center start" layout-padding flex>
-    <div class="dialog-demo-content" layout="column" layout-align="center center" style="width:100%">
-      <md-button class="md-primary md-raised edgePadding" ng-click="openFromLeft($event)" >
-        
-      </md-button>
-    </div>
-  </div>
-  <!-- <div layout="column" layout-align="center center"
-       style="background-color: #f2f2f2" class="md-padding">
-    <span id="right">right</span>
-  </div> -->
-</div>
-<!-- END NG-DIALOG -->
-
-
 <!-- ng-if="contractor && contractor" -->
 <!-- <div ng-if="contractor()">
   <md-button><a href="#home">Shoes-contractor</a></md-button>
@@ -60,29 +13,9 @@
 
 <!-- <div ng-if="customer && customer" ng-include="/home.html'"></div> -->
 
-<!-- CHARTS -->
-<md-content layout="row" layout-sm="column" layout-padding>
- <!-- style="height:200px; width:100%;" -->
-<div ng-controller="ChartController">
-<div google-chart chart="chartObject" flex></div>
-<div google-chart chart="chartObject_column" flex></div>
-</md-content>
+
 <!-- END Datatable -->
-<md-toolbar class="md-table-toolbar md-default" ng-show="!options.rowSelection || !selected.length">
-  <div class="md-toolbar-tools">
-    <span>Work</span>
-    <span flex></span>
-    <md-button class="md-icon-button" ng-click="loadStuff()">
-      <md-icon>refresh</md-icon>
-    </md-button>
-    <md-button class="md-icon-button">
-      <md-icon>filter_list</md-icon>
-    </md-button>
-    <md-button class="md-icon-button">
-      <md-icon>more_vert</md-icon>
-    </md-button>
-  </div>
-</md-toolbar>
+
 
 <md-toolbar class="md-table-toolbar alternate" ng-show="options.rowSelection && selected.length">
   <div class="md-toolbar-tools">
@@ -112,10 +45,6 @@
         <th md-column data-md-order-by="address"><span>Address</span></th>
         <th md-column data-md-order-by="details"><span>Details</span></th>
         <th md-column data-md-order-by="status"><span>Status</span></th>
-        <th md-column data-md-order-by="comment">
-          <md-icon>comments</md-icon>
-          <span>Comments</span>
-        </th>
       </tr>
     </thead>
     <tbody md-body>
@@ -128,9 +57,7 @@
         <td md-cell>{{work.status}}</td>
         <!-- <td md-cell hide-sm>{{work.details}}</td>
         <td md-cell hide-sm>{{work.status}}</td> -->
-        <td md-cell ng-click="editComment($event, work)" ng-class="{'md-placeholder': !work.comment}">
-          {{work.comment || 'Add a comment'}}
-        </td>
+
       </tr>
     </tbody>
   </table>
@@ -147,10 +74,10 @@
 
 
 <!-- START MD-CARDS -->
-<md-content layout-padding>
+<md-content layout-padding id="card" class="card">
     <div style="width : 100%; margin: 2vw auto;">
       <div ng-repeat="work in works.response">
-        <md-card>
+        <md-card id="card" class="card">
           <!-- <p>{{Marketer work.type }}</p> -->
             <md-card-title>
               <md-card-title-text>
@@ -168,6 +95,19 @@
            <div style="height:132px;width:100%"></div>
            <!-- START TWILIO VIDEO  -->
                       <md-card-content>
+                        <div>
+                          <div id="remote-media"></div>
+                          <div id="controls">
+                            <div id="preview">
+                              <p class="instructions">Video</p>
+                              <div id="local-media"></div>
+                              <button id="button-preview">Preview My Camera</button>
+                            </div>
+                          </div><!-- /controls -->
+                          <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script> -->
+
+                          <script src="/quickstart.js"></script>
+                        </div>
            <div>
              <div id="controls">
                <div id="invite-controls">

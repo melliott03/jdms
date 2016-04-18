@@ -1,20 +1,6 @@
 
 <!-- END Datatable -->
-<md-toolbar class="md-table-toolbar md-default" ng-show="!options.rowSelection || !selected.length">
-  <div class="md-toolbar-tools">
-    <span>Work</span>
-    <span flex></span>
-    <md-button class="md-icon-button" ng-click="loadStuff()">
-      <md-icon>refresh</md-icon>
-    </md-button>
-    <md-button class="md-icon-button">
-      <md-icon>filter_list</md-icon>
-    </md-button>
-    <md-button class="md-icon-button">
-      <md-icon>more_vert</md-icon>
-    </md-button>
-  </div>
-</md-toolbar>
+
 
 <md-toolbar class="md-table-toolbar alternate" ng-show="options.rowSelection && selected.length">
   <div class="md-toolbar-tools">
@@ -44,10 +30,7 @@
         <th md-column data-md-order-by="address"><span>Address</span></th>
         <th md-column data-md-order-by="details"><span>Details</span></th>
         <th md-column data-md-order-by="status"><span>Status</span></th>
-        <th md-column data-md-order-by="comment">
-          <md-icon>comments</md-icon>
-          <span>Comments</span>
-        </th>
+
       </tr>
     </thead>
     <tbody md-body>
@@ -60,9 +43,7 @@
         <td md-cell>{{work.status}}</td>
         <!-- <td md-cell hide-sm>{{work.details}}</td>
         <td md-cell hide-sm>{{work.status}}</td> -->
-        <td md-cell ng-click="editComment($event, work)" ng-class="{'md-placeholder': !work.comment}">
-          {{work.comment || 'Add a comment'}}
-        </td>
+
       </tr>
     </tbody>
   </table>
@@ -92,23 +73,41 @@
 
             <md-card-content>
               <div>
-                  <h1 >DATE & TIME: {{ work.datetime }} to {{ work.endTime }} <br>ADDRESS: {{ work.address }}<br> DETAILS: {{ work.details }} <br> STATUS: {{work.status}} <br>LAT LON {{ work.geo }} <br>WEATHER: {{ work.weather[0].daily.data[0].summary }} <br> CONTRACTOR ID: {{work.contractor_id}}</h1>
+                  <h3 >DATE&TIME:  {{ work.datetime }} to {{ work.endTime }} </h3>
+                  <h3 >ADDRESS:  {{ work.address }}</h3>
+                  <h3 >DETAILS:  {{ work.details }}</h3>
+                  <h3 >STATUS:   {{work.status}} </h3>
+                  <h3 >WEATHER:  {{ work.weather[0].daily.data[0].summary }} </h3>
+
               </div>
-            <ng-map zoom="11" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP" style="height:200px; width:200;"> <!-- TERRAIN TRAFFIC SATELLITE CONSTANT -->
+            <ng-map zoom="11" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP" style="height:200px; width:50%;"> <!-- TERRAIN TRAFFIC SATELLITE CONSTANT -->
              <marker position="{{ work.geo }}"  centered="true"></marker>
            </ng-map>
-           <div style="height:132px;width:100%"></div>
+           <div style="height:132px;width:50%%"></div>
            <!-- START TWILIO VIDEO  -->
                       <md-card-content>
+                        <div>
+                          <div id="remote-media"></div>
+                          <div id="controls">
+                            <div id="preview">
+                              <p class="instructions">Video</p>
+                              <div id="local-media"></div>
+                              <button id="button-preview">Preview My Camera</button>
+                            </div>
+                          </div><!-- /controls -->
+                          <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script> -->
+
+                          <script src="/quickstart.js"></script>
+                        </div>
            <div>
              <div id="controls">
                <div id="invite-controls">
-                 <p class="instructions">Invite another Video Client</p>
+                 <p class="instructions"></p>
                  <button id="button-invite" value="{{work.contractor_id}}">Send Invite</button>
                </div>
-               <div id="log">
+               <!-- <div id="log">
                  <p>&gt;&nbsp;<span id="log-content">Preparing to listen</span>...</p>
-               </div>
+               </div> -->
              </div><!-- /controls -->
            </div>
                           </md-card-content>

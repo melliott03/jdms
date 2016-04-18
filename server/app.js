@@ -9,6 +9,10 @@ var path = require('path');//Twilio Video
 var AccessToken = require('twilio').AccessToken;//Twilio Video
 var ConversationsGrant = AccessToken.ConversationsGrant;//Twilio Video
 // var randomUsername = require('./randos');//Twilio Video
+var User = require('./models/user');
+var Work = require('./models/work');
+var sugar = require('sugar');
+
 
 app.use(express.static(path.join(__dirname, 'public')));//Twilio Video
 
@@ -229,21 +233,53 @@ console.log(to, fromNumber, callStatus, callSid);
 });
 //
 app.get('/voice', (req, res) => {
-  //Start of original voice call response
-  console.log('req.query : ', req.query);
-  var name = "Sarah";
-  var address = "5650 Humboldt Avenue North Brooklyn Center, MN 55430";
-  var date = "Monday April 11 3:00PM"
-  // Generate a TwiML response
-  var twiml = new twilio.TwimlResponse();
-  // Talk in a robot voice over the phone.
-  twiml.say('Hello, Good morning  this is a reminder for your work appointment on'+ date +' . This is Mike Elliot saying, we love you. ');
-  // Set the response type as XML.
-  res.header('Content-Type', 'text/xml');
-  // Send the TwiML as the response.
-  res.send(twiml.toString());
-  //END of original voice call response
+  console.log('req.query : ', req.query.user_id);
+  //Find the user in the database
+  Work.findById(req.query.work_id, function(err, work){
+    console.log('INSIDE /voice on server "work:"', work);
+    if(err){
+      console.log(err);
+    }
+    // work.contractor_id = req.user._id; // req.user._id
+    // work.status = "Accept";
+    // // save the work
+    // work.save(function(err) {
+    //   if (err)
+    //   res.send(err);
+    //   console.log('2nd INSIDE accept after save on server work:', work);
 
+      User.findById(req.query.user_id, function(err, contractor){
+        console.log('INSIDE accept on server work.contractor_id contractor:', contractor);
+        if(err){
+          console.log(err);
+        }
+          deliverUserMessage(work, contractor);
+          // res.json({ message: 'work updated with accept!' });
+        });
+
+      // res.json({ message: 'work updated with accept!' });
+    // });
+  });
+    var deliverUserMessage = function(work, contractor){
+      //Start of original voice call response
+      var firstname = contractor.firstname;
+      var lastname = contractor.lastname;
+      var address = work.address;
+      var date = work.datetime;
+       date = Date.create(date).format(); //http://sugarjs.com/api/Date/format
+      console.log('Date.create(date):' ,Date.create(date));
+      // console.log('(8).hoursBefore(reminderDateTime):' ,(2).hoursBefore(reminderDateTime));
+
+      // Generate a TwiML response
+      var twiml = new twilio.TwimlResponse();
+      // Talk in a robot voice over the phone.
+      twiml.say('Hello, ' + firstname + " , " + lastname + 'this is a reminder for your work appointment on'+ date +' Please plan to arrive 10 minutes early. This is Mike Elliot saying, we love you. ');
+      // Set the response type as XML.
+      res.header('Content-Type', 'text/xml');
+      // Send the TwiML as the response.
+      res.send(twiml.toString());
+      //END of original voice call response
+    }
 });
 //END https://www.twilio.com/blog/2015/09/monitoring-call-progress-events-with-node-js-and-express.html
 
