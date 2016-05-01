@@ -335,7 +335,7 @@ var acceptedWorkReminder =  function(acceptedWork, contractor){
 
     //BEGIN CALL
     client.calls.create({
-      url: "https://8f7e319b.ngrok.io/voice/?user_id="+contractor_id+"&work_id="+work_id, //"https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
+      url: "https://07cf7bc3.ngrok.io/voice/?user_id="+contractor_id+"&work_id="+work_id, //"https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
               //https://8f7e319b.ngrok.io/ivr/welcome
       // url: "https://8f7e319b.ngrok.io/phoneCall/?user_id=12345", //"https://enigmatic-lowlands-90835.herokuapp.com/phoneCall.xml" "twiml" "http://demo.twilio.com/docs/voice.xml" "http://localhost:5005/public/assets/scripts/twiml.xml" "http://localhost/public/assets/scripts/twiml.xml" "http://twimlbin.com/0e4f056c3572ca5bc51f86e9f8e7d962"
       to: contractorPhone, //+16122671744  "+16128121238" "+16129631395 Dev" 8023561672 Tommy

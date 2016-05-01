@@ -18,7 +18,6 @@ myApp.factory("WorkService", ["$http", function($http){
             console.log(response.data);
             userObject.response = response.data;
             console.log('userObject ', userObject);
-
         });
     };
 

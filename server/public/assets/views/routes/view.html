@@ -1,19 +1,4 @@
 
-<!-- ng-if="contractor && contractor" -->
-<!-- <div ng-if="contractor()">
-  <md-button><a href="#home">Shoes-contractor</a></md-button>
-  <md-button><a href="#add">Boat</a></md-button>
-  <md-button><a href="#view">Trees</a></md-button>
-</div>
-<div ng-if="customer()">
-  <md-button><a href="#home">Shoes-customer</a></md-button>
-  <md-button><a href="#add">Boat</a></md-button>
-  <md-button><a href="#view">Trees</a></md-button>
-</div> -->
-
-<!-- <div ng-if="customer && customer" ng-include="/home.html'"></div> -->
-
-
 <!-- END Datatable -->
 
 
@@ -45,6 +30,7 @@
         <th md-column data-md-order-by="address"><span>Address</span></th>
         <th md-column data-md-order-by="details"><span>Details</span></th>
         <th md-column data-md-order-by="status"><span>Status</span></th>
+
       </tr>
     </thead>
     <tbody md-body>
@@ -55,6 +41,8 @@
         <td md-cell>{{work.address}}</td>
         <td md-cell>{{work.details}}</td>
         <td md-cell>{{work.status}}</td>
+        <td md-cell>{{work.contractor_fullname}}</td>
+
         <!-- <td md-cell hide-sm>{{work.details}}</td>
         <td md-cell hide-sm>{{work.status}}</td> -->
 
@@ -74,10 +62,10 @@
 
 
 <!-- START MD-CARDS -->
-<md-content layout-padding id="card" class="card">
+<md-content layout-padding>
     <div style="width : 100%; margin: 2vw auto;">
       <div ng-repeat="work in works.response">
-        <md-card id="card" class="card">
+        <md-card>
           <!-- <p>{{Marketer work.type }}</p> -->
             <md-card-title>
               <md-card-title-text>
@@ -87,12 +75,17 @@
 
             <md-card-content>
               <div>
-                  <h1 >DATE & TIME: {{ work.datetime }} to {{ work.endTime }} <br>ADDRESS: {{ work.address }}<br> DETAILS: {{ work.details }} <br> STATUS: {{work.status}} <br>LAT LON {{ work.geo }} <br>WEATHER: {{ work.weather[0].daily.data[0].summary }} <br> CONTRACTOR ID: {{work.contractor_id}}</h1>
+                  <h3 >DATE&TIME:  {{ work.datetime }} to {{ work.endTime }} </h3>
+                  <h3 >ADDRESS:  {{ work.address }}</h3>
+                  <h3 >DETAILS:  {{ work.details }}</h3>
+                  <h3 >STATUS:   {{work.status}} </h3>
+                  <h3 >WEATHER:  {{ work.weather[0].daily.data[0].summary }} </h3>
+
               </div>
-            <ng-map zoom="11" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP" style="height:200px; width:200;"> <!-- TERRAIN TRAFFIC SATELLITE CONSTANT -->
+            <ng-map zoom="11" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP" style="height:200px; width:50%;"> <!-- TERRAIN TRAFFIC SATELLITE CONSTANT -->
              <marker position="{{ work.geo }}"  centered="true"></marker>
            </ng-map>
-           <div style="height:132px;width:100%"></div>
+           <div style="height:132px;width:50%%"></div>
            <!-- START TWILIO VIDEO  -->
                       <md-card-content>
                         <div>
@@ -111,12 +104,12 @@
            <div>
              <div id="controls">
                <div id="invite-controls">
-                 <p class="instructions">Invite another Video Client</p>
+                 <p class="instructions"></p>
                  <button id="button-invite" value="{{work.contractor_id}}">Send Invite</button>
                </div>
-               <div id="log">
+               <!-- <div id="log">
                  <p>&gt;&nbsp;<span id="log-content">Preparing to listen</span>...</p>
-               </div>
+               </div> -->
              </div><!-- /controls -->
            </div>
                           </md-card-content>

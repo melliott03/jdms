@@ -4,6 +4,7 @@ var app = express();
 var db = require("./modules/db");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
+var morgan = require('morgan');//brought in here for passport JWT but might be a dependency for others
 var http = require ('http');
 var path = require('path');//Twilio Video
 var AccessToken = require('twilio').AccessToken;//Twilio Video
@@ -12,23 +13,31 @@ var ConversationsGrant = AccessToken.ConversationsGrant;//Twilio Video
 var User = require('./models/user');
 var Work = require('./models/work');
 var sugar = require('sugar');
+var config = require('./config/main'); // Tokens http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
 
 
 app.use(express.static(path.join(__dirname, 'public')));//Twilio Video
 
-
-//PASSPORT
-var passport = require("passport");
-var session = require("express-session");
-var localStrategy = require("passport-local");
-// var Strategy = require('passport-local').Strategy;//from gitHub Tutorial
-
 var mongoose = require("mongoose");
+//PASSPORT original before jtw strategy
+// var passport = require("passport");
+// var session = require("express-session");
+// var localStrategy = require("passport-local");
+
+//START: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
+// Bring in defined Passport Strategy
+var passport = require('passport');
+require('./config/passport')(passport);
+var jwt = require('jsonwebtoken');
+// Initialize passport for use
+// Create API group routes
+var apiRoutes = express.Router();
+//END: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
 
 var twilio = require('twilio');
 
 //MODELS
-var User = require("./models/user");
+// var User = require("./models/user");
 
 //ROUTES
 var index = require("./routes/index");
@@ -57,22 +66,105 @@ var restler = require('restler');
 //end of brought in from previous experiment
 var Agenda = require('agenda');//#AGENDA
 
+//START: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
+// Register new users
+apiRoutes.post('/register', function(req, res) {
+  if(!req.body.email || !req.body.password) {
+    res.json({ success: false, message: 'Please enter email and password.' });
+  } else {
+    var newUser = new User({
+      username: req.body.email,
+      email: req.body.email,
+      password: req.body.password
+    });
+
+    // Attempt to save the user
+    newUser.save(function(err) {
+      if (err) {
+        return res.json({ success: false, message: 'That email address already exists.'});
+      }
+      res.json({ success: true, message: 'Successfully created new user.' });
+    });
+  }
+});
 
 
+// app.use(session({
+//     secret: "secret",
+//     key: "user",
+//     resave: true,
+//     s: false,
+//     cookie: {maxAge: 365 * 24 * 60 * 60 * 1000, secure: false}
+// }));
 
-app.use(session({
-    secret: "secret",
-    key: "user",
-    resave: true,
-    s: false,
-    cookie: {maxAge: 365 * 24 * 60 * 60 * 1000, secure: false}
-}));
-
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));//changed this to false for twilio
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
+
+// Log requests to console
+app.use(morgan('dev'));
+
+
+//START: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
+// Authenticate the user and get a JSON Web Token to include in the header of future requests.
+apiRoutes.post('/authenticate', function(req, res) {
+  User.findOne({
+    email: req.body.email
+  }, function(err, user) {
+    if (err) throw err;
+
+    if (!user) {
+      res.send({ success: false, message: 'Authentication failed. User not found.' });
+    } else {
+      // Check if password matches
+      user.comparePassword(req.body.password, function(err, isMatch) {
+        if (isMatch && !err) {
+          // Create token if the password matched and no error was thrown
+          // console.log('user::', user);
+          var token = jwt.sign(user, config.secret, {
+            expiresIn: 60 * 60 * 24 * 365 // in seconds
+          });
+          res.json({ user: user, success: true, token: 'JWT ' + token });
+        } else {
+          res.send({ success: false, message: 'Authentication failed. Passwords did not match.' });
+        }
+      });
+    }
+  });
+});
+
+// Protect dashboard route with JWT
+app.get('/dashboard', passport.authenticate('jwt', { session: false }), function(req, res) {
+  // res.send('It worked! User id is: ' + req.user._id + '.', req);
+  Work.find(function (err, work) {
+    if (err) {
+      res.send(err, null);
+    }
+    // console.log("req.user._id", req.user._id);
+    console.log("FOUND ALL WORKS CONTRACTOR ACCEPTED", work);
+    // res.send(' ' + work[0]._id + ' , '+ work[0].type+ ' , '+ work[0].datetime + ', '+ work[0].endTime + ', '+ work[0].address + ', '+ work[0].details + ', '+ work[0].status + ', '+ work[0].customer_id);
+    res.json(work);
+  }).where('customer_id').equals(''+req.user._id);
+});
+// Set url for API group routes
+app.use('/api', apiRoutes);
+
+// Protect chat routes with JWT
+// GET messages for authenticated user
+app.get('/chat', passport.authenticate('jwt', { session: false }), function(req, res) {
+  console.log('req.user._id:', req.user);
+  Work.find({$or : [{'customer_id': req.user._id}, {'contractor_id': req.user._id}]}, function(err, messages) {
+    if (err)
+      res.send(err);
+
+    res.json(messages);
+  });
+});
+
+//END: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
+
 
 // //MONGO SETUP for Heroku mLab
 // var mongoURI =
@@ -122,38 +214,38 @@ app.use(passport.session());
 // });
 
 //PASSPORT SESSION
-passport.serializeUser(function(user, done){
-    done(null, user.id);
-});
+// passport.serializeUser(function(user, done){
+//     done(null, user.id);
+// });
 
-passport.deserializeUser(function(id, done){
-    User.findById(id, function(err, user){
-        if(err) done(err);
-        done(null, user);
-    });
-});
-
-passport.use("local", new localStrategy({
-      passReqToCallback : true,
-      usernameField: 'username'
-    }, function(req, username, password, done){
-        User.findOne({username: username}, function(err,user){
-            if(err) throw err;
-            if(!user){
-              return done(null, false, {message: "Incorrect username or password"});
-            }
-
-            user.comparePassword(password, function(err, isMatch){
-                if(err) throw err;
-                if(isMatch){
-                  return done(null, user);
-                } else {
-                  done( null, false, {message: "Incorrect username or password"});
-                }
-            });
-        });
-    }
-));
+// passport.deserializeUser(function(id, done){
+//     User.findById(id, function(err, user){
+//         if(err) done(err);
+//         done(null, user);
+//     });
+// });
+//
+// passport.use("local", new localStrategy({
+//       passReqToCallback : true,
+//       usernameField: 'username'
+//     }, function(req, username, password, done){
+//         User.findOne({username: username}, function(err,user){
+//             if(err) throw err;
+//             if(!user){
+//               return done(null, false, {message: "Incorrect username or password"});
+//             }
+//
+//             user.comparePassword(password, function(err, isMatch){
+//                 if(err) throw err;
+//                 if(isMatch){
+//                   return done(null, user);
+//                 } else {
+//                   done( null, false, {message: "Incorrect username or password"});
+//                 }
+//             });
+//         });
+//     }
+// ));
 
 
 
@@ -190,15 +282,15 @@ passport.use("local", new localStrategy({
 // app.use(express.favicon(path.join(__dirname, 'public/images/favicon.ico')));
 
 
-var isAuthenticated = function (req, res, next) {
-  if (req.isAuthenticated()){
-    return next();
-  }
-  res.redirect('/');
-}
+// var isAuthenticated = function (req, res, next) {
+//   if (req.isAuthenticated()){
+//     return next();
+//   }
+//   res.redirect('/');
+// }
 
-app.use("/register", register);
-app.use("/user", isAuthenticated, user); // START HERE TODAY
+// app.use("/register", register);
+// app.use("/user", isAuthenticated, user); // START HERE TODAY
 app.use("/work", work);
 app.use("/sms2", sms);
 
@@ -295,6 +387,12 @@ app.get('/logout', function(req, res){
   console.log('inside /logout on server BEFORE req.session.destroy:', req.session);
   req.session.destroy();
   res.redirect('/');
+});
+
+app.post('/api', function(req, res){
+  console.log('INSIDE API ON NODE SERVER REQ.BODY=:', req.body);
+  // res.send('Relax. We will put the home page here later.');
+  res.json({ message: 'You hit the api route on the server...good job!' });
 });
 
 // app.get('/logout', function(req, res){
