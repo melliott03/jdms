@@ -110,6 +110,7 @@ app.use(morgan('dev'));
 //START: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
 // Authenticate the user and get a JSON Web Token to include in the header of future requests.
 apiRoutes.post('/authenticate', function(req, res) {
+  console.log('req.body.email::::', req.body.email);
   User.findOne({
     email: req.body.email
   }, function(err, user) {
@@ -120,12 +121,15 @@ apiRoutes.post('/authenticate', function(req, res) {
     } else {
       // Check if password matches
       user.comparePassword(req.body.password, function(err, isMatch) {
+        console.log('req.body.email::::', req.body.password);
+
         if (isMatch && !err) {
           // Create token if the password matched and no error was thrown
           // console.log('user::', user);
           var token = jwt.sign(user, config.secret, {
             expiresIn: 60 * 60 * 24 * 365 // in seconds
           });
+          console.log('token::::', token);
           res.json({ user: user, success: true, token: 'JWT ' + token });
         } else {
           res.send({ success: false, message: 'Authentication failed. Passwords did not match.' });
@@ -137,6 +141,7 @@ apiRoutes.post('/authenticate', function(req, res) {
 
 // Protect dashboard route with JWT
 app.get('/dashboard', passport.authenticate('jwt', { session: false }), function(req, res) {
+  console.log('It worked! User id is: ' + req.user._id + '.', req);
   // res.send('It worked! User id is: ' + req.user._id + '.', req);
   Work.find(function (err, work) {
     if (err) {
@@ -291,7 +296,8 @@ app.get('/chat', passport.authenticate('jwt', { session: false }), function(req,
 
 // app.use("/register", register);
 // app.use("/user", isAuthenticated, user); // START HERE TODAY
-app.use("/work", work);
+app.use("/work", passport.authenticate('jwt', { session: false }), work);
+// '/dashboard', passport.authenticate('jwt', { session: false }), function(req, res) {
 app.use("/sms2", sms);
 
 

@@ -90,17 +90,24 @@ router.route("/complete")
 
 
 router.post("/", function(req,res){
-  console.log('1 inside post on server req.user._id', req.user._id );
-
-  var type = req.body.type,
-  datetime = req.body.datetime,
-  endTime = req.body.endTime,
+  console.log('1 inside post on server req.user._id', req.body );
+  var type = "req.body.type",
+  datetime = "req.body.datetime",
+  endTime = "req.body.endTime",
   address = req.body.address,
-  details = req.body.details,
+  details = "req.body.details",
   customer_id = req.user._id,
   contractor_id = '',
-  status = req.body.status;
-  console.log('2 inside post on server req.user._id', req.user._id );
+  status = "req.body.status";
+  // var type = req.body.type,
+  // datetime = req.body.datetime,
+  // endTime = req.body.endTime,
+  // address = req.body.address,
+  // details = req.body.details,
+  // customer_id = req.user._id,
+  // contractor_id = '',
+  // status = req.body.status;
+  console.log('2 inside post on server req.user._id', req.user );
   // Geocode item work
   geocoder.geocode(address, function ( err, geocodedData ) {
     var geocodedData = geocodedData.results[0].geometry.location;
@@ -142,8 +149,8 @@ router.post("/", function(req,res){
         addedWork.save(function(err, data){
           if(err){
             console.log(err);
-            console.log('data (new work item created inside addWork.save) ',data);
           }
+          console.log('data (new work item SAVED inside addWork.save) ',data);
           newWorkAlert(addedWork);
         });//END addedWork.save
       });//END forecast.getAtTime
@@ -227,7 +234,7 @@ Work.find(function (err, work) {
         console.log('workArray :', workArray);
         res.send(workArray);
       };
-    }).or([{ customer_id: ''+req.user._id }, { contractor_id: ''+req.user._id }]);
+    }).or([{ customer_id: ''+req.user._id }, { contractor_id: ''+req.user._id }]).where('status').ne('canceled');
 });
 
 
