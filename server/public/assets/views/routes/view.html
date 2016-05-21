@@ -34,7 +34,7 @@
       </tr>
     </thead>
     <tbody md-body>
-      <tr md-row md-select="work" md-select-id="name" data-md-on-select="log" md-on-deselect="deselect" x-md-auto-select="options.autoSelect"  data-ng-repeat="work in works.response | filter: filter.search | orderBy: query.order | limitTo: query.limit : (query.page - 1) * query.limit">
+      <tr ng-click="setWorkDetail(work)" md-row md-select="work" md-select-id="name" data-md-on-select="log" md-on-deselect="deselect" x-md-auto-select="options.autoSelect"  data-ng-repeat="work in works.response | filter: filter.search | orderBy: query.order ">
         <td md-cell>{{work.type}}</td>
         <td md-cell>{{work.datetime}}</td>
         <td md-cell>{{work.endTime}}</td>
@@ -57,7 +57,7 @@
   </md-select>
 </td> -->
 
-<data-md-table-pagination md-limit="query.limit" md-limit-options="limitOptions" md-page="query.page" md-total="{{works.count}}" md-on-paginate="onPaginate" md-page-select="options.pageSelect" md-boundary-links="options.boundaryLinks"></data-md-table-pagination>
+<data-md-table-pagination md-page="query.page" md-total="{{works.count}}" md-on-paginate="onPaginate" md-page-select="options.pageSelect" md-boundary-links="options.boundaryLinks"></data-md-table-pagination>
 <!-- END Datatable -->
 
 

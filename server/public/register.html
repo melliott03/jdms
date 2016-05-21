@@ -9,7 +9,7 @@
         Register!
       </p>
 
-      <form action="/register" method="post">
+      <!-- <form actng="/register" method="post">
           <label for="username">USERNAME: </label>
           <input type="text" name="username" id="username" />
           <label for="password">PASSWORD: </label>
@@ -34,6 +34,24 @@
 
           <input type="submit" value="Register" />
 
-      </form>
+      </form> -->
+
+      <!-- FOR FOR JWT -->
+      <ng-view title="Create a new account">
+        <ng-content class="padding">
+          <div class="list">
+            <label class="item item-input">
+              <input type="text" placeholder="Name" ng-model="user.name">
+            </label>
+            <label class="item item-input">
+              <input type="password" placeholder="Password" ng-model="user.password">
+            </label>
+          </div>
+          <button class="button button-full button-positive" ng-click="signup()">
+            Sign up
+          </button>
+        </ng-content>
+      </ng-view>
+
   </body>
 </html>

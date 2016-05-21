@@ -3,9 +3,9 @@ var router = express.Router();
 var User = require("../models/user");
 var sugar = require('sugar');
 
-router.get("/", function(req,res,next){
-    res.json(req.isAuthenticated());
-});
+// router.get("/", function(req,res,next){
+//     res.json(req.isAuthenticated());
+// });
 
 router.get("/name", function(req,res,next){
     console.log("IS USER AUTHENTICATED?", req.isAuthenticated());

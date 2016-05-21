@@ -73,7 +73,6 @@ apiRoutes.post('/register', function(req, res) {
     res.json({ success: false, message: 'Please enter email and password.' });
   } else {
     var newUser = new User({
-      username: req.body.email,
       email: req.body.email,
       password: req.body.password
     });
@@ -110,7 +109,6 @@ app.use(morgan('dev'));
 //START: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
 // Authenticate the user and get a JSON Web Token to include in the header of future requests.
 apiRoutes.post('/authenticate', function(req, res) {
-  console.log('req.body.email::::', req.body.email);
   User.findOne({
     email: req.body.email
   }, function(err, user) {
@@ -121,15 +119,12 @@ apiRoutes.post('/authenticate', function(req, res) {
     } else {
       // Check if password matches
       user.comparePassword(req.body.password, function(err, isMatch) {
-        console.log('req.body.email::::', req.body.password);
-
         if (isMatch && !err) {
           // Create token if the password matched and no error was thrown
-          // console.log('user::', user);
+          console.log('user::', user);
           var token = jwt.sign(user, config.secret, {
             expiresIn: 60 * 60 * 24 * 365 // in seconds
           });
-          console.log('token::::', token);
           res.json({ user: user, success: true, token: 'JWT ' + token });
         } else {
           res.send({ success: false, message: 'Authentication failed. Passwords did not match.' });
@@ -141,8 +136,8 @@ apiRoutes.post('/authenticate', function(req, res) {
 
 // Protect dashboard route with JWT
 app.get('/dashboard', passport.authenticate('jwt', { session: false }), function(req, res) {
-  console.log('It worked! User id is: ' + req.user._id + '.', req);
   // res.send('It worked! User id is: ' + req.user._id + '.', req);
+  // console.log("req.user._id", req.user._id);
   Work.find(function (err, work) {
     if (err) {
       res.send(err, null);
@@ -169,7 +164,6 @@ app.get('/chat', passport.authenticate('jwt', { session: false }), function(req,
 });
 
 //END: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
-
 
 // //MONGO SETUP for Heroku mLab
 // var mongoURI =
@@ -204,11 +198,8 @@ app.get('/chat', passport.authenticate('jwt', { session: false }), function(req,
 //   agenda.start();
 // });
 
-
 // console.log('Wait 10 seconds...');
 //#AGENDA ABOVE
-
-
 
 // MongoDB.on("error", function(err){
 //     console.log("Mongo Connection Error: ", err);
@@ -252,8 +243,6 @@ app.get('/chat', passport.authenticate('jwt', { session: false }), function(req,
 //     }
 // ));
 
-
-
 // //START SEEDING DATABASE WITH CONTRACTORS
 // // Geocode and save work to database
 //       geocoder.geocode("5650 Humboldt Avenue North, Brooklyn Center, MN 55430", function ( err, geocodedData ) {
@@ -286,7 +275,6 @@ app.get('/chat', passport.authenticate('jwt', { session: false }), function(req,
 // //END SEEDING DATABASE WITH CONTRACTORS
 // app.use(express.favicon(path.join(__dirname, 'public/images/favicon.ico')));
 
-
 // var isAuthenticated = function (req, res, next) {
 //   if (req.isAuthenticated()){
 //     return next();
@@ -295,12 +283,9 @@ app.get('/chat', passport.authenticate('jwt', { session: false }), function(req,
 // }
 
 // app.use("/register", register);
-// app.use("/user", isAuthenticated, user); // START HERE TODAY
+app.use("/user", passport.authenticate('jwt', { session: false }), user); // START HERE TODAY
 app.use("/work", passport.authenticate('jwt', { session: false }), work);
-// '/dashboard', passport.authenticate('jwt', { session: false }), function(req, res) {
 app.use("/sms2", sms);
-
-
 
 // app.use("/weather", weather);
 
@@ -381,7 +366,6 @@ app.get('/voice', (req, res) => {
 });
 //END https://www.twilio.com/blog/2015/09/monitoring-call-progress-events-with-node-js-and-express.html
 
-
 app.use('/ivr', ivr);
 
 // app.get('/logout', logout());
@@ -395,7 +379,7 @@ app.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-app.post('/api', function(req, res){
+app.post('/api', passport.authenticate('jwt', { session: false }), function(req, res){
   console.log('INSIDE API ON NODE SERVER REQ.BODY=:', req.body);
   // res.send('Relax. We will put the home page here later.');
   res.json({ message: 'You hit the api route on the server...good job!' });
@@ -418,7 +402,7 @@ Generate an Access Token for a chat application user - it generates a random
 username for the client requesting a token, and takes a device ID as a query
 parameter.
 */
-app.get('/boink', function(req, res) {
+app.get('/boink', passport.authenticate('jwt', { session: false }), function(req, res){
   console.log('/boink before randomUsername function req.user._id:::', req.user._id);
 
     // var identity = randomUsername();
@@ -447,19 +431,12 @@ app.get('/boink', function(req, res) {
     });
 });//End Twilio Video
 
-
-
-
-app.use("/", index);
-
-
+app.use("/", passport.authenticate('jwt', { session: false }), index);
 app.set("port", (process.env.PORT || 5100));
 
 app.listen(app.get("port"), function(){
     console.log("Listening on port: ", app.get("port"));
 });
-
-
 
 // //START agenda module example for Node.js [npmawesome and nodejitsu]
 // Agenda = require('agenda');

@@ -1,3 +1,34 @@
+myApp.controller("AuthenticationController", ["$scope", "$location", "$http", "$window", "AuthenticationService", "WorkService", function($scope, $location, $http, $window, AuthenticationService, WorkService){
+    console.log("Authentication Controller");
+    var authenticationService = AuthenticationService;
+    $scope.logout = authenticationService.logout;
+
+    $scope.user = {email: 'ki.workappdemo@gmail.com', password: '123'};
+    $scope.message = '';
+    $scope.submit = function () {
+      $http
+      .post('/api/authenticate', $scope.user)
+      .success(function (data, status, headers, config) {
+        console.log('in controller data.token::::::',data.token);
+        $window.localStorage.token = data.token;
+        // console.log('in controller $window.localStorage.token::::::',$window.localStorage.token);
+
+        $scope.message = 'Welcome';
+        $window.location.href = '/assets/views/users.html';
+      })
+      .error(function (data, status, headers, config) {
+        // Erase the token if the user fails to log in
+        delete $window.localStorage.token;
+
+        // Handle login errors here
+        $scope.message = 'Error: Invalid user or password';
+      });
+    };
+    // WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
+    // WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
+    // WorkService.getContractorWork(); //gets all the work contractor has accepted
+}]);
+
 myApp.controller("AddController", ["$scope", "$http", "$filter", "WorkService", function($scope, $http, $filter, WorkService){
 
     $scope.data = [];
@@ -35,13 +66,24 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "WorkService", 
     $scope.logedinUser = WorkService.userObject;
 }]);
 
-myApp.controller("ShowController", ["$scope", "WorkService", function($scope, WorkService){
-    // WorkService.getMovies();//this triggers my other sms and voice calls
+myApp.controller("ShowController", ["$scope", "$location", '$filter', "WorkService", 'uiGridConstants',  function($scope, $location, $filter, WorkService, uiGridConstants){
+  $scope.myData = [
+        {
+            "firstName": "Cox",
+            "lastName": "Carney"
+      }];
+  // WorkService.getMovies();//this triggers my other sms and voice calls
     // WorkService.getSMS(); //this triggers ANOTHER other sms and voice calls
     WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
     WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
     WorkService.getContractorWork(); //gets all the work contractor has accepted
-
+    // $scope.expand = {};
+    $scope.setWorkDetail = function(work) {
+      console.log('inside workdtail in controller::::work', work);
+      $scope.workdetail = work;
+      $location.path('#workdetail');
+      // redirectTo: '/';
+    };
     $scope.contractor = function(){
       if(WorkService.userObject.response.role == "contractor" ){
           return true;
@@ -156,12 +198,6 @@ myApp.controller("CommunicationsController", ["$scope", "WorkService", function(
     console.log("Communications Controller");
 
     $scope.data = WorkService.data;
-}]);
-
-myApp.controller("AuthenticationController", ["$scope", "$location", "AuthenticationService", function($scope, $location, AuthenticationService){
-    console.log("Authentication Controller");
-    var authenticationService = AuthenticationService;
-    $scope.logout = authenticationService.logout;
 }]);
 
 myApp.controller("GoogleController", ["$scope", "$log", function($scope, $log){

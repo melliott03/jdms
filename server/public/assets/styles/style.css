@@ -176,3 +176,26 @@ section > div:focus, section > div:focus:hover  {
   border: 1px solid #aeaeae;
   border-top:none;
 }
+/*for ui-grid tables*/
+.grid {
+  width: 650px;
+  height: 400px;
+}
+
+.header-filtered {
+  color: blue;
+}
+/*start of style for https://github.com/awerlang/angular-responsive-tables?utm_source=angular-js.in&utm_medium=website&utm_campaign=content-curation*/
+/*<!--[if IE 9]>
+<style>*/
+/* rules for IE9 only */
+/*.responsive {
+    overflow: hidden;
+}
+.responsive td:nth-child(odd), .responsive td:nth-child(even) {
+    float: left;
+    width: 100%;
+}
+</style>
+<![endif]-->*/
+/*end of style for https://github.com/awerlang/angular-responsive-tables?utm_source=angular-js.in&utm_medium=website&utm_campaign=content-curation*/

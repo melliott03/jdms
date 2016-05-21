@@ -8,7 +8,14 @@ var identity;
 if (!navigator.webkitGetUserMedia && !navigator.mozGetUserMedia) {
     alert('WebRTC is not available in your browser.');
 }
-
+console.log('quickstart localStorage.getItem("token"):::::', localStorage.getItem('token'));
+$.ajaxSetup({
+  headers : {
+    'Authorization': ''+localStorage.getItem('token')
+    // 'Authorization' : 'Basic faskd52352rwfsdfs',
+    // 'X-PartnerKey' : '3252352-sdgds-sdgd-dsgs-sgs332fs3f'
+  }
+});
 $.getJSON('/boink', function(data) {
     identity = data.identity;
     var accessManager = new Twilio.AccessManager(data.token);

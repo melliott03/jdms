@@ -1,3 +1,28 @@
+myApp.factory('authInterceptor', function ($rootScope, $q, $window) {
+  return {
+    request: function (config) {
+      config.headers = config.headers || {};
+      if ($window.localStorage.token) {
+        // console.log('$window.localStorage.token:::', $window.localStorage.token);
+        config.headers.Authorization = ""+$window.localStorage.token;
+      }
+      // console.log('config.headers.Authorization::::', config.headers.Authorization);
+      return config;
+    },
+    responseError: function (response) {
+      if (response.status === 401) {
+        // handle the case where the user is not authenticated
+      }
+      return response || $q.when(response);
+    }
+  };
+});
+
+myApp.config(function ($httpProvider) {
+  $httpProvider.interceptors.push('authInterceptor');
+});
+
+
 myApp.factory("WorkService", ["$http", function($http){
     var postedWork = {};
     var data = {};
@@ -23,8 +48,8 @@ myApp.factory("WorkService", ["$http", function($http){
 
     var getWorks = function(){
         $http.get("/work").then(function(response){
-            data.response = response.data;
-            console.log('RETRUN OF GET WROKS FUNCTION !!! !!!!!  ::  ', response.data);
+            data.response = response;
+            console.log('RETRUN OF GET WROKS FUNCTION !!! !!!!!  ::  ', response);
 
             // getWeather(response.data);
             // console.log(response.data);

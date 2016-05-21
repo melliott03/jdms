@@ -1,4 +1,4 @@
-var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart']);
+var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit']);
 
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
     $mdThemingProvider.theme('default')
@@ -40,10 +40,10 @@ myApp.config(["$routeProvider", function($routeProvider){
           templateUrl: "/assets/views/routes/view.html",
           controller: "ShowController"
       }).
-      // when("/users", {
-      //     templateUrl: "/assets/views/users.html",
-      //     controller: "ShowController"
-      // }).
+      when("/workdetail", {
+          templateUrl: "/assets/views/routes/workdetail.html",
+          controller: "ShowController"
+      }).
       otherwise({
           redirectTo: '/home'
       });

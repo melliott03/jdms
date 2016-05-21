@@ -1,0 +1,100 @@
+
+<!-- START MD-CARDS -->
+<md-content layout-padding>
+    <div style="width : 100%; margin: 2vw auto;">
+      <div >
+        <md-card>
+          <!-- <p>{{Marketer workdetail.type }}</p> -->
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">{{ workdetail.type }}</span>
+              </md-card-title-text>
+            </md-card-title>
+
+            <md-card-content>
+              <div>
+                  <h3 >DATE&TIME:  {{ workdetail.datetime }} to {{ workdetail.endTime }} </h3>
+                  <h3 >ADDRESS:  {{ workdetail.address }}</h3>
+                  <h3 >DETAILS:  {{ workdetail.details }}</h3>
+                  <h3 >STATUS:   {{workdetail.status}} </h3>
+                  <h3 >WEATHER:  {{ workdetail.weather[0].daily.data[0].summary }} </h3>
+
+              </div>
+            <ng-map zoom="11" center="{{ workdetail.geo }}" map-type-id="MapTypeId.ROADMAP" style="height:200px; width:50%;"> <!-- TERRAIN TRAFFIC SATELLITE CONSTANT -->
+             <marker position="{{ workdetail.geo }}"  centered="true"></marker>
+           </ng-map>
+           <div style="height:132px;width:50%%"></div>
+           <!-- START TWILIO VIDEO  -->
+                      <md-card-content>
+                        <div>
+                          <div id="remote-media"></div>
+                          <div id="controls">
+                            <div id="preview">
+                              <p class="instructions">Video</p>
+                              <div id="local-media"></div>
+                              <button id="button-preview">Preview My Camera</button>
+                            </div>
+                          </div><!-- /controls -->
+                          <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script> -->
+
+                          <script src="/quickstart.js"></script>
+                        </div>
+           <div>
+             <div id="controls">
+               <div id="invite-controls">
+                 <p class="instructions"></p>
+                 <button id="button-invite" value="{{workdetail.contractor_id}}">Send Invite</button>
+               </div>
+               <!-- <div id="log">
+                 <p>&gt;&nbsp;<span id="log-content">Preparing to listen</span>...</p>
+               </div> -->
+             </div><!-- /controls -->
+           </div>
+                          </md-card-content>
+           <!-- END TWILIO VIDEO -->
+             <!-- <ng-map zoom="11" center="current" map-type-id="MapTypeId.SATELLITE">
+              <marker position="current" animation="Animation.BOUNCE" centered="true"></marker>
+            </ng-map> -->
+
+
+              <!-- <div>
+                <p>{{ workdetail.address }}</p>
+              </div>
+              <div>
+                <h4>
+                    DETAILS:
+                </h4>
+                  <p>{{ workdetail.details }}</p>
+              </div> -->
+            </md-card-content>
+
+            <md-card-actions layout="row" layout-align="end center">
+              <md-button ng-click="deleteWork(workdetail._id)">Delete</md-button>
+              <md-button ng-click="cancelWork(workdetail._id)">Cancel</md-button>
+            </md-card-actions>
+        </md-card>
+      </div>
+    </div>
+</md-content>
+<!-- END MD-CARDS -->
+
+<!-- Editing Page Elements with contenteditable -->
+	<!-- <h1>AngularJS Edit-in-Place with contenteditable</h1>
+
+	<section>
+		<h2>The contenteditable directive</h2>
+
+		<div contenteditable="true" ng-model="text01">
+		</div>
+	</section>
+
+	<section>
+		<h2>Toggle Editing</h2>
+
+		<button id="editorBtn" type="button" ng-click="toggleEditMode()">{{editmode ? 'Disable Editing' : 'Enable Editing'}}</button>
+		<div id="editor" ng-model="text02" ng-attr-contenteditable="{{ editmode }}">
+		</div>
+	</section>
+
+</div> -->
+<!-- End Editing Page Elements with contenteditable -->

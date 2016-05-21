@@ -16,7 +16,15 @@
         <md-tab label="Login">
           <div layout="column" ng-cloak class="md-inline-form">
             <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
-            <form action="/" method="post">
+              <div ng-controller="AuthenticationController">
+                <span></span>
+                <form ng-submit="submit()">
+                  <input ng-model="user.email" type="text" name="user" placeholder="email" />
+                  <input ng-model="user.password" type="password" name="pass" placeholder="Password" />
+                  <input type="submit" value="Login" />
+                </form>
+              </div>
+            <!-- <form action="/" method="post">
                     <md-input-container>
                 <label for="username">USERNAME: </label>
                 <input type="text" name="username" id="username" />
@@ -26,7 +34,8 @@
                 <input type="password" name="password" id="password" />
                     </md-input-container>
                 <md-button class="md-raised md-primary" type="submit" value="Login" >Submit</md-button>
-            </form>
+            </form> -->
+
             </md-content>
           </div>
         </md-tab>
@@ -109,6 +118,49 @@
           </md-content>
           </div>
         </md-tab>
+        <!-- FOR FOR JWT -->
+        <md-tab label="Create a new account">
+          <div layout="column" ng-cloak class="md-inline-form">
+            <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+
+          <md-content class="padding">
+            <div class="list">
+              <label class="item item-input">
+                <input type="text" placeholder="Name" ng-model="user.name">
+              </label>
+              <label class="item item-input">
+                <input type="password" placeholder="Password" ng-model="user.password">
+              </label>
+            </div>
+            <button class="button button-full button-positive" ng-click="signup()">
+              Sign up
+            </button>
+          </md-content>
+        </md-content>
+        </div>
+      </md-tab>
+      <!-- login -->
+      <md-tab label="Please sign in">
+        <div layout="column" ng-cloak class="md-inline-form">
+          <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+        <md-content class="padding">
+          <div class="list">
+            <label class="item item-input">
+              <input type="text" placeholder="Name" ng-model="user.name">
+            </label>
+            <label class="item item-input">
+              <input type="password" placeholder="Password" ng-model="user.password">
+            </label>
+          </div>
+          <button class="button button-full button-balanced" ng-click="login()">
+            Login
+          </button>
+          <button class="button button-positive button-clear button-full" ui-sref="outside.register">Register now!</button>
+        </md-content>
+      </md-content>
+      </div>
+    </md-tab>
+
       </md-tabs>
     </md-dialog-content>
 
