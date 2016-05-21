@@ -5,7 +5,7 @@ myApp.controller("AuthenticationController", ["$scope", "$location", "$http", "$
       localStorage.removeItem('token');
       sessionStorage.removeItem('token');
       userProfile = null;
-      window.location.href = "/";
+      window.location.href = "/"; 
     }
 
     $scope.user = {email: 'ki.workappdemo@gmail.com', password: '123'};
