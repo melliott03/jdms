@@ -1,7 +1,12 @@
 myApp.controller("AuthenticationController", ["$scope", "$location", "$http", "$window", "AuthenticationService", "WorkService", function($scope, $location, $http, $window, AuthenticationService, WorkService){
     console.log("Authentication Controller");
     var authenticationService = AuthenticationService;
-    $scope.logout = authenticationService.logout;
+    $scope.logout = function(){
+      localStorage.removeItem('token');
+      sessionStorage.removeItem('token');
+      userProfile = null;
+      window.location.href = "/";
+    }
 
     $scope.user = {email: 'ki.workappdemo@gmail.com', password: '123'};
     $scope.message = '';

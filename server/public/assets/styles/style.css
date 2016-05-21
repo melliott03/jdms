@@ -199,3 +199,24 @@ section > div:focus, section > div:focus:hover  {
 </style>
 <![endif]-->*/
 /*end of style for https://github.com/awerlang/angular-responsive-tables?utm_source=angular-js.in&utm_medium=website&utm_campaign=content-curation*/
+
+/*for inlineedit */
+.ng-inline-edit__input {
+  padding: 0 3px;
+}
+
+.ng-inline-edit__text {
+  padding: 2px 3px;
+  font-weight: bold;
+}
+
+.ng-inline-edit__text:hover {
+  background: #ff0;
+  border-radius: 4px;
+}
+
+.ng-inline-edit__text--placeholder {
+  color: #999;
+  font-weight: normal;
+  font-style: italic;
+}

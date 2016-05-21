@@ -90,12 +90,13 @@
     <script type="text/javascript" src="/assets/vendors/smart-table-sticky-header/stStickyHeader.js"></script>
     <link rel="stylesheet" href="/assets/vendors/angular-responsive-tables/angular-responsive-tables.min.css">
     <script type="text/javascript" src="/assets/vendors/angular-responsive-tables/angular-responsive-tables.min.js"></script>
-
+    <link rel="stylesheet" href="/assets/vendors/ng-inline-edit-master/ng-inline-edit.min.css">
+    <script type="text/javascript" src="/assets/vendors/ng-inline-edit-master/ng-inline-edit.min.js"></script>
 
   </head>
   <body ng-cloak>
     <div ng-controller="AuthenticationController ">
-      <md-button class="md-warn"  href="/logout">
+      <md-button class="md-warn" ng-click="logout()">
         logout
       </md-button>
     </div>

@@ -1,4 +1,9 @@
         myApp.controller('mainCtrl', ['$scope', function ($scope) {
+          $scope.myModel = 'Click here and delete me';
+          $scope.myUpdateHandler = function(newValue) {
+            // check your console
+            console.log('value of your model is now: ' + newValue);
+          };
             $scope.hello = "hello Mike";
             $scope.displayed = [
                 {

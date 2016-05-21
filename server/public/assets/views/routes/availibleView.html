@@ -1,5 +1,14 @@
 
+
 <div ng-controller="mainCtrl">
+  <span
+    inline-edit="myModel"
+    inline-edit-callback="myUpdateHandler(newValue)"
+    inline-edit-placeholder="Type your value here"
+    inline-edit-btn-edit=""
+    inline-edit-on-blur="save"
+    inline-edit-on-click></span>
+
 <table st-set-filter="customFilter" st-table="displayed" class="table table-bordered table-striped" wt-responsive-table> <!-- st-sticky-header -->
     <thead>
     <tr>
@@ -33,15 +42,15 @@
               <button ng-if="!row.expanded" ng-click="row.expanded = true">+</button>
         </td>
         <!-- <td cs-select="row"></td> -->
-        <td inline-edit="">{{row.firstName}}</td>
-        <td inline-edit="">{{row.lastName | uppercase}}</td>
-        <td inline-edit="">{{row.birthDate | date}}</td>
-        <td inline-edit="">{{row.email}}</td>
-        <td inline-edit="">{{row.balance | currency}}</td>
+        <td >{{row.firstName}}</td>
+        <td >{{row.lastName | uppercase}}</td>
+        <td >{{row.birthDate | date}}</td>
+        <td >{{row.email}}</td>
+        <td >{{row.balance | currency}}</td>
 
     </tr>
     <tr ng-if="row.expanded" ng-repeat-end="row in displayed">
-            <td colspan="6" inline-edit="">{{row.details}}</td>
+            <td colspan="6" inline-edit="row.details" inline-edit-on-click inline-edit-btn-edit=""></td>
     </tr>
     </tbody>
     <tfoot>
