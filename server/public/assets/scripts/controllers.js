@@ -1,3 +1,8 @@
+
+myApp.controller('Ctrl', function($scope) {
+
+});
+
 myApp.controller("AuthenticationController", ["$scope", "$location", "$http", "$window", "AuthenticationService", "WorkService", function($scope, $location, $http, $window, AuthenticationService, WorkService){
     console.log("Authentication Controller");
     var authenticationService = AuthenticationService;
@@ -5,7 +10,7 @@ myApp.controller("AuthenticationController", ["$scope", "$location", "$http", "$
       localStorage.removeItem('token');
       sessionStorage.removeItem('token');
       userProfile = null;
-      window.location.href = "/"; 
+      window.location.href = "/";
     }
 
     $scope.user = {email: 'ki.workappdemo@gmail.com', password: '123'};
@@ -72,6 +77,51 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "WorkService", 
 }]);
 
 myApp.controller("ShowController", ["$scope", "$location", '$filter', "WorkService", 'uiGridConstants',  function($scope, $location, $filter, WorkService, uiGridConstants){
+  // document.body.addEventListener('DOMSubtreeModified', function(event) {
+  //   var targets = document.getElementsByClassName('target');
+  //   console.log('targets::',targets);
+  // });
+  var workService = WorkService;
+
+  // $scope.updateWorkEntered = function(work){
+  //   console.log('work:::',work);
+  // };
+  $scope.updateWorkEntered = function(work){
+    // check your console
+    // console.log('value of your model is now newValue::: ', newValue);
+    // console.log('value of your model is now work::: ', work);
+    // console.log(' newValue::: ', newValue);
+    // console.log(' key::: ', key);
+    // console.log(' work::: ', work);
+
+    // var objectKey = "work"+"."+""+key;
+    // console.log('without newValue ::: ', objectKey);
+    // objectKey = objectKey.replace(/"/g, ""); //remove quotes
+    // console.log('after removing quotes objectKey ::: ', objectKey);
+    // objectKey = newValue; //remove quotes
+    //
+    // console.log('after adding key to work object ::: ', objectKey);
+    // // objectKey = newValue;
+    // // console.log('objectKey with newValue::: ', objectKey);
+    //
+    // // console.log(' updated work::: ', work);
+    //
+    //
+    //
+    // // console.log(JSON.stringify(work));
+    //
+    workService.updateWork(work);
+    // // console.log('value of your model is now: ' + newValue[0]._id);
+    // // console.log('value of your model is now: ' + newValue.type);
+  };
+
+  $scope.updatedWorkFromDOM = function(work){
+    // $scope.updatedWorkFromDOM();
+    console.log('UPDATED WORK FROM DOM', work);
+  }
+  $scope.user = {
+    name: 'awesome user'
+  };
   $scope.myData = [
         {
             "firstName": "Cox",

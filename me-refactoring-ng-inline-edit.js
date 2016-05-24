@@ -51,16 +51,11 @@
         };
 
         $scope.applyText = function(cancel, byDOM) {
-          console.log('1INSIDE ng-inline applyText::::');
-
           var inputValue = $scope.inputValue; // initial input value
           $scope.validationError = false;
 
           function _onSuccess() {
-            console.log('1INSIDE ng-inline inputValue::::',inputValue);
-
             $scope.model = inputValue;
-            console.log('1INSIDE ng-inline $scope.model::::',$scope.model);
             $scope.callback({
               newValue: inputValue
             });
@@ -254,18 +249,15 @@
             scope.editInput = input;
 
             attrs.$observe('inlineEdit', function(newValue) {
-              console.log("1attrs.$observe");
               scope.model = scope.$parent.$eval(newValue);
               $compile(element.contents())(scope);
             });
 
             attrs.$observe('inlineEditPlaceholder', function(placeholder) {
-              console.log("2attrs.$observe");
               scope.placeholder = placeholder;
             });
 
             scope.$watch('model', function(newValue) {
-              console.log("3attrs.$observe");
               if (!isNaN(parseFloat(newValue)) && isFinite(newValue) && newValue === 0) {
                 scope.model = '0';
               }

@@ -1,4 +1,4 @@
-var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit']);
+var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable']);
 
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
     $mdThemingProvider.theme('default')
@@ -19,6 +19,10 @@ myApp.config(function(uiGmapGoogleMapApiProvider) {
         libraries: 'weather,geometry,visualization'
     });
 });
+
+// myApp.run(function(editableOptions) {
+//   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+// });
 
 myApp.config(["$routeProvider", function($routeProvider){
   $routeProvider.

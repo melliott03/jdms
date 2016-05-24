@@ -38,6 +38,7 @@ console.log('currdatetime', Date.now());
 
 router.route("/accept/")
     .put(function(req, res) {
+      console.log('HELLO FROM PUT ON WORK/ACCEPT');
       console.log('INSIDE work/accept on server req.body._id:', req.body._id);
       console.log('req.user._id', req.user._id);
       Work.findById(req.body._id, function(err, work){
@@ -82,7 +83,7 @@ router.route("/complete")
       postToPayable();
       if (err)
       res.send(err);
-      res.json({ message: 'WORK UPDATED WITH COMPLETE !!!!!!!' });
+      // res.json({ message: 'WORK UPDATED WITH COMPLETE !!!!!!!' });
     });
   });
 });
@@ -91,22 +92,24 @@ router.route("/complete")
 
 router.post("/", function(req,res){
   console.log('1 inside post on server req.user._id', req.body );
-  var type = "req.body.type",
-  datetime = "req.body.datetime",
-  endTime = "req.body.endTime",
-  address = req.body.address,
-  details = "req.body.details",
-  customer_id = req.user._id,
-  contractor_id = '',
-  status = "req.body.status";
-  // var type = req.body.type,
-  // datetime = req.body.datetime,
-  // endTime = req.body.endTime,
+
+  // MOBILE: the line below is used for adding work on MOBILE APP
+  // var type = "req.body.type",
+  // datetime = "req.body.datetime",
+  // endTime = "req.body.endTime",
   // address = req.body.address,
-  // details = req.body.details,
+  // details = "req.body.details",
   // customer_id = req.user._id,
   // contractor_id = '',
-  // status = req.body.status;
+  // status = "req.body.status";
+  var type = req.body.type,
+  datetime = req.body.datetime,
+  endTime = req.body.endTime,
+  address = req.body.address,
+  details = req.body.details,
+  customer_id = req.user._id,
+  contractor_id = '',
+  status = req.body.status;
   console.log('2 inside post on server req.user._id', req.user );
   // Geocode item work
   geocoder.geocode(address, function ( err, geocodedData ) {
@@ -237,6 +240,25 @@ Work.find(function (err, work) {
     }).or([{ customer_id: ''+req.user._id }, { contractor_id: ''+req.user._id }]).where('status').ne('canceled');
 });
 
+router.route("/update")
+    .put(function(req, res) {
+      // console.log('INSIDE cancel on server req.params.id:', req.params.id);
+      console.log('INSIDE update on server req.params.id:::::', req.body);
+    //   Work.findById(req.body._id, function(err, work){
+    //   console.log('INSIDE cancel on server work:', work);
+    //
+    //       if(err){
+    //         console.log(err);
+    //       }
+    //       work.status = 'canceled';
+    //       // save the work
+    //         work.save(function(err) {
+    //             if (err)
+    //                 res.send(err);
+    //       res.json({ message: 'work updated!' });
+    //   });
+    // });
+    });
 
 
 router.route("/:id")

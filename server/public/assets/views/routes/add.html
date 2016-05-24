@@ -1,4 +1,4 @@
-<md-content layout-padding ng-controller="AddController">
+<md-content layout-padding >
     <div style="width : 600px; margin: 0 auto;">
       <div layout-align="center center" layout="column">
           <h3 class="md-title">Work Information</h3>
@@ -67,10 +67,7 @@
           </md-input-container>
         		<md-button ng-click="paTrigger()">Send</md-button>
           </div>
-        <div>
-        		<h1>Details: </h1>
-        		<!-- <p>{{paDetails}}</p> -->
-        	</div>
+
         </div>
         <!-- End GoogleAutoComplete -->
 
@@ -90,7 +87,7 @@
 
 </div>
 
-<div ng-app="myApp" ng-controller="AddController">
+<div >
   <md-input-container class="md-block" flex-gt-sm>
   <md-timepicker ng-model="startTime" md-placeholder="Enter time"></md-timepicker>
 </md-input-container>

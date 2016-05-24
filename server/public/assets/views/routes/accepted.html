@@ -1,94 +1,101 @@
+<div>
+<!-- <input class="inputs" style="border-style: none;
+border-width: 0px;
+border-color: none;" ng-repeat="work in contractorWorks.data track by $index"
+  ng-model="work.type"
+  inline-edit="work.type"
+  ng-model="work"
+  inline-edit-placeholder="Type your value here"
+  inline-edit-btn-edit=""
+  inline-edit-on-blur="save"
+  ng-blur="updateWorkEntered(work)"
+  inline-edit-on-click
+  inline-edit-callback="updateWorkEntered(work)" /> -->
+
+<!-- </form> -->
 
 
-
-
-<!--  NG DIALOG  -->
-<div ng-controller="VideoDialogController" layout="row" ng-cloak style="height: 300px">
-  <md-content></md-content>
-  <style>
-      .edgePadding {
-        padding-left: 25px;
-        padding-right: 25px;
-      }
-  </style>
-  <!-- <div layout="column" layout-align="center center"
-       style="background-color: #f2f2f2" class="md-padding">
-    <span id="left">left</span>
-  </div> -->
-  <div layout="column" layout-align="center start" layout-padding flex>
-    <div class="dialog-demo-content" layout="column" layout-align="center center" style="width:100%">
-      <!-- <md-button class="md-primary md-raised edgePadding" ng-click="openFromLeft($event)" >
-
-      </md-button> -->
-    </div>
-  </div>
-  <!-- <div layout="column" layout-align="center center"
-       style="background-color: #f2f2f2" class="md-padding">
-    <span id="right">right</span>
-  </div> -->
-</div>
-<!-- END NG-DIALOG -->
-
-
-
-<!-- END Datatable -->
-
-
-<md-toolbar class="md-table-toolbar alternate" ng-show="options.rowSelection && selected.length">
-  <div class="md-toolbar-tools">
-    <span>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</span>
-    <span flex></span>
-    <md-button class="md-icon-button">
-      <md-icon>delete</md-icon>
-    </md-button>
-  </div>
-</md-toolbar>
-
-<md-table-container>
-  <table data-md-table data-md-row-select="options.rowSelection" multiple="{{options.multiSelect}}" data-ng-model="selected" md-progress="promise">
-    <!-- <thead md-head md-order="query.order">
-      <tr md-row>
-        <th md-column ng-repeat="column in columns" md-numeric="column.numeric" md-order-by="{{column.orderBy}}">
-          <span>{{column.name}}</span>
-          <span ng-if="column.unit">({{column.unit}})</span>
+<div >
+  <table st-set-filter="customFilter" st-table="contractorWorks.data" class="table table-bordered table-striped" wt-responsive-table> <!-- st-sticky-header -->
+    <thead>
+    <tr>
+        <th></th>
+        <th  st-sort="type">Type</th>
+        <th  st-sort="datetime">Date Time</th>
+        <th  st-sort="address">Address</th>
+        <th  st-sort="balance">balance</th>
+        <th></th>
+    </tr>
+    <tr>
+        <th></th>
+        <th>
+            <input placeholder="search type" st-search="type" />
         </th>
-      </tr>
-    </thead> -->
-    <thead ng-if="!options.decapitate" md-head data-md-order="query.order" md-on-reorder="onReorder">
-      <tr md-row>
-        <th md-column md:order:by="type"><span>Type</span></th>
-        <th md-column data-md-numeric data-md-order-by="datetime" data-md-desc><span>Date and Time</span></th>
-        <th md-column data-md-numeric data-md-order-by="endTime"><span>End Time</span></th>
-        <th md-column data-md-order-by="address"><span>Address</span></th>
-        <th md-column data-md-order-by="details"><span>Details</span></th>
-        <th md-column data-md-order-by="status"><span>Status</span></th>
-
-      </tr>
+        <th>
+            <st-date-range style="max-width=100px;" predicate="datetime" before="query.before" after="query.after"></st-date-range>
+        </th>
+        <th>
+        <input placeholder="search address" st-search="address" />
+        </th>
+        <th>
+            <st-number-range predicate="balance" lower="query.lower" higher="query.higher"></st-number-range>
+        </th>
+        <th></th>
+    </tr>
     </thead>
-    <tbody md-body>
-      <tr md-row md-select="work" md-select-id="name" data-md-on-select="log" md-on-deselect="deselect" x-md-auto-select="options.autoSelect"  data-ng-repeat="work in contractorWorks.data | filter: filter.search | orderBy: query.order | limitTo: query.limit : (query.page - 1) * query.limit">
-        <td md-cell>{{work.type}}</td>
-        <td md-cell>{{work.datetime}}</td>
-        <td md-cell>{{work.endTime}}</td>
-        <td md-cell>{{work.address}}</td>
-        <td md-cell>{{work.details}}</td>
-        <td md-cell>{{work.status}}</td>
-        <!-- <td md-cell hide-sm>{{work.details}}</td>
-        <td md-cell hide-sm>{{work.status}}</td> -->
+    <tbody>
+    <tr ng-repeat-start="work in contractorWorks.data">
+        <td>
+              <button ng-if="work.expanded" ng-click="work.expanded = false">-</button>
+              <button ng-if="!work.expanded" ng-click="work.expanded = true">+</button>
+        </td>
+        <!-- <td cs-select="row"></td> -->
+        <td inline-edit="work.type" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+        <td inline-edit="work.datetime | date" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+        <td inline-edit="work.address" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+        <!-- <td inline-edit="work.balance | currency" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td> -->
+        <td > </td>
+        <td >
+          <md-button ng-click="cancelWork(work._id)">Cancel</md-button>
+        </td>
 
-      </tr>
+    </tr>
+    <tr ng-if="work.expanded" ng-repeat-end="work in contractorWorks.data">
+            <!-- <td colspan="6" inline-edit="work.details" inline-edit-on-click inline-edit-btn-edit=""></td> -->
+            <td colspan="6" >
+
+              <input class="inputs" style="border-style: none;
+              border-width: 0px;
+              border-color: none;"
+                ng-model="work.type"
+                inline-edit="work.type"
+                ng-model="work"
+                inline-edit-placeholder="Type your value here"
+                inline-edit-btn-edit=""
+                inline-edit-on-blur="save"
+                ng-blur="updateWorkEntered(work)"
+                inline-edit-on-click
+                inline-edit-callback="updateWorkEntered(work)" />
+              </td>
+    </tr>
     </tbody>
-  </table>
-</md-table-container>
+    <tfoot>
+      <tr>
+				<td colspan="6" class="text-center">
+					<div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+				</td>
+			</tr>
+    </tfoot>
+</table>
+</div>
 
-<!-- <td md-cell>
-  <md-select ng-model="work.type" placeholder="Other">
-    <md-option ng-value="type" ng-repeat="type in getTypes()">{{type}}</md-option>
-  </md-select>
-</td> -->
-
-<data-md-table-pagination md-limit="query.limit" md-limit-options="limitOptions" md-page="query.page" md-total="{{works.count}}" md-on-paginate="onPaginate" md-page-select="options.pageSelect" md-boundary-links="options.boundaryLinks"></data-md-table-pagination>
+</div>
 <!-- END Datatable -->
+
+
+
+
+
 
 
 <!-- START MD-CARDS -->

@@ -105,13 +105,15 @@ myApp.factory("WorkService", ["$http", function($http){
         getWorks();
     });
     };
-    // var updateWork = function(work_id){
-    // console.log("Deleting work", work_id);
-    // $http.put("/work/" + work_id).then(function(response){
-    //     console.log("Updated : ", response.data);
-    //     getWorks();
-    // });
-    // };
+    var updateWork = function(work){
+    console.log("Updating in Factory work.type", work.type);
+    console.log("Updating in Factory work", work);
+
+    $http.put("/work/update",  work).then(function(response){
+        console.log("Updated::::", response.data);
+        getWorks();
+    });
+    };
 
     var getSMS = function(){
         $http.get("/sms").then(function(response){
@@ -152,7 +154,8 @@ myApp.factory("WorkService", ["$http", function($http){
         availibleWorkObject : availibleWorkObject,
         getAvailibleWorks : getAvailibleWorks,
         getContractorWork : getContractorWork,
-        contractorWorkObject : contractorWorkObject
+        contractorWorkObject : contractorWorkObject,
+        updateWork : updateWork
     };
 }]);
 
