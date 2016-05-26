@@ -17,17 +17,13 @@
         <!--  -->
         <div layout-gt-sm="row">
           <div >
+            <md-datepicker ng-model="work.date"></md-datepicker>
           <md-input-container class="md-block" flex-gt-sm>
-          <label>Date & Start Time</label>
-          <span class="input-group-addon">
-            <i class="octicon octicon-calendar"></i>
-          </span>
           <input type="datetime-local"
           placeholder="Enter date & start time"
           ng-model="work.date"
           ng-model-options="{ updateOn: 'blur' }"
           >
-          <md-datepicker ng-model="work.date"></md-datepicker>
         </md-input-container>
         </div>
 

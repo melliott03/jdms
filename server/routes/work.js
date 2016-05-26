@@ -47,7 +47,7 @@ router.route("/accept/")
           console.log(err);
         }
         work.contractor_id = req.user._id; // req.user._id
-        work.status = "Accept";
+        work.status = "Accepted";
         // save the work
         work.save(function(err) {
           if (err)
@@ -177,7 +177,7 @@ console.log('INSIDE get availibleWork on work req.user.geo[1]: ',req.user.geo[1]
         $maxDistance: distance
         }
         /**@todo figureout how to compair where contractor.type equals addedWork.type*/
-      }).where('type').equals(req.user.type).where('status').equals('pending');    //.where('status').ne('Accept');
+      }).where('type').equals(req.user.type).where('status').equals('pending');    //.where('status').ne('Accepted');
       query.exec(function (err, availibleWorks) {
         console.log(' inside query.exec contractors nearby : ', availibleWorks);
         if (err) {

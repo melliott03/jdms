@@ -1,20 +1,4 @@
 <div>
-<!-- <input class="inputs" style="border-style: none;
-border-width: 0px;
-border-color: none;" ng-repeat="work in contractorWorks.data track by $index"
-  ng-model="work.type"
-  inline-edit="work.type"
-  ng-model="work"
-  inline-edit-placeholder="Type your value here"
-  inline-edit-btn-edit=""
-  inline-edit-on-blur="save"
-  ng-blur="updateWorkEntered(work)"
-  inline-edit-on-click
-  inline-edit-callback="updateWorkEntered(work)" /> -->
-
-<!-- </form> -->
-
-
 <div >
   <table st-set-filter="customFilter" st-table="contractorWorks.data" class="table table-bordered table-striped" wt-responsive-table> <!-- st-sticky-header -->
     <thead>
@@ -61,9 +45,7 @@ border-color: none;" ng-repeat="work in contractorWorks.data track by $index"
 
     </tr>
     <tr ng-if="work.expanded" ng-repeat-end="work in contractorWorks.data">
-            <!-- <td colspan="6" inline-edit="work.details" inline-edit-on-click inline-edit-btn-edit=""></td> -->
             <td colspan="6" >
-
               <input class="inputs" style="border-style: none;
               border-width: 0px;
               border-color: none;"
@@ -91,104 +73,3 @@ border-color: none;" ng-repeat="work in contractorWorks.data track by $index"
 
 </div>
 <!-- END Datatable -->
-
-
-
-
-
-
-
-<!-- START MD-CARDS -->
-<md-content layout-padding>
-    <div style="width : 100%; margin: 2vw auto;">
-      <div ng-repeat="work in contractorWorks.data">
-        <md-card>
-          <!-- <p>{{Marketer work.type }}</p> -->
-            <md-card-title>
-              <md-card-title-text>
-                <span class="md-headline">{{ work.type }}</span>
-              </md-card-title-text>
-            </md-card-title>
-
-            <md-card-content>
-              <div>
-                  <h1 >DATE & TIME: {{ work.datetime }} to {{ work.endTime }} <br>ADDRESS: {{ work.address }}<br> DETAILS: {{ work.details }} <br> STATUS: {{work.status}} <br>LAT LON {{ work.geo }} <br>WEATHER: {{ work.weather[0].daily.data[0].summary }} <br> CONTRACTOR ID: {{work.contractor_id}}</h1>
-              </div>
-            <ng-map zoom="11" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP" style="height:200px; width:200;"> <!-- TERRAIN TRAFFIC SATELLITE CONSTANT -->
-             <marker position="{{ work.geo }}"  centered="true"></marker>
-           </ng-map>
-           <div style="height:132px;width:100%"></div>
-                        <!-- START TWILIO VIDEO  -->
-                        <md-card-content>
-                        <div>
-                          <div id="remote-media"></div>
-                          <div id="controls">
-                            <div id="preview">
-                              <p class="instructions">Video</p>
-                              <div id="local-media"></div>
-                              <button id="button-preview">Preview My Camera</button>
-                            </div>
-                          </div><!-- /controls -->
-                          <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script> -->
-
-                          <script src="/quickstart.js"></script>
-                        </div>
-           <div>
-             <div id="controls">
-               <div id="invite-controls">
-                 <p class="instructions">Invite another Video Client</p>
-                 <button id="button-invite" value="{{work.contractor_id}}">Send Invite</button>
-               </div>
-               <div id="log">
-                 <p>&gt;&nbsp;<span id="log-content">Preparing to listen</span>...</p>
-               </div>
-             </div><!-- /controls -->
-           </div>
-                          </md-card-content>
-           <!-- END TWILIO VIDEO -->
-             <!-- <ng-map zoom="11" center="current" map-type-id="MapTypeId.SATELLITE">
-              <marker position="current" animation="Animation.BOUNCE" centered="true"></marker>
-            </ng-map> -->
-
-
-              <!-- <div>
-                <p>{{ work.address }}</p>
-              </div>
-              <div>
-                <h4>
-                    DETAILS:
-                </h4>
-                  <p>{{ work.details }}</p>
-              </div> -->
-            </md-card-content>
-
-            <md-card-actions layout="row" layout-align="end center">
-              <!-- <md-button ng-click="cancelWork(work._id)">Cancel</md-button> -->
-              <md-button ng-click="completeWork(work)">Complete</md-button>
-            </md-card-actions>
-        </md-card>
-      </div>
-    </div>
-</md-content>
-<!-- END MD-CARDS -->
-
-<!-- Editing Page Elements with contenteditable -->
-	<!-- <h1>AngularJS Edit-in-Place with contenteditable</h1>
-
-	<section>
-		<h2>The contenteditable directive</h2>
-
-		<div contenteditable="true" ng-model="text01">
-		</div>
-	</section>
-
-	<section>
-		<h2>Toggle Editing</h2>
-
-		<button id="editorBtn" type="button" ng-click="toggleEditMode()">{{editmode ? 'Disable Editing' : 'Enable Editing'}}</button>
-		<div id="editor" ng-model="text02" ng-attr-contenteditable="{{ editmode }}">
-		</div>
-	</section>
-
-</div> -->
-<!-- End Editing Page Elements with contenteditable -->

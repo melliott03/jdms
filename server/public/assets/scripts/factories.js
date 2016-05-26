@@ -26,6 +26,7 @@ myApp.config(function ($httpProvider) {
 myApp.factory("WorkService", ["$http", function($http){
     var postedWork = {};
     var data = {};
+    var customerWorkObject = {};
     var userObject = {};
     var availibleWorkObject = {};
     var contractorWorkObject = {};
@@ -48,7 +49,7 @@ myApp.factory("WorkService", ["$http", function($http){
 
     var getWorks = function(){
         $http.get("/work").then(function(response){
-            data.response = response;
+            customerWorkObject.response = response.data;
             console.log('RETRUN OF GET WROKS FUNCTION !!! !!!!!  ::  ', response);
 
             // getWeather(response.data);
@@ -155,7 +156,8 @@ myApp.factory("WorkService", ["$http", function($http){
         getAvailibleWorks : getAvailibleWorks,
         getContractorWork : getContractorWork,
         contractorWorkObject : contractorWorkObject,
-        updateWork : updateWork
+        updateWork : updateWork,
+        customerWorkObject : customerWorkObject
     };
 }]);
 

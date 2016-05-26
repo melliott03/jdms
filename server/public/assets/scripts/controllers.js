@@ -160,7 +160,7 @@ myApp.controller("ShowController", ["$scope", "$location", '$filter', "WorkServi
     $scope.availibleWorks = WorkService.availibleWorkObject;
     console.log('$scope.availibleWorks :', $scope.availibleWorks);
 
-    $scope.works = WorkService.data;
+    $scope.works = WorkService.customerWorkObject;
     console.log('$scope.works :', $scope.works);
     $scope.deleteWork = WorkService.deleteWork;
     $scope.cancelWork = WorkService.cancelWork;

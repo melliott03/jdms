@@ -1,23 +1,4 @@
-<!-- <div class="target" ng-repeat="work in availibleWorks.data track by $index">
-  <a   ng-model="work"  editable-text="work.type" ng-focus="updateWorkEntered(work)" ng-blur="updateWorkEntered(work)">{{ work.type || "empty" }}</a>
-</div> -->
-
-
 <div>
-  <!-- <form ng-submit="updateWorkEntered(work)">
-    <input ng-model="work.type" type="text" name="type" value="work.type" />
-    <input ng-model="work.address" type="text" name="address" value="work.address" />
-    <input type="submit" value="Login" />
-  </form> -->
-
-<!-- <form class="" action="index.html" method="post"> -->
-  <!-- <input style="border-style: none;
-    border-width: 0px;
-    border-color: none;" ng-repeat="work in availibleWorks.data track by $index"
-    inline-edit="work.type"
-    ng-model="work.type"
-    ng-blur="updateWorkEntered(work)"
-/> -->
 <input class="inputs" style="border-style: none;
 border-width: 0px;
 border-color: none;" ng-repeat="work in availibleWorks.data track by $index"
@@ -30,9 +11,6 @@ border-color: none;" ng-repeat="work in availibleWorks.data track by $index"
   ng-blur="updateWorkEntered(work)"
   inline-edit-on-click
   inline-edit-callback="updateWorkEntered(work)" />
-
-<!-- </form> -->
-
 
 <div >
   <table st-set-filter="customFilter" st-table="availibleWorks.data" class="table table-bordered table-striped" wt-responsive-table> <!-- st-sticky-header -->
@@ -79,11 +57,10 @@ border-color: none;" ng-repeat="work in availibleWorks.data track by $index"
 
         <td >
           <md-button ng-click="acceptWork(work)">Accept</md-button>
-          <!-- <md-button ng-click="cancelWork(work._id)">Cancel</md-button> -->
         </td>
 
     </tr>
-    <tr ng-if="work.expanded" ng-repeat-end="work in displayed">
+    <tr ng-if="work.expanded" ng-repeat-end="work in availibleWorks.data">
             <td colspan="6" inline-edit="work.details" inline-edit-on-click inline-edit-btn-edit=""></td>
     </tr>
     </tbody>

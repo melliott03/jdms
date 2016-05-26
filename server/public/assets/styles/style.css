@@ -250,4 +250,79 @@ section > div:focus, section > div:focus:hover  {
     background: rgba(255, 255, 255, 0.4);
     outline: solid 1px #EE4C8D;
 }
+.map{
+  display: inline-block;
+}
+/*START table fixed header code*/
+/*http://stackoverflow.com/questions/29881335/smart-table-angularjs-module-fixed-table-header-is-not-working-on-safari*/
+table {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    height: 700px; /* this can vary */
+}
+
+table * {
+    box-sizing: inherit;
+    -moz-box-sizing: inherit;
+}
+
+thead {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+tbody {
+    overflow-y: scroll;
+    display: inline-block;
+}
+
+thead > tr, tbody > tr, tfoot > tr {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -moz-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -moz-flex-wrap: nowrap;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+}
+
+thead, tfoot {
+    -moz-flex-shrink: 0;
+    -webkit-flex-shrink: 0;
+    flex-shrink: 0;
+}
+
+th, tbody td {
+    width: 100%; /* this can vary */
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+}
+
+tfoot {
+    display: inline-block;
+}
+
+tfoot td {
+    width: 100%;
+    display: inline-block;
+}
+/*END table fixed header code*/
+
 </style>
