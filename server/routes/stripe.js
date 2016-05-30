@@ -1,7 +1,6 @@
 var express = require("express");
 var router = express.Router();
 var db = require("../modules/db");
-// var mongoURI = require("../modules/mongoURI");
 var path = require("path");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
@@ -13,11 +12,6 @@ var sugar = require('sugar');
 var Agenda = require('agenda');//#AGENDA
 var getForecast = require('../modules/forecast');
 var stripeChargePay = require('../modules/stripeTransactions');
-var stripe = require("stripe")(
-  "sk_test_SfT5Rf2DMVfT0unJf7aIIskQ"
-);
-
-// var restrict = require("../modules/restrict"); // restricts user to be logedin to access route
 
 // ---- Models ---- //
 // var Contractor = require('../models/contractor');
@@ -27,18 +21,6 @@ var Work = require('../models/work');
 
 // ---- Modules ---- //
 var newWorkAlert = require('../modules/newWorkAlert');
-
-
-var twilio = require('twilio'),
-client = twilio('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c'); //twilio('ACCOUNTSID', 'AUTHTOKEN'),
-// var acceptedWorkReminder = require('../modules/acceptedWorkReminder');
-
-
-// var Work = mongoose.model("Works");
-// var Contractor = mongoose.model("Contractors");
-
-console.log('currdatetime', Date.now());
-
 
 router.route("/accept/")
     .put(function(req, res) {
@@ -89,16 +71,10 @@ router.route("/complete")
       if (err)
       res.send(err);
 
-      //find the Customer and charge them
-
-      //find the Contractor and pay them
-
       // res.json({ message: 'WORK UPDATED WITH COMPLETE !!!!!!!' });
     });
   });
 });
-
-
 
 
 

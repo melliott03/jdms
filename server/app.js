@@ -14,7 +14,7 @@ var User = require('./models/user');
 var Work = require('./models/work');
 var sugar = require('sugar');
 var config = require('./config/main'); // Tokens http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
-
+var account = require('./routes/stripeCreateAccount');
 
 app.use(express.static(path.join(__dirname, 'public')));//Twilio Video
 
@@ -68,24 +68,24 @@ var Agenda = require('agenda');//#AGENDA
 
 //START: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
 // Register new users
-apiRoutes.post('/register', function(req, res) {
-  if(!req.body.email || !req.body.password) {
-    res.json({ success: false, message: 'Please enter email and password.' });
-  } else {
-    var newUser = new User({
-      email: req.body.email,
-      password: req.body.password
-    });
-
-    // Attempt to save the user
-    newUser.save(function(err) {
-      if (err) {
-        return res.json({ success: false, message: 'That email address already exists.'});
-      }
-      res.json({ success: true, message: 'Successfully created new user.' });
-    });
-  }
-});
+// apiRoutes.post('/register', function(req, res) {
+//   if(!req.body.email || !req.body.password) {
+//     res.json({ success: false, message: 'Please enter email and password.' });
+//   } else {
+//     var newUser = new User({
+//       email: req.body.email,
+//       password: req.body.password
+//     });
+//
+//     // Attempt to save the user
+//     newUser.save(function(err) {
+//       if (err) {
+//         return res.json({ success: false, message: 'That email address already exists.'});
+//       }
+//       res.json({ success: true, message: 'Successfully created new user.' });
+//     });
+//   }
+// });
 
 
 // app.use(session({
@@ -109,6 +109,7 @@ app.use(morgan('dev'));
 //START: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
 // Authenticate the user and get a JSON Web Token to include in the header of future requests.
 apiRoutes.post('/authenticate', function(req, res) {
+  console.log('req.body::', req.body);
   User.findOne({
     email: req.body.email
   }, function(err, user) {
@@ -150,6 +151,8 @@ app.get('/dashboard', passport.authenticate('jwt', { session: false }), function
 });
 // Set url for API group routes
 app.use('/api', apiRoutes);
+app.use('/epirts', passport.authenticate('jwt', { session: false }), account);
+
 
 // Protect chat routes with JWT
 // GET messages for authenticated user
@@ -282,7 +285,7 @@ app.get('/chat', passport.authenticate('jwt', { session: false }), function(req,
 //   res.redirect('/');
 // }
 
-// app.use("/register", register);
+app.use("/register", register);
 app.use("/user", passport.authenticate('jwt', { session: false }), user); // START HERE TODAY
 app.use("/work", passport.authenticate('jwt', { session: false }), work);
 app.use("/sms2", sms);

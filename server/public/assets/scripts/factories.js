@@ -18,6 +18,22 @@ myApp.factory('authInterceptor', function ($rootScope, $q, $window) {
   };
 });
 
+myApp.factory("HomeService", ["$http", function($http){
+  var contractorAccountObject = {};
+  var createContractorAccount = function(info){
+      $http.put("/epirts/create", info).then(function(response){
+          contractorAccountObject.response = response.data;
+          console.log('RETRUN OF GET WROKS FUNCTION !!! !!!!!  ::  ', response);
+      });
+  };
+
+  return {
+      contractorAccountObject : contractorAccountObject,
+      createContractorAccount : createContractorAccount
+  };
+}]);
+
+
 myApp.config(function ($httpProvider) {
   $httpProvider.interceptors.push('authInterceptor');
 });

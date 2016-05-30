@@ -215,8 +215,9 @@ myApp.controller("ShowController", ["$scope", "$location", '$filter', "WorkServi
 //   };
 // });
 
-myApp.controller("HomeController", ["$scope", "$mdDialog", "WorkService", function($scope, $mdDialog, WorkService){
+myApp.controller("HomeController", ["$scope", "$mdDialog", "HomeService", "WorkService", function($scope, $mdDialog, HomeService, WorkService){
     console.log("Home Controller");
+    var homeService = HomeService;
     // WorkService.getTravelTime();
 
     $scope.showTabDialog = function(ev) {
@@ -246,6 +247,7 @@ function DialogController($scope, $mdDialog) {
   };
 }
 
+$scope.submitContractorPersonal = homeService.createContractorAccount;
 
 }]);
 

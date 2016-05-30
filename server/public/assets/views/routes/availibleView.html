@@ -1,32 +1,24 @@
 <div>
-<input class="inputs" style="border-style: none;
-border-width: 0px;
-border-color: none;" ng-repeat="work in availibleWorks.data track by $index"
-  ng-model="work.type"
-  inline-edit="work.type"
-  ng-model="work"
-  inline-edit-placeholder="Type your value here"
-  inline-edit-btn-edit=""
-  inline-edit-on-blur="save"
-  ng-blur="updateWorkEntered(work)"
-  inline-edit-on-click
-  inline-edit-callback="updateWorkEntered(work)" />
-
 <div >
   <table st-set-filter="customFilter" st-table="availibleWorks.data" class="table table-bordered table-striped" wt-responsive-table> <!-- st-sticky-header -->
     <thead>
     <tr>
         <th></th>
         <th  st-sort="type">Type</th>
+        <th  st-sort="field">Field</th>
         <th  st-sort="status">Status</th>
         <th  st-sort="datetime">Date Time</th>
         <th  st-sort="address">Address</th>
-        <th st-sort="balance">balance</th>
+        <th st-sort="contractor_rate">$/hour</th>
+        <th ></th>
     </tr>
     <tr>
         <th></th>
         <th>
             <input placeholder="search type" st-search="type" />
+        </th>
+        <th>
+            <input placeholder="search field" st-search="field" />
         </th>
         <th>
             <input placeholder="search status" st-search="status" />
@@ -38,8 +30,10 @@ border-color: none;" ng-repeat="work in availibleWorks.data track by $index"
         <input placeholder="search address" st-search="address" />
         </th>
         <th>
-            <st-number-range predicate="balance" lower="query.lower" higher="query.higher"></st-number-range>
+            <st-number-range predicate="contractor_rate" lower="query.lower" higher="query.higher"></st-number-range>
         </th>
+        <th></th>
+
     </tr>
     </thead>
     <tbody>
@@ -50,10 +44,11 @@ border-color: none;" ng-repeat="work in availibleWorks.data track by $index"
         </td>
         <!-- <td cs-select="row"></td> -->
         <td inline-edit="work.type" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+        <td inline-edit="work.field" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
         <td inline-edit="work.status | uppercase" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
         <td inline-edit="work.datetime | date" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
         <td inline-edit="work.address" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
-        <!-- <td inline-edit="work.balance | currency" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td> -->
+        <td inline-edit="work.contractor_rate | currency" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
 
         <td >
           <md-button ng-click="acceptWork(work)">Accept</md-button>
@@ -61,7 +56,31 @@ border-color: none;" ng-repeat="work in availibleWorks.data track by $index"
 
     </tr>
     <tr ng-if="work.expanded" ng-repeat-end="work in availibleWorks.data">
-            <td colspan="6" inline-edit="work.details" inline-edit-on-click inline-edit-btn-edit=""></td>
+      <td colspan="7" >
+        <div class="" style="height:100%; width:100%; ">
+          <div>WEATHER:  {{ work.weather[0].daily.data[0].summary}} </div>
+          <span>Work Details:</span>
+         <input class="inputs" style="border-style: none;
+        border-width: 0px;
+        border-color: none;"
+          ng-model="work.details"
+          inline-edit="work.details"
+          ng-model="work"
+          inline-edit-placeholder="Type your value here"
+          inline-edit-btn-edit=""
+          inline-edit-on-blur="save"
+          ng-blur="updateWorkEntered(work)"
+          inline-edit-on-click
+          inline-edit-callback="updateWorkEntered(work)" />
+        </div>
+        <span class="">
+          <ng-map zoom="11" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP" style="height:100%; width:50%; display:inline-block;">
+           <marker position="{{ work.geo }}"  centered="true"></marker>
+         </ng-map>
+       </span>
+
+        <!-- TERRAIN TRAFFIC SATELLITE CONSTANT -->
+     </td>
     </tr>
     </tbody>
     <tfoot>

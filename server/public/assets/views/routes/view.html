@@ -8,7 +8,9 @@
         <th  st-sort="status">Status</th>
         <th  st-sort="datetime">Date Time</th>
         <th  st-sort="address">Address</th>
-        <th st-sort="balance">balance</th>
+        <th st-sort="customer_rate">$/hour</th>
+        <th ></th>
+
     </tr>
     <tr>
         <th></th>
@@ -25,8 +27,9 @@
         <input placeholder="search address" st-search="address" />
         </th>
         <th>
-            <st-number-range predicate="balance" lower="query.lower" higher="query.higher"></st-number-range>
+            <st-number-range predicate="customer_rate" lower="query.lower" higher="query.higher"></st-number-range>
         </th>
+        <th ></th>
     </tr>
     </thead>
     <tbody>
@@ -40,7 +43,7 @@
         <td inline-edit="work.status | uppercase" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
         <td inline-edit="work.datetime | date" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
         <td inline-edit="work.address" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
-        <!-- <td inline-edit="work.balance | currency" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td> -->
+        <td inline-edit="work.customer_rate | currency" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
 
         <td >
           <md-button ng-click="cancelWork(work._id)">Cancel</md-button>
@@ -70,7 +73,7 @@
                  <marker position="{{ work.geo }}"  centered="true"></marker>
                </ng-map>
              </span>
-             
+
               <!-- TERRAIN TRAFFIC SATELLITE CONSTANT -->
            </td>
 

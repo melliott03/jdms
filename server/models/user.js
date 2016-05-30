@@ -11,7 +11,10 @@ var UserSchema = new Schema({
     phone: {type: String, required: false},
     address: {type: String, required: false},
     type: {type: String, required: false},
-    email: {type: String, required: false},
+    email: {type: String, required: true},
+    dob: {type: String, required: false},
+    last4sos: {type: String, required: false},
+    epirtsToken: {type: String, required: false},
     role: {type: String, required: false},
     lastlogin: {type: Date, default: Date.now },
     geo: {

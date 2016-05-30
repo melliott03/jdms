@@ -3,7 +3,7 @@ var Schema = mongoose.Schema;
 
 mongoose.model("Contractors", new Schema({
   "fname" : String, "lname" : String, "type" : String, "phone" : String, "email" : String,
-"address" : String, "geo": {
+"address" : String, "last4sos" : String, "dob" : String,  "geo": {
     type: [Number],
     index: '2d'
   }

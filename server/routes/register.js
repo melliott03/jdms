@@ -4,6 +4,8 @@ var passport = require("passport");
 var path = require("path");
 var User = require("../models/user");
 var geocoder = require('geocoder');
+// var createStripeAccount = require("../modules/stripeCreateAccount");
+var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
 
 
 router.get("/", function(req,res,next){
@@ -11,7 +13,7 @@ router.get("/", function(req,res,next){
 });
 
 router.post("/", function(req, res, next){
-    // console.log("Made it into register : ", req.body);
+    console.log("Made it into register : ", req.body);
     // var user = req.body;
     // console.log("User : ", user);
     geocoder.geocode(req.body.address, function ( err, geocodedData ) {
@@ -31,7 +33,9 @@ router.post("/", function(req, res, next){
         newUserObject.address = req.body.address;
         newUserObject.role = req.body.role;
         newUserObject.type = req.body.type;
+        newUserObject.epirtsToken;
 
+        var reqbody =req.body;
 
 
         console.log("newUserObject.geo : ", newUserObject.geo);
@@ -39,11 +43,14 @@ router.post("/", function(req, res, next){
 
         console.log("newUserObject : ", newUserObject);
 
-    User.create(newUserObject, function(err,post){
+    User.create(newUserObject, function(err, user){
         if(err){
           next(err);
         } else {
-          res.redirect("/");
+
+              //create a stripe account for the user and update user object with token
+              // createStripeAccount(user, reqbody);
+          // res.redirect("/");
         }
     });
   });//END geocoder.geocode

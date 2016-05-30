@@ -88,9 +88,9 @@
                   <input type="text" name="address" id="address" class="md-block" value="{{paDetails.formatted_address}}" hidden flex-gt-sm />
 
                   <div>
-                    <h1>Details: </h1>
+                    <!-- <h1>Details: </h1>
 
-                    <p>{{paDetails.geometry.access_points[0].location}}</p>
+                    <p>{{paDetails.geometry.access_points[0].location}}</p> -->
                   </div>
                 </div>
                 <!-- End GoogleAutoComplete -->
@@ -103,15 +103,20 @@
                   <div ng-show="content == 'contractor'">
                       <md-input-container>
                     <!-- <label for="type">FIELD: </label> -->
-                    <select type="text" name="type" id="type" class="md-block" flex-gt-sm >
-                      <option>Accountant</option>
-                      <option>Tutor</option>
-                      <option>Machenic</option>
-                      <option>Plumber</option>
-                      <option>Marketer</option>
-                    </select>
+                      <select type="text" name="type" id="type" class="md-block" flex-gt-sm >
+                        <option>Accountant</option>
+                        <option>Tutor</option>
+                        <option>Machenic</option>
+                        <option>Plumber</option>
+                        <option>Marketer</option>
+                      </select>
                       </md-input-container>
+                      <!-- <label for="dob">DOB: </label>
+                      <input type="text" name="dob" id="dob" class="md-block"  flex-gt-sm />
+                      <label for="last4sos">last 4 digits of Social: </label>
+                      <input type="text" name="last4sos" id="last4sos" class="md-block"  flex-gt-sm /> -->
                   </div>
+
                 <md-button class="md-raised md-primary" type="submit" value="Register">Register</md-button>
 
             </form>
