@@ -14,7 +14,8 @@ var UserSchema = new Schema({
     email: {type: String, required: true},
     dob: {type: String, required: false},
     last4sos: {type: String, required: false},
-    epirtsToken: {type: String, required: false},
+    epirts: {type: Object, required: false},
+    plaidTokens: {type: Object, required: false},
     role: {type: String, required: false},
     lastlogin: {type: Date, default: Date.now },
     geo: {

@@ -1,8 +1,92 @@
+
+
 <h1>HOME</h1>
+
+
+
+
+
+
+
+
 <p>
    please add your bank account:
 </p>
+
+<!-- BEGIN PLAID STUFF -->
+<!-- <div ng-controller="plaidCtrl">
+    <div class="container">
+        <div class="clearfix">
+            <h1 class="pull-left">Angular Plaid Link Example</h1>
+
+            <ul class="list-unstyled pull-right" style="margin-top: 10px;">
+                <li><strong>Docs:</strong></li>
+                <li><a href="https://github.com/plaid/link">Plaid Link</a></li>
+                <li><a href="https://github.com/csbarnes/angular-plaid-link">angular-plaid-link</a></li>
+            </ul>
+        </div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Bank Select</strong></p>
+                <button class="btn btn-success" ng-click="openPlaid()" ng-disabled="!plaidIsLoaded()">
+                    Link Account
+                </button>
+
+                <br/>
+                <br/>
+                <p><em>or</em></p>
+
+                <p><strong>Direct Bank Login</strong></p>
+
+                <button class="btn btn-primary" ng-click="openPlaid('chase')" ng-disabled="!plaidIsLoaded()">
+                    Link Chase
+                </button>
+
+                <button class="btn btn-danger" ng-click="openPlaid('bofa')" ng-disabled="!plaidIsLoaded()">
+                    Link Bank of America
+                </button>
+            </div>
+
+            <div class="col-md-6">
+                <h4>Public Token:</h4>
+                <pre>{{token}}</pre>
+            </div>
+        </div>
+    </div>
+  </div>
+    <script src="https://cdn.plaid.com/link/stable/link-initialize.js"></script> -->
+    <!-- END PLAID STUFF -->
+
+
+
+
+
+
+
+
+
+
+
+
+
 <form class="" action="index.html" method="post">
+  <p>
+    Address all necessary identity verification.
+      *The business type (individual or company)
+      *Full name of the individual or company representative
+      *Date of birth of the individual or company representative
+      *Address of the individual or business (not required for Australian and U.S. managed accounts at this stage)
+      tos_acceptance.ip
+  </p>
+  <p>
+    Establish the contractor’s bank account (for transfers).
+  </p>
+  <p>
+    Have your contractors agree to your terms of service.
+  </p>
   <!-- external_account
 legal_entity.dob.day
 legal_entity.dob.month
@@ -12,12 +96,20 @@ legal_entity.last_name
 legal_entity.type
 tos_acceptance.date
 tos_acceptance.ip -->
+<label for="dob">Entity: </label>
+<input ng-model="contractorPersonal.dob" type="text" name="dob" id="dob" class="md-block"  flex-gt-sm />
+
   <label for="dob">DOB: </label>
   <input ng-model="contractorPersonal.dob" type="text" name="dob" id="dob" class="md-block"  flex-gt-sm />
   <label for="last4sos">last 4 digits of Social: </label>
   <input ng-model="contractorPersonal.last4sos" type="text" name="last4sos" id="last4sos" class="md-block"  flex-gt-sm />
+  <p>
+    By registering your account, you agree to our
+    <a href="#terms" target="_blank" rel="noopener noreferrer">Terms of Service</a> and the <a href="https://stripe.com/connect/account-terms" target="_blank" rel="noopener noreferrer">Stripe Connected Account Agreement</a>.
+  </p>
   <md-button ng-click="submitContractorPersonal(contractorPersonal)" class="md-raised">SUBMIT</md-button>
 </form>
+
 
 
 <form name="workEntry">
@@ -56,10 +148,7 @@ tos_acceptance.ip -->
 <div>
 <md-input-container class="md-block" flex-gt-sm>
 <label>End Time</label>
-<input  type="time"
-placeholder="End Time"
-ng-model="work.EndTime"
-ng-model-options="{ updateOn: 'blur' }">
+<input  type="time" placeholder="End Time" ng-model="work.EndTime" ng-model-options="{ updateOn: 'blur' }">
 </md-input-container>
 </div>
 </div>

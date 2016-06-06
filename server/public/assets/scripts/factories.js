@@ -188,3 +188,18 @@ myApp.factory("AuthenticationService", ["$http", "$location", function($http, $l
         logout : logout
     };
 }]);
+
+myApp.factory("PlaidService", ["$http", "$location", function($http, $location){
+
+    var sendToken = function(plaid){
+      console.log(' plaid in factory before  sending Token', plaid);
+
+       $http.post("/authenticate", plaid).then(function(response){
+         console.log('in factory back from sending Token', response);
+       });
+    };
+
+    return {
+        sendToken : sendToken
+    };
+}]);

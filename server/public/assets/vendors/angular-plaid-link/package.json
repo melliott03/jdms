@@ -1,0 +1,77 @@
+{
+  "_args": [
+    [
+      "angular-plaid-link",
+      "/Users/mikeelliott/AtomProjects/04052016_1_work"
+    ]
+  ],
+  "_from": "angular-plaid-link@latest",
+  "_id": "angular-plaid-link@1.0.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/angular-plaid-link",
+  "_nodeVersion": "0.10.35",
+  "_npmUser": {
+    "email": "barnes.csb@gmail.com",
+    "name": "csbarnes"
+  },
+  "_npmVersion": "2.1.17",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "angular-plaid-link",
+    "raw": "angular-plaid-link",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/angular-plaid-link/-/angular-plaid-link-1.0.0.tgz",
+  "_shasum": "443b79e3cf2aca0174311a282a053cff7bd8f318",
+  "_shrinkwrap": null,
+  "_spec": "angular-plaid-link",
+  "_where": "/Users/mikeelliott/AtomProjects/04052016_1_work",
+  "author": {
+    "email": "barnes.csb@gmail.com",
+    "name": "Chris Barnes"
+  },
+  "bugs": {
+    "url": "https://github.com/csbarnes/angular-plaid-link/issues"
+  },
+  "dependencies": {},
+  "description": "Plaid Link wrapper for AngularJS",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "443b79e3cf2aca0174311a282a053cff7bd8f318",
+    "tarball": "https://registry.npmjs.org/angular-plaid-link/-/angular-plaid-link-1.0.0.tgz"
+  },
+  "gitHead": "46fbc02c1eb2caf28b392663ef78cc3da217dda8",
+  "homepage": "https://github.com/csbarnes/angular-plaid-link",
+  "keywords": [
+    "angular",
+    "plaid",
+    "plaid-link"
+  ],
+  "license": "MIT",
+  "main": "src/angular-plaid-link.js",
+  "maintainers": [
+    {
+      "name": "csbarnes",
+      "email": "barnes.csb@gmail.com"
+    }
+  ],
+  "name": "angular-plaid-link",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csbarnes/angular-plaid-link.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
+}

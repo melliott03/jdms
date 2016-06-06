@@ -502,6 +502,78 @@ ng.module('smart-table')
         }
       }
     };
-  }]);
+  }])
+  // export smart table results
+  .directive('stExport',function(){
+  return {
+    require:'^stTable',
+    link:function(scope, element, attr,ctrl){
+      element.bind('click',function(){
+        // alert(ctrl.getFilteredCollection().length);
+        var stockData = ctrl.getFilteredCollection();
+        console.log('stockData',stockData);
+
+        //start function to convert and download csv
+        //brower note:: works only with chrome, safari doesn't download
+        function convertArrayOfObjectsToCSV(args) {
+            var result, ctr, keys, columnDelimiter, lineDelimiter, data;
+
+            data = args.data || null;
+            if (data == null || !data.length) {
+                return null;
+            }
+
+            columnDelimiter = args.columnDelimiter || ',';
+            lineDelimiter = args.lineDelimiter || '\n';
+
+            keys = Object.keys(data[0]);
+
+            result = '';
+            result += keys.join(columnDelimiter);
+            result += lineDelimiter;
+
+            data.forEach(function(item) {
+                ctr = 0;
+                keys.forEach(function(key) {
+                    if (ctr > 0) result += columnDelimiter;
+
+                    result += item[key];
+                    ctr++;
+                });
+                result += lineDelimiter;
+            });
+
+            return result;
+        }
+
+        function downloadCSV(args) {
+            var data, filename, link;
+
+            var csv = convertArrayOfObjectsToCSV({
+                data: stockData
+            });
+            if (csv == null) return;
+
+            filename = args.filename || 'export.csv';
+
+            if (!csv.match(/^data:text\/csv/i)) {
+                csv = 'data:text/csv;charset=utf-8,' + csv;
+            }
+            data = encodeURI(csv);
+
+            link = document.createElement('a');
+            link.setAttribute('href', data);
+            link.setAttribute('download', filename);
+            link.click();
+        }
+        //end function to convert and download csv
+        downloadCSV({ filename: "stock-data.csv" });
+
+
+
+      })
+    }
+  }
+});
 
 })(angular);

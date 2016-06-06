@@ -13,9 +13,7 @@ var sugar = require('sugar');
 var Agenda = require('agenda');//#AGENDA
 var getForecast = require('../modules/forecast');
 var stripeChargePay = require('../modules/stripeTransactions');
-var stripe = require("stripe")(
-  "sk_test_SfT5Rf2DMVfT0unJf7aIIskQ"
-);
+var stripe = require("stripe")(process.env.STRIPE_TEST);
 
 // var restrict = require("../modules/restrict"); // restricts user to be logedin to access route
 
@@ -90,8 +88,28 @@ router.route("/complete")
       res.send(err);
 
       //find the Customer and charge them
-
       //find the Contractor and pay them
+      User.findById('574b41752ec3c13faacf20f1', function(err, contractor){
+        console.log('INSIDE accept on server work.contractor_id contractor:', contractor);
+        if(err){
+          console.log(err);
+        }
+        console.log('contractor for epirts::',contractor);
+
+        stripe.charges.create({
+          amount: 1500, // amount in cents, again
+          currency: "usd",
+          description: "Example charge for interpreting",
+          customer: req.user.epirts.customerID, // Previously stored, then retrieved customer
+          destination: contractor.epirts.id,
+          application_fee: 700
+        }, function(err, charge) {
+          console.log('charge::',charge);
+          if (err && err.type === 'StripeCardError') {
+            // The card has been declined
+          }
+        });
+      });
 
       // res.json({ message: 'WORK UPDATED WITH COMPLETE !!!!!!!' });
     });

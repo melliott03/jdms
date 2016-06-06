@@ -33,7 +33,7 @@ router.post("/", function(req, res, next){
         newUserObject.address = req.body.address;
         newUserObject.role = req.body.role;
         newUserObject.type = req.body.type;
-        newUserObject.epirtsToken;
+        newUserObject.epirts;
 
         var reqbody =req.body;
 

@@ -3,7 +3,7 @@
   <table st-set-filter="customFilter" st-table="works.response" class="table table-bordered table-striped" wt-responsive-table> <!-- st-sticky-header -->
     <thead>
     <tr>
-        <th></th>
+        <th><a class="btn btn-default" st-export>Export</a></th>
         <th  st-sort="type">Type</th>
         <th  st-sort="status">Status</th>
         <th  st-sort="datetime">Date Time</th>
@@ -47,12 +47,15 @@
 
         <td >
           <md-button ng-click="cancelWork(work._id)">Cancel</md-button>
+          <md-button ng-click="completeWork(work)">completed</md-button>
+
         </td>
 
     </tr>
       <tr ng-if="work.expanded" ng-repeat-end="work in works.response">
             <td colspan="7" >
               <div class="" style="height:100%; width:100%; ">
+                <div>Contractor ID: {{ work.contractor_id }} </div>
                 <div>WEATHER:  {{ work.weather[0].daily.data[0].summary}} </div>
                 <span>Work Details:</span>
                <input class="inputs" style="border-style: none;

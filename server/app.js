@@ -15,6 +15,7 @@ var Work = require('./models/work');
 var sugar = require('sugar');
 var config = require('./config/main'); // Tokens http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
 var account = require('./routes/stripeCreateAccount');
+var stripe = require("stripe")(process.env.STRIPE_TEST);
 
 app.use(express.static(path.join(__dirname, 'public')));//Twilio Video
 
@@ -65,6 +66,13 @@ var geocoder = require('geocoder');
 var restler = require('restler');
 //end of brought in from previous experiment
 var Agenda = require('agenda');//#AGENDA
+
+var plaid = require('plaid');
+
+var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
+                                   process.env.PLAID_SECRET,
+                                   plaid.environments.tartan);
+
 
 //START: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
 // Register new users
@@ -165,6 +173,66 @@ app.get('/chat', passport.authenticate('jwt', { session: false }), function(req,
     res.json(messages);
   });
 });
+
+//PLAID STUFF!!!! BEGIN
+// /authenticate accepts the public_token and account_id from Link
+app.post('/authenticate', passport.authenticate('jwt', { session: false }), function(req, res) {
+  console.log('req.body on authenticate on server::', req.body);
+  console.log('req.user on authenticate on server::', req.user);
+  var public_token = req.body.public_token;
+  var account_id = req.body.account_id;
+  console.log('account_id on authenticate on server::', account_id);
+  console.log('public_token on authenticate on server::', public_token);
+
+  // Exchange a public_token and account_id for a Plaid access_token
+  // and a Stripe bank account token
+  plaidClient.exchangeToken(public_token, account_id, function(err, res) {
+    if (err != null) {
+      // Handle error!
+    } else {
+      // This is your Plaid access token - store somewhere persistent
+      // The access_token can be used to make Plaid API calls to
+      // retrieve accounts and transactions
+      var access_token = res.access_token;
+      console.log('access_token::', access_token);
+
+      // This is your Stripe bank account token - store somewhere
+      // persistent. The token can be used to move money via
+      // Stripe's ACH API.
+      var bank_account_token = res.stripe_bank_account_token;
+
+      console.log('bank_account_token::', bank_account_token);
+      //tell stripe to create a customer object on the stripe account id that is req.user.epirts.id
+      //save the stripe_bank_account_token to the newly created customer object
+      stripe.customers.create({
+        description: 'Customer for test@example.com',
+        source:  bank_account_token, // obtained with plaid
+        email: req.user.email
+      }, function(err, customer) {
+        console.log('customer::',customer);
+        // asynchronously called
+        User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: customer.id} }, function(err, user) {
+          if (err) throw err;
+
+          // we have the updated user returned to us
+          console.log('after saving user oooo',user);
+        });
+      });
+
+      //better yet, dont' create a customer, find the stripe user account and update it with the key external_accounts
+      // stripe.accounts.update("acct_18FteHDfqZ6t9CGD", {
+      //   external_accounts: {
+      //     object: "list",
+      //     data: []
+      //   }, function(err, customer) {
+      //     // asynchronously called
+      //   });
+
+
+    }
+  });
+});
+
 
 //END: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
 
