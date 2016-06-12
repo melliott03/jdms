@@ -1,4 +1,4 @@
-var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link']);
+var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check']);
 
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
     $mdThemingProvider.theme('default')
@@ -126,3 +126,8 @@ myApp.config([
             };
         }
     ]);
+
+// angular-stripe stuff
+myApp.config(function (stripeProvider) {
+  stripeProvider.setPublishableKey('pk_test_C6pNjUH41hCQ87RXmeLBIAa5');
+});

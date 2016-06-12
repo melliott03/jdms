@@ -76,7 +76,7 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "WorkService", 
     $scope.logedinUser = WorkService.userObject;
 }]);
 
-myApp.controller("ShowController", ["$scope", "$location", '$filter', "WorkService", 'uiGridConstants',  function($scope, $location, $filter, WorkService, uiGridConstants){
+myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "WorkService", 'uiGridConstants', 'stripe', function($scope, $location, $filter, $http, WorkService, uiGridConstants, stripe){
   // document.body.addEventListener('DOMSubtreeModified', function(event) {
   //   var targets = document.getElementsByClassName('target');
   //   console.log('targets::',targets);
@@ -158,10 +158,10 @@ myApp.controller("ShowController", ["$scope", "$location", '$filter', "WorkServi
     // console.log('WorkService.userObject.response.role:', WorkService.userObject.response.role);
     $scope.contractorWorks = WorkService.contractorWorkObject;
     $scope.availibleWorks = WorkService.availibleWorkObject;
-    console.log('$scope.availibleWorks :', $scope.availibleWorks);
+    // console.log('$scope.availibleWorks :', $scope.availibleWorks);
 
     $scope.works = WorkService.customerWorkObject;
-    console.log('$scope.works :', $scope.works);
+    // console.log('$scope.works :', $scope.works);
     $scope.deleteWork = WorkService.deleteWork;
     $scope.cancelWork = WorkService.cancelWork;
     $scope.acceptWork = WorkService.acceptWork;
@@ -185,6 +185,82 @@ myApp.controller("ShowController", ["$scope", "$location", '$filter', "WorkServi
     // $scope.promise = $nutrition.desserts.get($scope.query, success).$promise;
   };
   //End datatable
+
+// ANGULAR-STRIPE STUFF
+  // $scope.submitCC = workService.submitCC;
+//   Stripe.card.createToken({
+//   number: $('.card-number').val(),
+//   cvc: $('.card-cvc').val(),
+//   exp_month: $('.card-expiry-month').val(),
+//   exp_year: $('.card-expiry-year').val(),
+//   address_zip: $('.address_zip').val()
+// }, stripeResponseHandler);
+
+// START STRIPE CREDIT CARDS
+  $scope.charge = function () {
+    console.log('in controller $scope.payment.card::', $scope.payment.card);
+    return stripe.card.createToken($scope.payment.card)
+      .then(function (response) {
+        console.log('token created response ', response);
+        console.log('token created for card ending in ', response.card.last4);
+        console.log('$scope.payment::', $scope.payment);
+        var card = {};
+        card.token = response.id;
+        // cardToken.payment = angular.copy($scope.payment);
+        // var payment = angular.copy($scope.payment);
+        // payment.card = void 0;
+        // payment.token = response.id;
+        return $http.post('/stripecc', card);
+      })
+      .then(function (payment) {
+        console.log('successfully submitted payment for $', payment.amount);
+      })
+      .catch(function (err) {
+        if (err.type && /^Stripe/.test(err.type)) {
+          console.log('Stripe error: ', err.message);
+        }
+        else {
+          console.log('Other error occurred, possibly with your API', err.message);
+        }
+      });
+  };
+  // END STRIPE CREDIT CARDS
+
+  // START STRIPE BANK ACCOUNT
+  $scope.ccAuthorize = function () {
+    console.log('in controller $scope.payment.card::', $scope.payment.check);
+    $scope.payment.check.country = "US";
+    $scope.payment.check.currency = "USD";
+    return stripe.bankAccount.createToken($scope.payment.check)
+      .then(function (response) {
+        console.log('token created response ', response);
+        // console.log('token created for card ending in ', response.card.last4);
+        console.log('$scope.payment::', $scope.payment);
+        var card = {};
+        card.token = response.id;
+        // cardToken.payment = angular.copy($scope.payment);
+        // var payment = angular.copy($scope.payment);
+        $scope.payment.check = void 0;
+        // payment.token = response.id;
+        return $http.post('/stripecc', card);
+      })
+      .then(function (payment) {
+        console.log('successfully submitted payment for $', payment);
+      })
+      .catch(function (err) {
+        if (err.type && /^Stripe/.test(err.type)) {
+          console.log('Stripe error: ', err.message);
+        }
+        else {
+          console.log('Other error occurred, possibly with your API', err.message);
+        }
+      });
+  };
+  // END STRIPE BANK ACCOUNT
+
+  // function () {
+  //   console.log("hello in submitCC = function");
+  // };
 
 // //START Contenteditable
 //   $scope.text01 = 'Click here to edit the text.';
@@ -216,7 +292,7 @@ myApp.controller("ShowController", ["$scope", "$location", '$filter', "WorkServi
 // });
 
 myApp.controller("HomeController", ["$scope", "$mdDialog", "HomeService", "WorkService", function($scope, $mdDialog, HomeService, WorkService){
-    
+
     console.log("Home Controller");
     var homeService = HomeService;
     // WorkService.getTravelTime();
@@ -434,5 +510,78 @@ $scope.openFromLeft = function(ev) {
     };
   }
 //END
+
+}]);
+
+myApp.controller('creditCardCtrl', ['$scope', function($scope) {
+
+  $scope.card = {
+    name: 'Mike Brown',
+    number: '5555 4444 3333 1111',
+    expiry: '11 / 2020',
+    cvc: '123'
+  };
+
+  $scope.cardPlaceholders = {
+    name: 'Your Full Name',
+    number: 'xxxx xxxx xxxx xxxx',
+    expiry: 'MM/YY',
+    cvc: 'xxx'
+  };
+
+  $scope.cardMessages = {
+    validDate: 'valid\nthru',
+    monthYear: 'MM/YYYY',
+  };
+
+  $scope.cardOptions = {
+    debug: false,
+    formatting: true
+  };
+
+}]);
+
+myApp.controller('checkCtrl', ['$scope', function($scope) {
+
+  var check1 = {
+    name: 'Mike Brown',
+    bankName: 'Citi Bank',
+    accountNumber: '1111111111',
+    routingNumber: '222222222',
+    order: 'Software'
+  };
+  var check2 = {
+    name: 'Bill Smith',
+    bankName: 'BelarusBank',
+    accountNumber: '2334567865',
+    routingNumber: '235665544',
+    order: ''
+  };
+
+  var selectedCheck = 1;
+  $scope.check = check1;
+
+  $scope.changeCheck = function() {
+    if (selectedCheck == 1) {
+      $scope.check = check2;
+      selectedCheck = 2;
+    } else {
+      $scope.check = check1;
+      selectedCheck = 1;
+    }
+  };
+
+  $scope.clear = function() {
+    $scope.check = {};
+  };
+
+
+  $scope.checkValues = {
+    accountNumber: '&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;',
+    routingNumber: '&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;',
+    name: 'Full Name',
+    bankName: 'Bank Name',
+    order: '_________________________'
+  };
 
 }]);

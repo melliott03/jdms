@@ -102,12 +102,30 @@ router.route("/complete")
           description: "Example charge for interpreting",
           customer: req.user.epirts.customerID, // Previously stored, then retrieved customer
           destination: contractor.epirts.id,
-          application_fee: 700
+          application_fee: 700,
+          metadata: {'work_id': work._id}
         }, function(err, charge) {
           console.log('charge::',charge);
+          // Work.findById(req.body._id, function(err, work){
+          //   console.log('INSIDE complete on server work:', work);
+          //   if(err){
+          //     console.log(err);
+          //   }
+          //   work.epirts.charge_id = charge.id;
+          //   // save the work
+          //   work.save(function(err, work) {
+          //     console.log('WORK UPDATED WITH COMPLETE !!!!!!!');
+          //     postToPayable();
+          //     stripeChargePay(work);
+          //     if (err)
+          //     res.send(err);
+          // });
+          // });
           if (err && err.type === 'StripeCardError') {
             // The card has been declined
           }
+
+
         });
       });
 

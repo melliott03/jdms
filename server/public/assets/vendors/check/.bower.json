@@ -1,0 +1,38 @@
+{
+  "name": "check",
+  "version": "0.1.2",
+  "homepage": "https://github.com/gavruk/check",
+  "authors": [
+    "Sergey Gavruk <svgavruk@gmail.com>"
+  ],
+  "description": "Better check form.",
+  "main": [
+    "lib/js/check.js",
+    "lib/css/check.css"
+  ],
+  "keywords": [
+    "check",
+    "ach",
+    "form"
+  ],
+  "dependencies": {
+    "jquery": ">=1.5"
+  },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "example",
+    "test",
+    "tests"
+  ],
+  "_release": "0.1.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.1.2",
+    "commit": "99d3be8f82a8a4d836bfb0266355bb5e42bb5063"
+  },
+  "_source": "https://github.com/gavruk/check.git",
+  "_target": ">=0.1.2",
+  "_originalSource": "check"
+}

@@ -174,6 +174,29 @@ app.get('/chat', passport.authenticate('jwt', { session: false }), function(req,
   });
 });
 
+app.post('/stripecc', passport.authenticate('jwt', { session: false }), function(req, res) {
+  console.log('req.user:', req.user);
+  // console.log('req.body:', req.body);
+  console.log('req.body:', req.body);
+  console.log('source: req.body.id::', req.body.token);
+
+  stripe.customers.createSource(req.user.epirts.customerID,
+    //"cus_8aZsCveeEh7TX8",
+    {source: req.body.token/*"tok_18GtiTDfqZ6t9CGDQUYAYBpH"*/},
+    function(err, card) {
+      console.log('card::', card);
+      // asynchronously called
+    }
+  );
+
+  // Work.find({$or : [{'customer_id': req.user._id}, {'contractor_id': req.user._id}]}, function(err, messages) {
+  //   if (err)
+  //     res.send(err);
+  //
+  //   res.json(messages);
+  // });
+});
+
 //PLAID STUFF!!!! BEGIN
 // /authenticate accepts the public_token and account_id from Link
 app.post('/authenticate', passport.authenticate('jwt', { session: false }), function(req, res) {

@@ -154,6 +154,14 @@ myApp.factory("WorkService", ["$http", function($http){
     //    });
     //   //  console.log('in getData allPetsReturned outside getcall', allPetsReturned);
     // };
+    var CCobject={};
+    var submitCC = function(){
+       $http.post("/stripecc").then(function(response){
+          // travelTimeReturned.theTime = response.data;
+          console.log('return of CC response.data', response.data);
+       });
+      //  console.log('in getData allPetsReturned outside getcall', allPetsReturned);
+    };
 
     getUser();
     return {
@@ -173,7 +181,8 @@ myApp.factory("WorkService", ["$http", function($http){
         getContractorWork : getContractorWork,
         contractorWorkObject : contractorWorkObject,
         updateWork : updateWork,
-        customerWorkObject : customerWorkObject
+        customerWorkObject : customerWorkObject,
+        submitCC : submitCC
     };
 }]);
 
