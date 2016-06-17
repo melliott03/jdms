@@ -6,7 +6,7 @@
       <form name="workEntry">
         <div layout-gt-sm="row">
           <md-input-container class="md-block" flex-gt-sm>
-            <label>Work Type</label>
+            <label>Field</label>
             <md-select ng-model="work.type">
               <md-option ng-repeat="work in works" >
                 {{work}}
@@ -14,10 +14,18 @@
             </md-select>
           </md-input-container>
         </div>
-        <!--  -->
         <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Language</label>
+            <md-select ng-model="work.language">
+              <md-option ng-repeat="language in languages" >
+                {{language}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>        <div layout-gt-sm="row">
           <div >
-            <md-datepicker ng-model="work.date"></md-datepicker>
+            <!-- <md-datepicker ng-model="work.date"></md-datepicker> -->
           <md-input-container class="md-block" flex-gt-sm>
           <input type="datetime-local"
           placeholder="Enter date & start time"
@@ -36,13 +44,14 @@
         ng-model-options="{ updateOn: 'blur' }">
       </md-input-container>
       </div> -->
-      <div>
+      <div >
+        <!-- <md-datepicker ng-model="work.endDateTime"></md-datepicker> -->
       <md-input-container class="md-block" flex-gt-sm>
-      <label>End Time</label>
-      <input  type="time"
-      placeholder="End Time"
-      ng-model="work.EndTime"
-      ng-model-options="{ updateOn: 'blur' }">
+      <input type="datetime-local"
+      placeholder="End Date & Time"
+      ng-model="work.endDateTime"
+      ng-model-options="{ updateOn: 'blur' }"
+      >
     </md-input-container>
     </div>
   </div>
@@ -75,9 +84,18 @@
           </md-input-container>
         </div>
         <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-          <md-button ng-click="submit(work)" class="md-raised">SUBMIT</md-button>
+          <md-button ng-click="estimatePrice(work)" class="md-raised">GET ESTIMATE</md-button>
+        </section>
+        <p>
+          ${{estimatePriceObject.data.finalCost}} estimate
+        </p>
+        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+          <md-button ng-click="submit(work)" class="md-raised">SUBMIT REQUEST</md-button>
         </section>
       </form>
+      <p>
+        SCHEDULING 24 HOURS IN ADVANCE TO INCREASE THE LIKELYHOOD OF YOUR REQUEST BEING FILLED AND SAVE 20%.
+      </p>
     </div>
   </md-content>
 

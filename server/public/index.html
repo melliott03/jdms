@@ -105,10 +105,11 @@
     <script src="/assets/vendors/angular-xeditable/dist/js/xeditable.js"></script>
     <script src="/assets/vendors/angular-plaid-link/src/angular-plaid-link.js"></script>
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <script type="text/javascript" src="/assets/vendors/angular-stripe/src/angular-stripe.js"></script>
-    <!-- <script type="text/javascript" src="/assets/vendors/angular-stripe/src/index.js"></script>
-    <script type="text/javascript" src="/assets/vendors/angular-stripe/src/provider.js"></script>
-    <script type="text/javascript" src="/assets/vendors/angular-stripe/src/service.js"></script> -->
+    <!-- <script type="text/javascript" src="/assets/vendors/angular-stripe/src/angular-stripe.js"></script> -->
+    <script src="/assets/vendors/card/card.js"></script>
+    <script src="/assets/vendors/angular-card/card.js"></script>
+
+
 
   </head>
   <body>
@@ -157,7 +158,21 @@
 </div><!-- END OF HomeController -->
 </div><!-- END OF TINT -->
 
+
+  <script src="/assets/vendors/check/lib/js/check.js"></script>
+  <script src="/assets/vendors/angular-check/src/check.js"></script>
+
+
+<script src="https://cdn.plaid.com/link/stable/link-initialize.js"></script>
+
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript" src="/assets/vendors/angular-stripe/src/angular-stripe.js"></script>
+
+<script type="text/javascript">
+  Stripe.setPublishableKey('pk_test_C6pNjUH41hCQ87RXmeLBIAa5');
+</script>
 <script type="text/javascript" src="/assets/scripts/stripejssupportingcode.js"></script>
+
+
   </body>
 </html>

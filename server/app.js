@@ -197,6 +197,28 @@ app.post('/stripecc', passport.authenticate('jwt', { session: false }), function
   // });
 });
 
+
+app.post('/stripeMicro', passport.authenticate('jwt', { session: false }), function(req, res) {
+  console.log('req.user:', req.user);
+  // console.log('req.body:', req.body);
+  console.log('req.body:', req.body);
+  var deposit = req.body;
+
+  stripe.customers.verifySource(
+    'cus_7iLOlPKxhQJ75a', //req.user.epirts.customerID,
+    'ba_17SHwa2eZvKYlo2CUx7nphbZ', //req.user.epirts.bankAccount,
+    {
+      amounts: [deposit.one, deposit.two]
+    },
+    function(err, bankAccount) {
+      if (err) {
+        console.log('err', err);
+      }
+      console.log('returned bankAccount::', bankAccount);
+  });
+
+});
+
 //PLAID STUFF!!!! BEGIN
 // /authenticate accepts the public_token and account_id from Link
 app.post('/authenticate', passport.authenticate('jwt', { session: false }), function(req, res) {

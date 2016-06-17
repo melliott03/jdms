@@ -40,12 +40,14 @@ myApp.controller("AuthenticationController", ["$scope", "$location", "$http", "$
 }]);
 
 myApp.controller("AddController", ["$scope", "$http", "$filter", "WorkService", function($scope, $http, $filter, WorkService){
-
+    var workService = WorkService;
     $scope.data = [];
 
-    $scope.works = ['Plumber', 'Machenic', 'Marketer', 'Accountant', 'Tutor', 'Painter'];
-
+    $scope.works = ['Legal','Social Service','Medical', 'Other', 'Plumber', 'Machenic', 'Marketer', 'Accountant', 'Tutor', 'Painter'];
+    $scope.languages = ['Spanish', 'Oromo', 'Somali', 'Hmong'];
+    $scope.estimatePriceObject = workService.estimatePriceObject;
     var workItem={};
+    $scope.estimatePrice = workService.estimatePrice;
     $scope.submit = function(work){
       console.log('work object', work);
       console.log('work.datetime:', work.date);
@@ -257,6 +259,38 @@ myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "
       });
   };
   // END STRIPE BANK ACCOUNT
+
+  // START STRIPE MICRO DEPOSITS FOR BANK ACCOUNT
+  $scope.submitBankMicroDeposits = WorkService.submitBankMicroDeposits;
+
+  // $scope.bankMicroDeposits = function () {
+  //   console.log('in controller $scope.microDeposit::', $scope.microDeposit);
+  //   return stripe.bankAccount.createToken($scope.payment.check)
+  //     .then(function (response) {
+  //       console.log('token created response ', response);
+  //       // console.log('token created for card ending in ', response.card.last4);
+  //       console.log('$scope.payment::', $scope.payment);
+  //       var card = {};
+  //       card.token = response.id;
+  //       // cardToken.payment = angular.copy($scope.payment);
+  //       // var payment = angular.copy($scope.payment);
+  //       $scope.payment.check = void 0;
+  //       // payment.token = response.id;
+  //       return $http.post('/stripecc', card);
+  //     })
+  //     .then(function (payment) {
+  //       console.log('successfully submitted payment for $', payment);
+  //     })
+  //     .catch(function (err) {
+  //       if (err.type && /^Stripe/.test(err.type)) {
+  //         console.log('Stripe error: ', err.message);
+  //       }
+  //       else {
+  //         console.log('Other error occurred, possibly with your API', err.message);
+  //       }
+  //     });
+  // };
+  // END STRIPE MICRO DEPOSITS FOR BANK ACCOUNT
 
   // function () {
   //   console.log("hello in submitCC = function");

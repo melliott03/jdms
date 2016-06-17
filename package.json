@@ -55,6 +55,7 @@
     "kue": "^0.10.5",
     "lr-sticky-header": "^1.1.0",
     "moment": "^2.13.0",
+    "moment-strftime": "^0.1.5",
     "mongoose": "^4.4.10",
     "morgan": "^1.7.0",
     "ng-places-autocomplete": "^1.2.1",

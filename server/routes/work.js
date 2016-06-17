@@ -14,6 +14,8 @@ var Agenda = require('agenda');//#AGENDA
 var getForecast = require('../modules/forecast');
 var stripeChargePay = require('../modules/stripeTransactions');
 var stripe = require("stripe")(process.env.STRIPE_TEST);
+var workRates = require('../modules/workRates');
+var moment = require('moment');
 
 // var restrict = require("../modules/restrict"); // restricts user to be logedin to access route
 
@@ -69,6 +71,50 @@ router.route("/accept/")
         });
       });
     });
+
+
+router.post("/estimate", function(req,res){
+  console.log('1 inside post on server req.user._id', req.body );
+  work = req.body;
+  var startDateTime = work.date;
+  var endDateTime = work.endDateTime;
+
+  //CALCULATE HOURLY CHARGE
+  var workCostObject = workRates(work);
+  // CALCULATE DURATION
+  var a = moment(endDateTime);
+  var b = moment(startDateTime);
+  var workDuration  = a.diff(b, 'minutes');
+  // console.log('workDuration',workDuration);
+
+  // CALCULATE TOTAL APPOINTMENT COST
+  var hourlyCharge = workCostObject.charge;
+  var perMinuteCharge = hourlyCharge/60;
+  // console.log('perMinuteCharge', perMinuteCharge);
+  timeCost = workDuration * perMinuteCharge;
+  workCostObject.durationMins = workDuration;
+  // console.log('timeCost', timeCost);
+  workCostObject.durationCost = timeCost.round(2);
+
+
+  //IS THIS SHORT NOTICE ?
+  var a = moment(startDateTime);
+  var b = moment();
+  var hoursUntilAppointment  = a.diff(b, 'minutes');
+
+  // IF YES, CALCULATE SHORT NOTICE FEE IF AN
+  if (hoursUntilAppointment < 1440) { //1440 minutes = 24 hours
+      workCostObject.shortNoticeFee = (20 / 100) * workCostObject.charge; // 20% of charge rate
+  }else {
+    workCostObject.shortNoticeFee = 0;
+  }
+
+  var finalCost = workCostObject.durationCost + workCostObject.shortNoticeFee;
+  workCostObject.finalCost = finalCost.round(2);
+
+  res.send(workCostObject);
+});// END router.post
+
 
 router.route("/complete")
 .put(function(req, res) {
@@ -160,6 +206,9 @@ router.post("/", function(req,res){
   contractor_rate = '',
   customer_rate = '',
   status = req.body.status;
+  // set work constant
+
+  //set work pay
   console.log('2 inside post on server req.user._id', req.user );
   // Geocode item work
   geocoder.geocode(address, function ( err, geocodedData ) {

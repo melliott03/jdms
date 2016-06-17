@@ -163,6 +163,28 @@ myApp.factory("WorkService", ["$http", function($http){
       //  console.log('in getData allPetsReturned outside getcall', allPetsReturned);
     };
 
+
+    var bankMicroDepositsObject={};
+    var submitBankMicroDeposits = function(microDeposits){
+       $http.post("/stripeMicro", microDeposits).then(function(response){
+          // travelTimeReturned.theTime = response.data;
+          bankMicroDepositsObject.data = response.data;
+          console.log('return of CC response.data', response.data);
+       });
+      //  console.log('in getData allPetsReturned outside getcall', allPetsReturned);
+    };
+
+
+    var estimatePriceObject={};
+    var estimatePrice = function(work){
+       $http.post("/work/estimate", work).then(function(response){
+          // travelTimeReturned.theTime = response.data;
+          estimatePriceObject.data = response.data;
+          console.log('return of CC response.data', response.data);
+       });
+      //  console.log('in getData allPetsReturned outside getcall', allPetsReturned);
+    };
+
     getUser();
     return {
         postWork : postWork,
@@ -182,7 +204,11 @@ myApp.factory("WorkService", ["$http", function($http){
         contractorWorkObject : contractorWorkObject,
         updateWork : updateWork,
         customerWorkObject : customerWorkObject,
-        submitCC : submitCC
+        submitCC : submitCC,
+        submitBankMicroDeposits:submitBankMicroDeposits,
+        bankMicroDepositsObject:bankMicroDepositsObject,
+        estimatePrice : estimatePrice,
+        estimatePriceObject : estimatePriceObject
     };
 }]);
 
