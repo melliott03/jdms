@@ -10,7 +10,7 @@ var geocoder = require('geocoder');
 // var twiml = require('./public/assets/scripts/twiml.js');
 var restler = require('restler');
 
-var sugar = require('sugar');
+// var sugar = require('sugar');
 
 router.get("/:id", function (req, res) {
   console.log('req.params.id inside /phoneCall/:id');
@@ -24,7 +24,7 @@ router.get("/:id", function (req, res) {
   console.log(xml);
 res.send({xml});
 });
-// 
+//
 // <?xml version="1.0"?>
 // <root>
 //   <xmlbuilder>

@@ -17,7 +17,7 @@ var restler = require('restler');
 // var agenda = new Agenda({db: {address: mongoConnectionString}});
 
 
-var sugar = require('sugar');
+// var sugar = require('sugar');
 
 // app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({extended: true}));

@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var User = require("../models/user");
-var sugar = require('sugar');
+// var sugar = require('sugar');
 
 // router.get("/", function(req,res,next){
 //     res.json(req.isAuthenticated());

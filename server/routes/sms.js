@@ -9,7 +9,7 @@ var Forecast = require('forecast');//not using
 var darksky = require('darksky');//not using
 var geocoder = require('geocoder');
 var restler = require('restler');
-var sugar = require('sugar');
+// var sugar = require('sugar');
 var twilio = require('twilio');
 var http = require('http');
 app.use(bodyParser.urlencoded({

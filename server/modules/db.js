@@ -1,5 +1,6 @@
 // var path = require("path");
 var mongoose = require("mongoose");
+
 // var mongoURI = require("../modules/mongoURI");
 
 var mongoURI =
@@ -15,6 +16,10 @@ MongoDB.on("error", function(err){
 MongoDB.on("open", function(){
     console.log("Mongo Connection Open");
 });
+
+
+
+
 
 // module.exports.mongoURI =  mongoURI;
 module.exports.MongoDB = MongoDB;

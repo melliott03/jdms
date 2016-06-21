@@ -9,7 +9,7 @@ var Schema = mongoose.Schema;
 var darksky = require('darksky');//not using
 var geocoder = require('geocoder');
 var restler = require('restler');
-var sugar = require('sugar');
+// var sugar = require('sugar');
 var Agenda = require('agenda');//#AGENDA
 var getForecast = require('../modules/forecast');
 var stripeChargePay = require('../modules/stripeTransactions');
@@ -37,7 +37,6 @@ client = twilio('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1
 // var Work = mongoose.model("Works");
 // var Contractor = mongoose.model("Contractors");
 
-console.log('currdatetime', Date.now());
 
 
 router.route("/accept/")

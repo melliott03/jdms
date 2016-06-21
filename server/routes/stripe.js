@@ -8,7 +8,7 @@ var Schema = mongoose.Schema;
 var darksky = require('darksky');//not using
 var geocoder = require('geocoder');
 var restler = require('restler');
-var sugar = require('sugar');
+// var sugar = require('sugar');
 var Agenda = require('agenda');//#AGENDA
 var getForecast = require('../modules/forecast');
 var stripeChargePay = require('../modules/stripeTransactions');
@@ -111,9 +111,9 @@ router.post("/", function(req,res){
     var lon = geo[1];
     //getting weather info with Forecast.io package
     var workdatetime =  datetime;
-    console.log('workdatetime:' ,workdatetime);
-    console.log('Date.create(workdatetime):' ,Date.create(workdatetime));
-    console.log('(8).hoursBefore(workdatetime):' ,(2).hoursBefore(workdatetime));
+    // console.log('workdatetime:' ,workdatetime);
+    // console.log('Date.create(workdatetime):' , Date.create(workdatetime));
+    // console.log('(8).hoursBefore(workdatetime):' ,(2).hoursBefore(workdatetime));
     workdatetime = (2).hoursBefore(workdatetime);
     unixtime = workdatetime.getTime();
     unixtime = ""+unixtime;

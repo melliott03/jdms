@@ -12,7 +12,7 @@ var ConversationsGrant = AccessToken.ConversationsGrant;//Twilio Video
 // var randomUsername = require('./randos');//Twilio Video
 var User = require('./models/user');
 var Work = require('./models/work');
-var sugar = require('sugar');
+// var sugar = require('sugar');
 var config = require('./config/main'); // Tokens http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
 var account = require('./routes/stripeCreateAccount');
 var stripe = require("stripe")(process.env.STRIPE_TEST);
@@ -20,6 +20,8 @@ var stripe = require("stripe")(process.env.STRIPE_TEST);
 app.use(express.static(path.join(__dirname, 'public')));//Twilio Video
 
 var mongoose = require("mongoose");
+var nev = require('email-verification')(mongoose); //this might need to be placed after the user model
+
 //PASSPORT original before jtw strategy
 // var passport = require("passport");
 // var session = require("express-session");
@@ -43,6 +45,7 @@ var twilio = require('twilio');
 //ROUTES
 var index = require("./routes/index");
 var register = require("./routes/register");
+var invite = require("./routes/invite");
 var work = require("./routes/work");
 var user = require("./routes/user");
 var sms = require("./routes/sms");
@@ -72,6 +75,30 @@ var plaid = require('plaid');
 var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
                                    process.env.PLAID_SECRET,
                                    plaid.environments.tartan);
+
+
+// //EMAIL VARIFICATION
+// nev.configure({
+//    verificationURL: 'https://38b16a58.ngrok.io/email-verification/${URL}',
+//    persistentUserModel: User,
+//    tempUserCollection: 'myawesomewebsite_tempusers',
+//
+//    transportOptions: {
+//        service: 'Gmail',
+//        auth: {
+//            user: 'modespeaking@gmail.com',
+//            pass: 'gwtexvqycbstxzvf'
+//        }
+//    },
+//    verifyMailOptions: {
+//        from: 'Do Not Reply <myawesomeemail_do_not_reply@gmail.com>',
+//        subject: 'Please confirm account',
+//        html: 'Click the following link to confirm your account:</p><p>${URL}</p>',
+//        text: 'Please confirm your account by clicking the following link: ${URL}'
+//    }
+// });
+
+
 
 
 //START: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
@@ -200,13 +227,12 @@ app.post('/stripecc', passport.authenticate('jwt', { session: false }), function
 
 app.post('/stripeMicro', passport.authenticate('jwt', { session: false }), function(req, res) {
   console.log('req.user:', req.user);
-  // console.log('req.body:', req.body);
-  console.log('req.body:', req.body);
   var deposit = req.body;
-
+  deposit.one = (deposit.one.length && deposit.one[0] == '.') ? deposit.one.slice(1) : deposit.one;
+  deposit.two = (deposit.two.length && deposit.two[0] == '.') ? deposit.two.slice(1) : deposit.two;
   stripe.customers.verifySource(
-    'cus_7iLOlPKxhQJ75a', //req.user.epirts.customerID,
-    'ba_17SHwa2eZvKYlo2CUx7nphbZ', //req.user.epirts.bankAccount,
+    req.user.epirts.customerID, //'cus_7iLOlPKxhQJ75a',
+    'ba_18JOibDfqZ6t9CGDv9Kp6qkC', //req.user.epirts.bankAccount,
     {
       amounts: [deposit.one, deposit.two]
     },
@@ -397,8 +423,8 @@ app.post('/authenticate', passport.authenticate('jwt', { session: false }), func
 //   }
 //   res.redirect('/');
 // }
-
 app.use("/register", register);
+app.use("/invite", invite);
 app.use("/user", passport.authenticate('jwt', { session: false }), user); // START HERE TODAY
 app.use("/work", passport.authenticate('jwt', { session: false }), work);
 app.use("/sms2", sms);

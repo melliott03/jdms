@@ -344,4 +344,11 @@ tfoot td {
   width: 500px;
 }
 /*end Plaid modal*/
+
+.headshot{
+  width: 200px;
+  height: 200px;
+  border-radius:50%;
+}
+.centered-and-cropped { object-fit: cover }
 </style>
