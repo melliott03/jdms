@@ -51,7 +51,9 @@ myApp.factory("WorkService", ["$http", function($http){
         $http.post("/work", data).then(function(response){
             console.log("WORK SAVED! ", response);
             postedWork.data = response.data;
-            // getWorks();
+            getWorks();
+            getContractorWork();
+            getAvailibleWorks();
         });
     };
 
@@ -96,6 +98,8 @@ myApp.factory("WorkService", ["$http", function($http){
     $http.delete("/work/" + work_id).then(function(response){
         console.log("Deleted : ", response.data);
         getWorks();
+        getContractorWork();
+        getAvailibleWorks();
     });
     };
     var cancelWork = function(work_id){
@@ -120,6 +124,8 @@ myApp.factory("WorkService", ["$http", function($http){
     $http.put("/work/complete", work).then(function(response){
         console.log("complete back from server : ", response.data);
         getWorks();
+        getContractorWork();
+        getAvailibleWorks();
     });
     };
     var updateWork = function(work){
@@ -129,6 +135,8 @@ myApp.factory("WorkService", ["$http", function($http){
     $http.put("/work/update",  work).then(function(response){
         console.log("Updated::::", response.data);
         getWorks();
+        getContractorWork();
+        getAvailibleWorks();
     });
     };
 
@@ -177,6 +185,12 @@ myApp.factory("WorkService", ["$http", function($http){
 
     var estimatePriceObject={};
     var estimatePrice = function(work){
+      // if (work.date < minDate){
+      //   console.log('work.date < $scope.minDate');
+      // }
+      // console.log('work object', work);
+      // console.log('work.datetime:', work.date);
+
        $http.post("/work/estimate", work).then(function(response){
           // travelTimeReturned.theTime = response.data;
           estimatePriceObject.data = response.data;

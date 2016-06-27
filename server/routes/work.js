@@ -14,7 +14,8 @@ var Agenda = require('agenda');//#AGENDA
 var getForecast = require('../modules/forecast');
 var stripeChargePay = require('../modules/stripeTransactions');
 var stripe = require("stripe")(process.env.STRIPE_TEST);
-var workRates = require('../modules/workRates');
+var workRatesTotal = require('../modules/workRatesTotal');
+var workPayTotal = require('../modules/workPayTotal');
 var moment = require('moment');
 
 // var restrict = require("../modules/restrict"); // restricts user to be logedin to access route
@@ -79,7 +80,7 @@ router.post("/estimate", function(req,res){
   var endDateTime = work.endDateTime;
 
   //CALCULATE HOURLY CHARGE
-  var workCostObject = workRates(work);
+  var workCostObject = workRatesTotal(work);
   // CALCULATE DURATION
   var a = moment(endDateTime);
   var b = moment(startDateTime);
@@ -89,11 +90,13 @@ router.post("/estimate", function(req,res){
   // CALCULATE TOTAL APPOINTMENT COST
   var hourlyCharge = workCostObject.charge;
   var perMinuteCharge = hourlyCharge/60;
-  // console.log('perMinuteCharge', perMinuteCharge);
+  console.log('perMinuteCharge', perMinuteCharge);
   timeCost = workDuration * perMinuteCharge;
+  timeCost += .098687;
   workCostObject.durationMins = workDuration;
-  // console.log('timeCost', timeCost);
-  workCostObject.durationCost = timeCost.round(2);
+  console.log('timeCost', timeCost);
+  workCostObject.durationCost = Math.round(timeCost, 2);
+  console.log('workCostObject.durationCost', workCostObject.durationCost);
 
 
   //IS THIS SHORT NOTICE ?
@@ -109,7 +112,7 @@ router.post("/estimate", function(req,res){
   }
 
   var finalCost = workCostObject.durationCost + workCostObject.shortNoticeFee;
-  workCostObject.finalCost = finalCost.round(2);
+  workCostObject.finalCost = Math.round(finalCost, 2);
 
   res.send(workCostObject);
 });// END router.post
@@ -185,6 +188,12 @@ router.route("/complete")
 
 router.post("/", function(req,res){
   console.log('1 inside post on server req.user._id', req.body );
+  var work = req.body;
+  //GET contractor's estimate FEE
+  var contractorEstimateFee = workPayTotal(work);
+  var customerEstimateFee = workRatesTotal(work);
+
+  console.log('contractorEstimateFee', contractorEstimateFee);
 
   // MOBILE: the line below is used for adding work on MOBILE APP
   // var type = "req.body.type",
@@ -202,10 +211,17 @@ router.post("/", function(req,res){
   details = req.body.details,
   customer_id = req.user._id,
   contractor_id = '',
-  contractor_rate = '',
-  customer_rate = '',
-  status = req.body.status;
+  money = {},
+  status = req.body.status,
+  date_created = moment().toISOString();
+  console.log('work date_created',date_created);
+
   // set work constant
+  money.customer = {};
+  money.contractor = {};
+
+  money.customer.customer_estimate = customerEstimateFee;
+  money.contractor.contractor_estimate = contractorEstimateFee;
 
   //set work pay
   console.log('2 inside post on server req.user._id', req.user );
@@ -220,14 +236,14 @@ router.post("/", function(req,res){
     //getting weather info with Forecast.io package
     var workdatetime =  datetime;
     console.log('workdatetime:' ,workdatetime);
-    console.log('Date.create(workdatetime):' ,Date.create(workdatetime));
-    console.log('(8).hoursBefore(workdatetime):' ,(2).hoursBefore(workdatetime));
-    workdatetime = (2).hoursBefore(workdatetime);
-    unixtime = workdatetime.getTime();
-    unixtime = ""+unixtime;
-    unixtime = '2013-05-06T12:00:00-0400'; // '1461067200' or unixtime.slice(0, - 3);
-    console.log(' (2).hoursBefore(workdatetime) in milliseconds:' , unixtime);
-    var latLonTime = ""+geo[0]+","+geo[1]+","+unixtime; //"34.6036,98.3959"
+    console.log('Date.create(workdatetime):' ,moment(workdatetime));
+    console.log('moment(workdatetime).subtract(2, "hours"):', moment(workdatetime).subtract(2, 'hours'));
+    workdatetime = moment(workdatetime).subtract(2, 'hours').unix();
+    // unixtime = workdatetime.getTime();
+    // unixtime = ""+unixtime;
+    // unixtime = '2013-05-06T12:00:00-0400'; // '1461067200' or unixtime.slice(0, - 3);
+    console.log(' (2).hoursBefore(workdatetime) in unixtime:' , workdatetime);
+    var latLonTime = ""+geo[0]+","+geo[1]+","+workdatetime; //"34.6036,98.3959"
 
     var Forecast = require('forecast.io');
     var options = {
@@ -246,7 +262,9 @@ router.post("/", function(req,res){
         workWeather.push(data);
         //save work instence with geocode and weather info
         // console.log('W E A T H E R !!! !!!!!  ::  ', res.headers);
-        var addedWork = new Work({"type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id" : contractor_id, geo : geo, weather : workWeather });
+
+        var addedWork = new Work({"money" : money, "date_created" : date_created, "type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id" : contractor_id, geo : geo, weather : workWeather });
+
         addedWork.save(function(err, data){
           if(err){
             console.log(err);

@@ -78,10 +78,11 @@ router.get('/invite-verification/:URL', function(req, res) {
         if (err) {
           return res.status(404).send('ERROR: sending confirmation email FAILED: ' + err);
         }
-        res.json({
-          msg: 'CONFIRMED!',
-          info: info
-        });
+        // res.json({
+        //   msg: 'CONFIRMED!',
+        //   info: info
+        // });
+        res.redirect("/");
       });
     } else {
       return res.status(404).send('ERROR: confirming temp user FAILED: '+err);

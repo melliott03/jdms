@@ -18,6 +18,7 @@ var UserSchema = new Schema({
     plaidTokens: {type: Object, required: false},
     role: {type: String, required: false},
     action: {type: String, required: false},
+    company: {type: String, required: false},
     lastlogin: {type: Date, default: Date.now },
     geo: {
         type: [Number],

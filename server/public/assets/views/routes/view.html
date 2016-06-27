@@ -6,9 +6,10 @@
         <th><a class="btn btn-default" st-export>Export</a></th>
         <th  st-sort="type">Type</th>
         <th  st-sort="status">Status</th>
-        <th  st-sort="datetime">Date Time</th>
+        <th  st-sort="datetime">Date</th>
         <th  st-sort="address">Address</th>
-        <th st-sort="customer_rate">$/hour</th>
+        <th st-sort="customer_rate">Cost</th>
+        <th  st-sort="date_created">created</th>
         <th ></th>
 
     </tr>
@@ -29,7 +30,11 @@
         <th>
             <st-number-range predicate="customer_rate" lower="query.lower" higher="query.higher"></st-number-range>
         </th>
+        <th>
+            <st-date-range predicate="date_created" before="query.before" after="query.after"></st-date-range>
+        </th>
         <th ></th>
+
     </tr>
     </thead>
     <tbody>
@@ -44,6 +49,7 @@
         <td inline-edit="work.datetime | date" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
         <td inline-edit="work.address" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
         <td inline-edit="work.customer_rate | currency" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+        <td inline-edit="work.date_created | date" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
 
         <td >
           <md-button ng-click="cancelWork(work._id)">Cancel</md-button>
@@ -55,6 +61,7 @@
       <tr ng-if="work.expanded" ng-repeat-end="work in works.response">
             <td colspan="7" >
               <div class="" style="height:100%; width:100%; ">
+                <div>Date Created: {{ work.date_created }} </div>
                 <div>Contractor ID: {{ work.contractor_id }} </div>
                 <div>WEATHER:  {{ work.weather[0].daily.data[0].summary}} </div>
                 <span>Work Details:</span>

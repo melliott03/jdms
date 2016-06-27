@@ -512,6 +512,16 @@ app.use('/ivr', ivr);
 
 // app.get('/logout', logout());
 
+app.post('/bdays', function(req, res){
+  console.log('inside /bday on server, req.body:', req.body);
+  res.send({mesg: 'hi', req: req.body});
+});
+
+app.post('/saveUser', passport.authenticate('jwt', { session: false }), function(req, res){
+  console.log('inside /saveUser  on server, req.body:', req.body);
+  res.send({mesg: 'hi', req: req.body});
+});
+
 app.get('/logout', function(req, res){
   console.log('inside /logout on server before LOGOUT', req.user);
   req.logout();

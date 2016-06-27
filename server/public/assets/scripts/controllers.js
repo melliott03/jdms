@@ -42,16 +42,76 @@ myApp.controller("AuthenticationController", ["$scope", "$location", "$http", "$
 myApp.controller("AddController", ["$scope", "$http", "$filter", "WorkService", function($scope, $http, $filter, WorkService){
     var workService = WorkService;
     $scope.data = [];
+    var now = new Date(),
+    minDate = now.toISOString(); //.substring(0,10)
+    $scope.minDate = minDate;
+
+
+    $scope.myDate = new Date();
+  $scope.minDate = new Date(
+      $scope.myDate.getFullYear(),
+      $scope.myDate.getMonth() - 2,
+      $scope.myDate.getDate()
+                            );
+  $scope.maxDate = new Date(
+      $scope.myDate.getFullYear(),
+      $scope.myDate.getMonth() + 2,
+      $scope.myDate.getDate());
+  $scope.onlyWeekendsPredicate = function(date) {
+    var day = date.getDay();
+    return day === 0 || day === 6;
+  }
+
+
+
+
 
     $scope.works = ['Legal','Social Service','Medical', 'Other', 'Plumber', 'Machenic', 'Marketer', 'Accountant', 'Tutor', 'Painter'];
     $scope.languages = ['Spanish', 'Oromo', 'Somali', 'Hmong'];
     $scope.estimatePriceObject = workService.estimatePriceObject;
     var workItem={};
-    $scope.estimatePrice = workService.estimatePrice;
+    $scope.estimatePrice = function(work){
+      console.log('moment(work.date)', moment(work.date).toISOString());
+      console.log('moment(minDate)', moment(minDate).toISOString());
+      if (moment(work.date).isBefore(minDate)){
+        console.log('(work.date).isBefore(minDate) is true');
+
+      }
+      console.log('work object', work);
+      console.log('work.datetime:', work.date);
+      workService.estimatePrice(work);
+    }
+
+
+    $scope.setDateErrorMessage = function(work){
+      if (moment(work.date).isBefore(moment())){
+        $scope.dateErrorMessage_start = 'date cannot be in the past';
+        console.log('work.date < $scope.minDate');
+      }else if (moment(work.endDateTime).isBefore(moment())) {
+        $scope.dateErrorMessage_end = 'date cannot be in the past';
+        console.log('work.date < $scope.minDate');
+      }
+    };
+
     $scope.submit = function(work){
+      console.log('work.endDateTime:', work.endDateTime);
+      $scope.dateErrorMessage_start = '';
+      $scope.dateErrorMessage_end = '';
+
+      if (moment(work.date).isBefore(moment())){
+        $scope.dateErrorMessage_start = 'date cannot be in the past';
+        console.log('work.date < $scope.minDate');
+      }else if (moment(work.endDateTime).isBefore(moment())) {
+        $scope.dateErrorMessage_end = 'date cannot be in the past';
+        console.log('work.date < $scope.minDate');
+      }
+      else{
       console.log('work object', work);
       console.log('work.datetime:', work.date);
       console.log('work.datetime:', work.date.getTime());
+      console.log('moment()', moment());
+      console.log( 'moment(work.date).isBefore(moment())' , moment(work.date).isBefore( moment() ) );
+
 
 
 
@@ -61,7 +121,7 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "WorkService", 
       // console.log('workItem.datetime', workItem.datetime);
 
       // workItem.StartTime = $filter('date')(work.StartTime, "HH:mm");
-      workItem.endTime = $filter('date')(work.EndTime, "HH:mm");
+      workItem.endTime = $filter('date')(work.endDateTime, "HH:mm");
       workItem.address = work.address;
       workItem.details = work.details;
       workItem.customer_id = "";
@@ -69,10 +129,12 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "WorkService", 
       workItem.status = 'pending';
 
 
+
       console.log('Inside AddController WorkService.userObject.id', WorkService.userObject.id);
       console.log('workItem object', workItem);
 
       WorkService.postWork(workItem);
+      }
     };
 
     $scope.logedinUser = WorkService.userObject;
@@ -616,6 +678,81 @@ myApp.controller('checkCtrl', ['$scope', function($scope) {
     name: 'Full Name',
     bankName: 'Bank Name',
     order: '_________________________'
+  };
+
+}]);
+
+
+myApp.controller('XeditableCtrl', ['$scope', '$filter', '$http', function($scope, $filter, $http) {
+
+  $scope.user = {
+     id: 1,
+     name: 'awesome user',
+     status: 2,
+     group: 4,
+     groupName: 'admin'
+   };
+
+   $scope.statuses = [
+     {value: 1, text: 'status1'},
+     {value: 2, text: 'status2'},
+     {value: 3, text: 'status3'},
+     {value: 4, text: 'status4'}
+   ];
+
+   $scope.groups = [];
+   $scope.loadGroups = function() {
+     return $scope.groups.length ? null : $http.get('/groups').success(function(data) {
+       $scope.groups = data;
+     });
+   };
+
+   $scope.showGroup = function() {
+     if($scope.groups.length) {
+       var selected = $filter('filter')($scope.groups, {id: $scope.user.group});
+       return selected.length ? selected[0].text : 'Not set';
+     } else {
+       return $scope.user.groupName;
+     }
+   };
+
+   $scope.checkName = function(data) {
+     if (data !== 'awesome' && data !== 'error') {
+       return "Username should be `awesome` or `error`";
+     }
+   };
+
+   $scope.saveUser = function() {
+     // $scope.user already updated!
+     return $http.post('/saveUser', $scope.user).error(function(err) {
+       if(err.field && err.msg) {
+         // err like {field: "name", msg: "Server-side error for this username!"}
+         $scope.editableForm.$setError(err.field, err.msg);
+       } else {
+         // unknown error
+         $scope.editableForm.$setError('name', 'Unknown error!');
+       }
+     });
+   };
+
+
+
+//Start http://plnkr.co/edit/BjWwXIlYyyLvRnVwO8m8?p=preview
+$scope.user = {
+    name: 'awesome user',
+    status: 2
+  };
+
+  $scope.statuses = [
+    {value: 1, text: 'status1'},
+    {value: 2, text: 'status2'},
+    {value: 3, text: 'status3'},
+    {value: 4, text: 'status4'}
+  ];
+
+  $scope.showStatus = function() {
+    var selected = $filter('filter')($scope.statuses, {value: $scope.user.status});
+    return ($scope.user.status && selected.length) ? selected[0].text : 'Not set';
   };
 
 }]);
