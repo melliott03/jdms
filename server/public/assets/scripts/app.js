@@ -346,8 +346,8 @@ myApp.controller('XAccountCtrl2', function($scope, $filter, $http) {
     status: 2,
     group: 4,
     groupName: 'admin',
-    business_type: 3,
-    country: 1
+    business_type: 0,
+    country: 0
 
   };
 
