@@ -2262,14 +2262,14 @@ angular.module('xeditable').factory('editableThemes', function() {
 
     //bs3
     'bs3': {
-      formTpl:     '<form class="form-inline editable-wrap" role="form"></form>',
+      formTpl:     '<form class="form-inline editable-wrap" role="form" ng-model="showme=true"></form>',
       noformTpl:   '<span class="editable-wrap"></span>',
       controlsTpl: '<div class="editable-controls form-group" ng-class="{\'has-error\': $error}"></div>',
       inputTpl:    '',
       errorTpl:    '<div class="editable-error help-block" ng-show="$error" ng-bind="$error"></div>',
       buttonsTpl:  '<span class="editable-buttons"></span>',
       submitTpl:   '<button type="submit" class="btn btn-primary"><span></span></button>',
-      cancelTpl:   '<button type="button" class="btn btn-default" ng-click="$form.$cancel()">'+
+      cancelTpl:   '<button type="button" class="btn btn-default" ng-model="!showme" ng-click="$form.$cancel()">'+
                      '<span></span>'+
                    '</button>',
 

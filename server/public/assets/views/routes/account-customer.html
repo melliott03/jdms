@@ -1,0 +1,583 @@
+
+<!-- BEGIN ACCOUNT SETTING  -->
+<div ng-controller="XAccountCtrl2" ng-cloak>
+  <md-toolbar class="md-theme-light">
+    <h2 class="md-toolbar-tools">
+      <span class="account-page-headers">general</span>
+    </h2>
+  </md-toolbar>
+  <md-content>
+    <md-list>
+      <md-list-item class="md-3-line xeditablecontainerInner" >
+        <div class="md-list-item-text ">
+          <!-- <div class="xeditablecontainer"> -->
+            <form editable-form name="editableForm" onaftersave="updateStripeUserGeneral()" >
+              <div  ng-click="editableForm.$show()" ng-class="{'editable-click': enabled}" >
+              <div>
+                <!-- editable username (text with validation) -->
+                <span class="title">Company Display Name: </span>
+                <span class="focusoutlinenone" editable-text="logedin.display_name" e-name="display_name"  e-placeholder="Business Display Name" e-required>{{ logedin.display_name || 'empty' }}</span>
+              </div>
+
+              <div>
+                <!-- editable status (select-local) -->
+                <span class="title">Country: </span>
+                <span class="focusoutlinenone" editable-select="logedin.country" e-name="country" e-ng-options="s.value as s.text for s in countries">
+                  {{ (countries | filter:{value: logedin.country})[0].text || 'Not set' }}
+                </span>
+              </div>
+              <div>
+                <!-- editable status (select-local) -->
+                <span class="title">Busienss Type: </span>
+                <span class="focusoutlinenone" editable-select="logedin.business_type" e-name="business_type" e-ng-options="s.value as s.text for s in business_types">
+                  {{ (business_types | filter:{value: logedin.business_type})[0].text || 'Not set' }}
+                </span>
+              </div>
+              <div>
+                <!-- editable status (select-local) -->
+                <span class="title">Currency: </span>
+                <span class="focusoutlinenone" editable-select="logedin.currency" e-name="currency" e-ng-options="s.value as s.text for s in currencies">
+                  {{ (currencies | filter:{value: logedin.currency})[0].text || 'Not set' }}
+                </span>
+              </div>
+              <div>
+                <!-- editable group (select-remote) -->
+                <!-- <span class="title">Group: </span>
+                <span editable-select="user.group" e-name="group" onshow="loadGroups()" e-ng-options="g.id as g.text for g in groups">
+                {{ showGroup() }}
+              </span> -->
+            </div>
+
+            <div>
+              <!-- button to show form -->
+              <!-- <button type="button" class="btn btn-default" ng-click="editableForm.$show()" ng-show="!editableForm.$visible">
+                Edit
+              </button> -->
+
+              </span>
+            </div>
+            </div>
+            <!-- buttons to submit / cancel form -->
+            <span ng-show="editableForm.$visible">
+              <md-button type="submit" class="md-raised" ng-disabled="editableForm.$waiting">
+                Save
+              </md-button>
+              <md-button type="button" class="md-raised" ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">
+                Cancel
+              </md-button>
+            </span>
+          </form>
+          <!-- </div> -->
+
+      </div>
+      <md-button class="md-secondary">respond</md-button>
+      <md-divider ng-if="!$last"></md-divider>
+    </md-list-item>
+  </md-list>
+</md-content>
+<!-- begin new category -->
+<md-toolbar class="md-theme-light">
+  <h2 class="md-toolbar-tools">
+    <span class="account-page-headers">verification & tax information</span>
+  </h2>
+</md-toolbar>
+<md-content>
+  <md-list>
+    <md-list-item class="md-3-line xeditablecontainerInner" >
+      <div class="md-list-item-text ">
+        <!-- <div class="xeditablecontainer"> -->
+          <form editable-form name="editableForm_vari_info" onaftersave="saveUser()" >
+            <div  ng-click="editableForm_vari_info.$show()" ng-class="{'editable-click': enabled}" >
+            <div>
+              <!-- editable username (text with validation) -->
+              <span class="title">Full Tax Name: </span>
+              <span class="focusoutlinenone" editable-text="vari_info.tax_name" e-name="tax_name" e-placeholder="Full Name of Business" e-required>{{ vari_info.tax_name || 'empty' }}</span>
+            </div>
+
+            <div>
+              <!-- editable username (text with validation) -->
+              <span class="title">Employer Identification Number: </span>
+              <span class="focusoutlinenone" editable-text="vari_info.ein" e-name="ein" e-placeholder="Employer Identification Number" e-required>{{ vari_info.ein || 'empty' }}</span>
+            </div>
+
+          </div>
+          <!-- buttons to submit / cancel form -->
+          <span ng-show="editableForm_vari_info.$visible">
+            <md-button type="submit" class="md-raised" ng-disabled="editableForm_vari_info.$waiting">
+              Save
+            </md-button>
+            <md-button type="button" class="md-raised" ng-disabled="editableForm_vari_info.$waiting" ng-click="editableForm_vari_info.$cancel()">
+              Cancel
+            </md-button>
+          </span>
+        </form>
+
+    </div>
+    <md-button class="md-secondary">respond</md-button>
+    <md-divider ng-if="!$last"></md-divider>
+  </md-list-item>
+
+
+  <md-list-item class="md-3-line xeditablecontainerInner" >
+    <div class="md-list-item-text ">
+      <!-- <div class="xeditablecontainer"> -->
+        <form editable-form name="editableForm_vari_address" onaftersave="saveUserAddress()" >
+          <div  ng-click="editableForm_vari_address.$show()" ng-class="{'editable-click': enabled}" >
+
+          <div>
+            <!-- editable username (text with validation) -->
+            <span class="title">Address: </span>
+            <span class="focusoutlinenone" editable-text="logedinUser.response.address" e-name="address"  e-required>{{ logedinUser.response.address || 'empty' }}</span>
+          </div>
+        </div>
+        <!-- buttons to submit / cancel form -->
+        <span ng-show="editableForm_vari_address.$visible">
+          <md-button type="submit" class="md-raised" ng-disabled="editableForm_vari_address.$waiting">
+            Save
+          </md-button>
+          <md-button type="button" class="md-raised" ng-disabled="editableForm_vari_address.$waiting" ng-click="editableForm_vari_address.$cancel()">
+            Cancel
+          </md-button>
+          <!-- logedinUser: {{logedinUser.response.address}} -->
+        </span>
+      </form>
+
+  </div>
+  <md-button class="md-secondary">respond</md-button>
+  <md-divider ng-if="!$last"></md-divider>
+</md-list-item>
+
+
+  <md-list-item class="md-3-line xeditablecontainerInner focusoutlinenone" >
+    <div class="md-list-item-text focusoutlinenone ">
+      <!-- <div class="xeditablecontainer"> -->
+        <form editable-form name="editableForm_vari_contact" onaftersave="saveUserPhoneEmail()" >
+          <div  ng-click="editableForm_vari_contact.$show()" ng-class="{'editable-click': enabled}" >
+          <div>
+            <!-- editable username (text with validation) -->
+            <span class="title">Phone: </span>
+            <span class="focusoutlinenone" editable-text="logedinUser.response.phone" e-name="phone" e-placeholder="(xxx) xxx-xxxx" e-required>{{ logedinUser.response.phone || 'empty' }}</span>
+          </div>
+
+          <div>
+            <!-- editable username (text with validation) -->
+            <span class="title">Email: </span>
+            <span class="focusoutlinenone" editable-text="logedinUser.response.email" e-name="email" e-placeholder="Company Email" e-required>{{ logedinUser.response.email || 'empty' }}</span>
+          </div>
+
+        </div>
+        <!-- buttons to submit / cancel form -->
+        <span ng-show="editableForm_vari_contact.$visible">
+          <md-button type="submit" class="md-raised" ng-disabled="editableForm_vari_contact.$waiting">
+            Save
+          </md-button>
+          <md-button type="button" class="md-raised" ng-disabled="editableForm_vari_contact.$waiting" ng-click="editableForm_vari_contact.$cancel()">
+            Cancel
+          </md-button>
+        </span>
+      </form>
+
+  </div>
+  <md-button class="md-secondary">respond</md-button>
+  <md-divider ng-if="!$last"></md-divider>
+</md-list-item>
+
+
+
+<md-list-item class="md-3-line xeditablecontainerInner" >
+  <div class="md-list-item-text ">
+    <!-- <div class="xeditablecontainer"> -->
+      <form editable-form name="editableForm_vari_rep" onaftersave="saveUserSSDOBNAME()" >
+        <div  ng-click="editableForm_vari_rep.$show()" ng-class="{'editable-click': enabled}" >
+        <div>
+          <!-- editable username (text with validation) -->
+          <span class="title">Business Representative: </span>
+          <span class="focusoutlinenone" editable-text="logedinUser.rep_fname" e-name="rep_fname" e-required e-placeholder="Legal First Name">{{ logedinUser.rep_fname || 'empty' }}</span>
+          <span class="focusoutlinenone" editable-text="logedinUser.rep_lname" e-name="rep_lname" e-required e-placeholder="Legal Last Name">{{ logedinUser.rep_lname || 'empty' }}</span>
+        </div>
+
+        <div>
+          <!-- editable username (text with validation) -->
+          <span class="title">Date of Birth: </span>
+          <span class="focusoutlinenone" editable-text="logedinUser.tax_name" e-name="tax_name" e-required e-placeholder="MM /DD /YYYY" e-required>{{ vari_info.tax_name || 'empty' }}</span>
+        </div>
+      </div>
+      <!-- buttons to submit / cancel form -->
+      <span ng-show="editableForm_vari_rep.$visible">
+        <md-button type="submit" class="md-raised" ng-disabled="editableForm_vari_rep.$waiting">
+          Save
+        </md-button>
+        <md-button type="button" class="md-raised" ng-disabled="editableForm_vari_rep.$waiting" ng-click="editableForm_vari_rep.$cancel()">
+          Cancel
+        </md-button>
+      </span>
+    </form>
+
+</div>
+<md-button class="md-secondary">respond</md-button>
+<md-divider ng-if="!$last"></md-divider>
+</md-list-item>
+
+<md-list-item class="md-3-line xeditablecontainerInner" >
+  <div class="md-list-item-text ">
+    <!-- <div class="xeditablecontainer"> -->
+      <form editable-form name="editableForm_vari_sos" onaftersave="Pii()" >
+        <div  ng-click="editableForm_vari_sos.$show()" ng-class="{'editable-click': enabled}" >
+
+        <div>
+          <!-- editable username (text with validation) -->
+          <span class="title">Social Security Number: </span>
+          <span class="focusoutlinenone" editable-text="logedinUser.ssnum" e-name="ssnum" e-required e-placeholder="xxx-xx-xxxx" e-required>{{ logedinUser.ssnum || 'empty' }}</span>
+        </div>
+
+      <!-- buttons to submit / cancel form -->
+      <span ng-show="editableForm_vari_sos.$visible">
+        <md-button type="submit" class="md-raised" ng-disabled="editableForm_vari_sos.$waiting">
+          Save
+        </md-button>
+        <md-button type="button" class="md-raised" ng-disabled="editableForm_vari_sos.$waiting" ng-click="editableForm_vari_sos.$cancel()">
+          Cancel
+        </md-button>
+      </span>
+    </form>
+
+</div>
+<md-button class="md-secondary">respond</md-button>
+<md-divider ng-if="!$last"></md-divider>
+</md-list-item>
+
+</md-list>
+</md-content>
+<!-- end of category -->
+<!-- begin of category -->
+<md-toolbar class="md-theme-light">
+  <h2 class="md-toolbar-tools">
+    <span class="account-page-headers">payment</span>
+  </h2>
+</md-toolbar>
+<md-content>
+  <md-list>
+    <md-list-item class="md-3-line xeditablecontainerInner" >
+      <div class="md-list-item-text ">
+        <!-- BEGIN PLAID NON-ANGULAR VERSION -->
+        <div ng-controller="plaidCtrl">
+          <strong><span class="title">AUTOMATIC Bank Account Verification</span></strong><span><small> (Funds Availble to Use Right Away)</small></span>
+          <br><button id='linkButton'>Log In To Add Bank Account</button>
+          <script>
+          var linkHandler = Plaid.create({
+            selectAccount: true,
+            env: 'tartan',
+            clientName: 'Client Name',
+            key: '09b483e7f2a23fc9ebc47dd904323f',
+            product: 'auth',
+            onLoad: function() {
+              // The Link module finished loading.
+            },
+            onSuccess: function(public_token, metadata) {
+              // The onSuccess function is called when the user has successfully
+              // authenticated and selected an account to use.
+              //
+              // When called, you will send the public_token and the selected
+              // account ID, metadata.account_id, to your backend app server.
+              //
+              var plaidSuccessObject = {
+                public_token: public_token,
+                account_id: metadata.account_id
+              };
+              $.post("/updateUser/saveUserPlaidToken", plaidSuccessObject, function(data, status){
+                alert("Data: " + data + "\nStatus: " + status);
+              });
+              // sendDataToBackendServer({
+              //   public_token: public_token,
+              //   account_id: metadata.account_id
+              // });
+
+              angular.element(document.getElementById('plaidCtrl')).scope().sendDataToBackend(plaidSuccessObject);
+              // angular.scope().sendDataToBackend(plaidSuccessObject);
+
+              sendDataToBackend(plaidSuccessObject);
+              console.log('Public Token: ' + public_token);
+              console.log('Customer-selected account ID: ' + metadata.account_id);
+            },
+            onExit: function() {
+              // The user exited the Link flow.
+            },
+          });
+
+          // Trigger the standard Institution Select view
+          document.getElementById('linkButton').onclick = function() {
+            linkHandler.open();
+          };
+          </script>
+        </div>
+        <!-- END PLAID NON-ANGULAR VERSION -->
+
+        <!-- BEGIN PLAID NON-ANGULAR VERSION 2-->
+        <script src="https://cdn.plaid.com/link/stable/link-initialize.js"></script>
+        <!-- END PLAID ANGULAR VERSION -->
+
+    </div>
+    <md-button class="md-secondary">respond</md-button>
+    <md-divider ng-if="!$last"></md-divider>
+  </md-list-item>
+
+
+
+  <md-list-item class="md-3-line xeditablecontainerInner" >
+    <div class="md-list-item-text ">
+      <strong><span class="title">MANUAL Bank Account Verification</span></strong><span><small> (Availble to use in 2-3 days)</small></span>
+      <!-- BEGIN STRIPE CHECK PAYMENT FORM -->
+      <!-- <p>
+        Enter Bank Acount Info
+      </p> -->
+      <!-- END STRIPE CHECK PAYMENT FORM -->
+
+<!--  MANUAL ENTER BANK ACCOUNT FOR STRIPE -->
+        <form editable-form name="editableForm_manualBank" onaftersave="ccAuthorize()" id="payment-form">
+          <div  ng-click="editableForm_manualBank.$show()" ng-class="{'editable-click': enabled}" >
+          <div>
+            <span class="payment-errors"></span>
+            <span class="title">Account Holder Full Name: </span>
+            <span class="focusoutlinenone" editable-text="payment.check.account_holder_name" e-name="account_holder_name" e-required e-placeholder="Full Name On Account">{{ payment.check.account_holder_name || 'empty' }}</span>
+          </div>
+
+          <div>
+            <!-- editable username (text with validation) -->
+            <span class="title">Routing Number: </span>
+            <span class="focusoutlinenone" editable-text="payment.check.routing_number" e-name="check.routing_number"  e-required e-placeholder="xxxxxxxxxxx" e-required>{{ payment.check.routing_number || 'empty' }}</span>
+          </div>
+
+          <div>
+            <!-- editable username (text with validation) -->
+            <span class="title">Account Number: </span>
+            <span class="focusoutlinenone" editable-text="payment.check.account_number" e-name="account_number" e-required e-placeholder="*XXXXXXXXX*" e-required>{{ payment.check.account_number || 'empty' }}</span>
+          </div>
+        </div>
+
+        <div>
+          <!-- editable status (select-local) -->
+          <span class="title">Account Holder Type: </span>
+          <span class="focusoutlinenone" editable-select="payment.check.account_holder_type" e-name="account_holder_type" e-ng-options="s.value as s.text for s in account_holder_types">
+            {{ (account_holder_types | filter:{value: payment.check.account_holder_type})[0].text || 'Not set' }}
+          </span>
+        </div>
+
+        <!-- buttons to submit / cancel form -->
+        <span ng-show="editableForm_manualBank.$visible">
+          <md-button type="submit" class="md-raised" ng-disabled="editableForm_manualBank.$waiting">
+            Save
+          </md-button>
+          <md-button type="button" class="md-raised" ng-disabled="editableForm_manualBank.$waiting" ng-click="editableForm_manualBank.$cancel()">
+            Cancel
+          </md-button>
+        </span>
+      </form>
+
+  </div>
+  <md-button class="md-secondary">respond</md-button>
+  <md-divider ng-if="!$last"></md-divider>
+  </md-list-item>
+
+
+
+<!-- ENTER MICRODEPOSITS -->
+  <md-list-item class="md-3-line xeditablecontainerInner" >
+    <div class="md-list-item-text ">
+      <!-- <strong>Enter micro depost amounts:</strong> -->
+<!--  ENTER MICRO-DEPOSITS -->
+        <form editable-form name="editableForm_microDeposits" onaftersave="submitBankMicroDeposits(microDeposit)" id="payment-form">
+          <div  ng-click="editableForm_microDeposits.$show()" ng-class="{'editable-click': enabled}" >
+          <div>
+            <span class="payment-errors"></span>
+            <span class="title">Enter Deposits: </span>
+            <span class="focusoutlinenone" editable-text="microDeposit.one" size="2" e-name="one" e-required e-placeholder="first amount">{{ microDeposit.one || 'empty' }}</span>
+            <span class="focusoutlinenone" editable-text="microDeposit.two" size="2" e-name="two" e-required e-placeholder="second amount">{{ microDeposit.two || 'empty' }}</span>
+          </div>
+        </div>
+
+        <!-- buttons to submit / cancel form -->
+        <span ng-show="editableForm_microDeposits.$visible">
+          <md-button type="submit" class="md-raised" ng-disabled="editableForm_microDeposits.$waiting">
+            Save
+          </md-button>
+          <md-button type="button" class="md-raised" ng-disabled="editableForm_microDeposits.$waiting" ng-click="editableForm_microDeposits.$cancel()">
+            Cancel
+          </md-button>
+          <p>
+            Allow 1-2 business days for deposits to appear on your online statement with description, 'VERIFICATION'. You will need to enter the value of the two deposits here.
+            There is a limit of 10 failed verification attempts. Once this limit has been crossed, the bank account will be unable to be verified.
+          </p>
+        </span>
+      </form>
+
+  </div>
+  <md-button class="md-secondary">respond</md-button>
+  <md-divider ng-if="!$last"></md-divider>
+  </md-list-item>
+
+
+
+
+
+
+  <!-- ENTER CREDIT CARD -->
+    <md-list-item class="md-3-line xeditablecontainerInner" >
+      <div class="md-list-item-text ">
+        <strong><span class="title">CREDIT OR DEBIT CARD</span></strong><span><small> (Funds Availble right away)*(debit card for contractors...can be debit or credit for customers)</small></span>
+        <!-- BEGIN STRIPE CHECK PAYMENT FORM -->
+        <!-- <p>
+          Enter Bank Acount Info
+        </p> -->
+        <!-- END STRIPE CHECK PAYMENT FORM -->
+
+  <!--  MANUAL ENTER BANK ACCOUNT FOR STRIPE -->
+          <form editable-form name="editableForm_CreditCard" onaftersave="charge()" id="payment-form" >
+            <div  ng-click="editableForm_CreditCard.$show()" ng-class="{'editable-click': enabled}" >
+            <div>
+              <span class="payment-errors"></span>
+              <span class="title">Name on Card: </span>
+              <span class="focusoutlinenone" e-size="20" editable-text="payment.card.name" e-name="name" e-required e-placeholder="Full Name On Account">{{ payment.card.name || 'empty' }}</span>
+            </div>
+
+            <div>
+              <!-- editable username (text with validation) -->
+              <span class="title">Card Number: </span>
+              <span class="focusoutlinenone" data-stripe="number" editable-text="payment.card.number" e-name="number"  e-required e-placeholder="xxxxxxxxxxx" e-required>{{ payment.card.number || 'empty' }}</span>
+            </div>
+
+            <div>
+              <!-- editable username (text with validation) -->
+              <span class="title">Expiration (MM/YY): </span>
+              <span class="focusoutlinenone" size="2" data-stripe="exp_month" ng-model='payment.card.exp_month' editable-text="payment.card.exp_month" e-name="exp_month" e-required e-placeholder="MM" e-required>{{ payment.card.exp_month || 'empty' }}</span>
+              <span class="focusoutlinenone" size="2" data-stripe="exp_year" ng-model='payment.card.exp_year' editable-text="payment.card.exp_year" e-name="exp_year" e-required e-placeholder="MM" e-required>{{ payment.card.exp_year || 'empty' }}</span>
+            </div>
+            <div>
+              <!-- editable username (text with validation) -->
+              <span class="title">CVC: </span>
+              <span class="focusoutlinenone" name="cvc" size="4" data-stripe="cvc" ng-model='payment.card.cvc' editable-text="payment.card.cvc" e-name="cvc" e-required e-placeholder="MM" e-required>{{ payment.card.cvc || 'empty' }}</span>
+            </div>
+            <div>
+              <!-- editable username (text with validation) -->
+              <span class="title">Billing Zip: </span>
+              <span class="focusoutlinenone" size="6" data-stripe="address_zip" ng-model='payment.card.address_zip' editable-text="payment.card.address_zip" e-name="address_zip" e-required e-placeholder="MM" e-required>{{ payment.card.address_zip || 'empty' }}</span>
+            </div>
+          </div>
+
+          <div>
+            <!-- editable status (select-local) -->
+            <span class="title">Account Holder Type: </span>
+            <span class="focusoutlinenone" editable-select="payment.check.account_holder_type" e-name="account_holder_type" e-ng-options="s.value as s.text for s in account_holder_types">
+              {{ (account_holder_types | filter:{value: payment.check.account_holder_type})[0].text || 'Not set' }}
+            </span>
+          </div>
+
+          <!-- buttons to submit / cancel form -->
+          <span ng-show="editableForm_CreditCard.$visible">
+            <md-button type="submit" class="md-raised" ng-disabled="editableForm_CreditCard.$waiting">
+              Save
+            </md-button>
+            <md-button type="button" class="md-raised" ng-disabled="editableForm_CreditCard.$waiting" ng-click="editableForm_CreditCard.$cancel()">
+              Cancel
+            </md-button>
+          </span>
+        </form>
+
+    </div>
+    <md-button class="md-secondary">respond</md-button>
+    <md-divider ng-if="!$last"></md-divider>
+    </md-list-item>
+
+
+</md-list>
+</md-content>
+<!-- end of category -->
+
+<div ng-controller="XAccountCtrl2" ng-cloak>
+  <md-toolbar class="md-theme-light">
+    <h2 class="md-toolbar-tools">
+      <span class="account-page-headers">Add People</span>
+    </h2>
+  </md-toolbar>
+  <md-content>
+    <md-list>
+      <md-list-item class="md-3-line xeditablecontainerInner" >
+        <div class="md-list-item-text ">
+
+          <!-- START INVITE -->
+          <strong>
+            Invite others to join your company
+          </strong>
+          <form action="/register" method="post">
+
+            <md-input-container>
+              <label for="email">EMAIL: </label>
+              <input type="email" name="email" id="email" class="md-block" flex-gt-sm required/>
+            </md-input-container>
+
+            <input type="text" name="action" value="invite" hidden/>
+            <div class="form-row">
+              <label>
+                <span>Define User Role</span>
+              </label>
+            </div>
+            <input type="radio" name="privilege_role" value="user" required >User<br>
+            <input type="radio" name="privilege_role" value="admin" required >Admin<br>
+
+            <md-button class="md-raised md-primary" type="submit" value="Register">send invite</md-button>
+
+          </form>
+
+      </div>
+      <md-button class="md-secondary">respond</md-button>
+      <md-divider ng-if="!$last"></md-divider>
+    </md-list-item>
+  </md-list>
+</md-content>
+<!-- begin new category -->
+
+
+
+<md-toolbar class="md-theme-light">
+  <h2 class="md-toolbar-tools">
+    <span class="account-page-headers">upload identity documents</span>
+  </h2>
+</md-toolbar>
+<md-content>
+  <md-list>
+    <md-list-item class="md-3-line xeditablecontainerInner" >
+      <div class="md-list-item-text ">
+
+        Upload on form submit or button click
+        <form name="form">
+          Single Image with validations
+          <div class="button btn btn-primary" ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
+            ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100"
+            ngf-resize="{width: 100, height: 100}">Select</div>
+          Multiple files
+          <div class="button btn btn-primary" ngf-select ng-model="files" ngf-multiple="true">Select</div>
+          Drop files: <div ngf-drop ng-model="files" class="drop-box">Drop</div>
+          <button type="submit" ng-click="submitUpload()">submit</button>
+        </form>
+
+        Upload right away after file selection:
+        <div class="button btn btn-primary" ngf-select="upload($file)">Upload on file select</div>
+        <div class="button btn btn-primary" ngf-select="uploadFiles($files)" multiple="multiple">Upload on file select</div>
+          Drop File:
+        <div ngf-drop="uploadFiles($files)" class="drop-box"
+          ngf-drag-over-class="'dragover'" ngf-multiple="true"
+          ngf-pattern="'image/*,application/pdf'">Drop Images or PDFs files here</div>
+        <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+
+        Image thumbnail: <img ngf-thumbnail="file || '/thumb.jpg'">
+        Audio preview: <audio controls ngf-src="file"></audio>
+        Video preview: <video controls ngf-src="file"></video>
+
+        </div><!-- END XAccountCtrl2 -->
+
+    </div>
+    <md-button class="md-secondary">respond</md-button>
+    <md-divider ng-if="!$last"></md-divider>
+  </md-list-item>
+</md-list>
+</md-content>
+<!-- begin new category -->

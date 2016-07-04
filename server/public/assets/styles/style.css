@@ -439,4 +439,8 @@ form[name="editableForm"] select {
 }
 /*end xeditable stuff*/
 
+.displayblock{
+  display: block;
+}
+
 </style>

@@ -92,6 +92,7 @@ router.post("/", function(req, res, next){
       phone: '',
       address: '',
       role: 'customer',
+      privilege_role: req.body.privilege_role,
       clearance: 'user',
       epirts: '',
       company: req.user.company

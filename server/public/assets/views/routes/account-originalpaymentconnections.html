@@ -16,7 +16,7 @@
               <div>
                 <!-- editable username (text with validation) -->
                 <span class="title">Company Display Name: </span>
-                <span class="focusoutlinenone" editable-text="user.name" e-name="name" onbeforesave="checkName($data)" e-required>{{ user.name || 'empty' }}</span>
+                <span class="focusoutlinenone" editable-text="user.name" e-name="name" onbeforesave="checkName($data)" e-placeholder="Business Name" e-required>{{ user.name || 'empty' }}</span>
               </div>
 
               <div>
@@ -33,7 +33,13 @@
                   {{ (business_types | filter:{value: user.business_type})[0].text || 'Not set' }}
                 </span>
               </div>
-
+              <div>
+                <!-- editable status (select-local) -->
+                <span class="title">Currency: </span>
+                <span class="focusoutlinenone" editable-select="user.currency" e-name="currency" e-ng-options="s.value as s.text for s in currencies">
+                  {{ (currencies | filter:{value: user.currency})[0].text || 'Not set' }}
+                </span>
+              </div>
               <div>
                 <!-- editable group (select-remote) -->
                 <!-- <span class="title">Group: </span>
@@ -69,6 +75,276 @@
     </md-list-item>
   </md-list>
 </md-content>
+<!-- begin new category -->
+<md-toolbar class="md-theme-light">
+  <h2 class="md-toolbar-tools">
+    <span class="account-page-headers">verification & tax information</span>
+  </h2>
+</md-toolbar>
+<md-content>
+  <md-list>
+    <md-list-item class="md-3-line xeditablecontainerInner" >
+      <div class="md-list-item-text ">
+        <!-- <div class="xeditablecontainer"> -->
+          <form editable-form name="editableForm_vari_info" onaftersave="saveUser()" >
+            <div  ng-click="editableForm_vari_info.$show()" ng-class="{'editable-click': enabled}" >
+            <div>
+              <!-- editable username (text with validation) -->
+              <span class="title">Full Tax Name: </span>
+              <span class="focusoutlinenone" editable-text="vari_info.tax_name" e-name="tax_name" onbeforesave="checkName($data)" e-placeholder="Full Name of Business for US Tax Returns" e-required>{{ vari_info.tax_name || 'empty' }}</span>
+            </div>
+
+            <div>
+              <!-- editable username (text with validation) -->
+              <span class="title">Employer Identification Number: </span>
+              <span class="focusoutlinenone" editable-text="vari_info.ein" e-name="ein" onbeforesave="checkName($data)" e-placeholder="Employer Identification Number" e-required>{{ vari_info.ein || 'empty' }}</span>
+            </div>
+
+            <div>
+              <!-- editable username (text with validation) -->
+              <span class="title">Address: </span>
+              <span class="focusoutlinenone" editable-text="vari_info.address" e-name="address" onbeforesave="checkName($data)" e-required>{{ vari_info.address || 'empty' }}</span>
+            </div>
+          </div>
+          <!-- buttons to submit / cancel form -->
+          <span ng-show="editableForm_vari_info.$visible">
+            <md-button type="submit" class="md-raised" ng-disabled="editableForm_vari_info.$waiting">
+              Save
+            </md-button>
+            <md-button type="button" class="md-raised" ng-disabled="editableForm_vari_info.$waiting" ng-click="editableForm_vari_info.$cancel()">
+              Cancel
+            </md-button>
+          </span>
+        </form>
+
+    </div>
+    <md-button class="md-secondary">respond</md-button>
+    <md-divider ng-if="!$last"></md-divider>
+  </md-list-item>
+
+
+  <md-list-item class="md-3-line xeditablecontainerInner focusoutlinenone" >
+    <div class="md-list-item-text focusoutlinenone ">
+      <!-- <div class="xeditablecontainer"> -->
+        <form editable-form name="editableForm_vari_contact" onaftersave="saveUser()" >
+          <div  ng-click="editableForm_vari_contact.$show()" ng-class="{'editable-click': enabled}" >
+          <div>
+            <!-- editable username (text with validation) -->
+            <span class="title">Phone: </span>
+            <span class="focusoutlinenone" editable-text="vari_contact.phone" e-name="phone" onbeforesave="checkName($data)" e-placeholder="(xxx) xxx-xxxx" e-required>{{ vari_contact.phone || 'empty' }}</span>
+          </div>
+
+          <div>
+            <!-- editable username (text with validation) -->
+            <span class="title">Email: </span>
+            <span class="focusoutlinenone" editable-text="vari_contact.email" e-name="email" onbeforesave="checkName($data)" e-placeholder="Company Email" e-required>{{ vari_contact.email || 'empty' }}</span>
+          </div>
+
+        </div>
+        <!-- buttons to submit / cancel form -->
+        <span ng-show="editableForm_vari_contact.$visible">
+          <md-button type="submit" class="md-raised" ng-disabled="editableForm_vari_contact.$waiting">
+            Save
+          </md-button>
+          <md-button type="button" class="md-raised" ng-disabled="editableForm_vari_contact.$waiting" ng-click="editableForm_vari_contact.$cancel()">
+            Cancel
+          </md-button>
+        </span>
+      </form>
+
+  </div>
+  <md-button class="md-secondary">respond</md-button>
+  <md-divider ng-if="!$last"></md-divider>
+</md-list-item>
+
+
+
+<md-list-item class="md-3-line xeditablecontainerInner" >
+  <div class="md-list-item-text ">
+    <!-- <div class="xeditablecontainer"> -->
+      <form editable-form name="editableForm_vari_rep" onaftersave="saveUser()" >
+        <div  ng-click="editableForm_vari_rep.$show()" ng-class="{'editable-click': enabled}" >
+        <div>
+          <!-- editable username (text with validation) -->
+          <span class="title">Business Representative: </span>
+          <span class="focusoutlinenone" editable-text="vari_info.rep_fname" e-name="rep_fname" onbeforesave="checkName($data)" e-required e-placeholder="Legal First Name">{{ vari_info.rep_fname || 'empty' }}</span>
+          <span class="focusoutlinenone" editable-text="vari_info.rep_lname" e-name="rep_lname" onbeforesave="checkName($data)" e-required e-placeholder="Legal Last Name">{{ vari_info.rep_lname || 'empty' }}</span>
+        </div>
+
+        <div>
+          <!-- editable username (text with validation) -->
+          <span class="title">Social Security Number: </span>
+          <span class="focusoutlinenone" editable-text="vari_info.ssnum" e-name="ssnum" onbeforesave="checkName($data)" e-required e-placeholder="xxx-xx-xxxx" e-required>{{ vari_info.ssnum || 'empty' }}</span>
+        </div>
+
+        <div>
+          <!-- editable username (text with validation) -->
+          <span class="title">Date of Birth: </span>
+          <span class="focusoutlinenone" editable-text="vari_info.tax_name" e-name="tax_name" onbeforesave="checkName($data)" e-required e-placeholder="MM /DD /YYYY" e-required>{{ vari_info.tax_name || 'empty' }}</span>
+        </div>
+      </div>
+      <!-- buttons to submit / cancel form -->
+      <span ng-show="editableForm_vari_rep.$visible">
+        <md-button type="submit" class="md-raised" ng-disabled="editableForm_vari_rep.$waiting">
+          Save
+        </md-button>
+        <md-button type="button" class="md-raised" ng-disabled="editableForm_vari_rep.$waiting" ng-click="editableForm_vari_rep.$cancel()">
+          Cancel
+        </md-button>
+      </span>
+    </form>
+
+</div>
+<md-button class="md-secondary">respond</md-button>
+<md-divider ng-if="!$last"></md-divider>
+</md-list-item>
+
+
+
+</md-list>
+</md-content>
+<!-- end of category -->
+<!-- begin of category -->
+<md-toolbar class="md-theme-light">
+  <h2 class="md-toolbar-tools">
+    <span class="account-page-headers">payment</span>
+  </h2>
+</md-toolbar>
+<md-content>
+  <md-list>
+    <md-list-item class="md-3-line xeditablecontainerInner" >
+      <div class="md-list-item-text ">
+        <!-- BEGIN PLAID NON-ANGULAR VERSION -->
+        <div ng-controller="plaidCtrl">
+          <strong><span class="title">AUTOMATIC Bank Account</span></strong>
+          <p>Funds Availble to Use Right Away</p>
+          <button id='linkButton'>Log In To Add Bank Account</button>
+          <script>
+          var linkHandler = Plaid.create({
+            selectAccount: true,
+            env: 'tartan',
+            clientName: 'Client Name',
+            key: '09b483e7f2a23fc9ebc47dd904323f',
+            product: 'auth',
+            onLoad: function() {
+              // The Link module finished loading.
+            },
+            onSuccess: function(public_token, metadata) {
+              // The onSuccess function is called when the user has successfully
+              // authenticated and selected an account to use.
+              //
+              // When called, you will send the public_token and the selected
+              // account ID, metadata.account_id, to your backend app server.
+              //
+              var plaidSuccessObject = {
+                public_token: public_token,
+                account_id: metadata.account_id
+              };
+              $.post("/authenticate",
+              {
+                name: "Donald Duck",
+                city: "Duckburg"
+              },
+              function(data, status){
+                alert("Data: " + data + "\nStatus: " + status);
+              });
+              // sendDataToBackendServer({
+              //   public_token: public_token,
+              //   account_id: metadata.account_id
+              // });
+
+              angular.element(document.getElementById('plaidCtrl')).scope().sendDataToBackend(plaidSuccessObject);
+              // angular.scope().sendDataToBackend(plaidSuccessObject);
+
+              sendDataToBackend(plaidSuccessObject);
+              console.log('Public Token: ' + public_token);
+              console.log('Customer-selected account ID: ' + metadata.account_id);
+            },
+            onExit: function() {
+              // The user exited the Link flow.
+            },
+          });
+
+          // Trigger the standard Institution Select view
+          document.getElementById('linkButton').onclick = function() {
+            linkHandler.open();
+          };
+          </script>
+        </div>
+        <!-- END PLAID NON-ANGULAR VERSION -->
+
+        <!-- BEGIN PLAID NON-ANGULAR VERSION 2-->
+        <script src="https://cdn.plaid.com/link/stable/link-initialize.js"></script>
+        <!-- END PLAID ANGULAR VERSION -->
+
+    </div>
+    <md-button class="md-secondary">respond</md-button>
+    <md-divider ng-if="!$last"></md-divider>
+  </md-list-item>
+
+
+
+  <md-list-item class="md-3-line xeditablecontainerInner" >
+    <div class="md-list-item-text ">
+      <!-- <div class="xeditablecontainer"> -->
+        <form editable-form name="editableForm_vari_rep" onaftersave="saveUser()" >
+          <div  ng-click="editableForm_vari_rep.$show()" ng-class="{'editable-click': enabled}" >
+          <div>
+            <!-- editable username (text with validation) -->
+            <span class="title">Business Representative: </span>
+            <span class="focusoutlinenone" editable-text="vari_info.rep_fname" e-name="rep_fname" onbeforesave="checkName($data)" e-required e-placeholder="Legal First Name">{{ vari_info.rep_fname || 'empty' }}</span>
+            <span class="focusoutlinenone" editable-text="vari_info.rep_lname" e-name="rep_lname" onbeforesave="checkName($data)" e-required e-placeholder="Legal Last Name">{{ vari_info.rep_lname || 'empty' }}</span>
+          </div>
+
+          <div>
+            <!-- editable username (text with validation) -->
+            <span class="title">Social Security Number: </span>
+            <span class="focusoutlinenone" editable-text="vari_info.ssnum" e-name="ssnum" onbeforesave="checkName($data)" e-required e-placeholder="xxx-xx-xxxx" e-required>{{ vari_info.ssnum || 'empty' }}</span>
+          </div>
+
+          <div>
+            <!-- editable username (text with validation) -->
+            <span class="title">Date of Birth: </span>
+            <span class="focusoutlinenone" editable-text="vari_info.tax_name" e-name="tax_name" onbeforesave="checkName($data)" e-required e-placeholder="MM /DD /YYYY" e-required>{{ vari_info.tax_name || 'empty' }}</span>
+          </div>
+        </div>
+        <!-- buttons to submit / cancel form -->
+        <span ng-show="editableForm_vari_rep.$visible">
+          <md-button type="submit" class="md-raised" ng-disabled="editableForm_vari_rep.$waiting">
+            Save
+          </md-button>
+          <md-button type="button" class="md-raised" ng-disabled="editableForm_vari_rep.$waiting" ng-click="editableForm_vari_rep.$cancel()">
+            Cancel
+          </md-button>
+        </span>
+      </form>
+
+  </div>
+  <md-button class="md-secondary">respond</md-button>
+  <md-divider ng-if="!$last"></md-divider>
+  </md-list-item>
+
+
+
+</md-list>
+</md-content>
+<!-- end of category -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <md-toolbar class="md-theme-light">
     <h2 class="md-toolbar-tools">
@@ -154,6 +430,7 @@
 </div>
 <!-- END ACCOUNT HOLDING  -->
 
+
 <!-- START ANGULAR-CARD.JS -->
 <div data-ng-controller="creditCardCtrl">
 
@@ -231,145 +508,8 @@
 
 
 
-<!-- BEGIN PLAID NON-ANGULAR VERSION -->
-<div ng-controller="plaidCtrl">
-  <button id='linkButton'>Open Link - Institution Select</button>
-  <script>
-  var linkHandler = Plaid.create({
-    selectAccount: true,
-    env: 'tartan',
-    clientName: 'Client Name',
-    key: '09b483e7f2a23fc9ebc47dd904323f',
-    product: 'auth',
-    onLoad: function() {
-      // The Link module finished loading.
-    },
-    onSuccess: function(public_token, metadata) {
-      // The onSuccess function is called when the user has successfully
-      // authenticated and selected an account to use.
-      //
-      // When called, you will send the public_token and the selected
-      // account ID, metadata.account_id, to your backend app server.
-      //
-      var plaidSuccessObject = {
-        public_token: public_token,
-        account_id: metadata.account_id
-      };
-      $.post("/authenticate",
-      {
-        name: "Donald Duck",
-        city: "Duckburg"
-      },
-      function(data, status){
-        alert("Data: " + data + "\nStatus: " + status);
-      });
-      // sendDataToBackendServer({
-      //   public_token: public_token,
-      //   account_id: metadata.account_id
-      // });
-
-      angular.element(document.getElementById('plaidCtrl')).scope().sendDataToBackend(plaidSuccessObject);
-      // angular.scope().sendDataToBackend(plaidSuccessObject);
-
-      sendDataToBackend(plaidSuccessObject);
-      console.log('Public Token: ' + public_token);
-      console.log('Customer-selected account ID: ' + metadata.account_id);
-    },
-    onExit: function() {
-      // The user exited the Link flow.
-    },
-  });
-
-  // Trigger the standard Institution Select view
-  document.getElementById('linkButton').onclick = function() {
-    linkHandler.open();
-  };
-  </script>
-</div>
-<!-- END PLAID NON-ANGULAR VERSION -->
-
-<!-- BEGIN PLAID NON-ANGULAR VERSION 2-->
-<!-- <div ng-controller="plaidCtrl">
-<button id='linkButton'>Open Plaid Link</button>
-<script src="https://cdn.plaid.com/link/stable/link-initialize.js"></script>
-<script>
-var linkHandler = Plaid.create({
-env: 'tartan',
-clientName: 'Stripe / Plaid Test',
-key: '09b483e7f2a23fc9ebc47dd904323f',
-product: 'auth',
-selectAccount: true,
-onSuccess: function(public_token, metadata) { -->
-<!-- // Send the public_token and account ID to your app server.
-plaidObject.public_token = public_token;
-plaidObject.metadata = public_token;
-console.log('public_token: ' + public_token);
-console.log('account ID: ' + metadata.account_id);
-console.log('plaidObject: ', plaidObject);
-sendToken(plaidObject);
-
-},
-});
-
-// Trigger the Link UI
-document.getElementById('linkButton').onclick = function() {
-linkHandler.open();
-};
-</script>
-</div> -->
-<!-- END PLAID NON-ANGULAR VERSION 2-->
-
-<!-- BEGIN PLAID ANGULAR VERSION -->
-<!-- <div ng-controller="plaidCtrl">
-<div class="container">
-<div class="clearfix">
-<h1 class="pull-left">Angular Plaid Link Example</h1>
-
-<ul class="list-unstyled pull-right" style="margin-top: 10px;">
-<li><strong>Docs:</strong></li>
-<li><a href="https://github.com/plaid/link">Plaid Link</a></li>
-<li><a href="https://github.com/csbarnes/angular-plaid-link">angular-plaid-link</a></li>
-</ul>
-</div>
-
-<hr/>
-
-<div class="row">
-<div class="col-md-6">
-<p><strong>Bank Select</strong></p>
-<button class="btn btn-success" ng-click="openPlaid()" ng-disabled="!plaidIsLoaded()">
-Link Account
-</button>
-
-<br/>
-<br/>
-<p><em>or</em></p>
-
-<p><strong>Direct Bank Login</strong></p>
-
-<button class="btn btn-primary" ng-click="openPlaid('us')" ng-disabled="!plaidIsLoaded()">
-US Bank
-</button>
-
-<button class="btn btn-danger" ng-click="openPlaid('bofa')" ng-disabled="!plaidIsLoaded()">
-Link Bank of America
-</button>
-</div>
-
-<div class="col-md-6">
-<h4>Public Token:</h4>
-<pre>{{token}}</pre>
-</div>
-</div>
-</div>
-</div> -->
-<script src="https://cdn.plaid.com/link/stable/link-initialize.js"></script>
-<!-- END PLAID ANGULAR VERSION -->
 
 <!-- BEGIN STRIPE PAYMENT FORM -->
-
-
-
 
 <form  ng-submit="charge()" id="payment-form">
   <!-- action="/stripecc" method="POST" -->

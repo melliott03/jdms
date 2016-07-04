@@ -74,7 +74,7 @@
                 <div ng-controller="GoogleController">
                   <div layout-gt-sm="row">
                   <md-input-container class="md-block" flex-gt-sm>
-                      <input type="text" ng-model="work.address" value="address"
+                      <input type="text" ng-model="work.address" value="{{paDetails.formatted_address}}"
                            ng-places-autocomplete
                            ng-model="query"
                            pa-options="paOptions"
@@ -84,13 +84,16 @@
                   </md-input-container>
                     <md-button ng-click="paTrigger()">Send</md-button>
                   </div>
-                  <input type="text" name="geo" id="geo" class="md-block" value="{{paDetails.geometry.access_points[0].location}}" hidden flex-gt-sm />
-                  <input type="text" name="address" id="address" class="md-block" value="{{paDetails.formatted_address}}" hidden flex-gt-sm />
+                  <input type="text" name="geo" id="geo" class="md-block" value="{{paDetails.geometry.location}}"  flex-gt-sm />
+                  <input type="text" name="address" id="address" class="md-block" value="{{paDetails.formatted_address}}"  flex-gt-sm />
 
                   <div>
                     <!-- <h1>Details: </h1>
 
                     <p>{{paDetails.geometry.access_points[0].location}}</p> -->
+                    <p>
+                      paDetails.formatted_address}: {{paDetails.formatted_address}}
+                    </p>
                   </div>
                 </div>
                 <!-- End GoogleAutoComplete -->

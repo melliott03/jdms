@@ -1,4 +1,4 @@
-var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check']);
+var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload']);
 
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
     $mdThemingProvider.theme('default')
@@ -70,7 +70,7 @@ myApp.config([
                 selectAccount: true,
                 clientName: 'NowLanguage',
                 env: 'tartan',
-                key: 'test_key',
+                key: '09b483e7f2a23fc9ebc47dd904323f', //test_key
                 product: 'auth',
                 onLoad: function() {
                   console.log('modal loaded');
@@ -78,21 +78,40 @@ myApp.config([
                 },
                 onSuccess: function(public_token, metadata) {
                     // $scope.token = public_token;
-                    var plaid = {};
-                    plaid.public_token = public_token;
-                    // plaid.account_id = metadata.account_id;
-                    // plaidService.sendToken(plaid);
-                    console.log('public returned token:',plaid);
-                    console.log('public returned metadata:', metadata);
+                    // var dialp = {};
+                    // dialp.public_token = public_token;
+                    // dialp.metadata = metadata.account_id;
+                    // PlaidService.sendToken(plaid);
+                    // console.log('plaid returned plaid::', plaid);
+
+                    console.log('public_token returned token::', public_token);
+                    console.log('metadata returned token::', metadata);
+                    alert('success plaid', public_token);
+                    // $http.post("/updateUser/saveUserPlaidToken", plaidSuccessObject).then(function(response){
+                    //   console.log('in controller back from sending Token', response);
+                    // });
+                    //
+                    // console.log('metadata returned token::', metadata);
+                    // $.post("/updateUser/saveUserPlaidToken",
+                    // {
+                    //   token: public_token,
+                    //   account_id: metadata.account_id
+                    // });
+                    // console.log('public returned metadata:', metadata);
+                    // sendDataToBackendServer({
+                    //   public_token: public_token,
+                    //   account_id: metadata.account_id
+                    // });
                 }
             });
         }
     ]).controller('plaidCtrl', [
+        '$http',
         '$scope',
         'plaidLink',
         'PlaidService',
 
-        function($scope, plaidLink, PlaidService) {
+        function($http, $scope, plaidLink, PlaidService) {
             var plaidService = PlaidService;
             $scope.plaidObject = {};
             $scope.sendDataToBackend = function(plaidSuccessObject){
@@ -111,15 +130,16 @@ myApp.config([
             // });
 
             plaidLink.create({
-                // onSuccess: function(public_token, metadata) {
-                //     $scope.token = public_token;
-                //     var plaid = {};
-                //     plaid.public_token = public_token;
-                //     // plaid.account_id = metadata.account_id;
-                //     plaidService.sendToken(plaid);
-                //     console.log('public returned token:',plaid);
-                //     // console.log('public returned metadata:', metadata);
-                // },
+                onSuccess: function(public_token, metadata) {
+                    $scope.token = public_token;
+                    var plaid = {};
+                    plaid.public_token = public_token;
+                    // plaid.account_id = metadata.account_id;
+                    plaidService.sendToken(plaid);
+                    console.log('public returned token:',plaid);
+                    // console.log('public returned metadata:', metadata);
+
+                },
                 onExit: function() {
                     console.log('user closed');
                 }
@@ -338,12 +358,16 @@ myApp.controller('XAccountCtrl', function($scope, $timeout) {
 //
 // });
 
+// myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "WorkService", 'uiGridConstants', 'stripe', function($scope, $location, $filter, $http, WorkService, uiGridConstants, stripe){
+// myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "WorkService", 'uiGridConstants', 'stripe', function($scope, $location, $filter, $http, WorkService, uiGridConstants, stripe){
 
-myApp.controller('XAccountCtrl2', function($scope, $filter, $http) {
+myApp.controller('XAccountCtrl2', ["$scope", "$location", '$filter', '$http', "WorkService", 'stripe', 'Upload', function($scope, $location, $filter, $http, WorkService, stripe, Upload) {
+  var workService = WorkService;
+ $scope.logedinUser = WorkService.userObject;
  $scope.user = {
     id: 1,
-    name: 'All Nations',
-    status: 2,
+    name: '',
+    currency: 1,
     group: 4,
     groupName: 'admin',
     business_type: 0,
@@ -351,18 +375,21 @@ myApp.controller('XAccountCtrl2', function($scope, $filter, $http) {
 
   };
 
-  $scope.statuses = [
-    {value: 1, text: 'status1'},
-    {value: 2, text: 'status2'},
-    {value: 3, text: 'status3'},
-    {value: 4, text: 'status4'}
+  $scope.currencies = [
+    {value: 1, text: 'USD'}
   ];
 
   $scope.business_types = [
-    {value: 1, text: 'LLC'},
-    {value: 2, text: 'S Corp'},
-    {value: 3, text: 'C Corp'},
-    {value: 4, text: 'Sole Proprietor'}
+    {value: 1, text: 'Individual'},
+    {value: 2, text: 'LLC - Single Member'},
+    {value: 3, text: 'LLC - C Corp Tax Class'},
+    {value: 4, text: 'LLC - S Corp Tax Class'},
+    {value: 5, text: 'LLC - Partnership Tax Class'},
+    {value: 6, text: 'C Corporation'},
+    {value: 7, text: 'S Corporation'},
+    {value: 8, text: 'Partnership'},
+    {value: 9, text: 'Non-Profit'}
+
   ];
 
   $scope.countries = [
@@ -395,6 +422,34 @@ myApp.controller('XAccountCtrl2', function($scope, $filter, $http) {
     }
   };
 
+  $scope.saveUserAddress = function() {
+    // $scope.user already updated!
+    var logedinUser = $scope.logedinUser.response;
+    console.log('logedinUser', logedinUser);
+    return $http.post('/updateUser/saveUserAddress', logedinUser).error(function(err) {
+      if(err.field && err.msg) {
+        // err like {field: "name", msg: "Server-side error for this username!"}
+        $scope.editableForm.$setError(err.field, err.msg);
+      } else {
+        // unknown error
+        $scope.editableForm.$setError('name', 'Unknown error!');
+      }
+    });
+  };
+  $scope.saveUserPhoneEmail = function() {
+    // $scope.user already updated!
+    var logedinUser = $scope.logedinUser.response;
+    console.log('logedinUser', logedinUser);
+    return $http.post('/updateUser/saveUserPhoneEmail', logedinUser).error(function(err) {
+      if(err.field && err.msg) {
+        // err like {field: "name", msg: "Server-side error for this username!"}
+        $scope.editableForm.$setError(err.field, err.msg);
+      } else {
+        // unknown error
+        $scope.editableForm.$setError('name', 'Unknown error!');
+      }
+    });
+  };
   $scope.saveUser = function() {
     // $scope.user already updated!
     console.log('$scope.user', $scope.user);
@@ -408,4 +463,242 @@ myApp.controller('XAccountCtrl2', function($scope, $filter, $http) {
       }
     });
   };
-});
+
+  // PAYMENT
+  $scope.account_holder_types = [
+    {value: 'individual', text: 'individual'},
+    {value: 'company', text: 'company'}
+  ];
+
+  $scope.payment = {
+    check: {
+      account_holder_name: '', //Kebeah Johnson
+      account_holder_type: 0,
+      account_number: '', //000123456789
+      routing_number: '', //110000000
+      country: "US",
+      currency: "USD"
+    }
+   };
+
+   // START STRIPE Pii
+   $scope.Pii = function () {
+     console.log('in controller $scope.logedinUser.ssnum::', $scope.logedinUser.ssnum);
+     // $scope.payment.check.country = "US";
+     // $scope.payment.check.currency = "USD";
+     console.log('stripe', stripe);
+      // stripe.tokens.create({
+      //   pii: {
+      //     personal_id_number: '000000000'
+      //   }
+      // }, function(err, token) {
+      //   console.log('pii token', token);
+      //   // asynchronously called
+      // });
+
+     return stripe.piiData.createToken({personal_id_number: $scope.logedinUser.ssnum}) //$scope.logedinUser.ssnum or '000000000'
+       .then(function (response) {
+         console.log('token created response ', response);
+         // console.log('token created for card ending in ', response.card.last4);
+        //  console.log('$scope.logedinUser::', $scope.logedinUser);
+         var pii = {};
+         pii.piiTokenID = response.id; //reponse.id
+         // cardToken.payment = angular.copy($scope.payment);
+         // var payment = angular.copy($scope.payment);
+         // $scope.payment.check = void 0;
+         // payment.token = response.id;
+         return $http.post('/updateUser/saveUserPii', pii);
+       })
+       .then(function (payment) {
+         console.log('successfully submitted payment for $', payment);
+       })
+       .catch(function (err) {
+         if(err.field && err.msg) {
+           // err like {field: "name", msg: "Server-side error for this username!"}
+           $scope.editableForm.$setError(err.field, err.msg);
+         } else {
+           // unknown error
+           $scope.editableForm.$setError('name', 'Unknown error!');
+         }
+         if (err.type && /^Stripe/.test(err.type)) {
+           console.log('Stripe error: ', err.message);
+         }
+         else {
+           console.log('Other error occurred, possibly with your API', err.message);
+         }
+
+
+
+       });
+   };
+   // END STRIPE Pii
+
+  // START STRIPE BANK ACCOUNT
+  $scope.ccAuthorize = function () {
+    console.log('in controller $scope.payment.card::', $scope.payment.check);
+    // $scope.payment.check.country = "US";
+    // $scope.payment.check.currency = "USD";
+    console.log('stripe', stripe);
+    return stripe.bankAccount.createToken($scope.payment.check)
+      .then(function (response) {
+        console.log('token created response ', response);
+        // console.log('token created for card ending in ', response.card.last4);
+        console.log('$scope.payment::', $scope.payment);
+        var card = {};
+        card.token = response.id;
+        // cardToken.payment = angular.copy($scope.payment);
+        // var payment = angular.copy($scope.payment);
+        // $scope.payment.check = void 0;
+        // payment.token = response.id;
+        return $http.post('/stripecc', card);
+      })
+      .then(function (payment) {
+        console.log('successfully submitted payment for $', payment);
+      })
+      .catch(function (err) {
+        if(err.field && err.msg) {
+          // err like {field: "name", msg: "Server-side error for this username!"}
+          $scope.editableForm.$setError(err.field, err.msg);
+        } else {
+          // unknown error
+          $scope.editableForm.$setError('name', 'Unknown error!');
+        }
+        if (err.type && /^Stripe/.test(err.type)) {
+          console.log('Stripe error: ', err.message);
+        }
+        else {
+          console.log('Other error occurred, possibly with your API', err.message);
+        }
+
+
+
+      });
+  };
+  // END STRIPE BANK ACCOUNT
+
+  $scope.updateStripeUserGeneral = function() {
+    // $scope.user already updated!
+    var logedinUser = $scope.logedinUser.response;
+    console.log('logedinUser', logedinUser);
+    return $http.post('/updateUser/saveUserGeneral', logedinUser).error(function(err) {
+      if(err.field && err.msg) {
+        // err like {field: "name", msg: "Server-side error for this username!"}
+        $scope.editableForm.$setError(err.field, err.msg);
+      } else {
+        // unknown error
+        $scope.editableForm.$setError('name', 'Unknown error!');
+      }
+    });
+  };
+
+  $scope.saveUserSSDOBNAME = function() {
+    // $scope.user already updated!
+    var logedinUser = $scope.logedinUser.response;
+    console.log('logedinUser', logedinUser);
+    return $http.post('/updateUser/saveUserSSDOBNAME', logedinUser).error(function(err) {
+      if(err.field && err.msg) {
+        // err like {field: "name", msg: "Server-side error for this username!"}
+        $scope.editableForm.$setError(err.field, err.msg);
+      } else {
+        // unknown error
+        $scope.editableForm.$setError('name', 'Unknown error!');
+      }
+    });
+  };
+
+  // START STRIPE MICRO DEPOSITS FOR BANK ACCOUNT
+  $scope.submitBankMicroDeposits = workService.submitBankMicroDeposits;
+  // $scope.showme = showmeFactory.showme;
+
+
+  // START STRIPE CREDIT CARDS
+    $scope.charge = function () {
+      console.log('in controller $scope.payment.card::', $scope.payment.card);
+      $scope.payment.card.currency = 'usd';
+      return stripe.card.createToken($scope.payment.card)
+        .then(function (response) {
+          console.log('token created response ', response);
+          console.log('token created for card ending in ', response.card.last4);
+          console.log('$scope.payment::', $scope.payment);
+          var card = {};
+          card.token = response.id;
+          // cardToken.payment = angular.copy($scope.payment);
+          // var payment = angular.copy($scope.payment);
+          // payment.card = void 0;
+          // payment.token = response.id;
+          return $http.post('/updateUser/stripecc', card);
+        })
+        .then(function (payment) {
+          console.log('successfully submitted payment for $', payment.amount);
+        })
+        .catch(function (err) {
+          if (err.type && /^Stripe/.test(err.type)) {
+            console.log('Stripe error: ', err.message);
+          }
+          else {
+            console.log('Other error occurred, possibly with your API', err.message);
+          }
+        });
+    };
+    // END STRIPE CREDIT CARDS
+
+
+    // START OF NG-FILE-UPLOAD STUFF
+    // upload later on form submit or something similar
+    $scope.submitUpload = function() {
+      if ($scope.form.file.$valid && $scope.file) {
+        $scope.upload($scope.file);
+      }
+    };
+
+    // upload on file select or drop
+    $scope.upload = function (file) {
+      // return $http.post('/updateUser/saveUserIdentityDocument', file).error(function(err) {
+      //   if(err.field && err.msg) {
+      //     // err like {field: "name", msg: "Server-side error for this username!"}
+      //     // $scope.editableForm.$setError(err.field, err.msg);
+      //     console.log('err.msg::', err.msg);
+      //   } else {
+      //     // unknown error
+      //     // $scope.editableForm.$setError('name', 'Unknown error!');
+      //     console.log('Unknown error!');
+      //   }
+      // });
+
+        Upload.upload({
+            url: '/updateUser/saveUserIdentityDocument', //'upload/url'
+            data: {file: file, 'username': $scope.logedinUser.email}
+        }).then(function (resp) {
+            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+        }, function (resp) {
+            console.log('Error status: ' + resp.status);
+        }, function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+        });
+    };
+    // for multiple files:
+    // $scope.uploadFiles = function (files) {
+    //   if (files && files.length) {
+    //     for (var i = 0; i < files.length; i++) {
+    //       Upload.upload({..., data: {file: files[i]}, ...})...;
+    //     }
+    //     // or send them all together for HTML5 browsers:
+    //     Upload.upload({..., data: {file: files}, ...})...;
+    //   }
+    // }
+
+    // END OF NG-FILE-UPLOAD STUFF
+}]);
+
+myApp.factory("showmeFactory", ["$http", "$location", function($http, $location){
+
+    // var showme = function(){
+    //   return true;
+    // };
+    // var showme =  true;
+    //
+    // return {
+    //     showme : showme
+    // };
+}]);

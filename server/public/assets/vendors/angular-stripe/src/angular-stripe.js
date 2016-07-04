@@ -73,6 +73,7 @@ var asyncMethods = [
   'bitcoinReceiver.createReceiver',
   'bitcoinReceiver.pollReceiver',
   'bitcoinReceiver.getReceiver',
+  'piiData.createToken',
 ]
 
 var helperMethods = [
@@ -83,7 +84,7 @@ var helperMethods = [
   'card.cardType',
   'bankAccount.validateRoutingNumber',
   'bankAccount.validateAccountNumber',
-  'bitcoinReceiver.cancelReceiverPoll'
+  'bitcoinReceiver.cancelReceiverPoll',
 ]
 
 module.exports = function promisifyStripe (Stripe, Promise) {

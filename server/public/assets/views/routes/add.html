@@ -39,7 +39,7 @@
           <p class="dateErrorMessage">{{dateErrorMessage_start}}</p>
 
         </md-input-container>
-        <h4>Date-picker with min date and max date</h4>
+        <!-- <h4>Date-picker with min date and max date</h4>
         <md-datepicker ng-model="myDate" md-placeholder="Enter date"
         md-min-date="minDate" md-max-date="maxDate"></md-datepicker>
         <md-datepicker name="dateField" ng-model="myDate" md-placeholder="Enter date"
@@ -51,7 +51,7 @@
         <div ng-message="mindate">Date is too early!</div>
         <div ng-message="maxdate">Date is too late!</div>
         <div ng-message="filtered">Only weekends are allowed!</div>
-      </div>
+      </div> -->
         </div>
 
         <!-- <div>
@@ -81,7 +81,7 @@
 
 
         <!-- GoogleAutoComplete -->
-        <div ng-controller="GoogleController">
+        <!-- <div ng-controller="GoogleController"> -->
           <div layout-gt-sm="row">
         	<md-input-container class="md-block" flex-gt-sm>
               <input type="text" ng-model="work.address"
@@ -94,8 +94,14 @@
           </md-input-container>
         		<md-button ng-click="paTrigger()">Send</md-button>
           </div>
+          <p>
+            {{worklatlon}}
+          </p>
+          <input type="text" ng-model="work.location"
+               value="{{worklatlon}}"
+              />
 
-        </div>
+        <!-- </div> -->
         <!-- End GoogleAutoComplete -->
 
 

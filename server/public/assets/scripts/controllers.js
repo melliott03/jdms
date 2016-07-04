@@ -39,7 +39,23 @@ myApp.controller("AuthenticationController", ["$scope", "$location", "$http", "$
     // WorkService.getContractorWork(); //gets all the work contractor has accepted
 }]);
 
-myApp.controller("AddController", ["$scope", "$http", "$filter", "WorkService", function($scope, $http, $filter, WorkService){
+myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkService", function($scope, $http, $filter, $log, WorkService){
+  // GoogleController Content
+  $scope.query = "";
+  $scope.paOptions = {
+    updateModel : true
+  };
+  $scope.paTrigger = {};
+  $scope.paDetails = {};
+  $scope.placesCallback = function (error, details) {
+          console.log($scope.query);
+    if (error) {
+      return console.error(error);
+    }
+    $scope.paDetails = details;
+    $scope.worklatlon = details.geometry.location;
+  };
+
     var workService = WorkService;
     $scope.data = [];
     var now = new Date(),
@@ -127,7 +143,8 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "WorkService", 
       workItem.customer_id = "";
       workItem.contractor_id = "";
       workItem.status = 'pending';
-
+      // workItem.worklatlon2 = work.location;
+      workItem.worklatlon = $scope.worklatlon;
 
 
       console.log('Inside AddController WorkService.userObject.id', WorkService.userObject.id);
@@ -138,6 +155,9 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "WorkService", 
     };
 
     $scope.logedinUser = WorkService.userObject;
+
+
+
 }]);
 
 myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "WorkService", 'uiGridConstants', 'stripe', function($scope, $location, $filter, $http, WorkService, uiGridConstants, stripe){
@@ -260,70 +280,9 @@ myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "
 //   address_zip: $('.address_zip').val()
 // }, stripeResponseHandler);
 
-// START STRIPE CREDIT CARDS
-  $scope.charge = function () {
-    console.log('in controller $scope.payment.card::', $scope.payment.card);
-    return stripe.card.createToken($scope.payment.card)
-      .then(function (response) {
-        console.log('token created response ', response);
-        console.log('token created for card ending in ', response.card.last4);
-        console.log('$scope.payment::', $scope.payment);
-        var card = {};
-        card.token = response.id;
-        // cardToken.payment = angular.copy($scope.payment);
-        // var payment = angular.copy($scope.payment);
-        // payment.card = void 0;
-        // payment.token = response.id;
-        return $http.post('/stripecc', card);
-      })
-      .then(function (payment) {
-        console.log('successfully submitted payment for $', payment.amount);
-      })
-      .catch(function (err) {
-        if (err.type && /^Stripe/.test(err.type)) {
-          console.log('Stripe error: ', err.message);
-        }
-        else {
-          console.log('Other error occurred, possibly with your API', err.message);
-        }
-      });
-  };
-  // END STRIPE CREDIT CARDS
 
-  // START STRIPE BANK ACCOUNT
-  $scope.ccAuthorize = function () {
-    console.log('in controller $scope.payment.card::', $scope.payment.check);
-    $scope.payment.check.country = "US";
-    $scope.payment.check.currency = "USD";
-    return stripe.bankAccount.createToken($scope.payment.check)
-      .then(function (response) {
-        console.log('token created response ', response);
-        // console.log('token created for card ending in ', response.card.last4);
-        console.log('$scope.payment::', $scope.payment);
-        var card = {};
-        card.token = response.id;
-        // cardToken.payment = angular.copy($scope.payment);
-        // var payment = angular.copy($scope.payment);
-        $scope.payment.check = void 0;
-        // payment.token = response.id;
-        return $http.post('/stripecc', card);
-      })
-      .then(function (payment) {
-        console.log('successfully submitted payment for $', payment);
-      })
-      .catch(function (err) {
-        if (err.type && /^Stripe/.test(err.type)) {
-          console.log('Stripe error: ', err.message);
-        }
-        else {
-          console.log('Other error occurred, possibly with your API', err.message);
-        }
-      });
-  };
-  // END STRIPE BANK ACCOUNT
 
-  // START STRIPE MICRO DEPOSITS FOR BANK ACCOUNT
-  $scope.submitBankMicroDeposits = WorkService.submitBankMicroDeposits;
+
 
   // $scope.bankMicroDeposits = function () {
   //   console.log('in controller $scope.microDeposit::', $scope.microDeposit);
@@ -432,19 +391,23 @@ myApp.controller("CommunicationsController", ["$scope", "WorkService", function(
 
 myApp.controller("GoogleController", ["$scope", "$log", function($scope, $log){
     console.log("Google Controller");
+    // GoogleController Content
     $scope.query = "";
-		$scope.paOptions = {
-			updateModel : true
-		};
-		$scope.paTrigger = {};
-		$scope.paDetails = {};
-		$scope.placesCallback = function (error, details) {
+    $scope.paOptions = {
+      updateModel : true
+    };
+    $scope.paTrigger = {};
+    $scope.paDetails = {};
+    $scope.placesCallback = function (error, details) {
             console.log($scope.query);
-			if (error) {
-				return console.error(error);
-			}
-			$scope.paDetails = details;
-		};
+      if (error) {
+        return console.error(error);
+      }
+      console.log('inside GoogleController details::', details.geometry);
+
+      $scope.paDetails = details;
+      $scope.worklatlon = details.geometry.location;
+    };
 }]);
 
 myApp.controller("GoogleDisplayController", ["$scope", function($scope, NgMap){

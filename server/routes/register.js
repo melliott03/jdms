@@ -5,12 +5,75 @@ var path = require("path");
 var User = require("../models/user");
 var User_TempInvited = require("../models/user_invited");
 var geocoder = require('geocoder');
-// var createStripeAccount = require("../modules/stripeCreateAccount");
+// var createStripeAccount = require("../modules/createStripeAccount");
 var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
 var mongoose = require("mongoose");
 var nev = require('email-verification')(mongoose);
 var nev2nd = require('email-verification')(mongoose);
 
+var createStripeCustomer = function(user, req){
+  stripe.customers.create({
+    description: 'Customer for work app',
+    source:  bank_account_token, // obtained with plaid
+    email: req.user.email
+  }, function(err, customer) {
+    console.log('customer::',customer);
+    // asynchronously called
+    User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: customer.id, customer: customer} }, function(err, user) {
+      if (err) throw err;
+
+      // we have the updated user returned to us
+      console.log("after creating and saving the user's stripe customer info", user);
+    });
+  });
+}
+
+var createStripeAccount = function(user, req){
+
+        console.log('req.body', req.body);
+        console.log('INSIDE stripe/create on server req.body._id:', req.body);
+        console.log('user._id', user._id);
+        console.log('user', user);
+        console.log('req.connection.remoteAddress::',req.connection.remoteAddress);
+        stripe.accounts.create({
+          managed: true,
+          country: 'US',
+          email: user.email,
+          tos_acceptance: {
+            date: Math.floor(Date.now() / 1000),
+            ip: req.connection.remoteAddress // Assumes you're not using a proxy
+          }
+          // ,
+          // legal_entity: {
+          //   additional_owners: {
+          //     // Note the use of an object instead of an array
+          //     0: {first_name: 'Bob', last_name: 'Smith'},
+          //     1: {first_name: 'Jane', last_name: 'Doe'}
+          //   }
+          // }
+        }, function(err, account) {
+          if (err) {console.log('stripe err::',err);}
+          console.log('account:::', account);
+          User.findOneAndUpdate({ _id: user._id }, { epirts: {id: account.id, keys: account.keys, account: account} }, function(err, user) {
+            if (err) throw err;
+
+            // we have the updated user returned to us
+            console.log('after saving user"s stripe info oooo',user);
+          });
+          // asynchronously called
+          //stripe terms of service acceptance
+          // var CONNECTED_STRIPE_ACCOUNT_ID = account.id;
+          // stripe.accounts.update(
+          //   {CONNECTED_STRIPE_ACCOUNT_ID},
+          //   {
+          //     tos_acceptance: {
+          //       date: Math.floor(Date.now() / 1000),
+          //       ip: req.connection.remoteAddress // Assumes you're not using a proxy
+          //     }
+          //   }
+          // );
+        });
+      };
 
 //EMAIL VARIFICATION
 nev.configure({
@@ -51,10 +114,19 @@ router.get('/email-verification/:URL', function(req, res) {
   console.log('url', url);
   nev.confirmTempUser(url, function(err, user) {
     if (user) {
+
+      //create stripe account object for contractor or customer object customer
+      if (req.user.role == 'customer') {
+        createStripeCustomer(user, req);
+      } else if (req.user.role == 'contractor') {
+        createStripeAccount(user, req);
+      }
+
       nev.sendConfirmationEmail(user.email, function(err, info) {
         if (err) {
           return res.status(404).send('ERROR: sending confirmation email FAILED');
         }
+
         res.json({
           msg: 'CONFIRMED!',
           info: info
@@ -105,54 +177,69 @@ router.post("/", function(req, res, next){
 
     // register button was clicked
 if (req.body.action === 'signup') {
+  console.log("Im in signup req.body:", req.body);
   if (req.body.action === 'signup') {
+    // geocoder.geocode(req.body.address, function ( err, geocodedData ) { //req.body.address
+    //   console.log('1st geocodedData',geocodedData);
+    // });//END geocoder.geocode
     var password = req.body.password;
-    var newUser = new User({
-      username: req.body.username,
-      email: email,
-      password: password,
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      phone: req.body.phone,
-      address: req.body.address,
-      role: req.body.role,
-      type: req.body.type,
-      epirts: ''
-    });
-    var agentAddress = '5650 Humboldt Avenue North Minneapolis, MN 55430'
-    geocoder.geocode(agentAddress, function ( err, geocodedData ) { //req.body.address
-      var newUserObject = {};
-      var geocodedData = geocodedData.results[0].geometry.location;
+  //   var geo = req.body.geo;
+  //       // geo = geo.slice(1, -1);
+  //       geo = geo.substring(1, geo.length-2);
+  //       // geo = geo.replace(/^"+/i, '');
+  //       geo = geo.replace(/[\'\"]+/g, '');
+  //       geo = "{" + geo + "}";
+  // console.log("Im in signup :", geo);
+  // console.log("Im in signup geo.lat:", geo.lat);
+    var newUser;
+    // geocoder.geocode(req.body.address, function ( err, geocodedData ) { //req.body.address
+    //   console.log('2nd geocodedData',geocodedData);
+    //
+    //   var newUserObject = {};
+    //   var geocodedData = geocodedData.results[0].geometry.location;
       var geo = [];
-          geo[0]=geocodedData.lat;
-          geo[1]=geocodedData.lng;
+          geo[0]=0;
+          geo[1]=0;
+    //
+    //     newUserObject.geo = geo;
+    //     newUserObject.username = req.body.username;
+    //     newUserObject.password = req.body.password;
+    //     newUserObject.firstname = req.body.firstname;
+    //     newUserObject.lastname = req.body.lastname;
+    //     newUserObject.phone = req.body.phone;
+    //     newUserObject.email = req.body.email;
+    //     newUserObject.address = req.body.address;
+    //     newUserObject.role = req.body.role;
+    //     newUserObject.type = req.body.type;
+    //     newUserObject.epirts;
+    //
+    //     var reqbody =req.body;
 
-        newUserObject.geo = geo;
-        newUserObject.username = req.body.username;
-        newUserObject.password = req.body.password;
-        newUserObject.firstname = req.body.firstname;
-        newUserObject.lastname = req.body.lastname;
-        newUserObject.phone = req.body.phone;
-        newUserObject.email = req.body.email;
-        newUserObject.address = req.body.address;
-        newUserObject.role = req.body.role;
-        newUserObject.type = req.body.type;
-        newUserObject.epirts;
-
-        var reqbody =req.body;
-
-
-        console.log("newUserObject.geo : ", newUserObject.geo);
-
-
-        console.log("newUserObject : ", newUserObject);
-        console.log("User inside register.js: ", User);
+        newUser = new User({
+          username: req.body.username,
+          email: email,
+          password: password,
+          firstname: req.body.firstname,
+          lastname: req.body.lastname,
+          phone: req.body.phone,
+          privilege_role: req.body.privilege_role || '',
+          address: req.body.address || '',
+          role: req.body.role,
+          type: req.body.type,
+          epirts: '',
+          geo: geo || ''
+        });
+        // console.log("newUserObject.geo : ", newUserObject.geo);
 
 
-        console.log('newUserObject: ' , newUserObject);
+        // console.log("newUserObject : ", newUserObject);
+        // console.log("User inside register.js: ", User);
+
+
+        // console.log('newUserObject: ' , newUserObject);
 
         nev.createTempUser(newUser, function(err, newTempUser) {
-          console.log('inside nev.createTempUser', newUser);
+          console.log('inside nev.createTempUser newUser::', newUser);
           if (err) {
             return res.status(404).send('ERROR: creating temp user FAILED: ' + err);
           }
@@ -179,18 +266,8 @@ if (req.body.action === 'signup') {
           }
         });
 
-    // User.create(newUserObject, function(err, user){
-    //     if(err){
-    //       next(err);
-    //     } else {
-    //
-    //           //create a stripe account for the user and update user object with token
-    //           // createStripeAccount(user, reqbody);
-    //       // res.redirect("/");
-    //     }
-    // });
 
-  });//END geocoder.geocode
+  // });//END geocoder.geocode
 
   // resend verification button was clicked
   } else {
@@ -215,7 +292,7 @@ if (req.body.action === 'signup') {
      verificationURL: 'https://80cafa98.ngrok.io/register/invite-verification/${URL}',
      persistentUserModel: User,
      tempUserCollection: 'user_tempinvites',
-      // tempUserModel: User_TempInvited,
+      tempUserModel: User_TempInvited,
 
      transportOptions: {
          service: 'Gmail',
@@ -252,13 +329,15 @@ if (req.body.action === 'signup') {
       firstname: '',
       lastname: '',
       phone: '',
+      privilege_role: req.body.privilege_role,
+
       address: '',
       role: 'customer',
       clearance: 'user',
       epirts: '',
       company: 'United Bank'//req.user.company
     });
-    var agentAddress = '5650 Humboldt Avenue North Minneapolis, MN 55430'
+    var agentAddress = req.body.address;
     geocoder.geocode(agentAddress, function ( err, geocodedData ) { //req.body.address
       var newUserObject = {};
       var geocodedData = geocodedData.results[0].geometry.location;

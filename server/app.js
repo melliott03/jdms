@@ -1,5 +1,9 @@
 require('dotenv').load();//Twilio Video
 var express = require("express");
+// Requires multiparty  https://github.com/danialfarid/ng-file-upload/wiki/Node-example
+// var multiparty = require('connect-multiparty');
+// var multipartyMiddleware = multiparty();
+
 var app = express();
 var db = require("./modules/db");
 var cookieParser = require("cookie-parser");
@@ -21,6 +25,8 @@ app.use(express.static(path.join(__dirname, 'public')));//Twilio Video
 
 var mongoose = require("mongoose");
 var nev = require('email-verification')(mongoose); //this might need to be placed after the user model
+
+var updateUser = require('./routes/updateUser');
 
 //PASSPORT original before jtw strategy
 // var passport = require("passport");
@@ -76,6 +82,10 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
                                    process.env.PLAID_SECRET,
                                    plaid.environments.tartan);
 
+
+var fs = require('fs');
+// Requires controller  https://github.com/danialfarid/ng-file-upload/wiki/Node-example
+UserController = require('./modules/UserController');
 
 // //EMAIL VARIFICATION
 // nev.configure({
@@ -188,6 +198,12 @@ app.get('/dashboard', passport.authenticate('jwt', { session: false }), function
 app.use('/api', apiRoutes);
 app.use('/epirts', passport.authenticate('jwt', { session: false }), account);
 
+// Example endpoint https://github.com/danialfarid/ng-file-upload/wiki/Node-example
+// app.use('/updateUser/saveUserIdentityDocument', passport.authenticate('jwt', { session: false }), multipartyMiddleware, UserController.uploadFile);
+// app.post('/upload', multipartMiddleware, function(req, resp) {
+//   console.log('req.body, req.files::',req.body, req.files);
+//   // don't forget to delete all req.files when done
+// });
 
 // Protect chat routes with JWT
 // GET messages for authenticated user
@@ -206,15 +222,50 @@ app.post('/stripecc', passport.authenticate('jwt', { session: false }), function
   // console.log('req.body:', req.body);
   console.log('req.body:', req.body);
   console.log('source: req.body.id::', req.body.token);
+  var Connected_stripe_ID = req.user.epirts.id;
 
-  stripe.customers.createSource(req.user.epirts.customerID,
-    //"cus_8aZsCveeEh7TX8",
-    {source: req.body.token/*"tok_18GtiTDfqZ6t9CGDQUYAYBpH"*/},
-    function(err, card) {
-      console.log('card::', card);
-      // asynchronously called
-    }
+  var stripe = require("stripe")(
+    req.user.epirts.keys.secret
   );
+
+  stripe.accounts.createExternalAccount(
+  Connected_stripe_ID,
+  {external_account: req.body.token},
+  function(err, bank_account) {
+    // asynchronously called
+    console.log('bank_account::', bank_account);
+  }
+  ).then(function (response) {
+      console.log(' stripe plaidPublic_token response:::: ', response);
+      // console.log('token created for card ending in ', response.card.last4);
+      User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.response, account: req.user.epirts.account} }, function(err, user) {
+        if (err) throw err;
+        // we have the updated user returned to us
+        console.log('after saving user"s stripe info oooo',user);
+      });
+    });
+
+  // stripe.accounts.createSource(Connected_stripe_ID,
+  //   //"cus_8aZsCveeEh7TX8",
+  //   {source: req.body.token/*"tok_18GtiTDfqZ6t9CGDQUYAYBpH"*/},
+  //   function(err, card) {
+  //     if (err) {
+  //       console.log('err::', err);
+  //     }
+  //     console.log('card::', card);
+  //     // asynchronously called
+  //   }
+  // );
+
+
+  // stripe.customers.createSource(req.user.epirts.customerID,
+  //   //"cus_8aZsCveeEh7TX8",
+  //   {source: req.body.token/*"tok_18GtiTDfqZ6t9CGDQUYAYBpH"*/},
+  //   function(err, card) {
+  //     console.log('card::', card);
+  //     // asynchronously called
+  //   }
+  // );
 
   // Work.find({$or : [{'customer_id': req.user._id}, {'contractor_id': req.user._id}]}, function(err, messages) {
   //   if (err)
@@ -222,11 +273,15 @@ app.post('/stripecc', passport.authenticate('jwt', { session: false }), function
   //
   //   res.json(messages);
   // });
+  res.json({message: "hi from server"});
+
 });
 
 
 app.post('/stripeMicro', passport.authenticate('jwt', { session: false }), function(req, res) {
-  console.log('req.user:', req.user);
+  console.log('req.user::::', req.user);
+  console.log('req.body::::', req.body);
+
   var deposit = req.body;
   deposit.one = (deposit.one.length && deposit.one[0] == '.') ? deposit.one.slice(1) : deposit.one;
   deposit.two = (deposit.two.length && deposit.two[0] == '.') ? deposit.two.slice(1) : deposit.two;
@@ -517,10 +572,7 @@ app.post('/bdays', function(req, res){
   res.send({mesg: 'hi', req: req.body});
 });
 
-app.post('/saveUser', passport.authenticate('jwt', { session: false }), function(req, res){
-  console.log('inside /saveUser  on server, req.body:', req.body);
-  res.send({mesg: 'hi', req: req.body});
-});
+app.use('/updateUser', passport.authenticate('jwt', { session: false }), updateUser );
 
 app.get('/logout', function(req, res){
   console.log('inside /logout on server before LOGOUT', req.user);
