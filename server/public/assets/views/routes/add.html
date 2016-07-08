@@ -7,7 +7,7 @@
         <div layout-gt-sm="row">
           <md-input-container class="md-block" flex-gt-sm>
             <label>Field</label>
-            <md-select ng-model="work.type">
+            <md-select ng-model="work.type" required="required">
               <md-option ng-repeat="work in works" >
                 {{work}}
               </md-option>
@@ -17,7 +17,7 @@
         <div layout-gt-sm="row">
           <md-input-container class="md-block" flex-gt-sm>
             <label>Language</label>
-            <md-select ng-model="work.language">
+            <md-select ng-model="work.language" required="required">
               <md-option ng-repeat="language in languages" >
                 {{language}}
               </md-option>
@@ -35,6 +35,7 @@
           ng-model="work.date"
           ng-model-options="{ updateOn: 'blur' }"
           oninvalid="this.setCustomValidity('Witinnovation')"
+          required="required"
           >
           <p class="dateErrorMessage">{{dateErrorMessage_start}}</p>
 
@@ -72,6 +73,7 @@
       ng-model="work.endDateTime"
       ng-model-options="{ updateOn: 'blur' }"
       ng-keyup="resetDateErrorMessage()"
+      required="required"
       >
       <p class="dateErrorMessage">{{dateErrorMessage_end}}</p>
     </md-input-container>
@@ -90,7 +92,7 @@
             		   pa-options="paOptions"
             		   pa-on-place-ready="placesCallback"
             		   pa-trigger="paTrigger"
-            			/>
+            			required="required"/>
           </md-input-container>
         		<md-button ng-click="paTrigger()">Send</md-button>
           </div>

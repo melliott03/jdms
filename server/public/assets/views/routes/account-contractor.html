@@ -492,48 +492,6 @@
 </md-content>
 <!-- end of category -->
 
-<div ng-controller="XAccountCtrl2" ng-cloak>
-  <md-toolbar class="md-theme-light">
-    <h2 class="md-toolbar-tools">
-      <span class="account-page-headers">Add People</span>
-    </h2>
-  </md-toolbar>
-  <md-content>
-    <md-list>
-      <md-list-item class="md-3-line xeditablecontainerInner" >
-        <div class="md-list-item-text ">
-
-          <!-- START INVITE -->
-          <strong>
-            Invite others to join your company
-          </strong>
-          <form action="/register" method="post">
-
-            <md-input-container>
-              <label for="email">EMAIL: </label>
-              <input type="email" name="email" id="email" class="md-block" flex-gt-sm required/>
-            </md-input-container>
-
-            <input type="text" name="action" value="invite" hidden/>
-            <div class="form-row">
-              <label>
-                <span>Define User Role</span>
-              </label>
-            </div>
-            <input type="radio" name="privilege_role" value="user" required >User<br>
-            <input type="radio" name="privilege_role" value="admin" required >Admin<br>
-
-            <md-button class="md-raised md-primary" type="submit" value="Register">send invite</md-button>
-
-          </form>
-
-      </div>
-      <md-button class="md-secondary">respond</md-button>
-      <md-divider ng-if="!$last"></md-divider>
-    </md-list-item>
-  </md-list>
-</md-content>
-<!-- begin new category -->
 
 
 

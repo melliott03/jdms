@@ -52,8 +52,12 @@ myApp.config(["$routeProvider", function($routeProvider){
           templateUrl: "/assets/views/routes/terms.html",
           controller: "ShowController"
       }).
-      when("/account", {
-          templateUrl: "/assets/views/routes/account.html",
+      when("/accountCont", {
+          templateUrl: "/assets/views/routes/account-contractor.html",
+          controller: "ShowController"
+      }).
+      when("/accountCust", {
+          templateUrl: "/assets/views/routes/account-customer.html",
           controller: "ShowController"
       }).
       otherwise({
@@ -61,95 +65,133 @@ myApp.config(["$routeProvider", function($routeProvider){
       });
 }]);
 
+// //START PLAID RE STUFF
+// myApp.config([
+//      'plaidLinkProvider',
+//
+//      function(plaidLinkProvider) {
+//          plaidLinkProvider.init({
+//            selectAccount: true,
+//              clientName: 'My App',
+//              env: 'tartan',
+//              key: 'test_key',
+//              product: 'auth'
+//          });
+//      }
+//  ])
+//
+//  .controller('mainPlaidCtrl', [
+//      '$scope',
+//      'plaidLink',
+//
+//      function($scope, plaidLink) {
+//          $scope.token = '';
+//          $scope.plaidIsLoaded = plaidLink.isLoaded;
+//
+//          plaidLink.create({
+//              onSuccess: function(token, metadata) {
+//                  $scope.token = token;
+//                  console.log('metadata', metadata);
+//              },
+//              onExit: function() {
+//                  console.log('user closed');
+//              }
+//          });
+//
+//          $scope.openPlaid = function() {
+//              plaidLink.open();
+//          };
+//      }
+//  ]);
+// //END PLAID RE STUFF
+
 // PLAID stuff
-myApp.config([
-        'plaidLinkProvider',
-
-        function(plaidLinkProvider) {
-            plaidLinkProvider.init({
-                selectAccount: true,
-                clientName: 'NowLanguage',
-                env: 'tartan',
-                key: '09b483e7f2a23fc9ebc47dd904323f', //test_key
-                product: 'auth',
-                onLoad: function() {
-                  console.log('modal loaded');
-                  // The Link module finished loading.
-                },
-                onSuccess: function(public_token, metadata) {
-                    // $scope.token = public_token;
-                    // var dialp = {};
-                    // dialp.public_token = public_token;
-                    // dialp.metadata = metadata.account_id;
-                    // PlaidService.sendToken(plaid);
-                    // console.log('plaid returned plaid::', plaid);
-
-                    console.log('public_token returned token::', public_token);
-                    console.log('metadata returned token::', metadata);
-                    alert('success plaid', public_token);
-                    // $http.post("/updateUser/saveUserPlaidToken", plaidSuccessObject).then(function(response){
-                    //   console.log('in controller back from sending Token', response);
-                    // });
-                    //
-                    // console.log('metadata returned token::', metadata);
-                    // $.post("/updateUser/saveUserPlaidToken",
-                    // {
-                    //   token: public_token,
-                    //   account_id: metadata.account_id
-                    // });
-                    // console.log('public returned metadata:', metadata);
-                    // sendDataToBackendServer({
-                    //   public_token: public_token,
-                    //   account_id: metadata.account_id
-                    // });
-                }
-            });
-        }
-    ]).controller('plaidCtrl', [
-        '$http',
-        '$scope',
-        'plaidLink',
-        'PlaidService',
-
-        function($http, $scope, plaidLink, PlaidService) {
-            var plaidService = PlaidService;
-            $scope.plaidObject = {};
-            $scope.sendDataToBackend = function(plaidSuccessObject){
-              console.log('plaidSuccessObject in controller', plaidSuccessObject);
-              $http.post("/authenticate", plaidSuccessObject).then(function(response){
-                console.log('in controller back from sending Token', response);
-              });
-            };
-            $scope.sendTokens = plaidService.sendToken;
-            $scope.token = '';
-            $scope.plaidIsLoaded = plaidLink.isLoaded;
-
-            // plaidLink.create({}, function (public_token, metadata) {
-            // console.log('token', public_token);
-            // console.log('metadata', metadata); // undefined
-            // });
-
-            plaidLink.create({
-                onSuccess: function(public_token, metadata) {
-                    $scope.token = public_token;
-                    var plaid = {};
-                    plaid.public_token = public_token;
-                    // plaid.account_id = metadata.account_id;
-                    plaidService.sendToken(plaid);
-                    console.log('public returned token:',plaid);
-                    // console.log('public returned metadata:', metadata);
-
-                },
-                onExit: function() {
-                    console.log('user closed');
-                }
-            });
-
-            $scope.openPlaid = function(bankType) {
-                plaidLink.open(bankType);
-            };
-        }
-    ]);
+// myApp.config([
+//         'plaidLinkProvider',
+//
+//         function(plaidLinkProvider) {
+//             plaidLinkProvider.init({
+//                 clientName: 'NowLanguage',
+//                 env: 'tartan',
+//                 key: '09b483e7f2a23fc9ebc47dd904323f', //test_key or 09b483e7f2a23fc9ebc47dd904323f
+//                 product: 'auth',
+//                 onLoad: function() {
+//                   console.log('modal loaded');
+//                   // The Link module finished loading.
+//                 }
+//             });
+//         }
+//     ]).controller('plaidCtrl', [
+//         '$scope',
+//         'plaidLink',
+//         // ,
+//         // '$http',
+//         // 'PlaidService',
+//
+//         function($scope, plaidLink) { //, $http, PlaidService
+//           $scope.token = '';
+//            $scope.plaidIsLoaded = plaidLink.isLoaded;
+//
+//            plaidLink.create({
+//                onSuccess: function(token) {
+//                    $scope.token = token;
+//                },
+//                onExit: function() {
+//                    console.log('user closed');
+//                }
+//            });
+//
+//            $scope.openPlaid = function(bankType) {
+//                plaidLink.open(bankType);
+//            };
+//             // // var plaidService = PlaidService;
+//             // // $scope.plaidObject = {};
+//             // // $scope.sendDataToBackend = function(plaidSuccessObject){
+//             // //   console.log('plaidSuccessObject in controller', plaidSuccessObject);
+//             // //   $http.post("/authenticate", plaidSuccessObject).then(function(response){
+//             // //     console.log('in controller back from sending Token', response);
+//             // //   });
+//             // // };
+//             // // $scope.sendTokens = plaidService.sendToken;
+//             // // $scope.token = '';
+//             // // $scope.plaidIsLoaded = plaidLink.isLoaded;
+//             //
+//             // plaidLink.create({}, function (public_token, metadata) {
+//             // console.log('token', public_token);
+//             // console.log('metadata', metadata); // undefined
+//             // });
+//             //
+//             // plaidLink.create({
+//             //     selectAccount: true,
+//             //     longtail: true,
+//             //     onSuccess: function(public_token, metadata) {
+//             //         $scope.token = public_token;
+//             //         $scope.metadata = metadata;
+//             //         var plaid = {};
+//             //         plaid.public_token = public_token;
+//             //         plaid.account_id = metadata;
+//             //         plaidService.sendToken(plaid);
+//             //         console.log('public returned token:',plaid);
+//             //         // console.log('public returned metadata:', metadata);
+//             //
+//             //     },
+//             //     // success callback
+//             //     function(token) {
+//             //         console.log('token: ', token);
+//             //
+//             //         // pass the token to your sever to retrieve an `access_token`
+//             //         // see https://github.com/plaid/link#step-3-write-server-side-handler
+//             //     },
+//             //     onExit: function() {
+//             //         console.log('user closed');
+//             //     }
+//             });
+//
+//             $scope.openPlaid = function(bankType) {
+//                 plaidLink.open(bankType);
+//             };
+//         }
+//     ]);
 
 // angular-stripe stuff
 myApp.config(function (stripeProvider) {
@@ -436,6 +478,22 @@ myApp.controller('XAccountCtrl2', ["$scope", "$location", '$filter', '$http', "W
       }
     });
   };
+
+  $scope.saveCustomerAddress = function() {
+    // $scope.user already updated!
+    var logedinUser = $scope.logedinUser.response;
+    console.log('logedinUser', logedinUser);
+    return $http.post('/updateCustomer/saveCustomerAddress', logedinUser).error(function(err) {
+      if(err.field && err.msg) {
+        // err like {field: "name", msg: "Server-side error for this username!"}
+        $scope.editableForm.$setError(err.field, err.msg);
+      } else {
+        // unknown error
+        $scope.editableForm.$setError('name', 'Unknown error!');
+      }
+    });
+  };
+
   $scope.saveUserPhoneEmail = function() {
     // $scope.user already updated!
     var logedinUser = $scope.logedinUser.response;
@@ -591,6 +649,23 @@ myApp.controller('XAccountCtrl2', ["$scope", "$location", '$filter', '$http', "W
     });
   };
 
+
+  $scope.updateStripeCustomerGeneral = function() {
+    // $scope.user already updated!
+    var logedinUser = $scope.logedinUser.response;
+    console.log('logedinUser', logedinUser);
+    return $http.post('/updateCustomer/saveCustomerGeneral', logedinUser).error(function(err) {
+      if(err.field && err.msg) {
+        // err like {field: "name", msg: "Server-side error for this username!"}
+        $scope.editableForm.$setError(err.field, err.msg);
+      } else {
+        // unknown error
+        $scope.editableForm.$setError('name', 'Unknown error!');
+      }
+    });
+  };
+
+
   $scope.saveUserSSDOBNAME = function() {
     // $scope.user already updated!
     var logedinUser = $scope.logedinUser.response;
@@ -641,6 +716,39 @@ myApp.controller('XAccountCtrl2', ["$scope", "$location", '$filter', '$http', "W
         });
     };
     // END STRIPE CREDIT CARDS
+
+
+
+// START STRIPE CREDIT CARDS
+  $scope.customerChargeCard = function () {
+    console.log('in controller $scope.payment.card::', $scope.payment.card);
+    $scope.payment.card.currency = 'usd';
+    return stripe.card.createToken($scope.payment.card)
+      .then(function (response) {
+        console.log('token created response ', response);
+        console.log('token created for card ending in ', response.card.last4);
+        console.log('$scope.payment::', $scope.payment);
+        var card = {};
+        card.token = response.id;
+        // cardToken.payment = angular.copy($scope.payment);
+        // var payment = angular.copy($scope.payment);
+        // payment.card = void 0;
+        // payment.token = response.id;
+        return $http.post('/updateCustomer/stripecc', card);
+      })
+      .then(function (payment) {
+        console.log('successfully submitted payment for $', payment.amount);
+      })
+      .catch(function (err) {
+        if (err.type && /^Stripe/.test(err.type)) {
+          console.log('Stripe error: ', err.message);
+        }
+        else {
+          console.log('Other error occurred, possibly with your API', err.message);
+        }
+      });
+  };
+  // END STRIPE CREDIT CARDS
 
 
     // START OF NG-FILE-UPLOAD STUFF
@@ -701,4 +809,19 @@ myApp.factory("showmeFactory", ["$http", "$location", function($http, $location)
     // return {
     //     showme : showme
     // };
+}]);
+
+
+myApp.controller('plaidController', ['$scope', 'PlaidService', function($scope, PlaidService) {
+            console.log('plaidController loaded');
+            var plaidService = PlaidService;
+            $scope.plaidObject = {};
+            $scope.inside = "inside words";
+            $scope.sendDataToBackend = function(plaidSuccessObject){
+              console.log('plaidSuccessObject in controller', plaidSuccessObject);
+              $http.post("/authenticate", plaidSuccessObject).then(function(response){
+                console.log('in controller back from sending Token', response);
+              });
+            };
+            $scope.sendTokens = plaidService.sendToken;
 }]);

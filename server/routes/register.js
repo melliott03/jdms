@@ -14,12 +14,12 @@ var nev2nd = require('email-verification')(mongoose);
 var createStripeCustomer = function(user, req){
   stripe.customers.create({
     description: 'Customer for work app',
-    source:  bank_account_token, // obtained with plaid
-    email: req.user.email
+    // source:  bank_account_token, // obtained with plaid
+    email: user.email
   }, function(err, customer) {
     console.log('customer::',customer);
     // asynchronously called
-    User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: customer.id, customer: customer} }, function(err, user) {
+    User.findOneAndUpdate({ _id: user._id }, { epirts: {customerID: customer.id, customer: customer} }, function(err, user) {
       if (err) throw err;
 
       // we have the updated user returned to us
@@ -54,7 +54,7 @@ var createStripeAccount = function(user, req){
         }, function(err, account) {
           if (err) {console.log('stripe err::',err);}
           console.log('account:::', account);
-          User.findOneAndUpdate({ _id: user._id }, { epirts: {id: account.id, keys: account.keys, account: account} }, function(err, user) {
+          User.findOneAndUpdate({ _id: user._id }, { epirts: {accountID: account.id, keys: account.keys, account: account} }, function(err, user) {
             if (err) throw err;
 
             // we have the updated user returned to us
@@ -77,7 +77,7 @@ var createStripeAccount = function(user, req){
 
 //EMAIL VARIFICATION
 nev.configure({
-   verificationURL: 'https://80cafa98.ngrok.io/register/email-verification/${URL}',
+   verificationURL: process.env.APPURL+'/register/email-verification/${URL}',
    persistentUserModel: User,
    tempUserCollection: 'work_tempusers',
 
@@ -116,9 +116,9 @@ router.get('/email-verification/:URL', function(req, res) {
     if (user) {
 
       //create stripe account object for contractor or customer object customer
-      if (req.user.role == 'customer') {
+      if (user.role == 'customer') {
         createStripeCustomer(user, req);
-      } else if (req.user.role == 'contractor') {
+      } else if (user.role == 'contractor') {
         createStripeAccount(user, req);
       }
 
@@ -289,7 +289,7 @@ if (req.body.action === 'signup') {
 }else if(req.body.action === 'invite') {
   //EMAIL VARIFICATION
   nev2nd.configure({
-     verificationURL: 'https://80cafa98.ngrok.io/register/invite-verification/${URL}',
+     verificationURL: process.env.APPURL+'/register/invite-verification/${URL}',
      persistentUserModel: User,
      tempUserCollection: 'user_tempinvites',
       tempUserModel: User_TempInvited,

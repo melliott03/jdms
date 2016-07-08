@@ -27,6 +27,7 @@ var mongoose = require("mongoose");
 var nev = require('email-verification')(mongoose); //this might need to be placed after the user model
 
 var updateUser = require('./routes/updateUser');
+var updateCustomer = require('./routes/updateCustomer');
 
 //PASSPORT original before jtw strategy
 // var passport = require("passport");
@@ -573,6 +574,7 @@ app.post('/bdays', function(req, res){
 });
 
 app.use('/updateUser', passport.authenticate('jwt', { session: false }), updateUser );
+app.use('/updateCustomer', passport.authenticate('jwt', { session: false }), updateCustomer );
 
 app.get('/logout', function(req, res){
   console.log('inside /logout on server before LOGOUT', req.user);

@@ -8,9 +8,8 @@ var path = require("path");
 var User = require("../models/user");
 var geocoder = require('geocoder');
 var mongoose = require("mongoose");
-// var stripe = require("stripe")("sk_test_SfT5Rf2DMVfT0unJf7aIIskQ");
-// var stripe = require("stripe")('pk_test_C6pNjUH41hCQ87RXmeLBIAa5');
-// var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
+
+var stripe = require("stripe");
 
 var plaid = require('plaid');
 
@@ -19,47 +18,27 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
                                    plaid.environments.tartan);
 
 
-router.post("/saveUserAddress", function(req, res, next){
+
+                                              //  // Not recommended: setting global API key state
+                                  //  var stripe = require('stripe')(CONNECTED_ACCOUNT_SECRET_KEY);
+                                  //  stripe.customers.create({
+                                  //    description: "example@stripe.com"
+                                  //  });
+                                   //
+                                              //  // Recommended: sending API key with every request
+                                  //  stripe.customers.create(
+                                  //    { description: "example@stripe.com" },
+                                  //    { api_key: CONNECTED_ACCOUNT_SECRET_KEY } // account's access token from the Connect flow
+                                  //  );
+
+router.post("/saveCustomerAddress", function(req, res, next){
   console.log('Geocoding, req.body::::',req.body);
   var address = req.body.address;
-  geocoder.geocode(address, function ( err, geocodedData ) { //req.body.address
-    if (err) throw err;
 
-    console.log('After Geocoding, geocodedData::::',geocodedData);
-
-    var Connected_stripe_ID = req.user.epirts.id;
-    var stripe = require("stripe")(
-      req.user.epirts.keys.secret
-    );
-
-    stripe.accounts.update(Connected_stripe_ID, {
-      legal_entity: {
-        address: {
-              city:  'Minneapolis',
-              line1:  '5650 Humboldt Ave N',
-              postal_code: '55430',
-              state: 'MN'
-            }
-      }
-    }).then(function (response) {
-        console.log(' stripe response ', response);
-        // console.log('token created for card ending in ', response.card.last4);
-        User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: response} }, function(err, user) {
-          if (err) throw err;
-          // we have the updated user returned to us
-          console.log('after saving user"s stripe info oooo',user);
-        });
-      });
-    var geocodedData = geocodedData.results[0].geometry.location;
-    var geo = [];
-        geo[0]=geocodedData.lat;
-        geo[1]=geocodedData.lng;
-      // User.findOneAndUpdate({ _id: req.user._id }, { geo: {customerID: customer.id} }, function(err, user) {
-      User.findOneAndUpdate({ _id: req.user._id }, { geo: geo, address: address  }, function(err, user) {
+      User.findOneAndUpdate({ _id: req.user._id }, { address: address  }, function(err, user) {
         console.log('after saving user"s geo data, user::::',user);
       });
-      res.json({geocodedData: geocodedData, address: address})
-  });//END geocoder.geocode
+      res.json({address: address})
 });
 
 router.post("/saveUserPhoneEmail", function(req, res, next){
@@ -72,44 +51,14 @@ router.post("/saveUserPhoneEmail", function(req, res, next){
       });
 });
 
-router.post("/saveUserGeneral", function(req, res, next){
-  console.log('Saving Stripe General, req.body::::',req.body);
-
-  if (req.user.role == "customer") {
-
-  } else if (req.user.role == "contractor") {
-    var Connected_stripe_ID = req.user.epirts.id;
-    console.log('req.user::::',req.user);
-    console.log('req.user.epirts.id::::',req.user.epirts.id);
-    console.log('Connected_stripe_ID::::',Connected_stripe_ID);
-    console.log('req.body.business_type::::',req.body.business_type);
-
-      var display_name = req.user.display_name,
-      country = req.body.country,
-      currency = req.body.currency;
-
-    var stripe = require("stripe")(
-      req.user.epirts.keys.secret
-    );
-
-    stripe.accounts.update(Connected_stripe_ID, {
-      support_phone: "555-867-9999",
-      legal_entity: {
-        // additional_owners: 'Michelle Elliott',
-        // type: req.body.business_type,
-        type: 'company'
-      }
-    }).then(function (response) {
-        console.log(' stripe response ', response);
-        // console.log('token created for card ending in ', response.card.last4);
-        User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: response} }, function(err, user) {
-          if (err) throw err;
-          // we have the updated user returned to us
-          console.log('after saving user"s stripe info oooo',user);
-        });
-      });
-  } //end of if(req.user.role == "contractor")
-
+router.post("/saveCustomerGeneral", function(req, res, next){
+  console.log('In saveCustomerGeneral',req.body);
+  var display_name = req.body.display_name;
+  User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customer.id, customer: req.user.epirts.customer, customer_Display_Name: display_name } }, function(err, user) {
+    if (err) throw err;
+    // we have the updated user returned to us
+    console.log('after saving user"s stripe info oooo',user);
+  });
     res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
 });
 
@@ -260,27 +209,43 @@ router.post('/stripecc', passport.authenticate('jwt', { session: false }), funct
   // console.log('req.body:', req.body);
   console.log('req.body:', req.body);
   console.log('source: req.body.id::', req.body.token);
-  var Connected_stripe_ID = req.user.epirts.id;
 
   var stripe = require("stripe")(
-    req.user.epirts.keys.secret
-  );
+  "sk_test_SfT5Rf2DMVfT0unJf7aIIskQ"
+);
 
-  stripe.accounts.createExternalAccount(
-  Connected_stripe_ID,
-  {external_account: req.body.token},
-  function(err, bank_account) {
+  stripe.customers.createSource(req.user.epirts.customerID, {
+    source: req.body.token
+  }, function(err, card) {
+    console.log('customer after update::', card);
     // asynchronously called
-    console.log('bank_account::', bank_account);
-  }
-  ).then(function (response) {
-      console.log(' stripe plaidPublic_token response:::: ', response);
+    if (err) {
+      console.log(' stripe err::', err);
+      console.error('console.error::', err);
+    }
+    console.log(' stripe customer ', card);
+
+    stripe.customers.retrieve(
+      req.user.epirts.customerID,
+      function(err, customer) {
+        // asynchronously called
+        User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
+          if (err) throw err;
+          // we have the updated user returned to us
+          console.log('after saving user"s stripe info oooo',user);
+        });
+      }
+    );
+
+
+  }).then(function (response) {
+      console.log(' stripe card add to customer response:::: ', response);
       // console.log('token created for card ending in ', response.card.last4);
-      User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.response, account: req.user.epirts.account} }, function(err, user) {
-        if (err) throw err;
-        // we have the updated user returned to us
-        console.log('after saving user"s stripe info oooo',user);
-      });
+      // User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.response, account: req.user.epirts.account} }, function(err, user) {
+      //   if (err) throw err;
+      //   // we have the updated user returned to us
+      //   console.log('after saving user"s stripe info oooo',user);
+      // });
     });
 
   // stripe.accounts.createSource(Connected_stripe_ID,
