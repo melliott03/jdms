@@ -453,11 +453,11 @@ form[name="editableForm"] select {
   -ms-user-select: none;
   user-select: none;
 }
-img {
+/*img {
   position: absolute;
   left: 0;
   top: 0;
-}
+}*/
 
 .signature-pad {
   position: absolute;
@@ -465,7 +465,17 @@ img {
   top: 0;
   width:400px;
   height:200px;
+
 }
 /**/
+
+.signature-img {
+  display: inline-block;
+  height: 30px;
+  width: auto;
+  /*vertical-align: baseline;*/
+  vertical-align: text-bottom;
+  border: none;
+}
 
 </style>

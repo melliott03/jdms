@@ -128,13 +128,10 @@
     </tr>
       <tr ng-if="work.expanded" ng-repeat-end="work in works.response">
             <td colspan="7" >
-              <div class="" style=" width:100%; ">
+              <div class="" >
                 <!-- <img style="height:3%; width:6%; display:inline-block;" src="{{work.work_signatures.signature}}" alt="customer sig" /> -->
 
-                <div>Date Created: {{ work.date_created }} </div>
-                <div>Contractor ID: {{ work.contractor_id }} </div>
-                <div>WEATHER:  {{ work.weather[0].daily.data[0].summary}} </div>
-                <!-- <img stSafeSrc="{{work.work_signatures.signature}}" alt="" border=3 height=100 width=300></img> -->
+            <!-- <img stSafeSrc="{{work.work_signatures.signature}}" alt="" border=3 height=100 width=300></img> -->
                 <span class="">
                   <!-- <div> <i class="glyphicon glyphicon-eye-open"></i> <p> Customer Signature: <img style="height:3%; width:6%; display:inline-block; margin:auto;" ng-src="{{work.work_signatures.signature}}" alt="customer sig">  </p>  | Date Signed: {{ work.work_signatures.date }} </div> -->
               </span>
@@ -149,10 +146,19 @@
           </md-card-title-text>
         </md-card-title>
         <md-card-content>
-          <p>
-            The titles of Washed Out's breakthrough song and the first single from Paracosm share the <img ng-src="{{work.work_signatures.signature}}" class="md-card-image" style="display:inline-block;" alt="Washed Out" height="auto" width="150px"/>
-            two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
-          </p>
+          <div>Date Created: {{ work.date_created }} </div>
+          <div>Contractor ID: {{ work.contractor_id }} </div>
+          <div>WEATHER:  {{ work.weather[0].daily.data[0].summary}} </div>
+
+          <span>
+            Approval Date: {{work.work_signatures.date}} Name: {{work.work_signatures.name}} Signature: <img ng-src="{{work.work_signatures.signature}}" class="md-card-image signature-img"  alt="Customer Signature" />
+          </span>
+
+          <span class="">
+            <ng-map zoom="11" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP" style="height:20%; width:50%; display:inline-block;">
+             <marker position="{{ work.geo }}"  centered="true"></marker>
+           </ng-map>
+         </span>
         </md-card-content>
       </md-card>
 
@@ -170,11 +176,7 @@
                 inline-edit-on-click
                 inline-edit-callback="updateWorkEntered(work)" />
               </div>
-              <span class="">
-                <ng-map zoom="11" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP" style="height:100%; width:50%; display:inline-block;">
-                 <marker position="{{ work.geo }}"  centered="true"></marker>
-               </ng-map>
-             </span>
+
 
               <!-- TERRAIN TRAFFIC SATELLITE CONSTANT -->
            </td>
