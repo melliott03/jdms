@@ -120,62 +120,66 @@ router.post("/estimate", function(req,res){
 
 router.route("/complete")
 .put(function(req, res) {
-  console.log('INSIDE work/complete on server req.body:', req.body._id);
-  Work.findById(req.body._id, function(err, work){
-    console.log('INSIDE complete on server work:', work);
+  console.log('INSIDE work/complete on server req.body:', req.body);
+  Work.findById(req.body.id, function(err, work){
+    console.log('INSIDE complete on server found work item:', work);
     if(err){
       console.log(err);
     }
+    var date_now = Date.now();
+    console.log('date_now::', date_now);
+
+    work.work_signatures = {signature: req.body.sig,  date: date_now};
     work.status = 'completed';
     // save the work
     work.save(function(err, work) {
-      console.log('WORK UPDATED WITH COMPLETE !!!!!!!');
-      postToPayable();
-      stripeChargePay(work);
+      console.log('WORK UPDATED WITH COMPLETE !!!!!!!', work);
+      // postToPayable();
+      // stripeChargePay(work);
       if (err)
       res.send(err);
 
       //find the Customer and charge them
       //find the Contractor and pay them
-      User.findById('574b41752ec3c13faacf20f1', function(err, contractor){
-        console.log('INSIDE accept on server work.contractor_id contractor:', contractor);
-        if(err){
-          console.log(err);
-        }
-        console.log('contractor for epirts::',contractor);
-
-        stripe.charges.create({
-          amount: 1500, // amount in cents, again
-          currency: "usd",
-          description: "Example charge for interpreting",
-          customer: req.user.epirts.customerID, // Previously stored, then retrieved customer
-          destination: contractor.epirts.id,
-          application_fee: 700,
-          metadata: {'work_id': work._id}
-        }, function(err, charge) {
-          console.log('charge::',charge);
-          // Work.findById(req.body._id, function(err, work){
-          //   console.log('INSIDE complete on server work:', work);
-          //   if(err){
-          //     console.log(err);
-          //   }
-          //   work.epirts.charge_id = charge.id;
-          //   // save the work
-          //   work.save(function(err, work) {
-          //     console.log('WORK UPDATED WITH COMPLETE !!!!!!!');
-          //     postToPayable();
-          //     stripeChargePay(work);
-          //     if (err)
-          //     res.send(err);
-          // });
-          // });
-          if (err && err.type === 'StripeCardError') {
-            // The card has been declined
-          }
-
-
-        });
-      });
+      // User.findById('574b41752ec3c13faacf20f1', function(err, contractor){
+      //   console.log('INSIDE accept on server work.contractor_id contractor:', contractor);
+      //   if(err){
+      //     console.log(err);
+      //   }
+      //   console.log('contractor for epirts::',contractor);
+      //
+      //   stripe.charges.create({
+      //     amount: 1500, // amount in cents, again
+      //     currency: "usd",
+      //     description: "Example charge for interpreting",
+      //     customer: req.user.epirts.customerID, // Previously stored, then retrieved customer
+      //     destination: contractor.epirts.id,
+      //     application_fee: 700,
+      //     metadata: {'work_id': work._id}
+      //   }, function(err, charge) {
+      //     console.log('charge::',charge);
+      //     // Work.findById(req.body._id, function(err, work){
+      //     //   console.log('INSIDE complete on server work:', work);
+      //     //   if(err){
+      //     //     console.log(err);
+      //     //   }
+      //     //   work.epirts.charge_id = charge.id;
+      //     //   // save the work
+      //     //   work.save(function(err, work) {
+      //     //     console.log('WORK UPDATED WITH COMPLETE !!!!!!!');
+      //     //     postToPayable();
+      //     //     stripeChargePay(work);
+      //     //     if (err)
+      //     //     res.send(err);
+      //     // });
+      //     // });
+      //     if (err && err.type === 'StripeCardError') {
+      //       // The card has been declined
+      //     }
+      //
+      //
+      //   });
+      // });
 
       // res.json({ message: 'WORK UPDATED WITH COMPLETE !!!!!!!' });
     });
@@ -258,12 +262,13 @@ router.post("/", function(req,res){
         console.log('H E L L O data inside forecast.js: ', data);
         // console.log('data inside forecast.js: ', data);
         // return data;
+        var work_signatures = {};
         var workWeather =[];
         workWeather.push(data);
         //save work instence with geocode and weather info
         // console.log('W E A T H E R !!! !!!!!  ::  ', res.headers);
 
-        var addedWork = new Work({"money" : money, "date_created" : date_created, "type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id" : contractor_id, geo : geo, weather : workWeather });
+        var addedWork = new Work({"work_signatures" : work_signatures, "money" : money, "date_created" : date_created, "type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id" : contractor_id, geo : geo, weather : workWeather });
 
         addedWork.save(function(err, data){
           if(err){

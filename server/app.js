@@ -218,7 +218,7 @@ app.get('/chat', passport.authenticate('jwt', { session: false }), function(req,
   });
 });
 
-app.post('/stripecc', passport.authenticate('jwt', { session: false }), function(req, res) {
+app.post('/stripecc', passport.authenticate('jwt', { session: false }), function(req, res) {//get rid of this, it is now in /updateCustomer and needs to be in /updateUser
   console.log('req.user:', req.user);
   // console.log('req.body:', req.body);
   console.log('req.body:', req.body);

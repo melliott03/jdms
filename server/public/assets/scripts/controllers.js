@@ -156,11 +156,16 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkSe
 
     $scope.logedinUser = WorkService.userObject;
 
+// ANGULAR-STRAP  ANGULAR-STRAP STUFF
+    $scope.modal = {
+      "title": "Title",
+      "content": "Hello Modal<br />This is a multiline message!"
+    };
 
 
 }]);
 
-myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "WorkService", 'uiGridConstants', 'stripe', function($scope, $location, $filter, $http, WorkService, uiGridConstants, stripe){
+myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "WorkService", 'uiGridConstants', 'stripe', '$mdDialog', function($scope, $location, $filter, $http, WorkService, uiGridConstants, stripe, $mdDialog){
   // document.body.addEventListener('DOMSubtreeModified', function(event) {
   //   var targets = document.getElementsByClassName('target');
   //   console.log('targets::',targets);
@@ -325,7 +330,44 @@ myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "
 //     $scope.editmode = $scope.editmode === false ? true: false;
 //   }
 // //END Contenteditable
-}]);
+
+//START $mdDialog
+$scope.showTabDialog = function(ev, work_id) {
+  console.log("Inside showTabDialog function");
+  console.log('work_id', work_id);
+  $scope.work_id = work_id;
+  $scope.work_id = '5345we';
+  $mdDialog.show({
+    controller: DialogController,
+    templateUrl: 'workDialog.tmpl.html',
+    parent: angular.element(document.body),
+    targetEvent: ev,
+    clickOutsideToClose:true,
+    locals: {
+           items: work_id
+         }
+  })
+  .then(function(answer) {
+    $scope.status = 'You said the information was "' + answer + '".';
+  }, function() {
+    $scope.status = 'You cancelled the dialog.';
+  });
+};
+function DialogController($scope, $mdDialog, items) {
+  $scope.work_id = items;
+  $scope.hide = function() {
+    $mdDialog.hide();
+  };
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  $scope.answer = function(answer) {
+    $mdDialog.hide(answer);
+  };
+}
+//END $mdDialog
+}]); //END ShowController
+
 // myApp.directive("contenteditable", function() {//PART OF contente
 //   return {
 //     require: "ngModel",
@@ -697,8 +739,6 @@ myApp.controller('XeditableCtrl', ['$scope', '$filter', '$http', function($scope
        }
      });
    };
-
-
 
 //Start http://plnkr.co/edit/BjWwXIlYyyLvRnVwO8m8?p=preview
 $scope.user = {

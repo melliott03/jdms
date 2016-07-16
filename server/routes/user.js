@@ -25,19 +25,19 @@ router.get("/name", function(req,res,next){
   var resUser = {};
   if (req.user.role == 'customer') {
     //UPDATE USER SOURCES IF null
-    if (!req.user.epirts.customer) {
+    // if (!req.user.epirts.customer) {
       stripe.customers.retrieve(
         req.user.epirts.customerID,
         function(err, customer) {
           // asynchronously called
-          User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
+          User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer, customer_display_name: req.user.epirts.customer_display_name} }, function(err, user) {
             if (err) throw err;
             // we have the updated user returned to us
             console.log('after saving user"s stripe info oooo',user);
           });
         }
       );
-    } else {
+    // } else {
       //loop over payment sources take only :
       // exp_month
       // exp_year
@@ -73,15 +73,15 @@ router.get("/name", function(req,res,next){
         geo: req.user.geo,
         role: req.user.role,
         id: req.user._id,
-        display_name: req.user.epirts.customer_Display_Name,
+        display_name: req.user.epirts.customer_display_name,
         sources: {
           total_count: req.user.epirts.customer.sources.total_count,
           data: paymentSourcesNewArray
         }
         // reminderDateTime: reminderDateTime
       }
-    }
-  } else if (req.user.role == 'Contractor') {
+    // }
+  } else if (req.user.role == 'contractor') {
     //UPDATE USER SOURCES IF null
     if (!req.user.epirts.account) {
       stripe.accounts.retrieve(
@@ -96,6 +96,32 @@ router.get("/name", function(req,res,next){
         }
       );
     } else {
+
+      //loop over payment sources take only :
+      // exp_month
+      // exp_year
+      // last4
+      // object
+      var paymentSourcesNewArray = [];
+      if (req.user.epirts.account.external_accounts.data.length > 0) {
+        var paymentSourcesArray = req.user.epirts.account.external_accounts.data;
+        for (var i = 0; i < paymentSourcesArray.length; i++) {
+          var last4 = paymentSourcesArray[i].last4,
+          object = paymentSourcesArray[i].object,
+          exp_month = paymentSourcesArray[i].exp_month,
+          exp_year = paymentSourcesArray[i].exp_year;
+
+          var paymentSourceObject = {
+            last4: last4,
+            object: object,
+            exp_month: exp_month,
+            exp_year: exp_year
+          };
+          paymentSourcesNewArray.push(paymentSourceObject);
+        };
+        console.log('paymentSourcesNewArray', paymentSourcesNewArray);
+      }
+
       resUser = {
         username: req.user.username,
         firstname: req.user.firstname,
@@ -108,7 +134,11 @@ router.get("/name", function(req,res,next){
         geo: req.user.geo,
         role: req.user.role,
         id: req.user._id,
-        epirts: {contractor: 'up'}
+        // display_name: req.user.epirts.customer_display_name,
+        sources: {
+          total_count: req.user.epirts.account.external_accounts.total_count,
+          data: paymentSourcesNewArray
+        }
         // reminderDateTime: reminderDateTime
       }
     }

@@ -1,0 +1,68 @@
+<div ng-controller="ShowController">
+  <!-- <div ng-controller="DialogController"> -->
+
+<md-dialog aria-label="Work Verification">
+
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2></h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-dialog-content style="max-width:800px;max-height:810px; ">
+<p>
+  START TIME
+  END TIME
+  RATE CONTRACTOR
+  PRINT NAME AND SIGN FORM
+</p>
+work_id: {{work_id}}
+<div ng-controller="SignModalCtrl">
+
+<canvas ng-signature-pad="signature" style="background-color: rgba(255, 200, 0, 0.1);"></canvas>
+  <button type="button" name="button" ng-click="done(signature, work_id)">submit</button>
+  <button type="button" name="button" ng-click="clear(signature)">clear</button>
+
+</div>
+
+          <div layout="column" ng-cloak class="md-inline-form">
+            <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+            <form action="/register" method="post">
+                  <md-input-container>
+                <label for="username">USERNAME: </label>
+                <input type="text" name="username" id="username" class="md-block" flex-gt-sm required/>
+                  </md-input-container>
+
+                  <md-input-container>
+                <input type="radio" name="role" value="customer" class="md-block" flex-gt-sm ng-model="content" >Customer<br>
+                <input type="radio" name="role" value="contractor" class="md-block" flex-gt-sm ng-model="content" required>Contractor<br>
+                </md-input-container>
+                  <div ng-show="content == 'contractor'">
+                      <md-input-container>
+                    <!-- <label for="type">FIELD: </label> -->
+                      <select type="text" name="type" id="type" class="md-block" flex-gt-sm >
+                        <option>Accountant</option>
+                        <option>Tutor</option>
+                        <option>Machenic</option>
+                        <option>Plumber</option>
+                        <option>Marketer</option>
+                      </select>
+                      </md-input-container>
+                  </div>
+                  <input type="text" name="action" value="signup" hidden/>
+
+                <md-button class="md-raised md-primary" type="submit" value="Register">Register</md-button>
+
+            </form>
+          </md-content>
+          </div>
+    </md-dialog-content>
+
+
+</md-dialog>
+<!-- </div> -->
+<!-- DialogController -->
+</div><!-- ng-controller="ShowController" -->

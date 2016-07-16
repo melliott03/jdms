@@ -1,3 +1,69 @@
+
+
+<!--  -->
+
+<!--  -->
+<!-- <div ng-controller="SignModalCtrl"> -->
+<!-- <span style="height:300px; width:100%; ">
+<signature-pad accept="accept" clear="clear" style="height:100px; width:100%; "></signature-pad>
+<button ng-click="clear()">Clear signature</button>
+<button ng-click="signature = accept()">Sign</button>
+</span> -->
+<!-- </div> -->
+<!--  -->
+<!-- <div ng-controller="ModalDemoCtrl">
+    <script type="text/ng-template" id="sign.html">
+        <div class="modal-header">
+            <h3 class="modal-title">I'm a modal!</h3>
+        </div>
+        <div class="modal-body">
+            <ul>
+                <li ng-repeat="item in items">
+                    <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
+                </li>
+            </ul>
+            Selected: <b>{{ selected.item }}</b>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+
+    <button type="button" class="btn btn-default" ng-click="open()">Open me!</button>
+    <button type="button" class="btn btn-default" ng-click="open('lg')">Large modal</button>
+    <button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>
+    <button type="button" class="btn btn-default" ng-click="toggleAnimation()">Toggle Animation ({{ animationsEnabled }})</button>
+    <div ng-show="selected">Selection from a modal: {{ selected }}</div>
+</div> -->
+<!--  -->
+
+
+<!-- START SIGNITURE PAD -->
+<!-- <div ng-controller="SignModalCtrl">
+  <script type="text/ng-template" id="sign.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Sign</h3>
+    </div>
+    <div class="modal-body">
+        <signature-pad accept="accept" clear="clear"></signature-pad>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default pull-left" ng-click="clear()">Clear signature</button>
+        <button class="btn btn-default" ng-click="$dismiss()">Cancel</button>
+        <button class="btn btn-primary" ng-click="done()">Sign</button>
+    </div>
+  </script>
+
+  <button type="button" class="btn btn-default" ng-click="open()">Open me!</button>
+  <button type="button" class="btn btn-default" ng-click="open('lg')">Large modal</button>
+  <button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>
+  <button type="button" class="btn btn-default" ng-click="toggleAnimation()">Toggle Animation ({{ animationsEnabled }})</button>
+  <div ng-show="selected">Selection from a modal: {{ selected }}</div>
+</div> -->
+<!-- END SIGNITURE PAD -->
+
+
 <div>
   <div >
   <table st-set-filter="customFilter" st-table="works.response" class="table table-bordered table-striped" wt-responsive-table> <!-- st-sticky-header -->
@@ -54,16 +120,42 @@
         <td >
           <md-button ng-click="cancelWork(work._id)">Cancel</md-button>
           <md-button ng-click="completeWork(work)">completed</md-button>
-
+          <md-button class="md-primary" ng-click="showTabDialog($event, work._id)" >
+            Complete
+          </md-button>
         </td>
 
     </tr>
       <tr ng-if="work.expanded" ng-repeat-end="work in works.response">
             <td colspan="7" >
-              <div class="" style="height:100%; width:100%; ">
+              <div class="" style=" width:100%; ">
+                <!-- <img style="height:3%; width:6%; display:inline-block;" src="{{work.work_signatures.signature}}" alt="customer sig" /> -->
+
                 <div>Date Created: {{ work.date_created }} </div>
                 <div>Contractor ID: {{ work.contractor_id }} </div>
                 <div>WEATHER:  {{ work.weather[0].daily.data[0].summary}} </div>
+                <!-- <img stSafeSrc="{{work.work_signatures.signature}}" alt="" border=3 height=100 width=300></img> -->
+                <span class="">
+                  <!-- <div> <i class="glyphicon glyphicon-eye-open"></i> <p> Customer Signature: <img style="height:3%; width:6%; display:inline-block; margin:auto;" ng-src="{{work.work_signatures.signature}}" alt="customer sig">  </p>  | Date Signed: {{ work.work_signatures.date }} </div> -->
+              </span>
+
+              <md-content class="md-padding" layout-xs="column" layout="row">
+    <div flex-xs="" flex-gt-xs="50" layout="column">
+      <md-card>
+
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Action buttons</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+          <p>
+            The titles of Washed Out's breakthrough song and the first single from Paracosm share the <img ng-src="{{work.work_signatures.signature}}" class="md-card-image" style="display:inline-block;" alt="Washed Out" height="auto" width="150px"/>
+            two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
+          </p>
+        </md-card-content>
+      </md-card>
+
                 <span>Work Details:</span>
                <input class="inputs" style="border-style: none;
               border-width: 0px;

@@ -19,7 +19,7 @@ var createStripeCustomer = function(user, req){
   }, function(err, customer) {
     console.log('customer::',customer);
     // asynchronously called
-    User.findOneAndUpdate({ _id: user._id }, { epirts: {customerID: customer.id, customer: customer} }, function(err, user) {
+    User.findOneAndUpdate({ _id: user._id }, { epirts: {customerID: customer.id, customer: customer, customer_display_name: ''} }, function(err, user) {
       if (err) throw err;
 
       // we have the updated user returned to us

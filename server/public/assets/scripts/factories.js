@@ -61,7 +61,7 @@ myApp.factory("WorkService", ["$http", function($http){
         $http.get("/user/name").then(function(response){
             console.log(response.data);
             userObject.response = response.data;
-            console.log('userObject ', userObject);
+            console.log('userObject in factory', userObject);
         });
     };
 
@@ -201,6 +201,7 @@ myApp.factory("WorkService", ["$http", function($http){
 
     getUser();
     return {
+        getUser : getUser,
         postWork : postWork,
         postedWork : postedWork,
         getWorks : getWorks,
@@ -223,6 +224,7 @@ myApp.factory("WorkService", ["$http", function($http){
         bankMicroDepositsObject:bankMicroDepositsObject,
         estimatePrice : estimatePrice,
         estimatePriceObject : estimatePriceObject
+
     };
 }]);
 
@@ -238,17 +240,30 @@ myApp.factory("AuthenticationService", ["$http", "$location", function($http, $l
     };
 }]);
 
-myApp.factory("PlaidService", ["$http", "$location", function($http, $location){
-
-    var sendToken = function(plaid){
+myApp.factory("PlaidService", ["$http", "$location", "WorkService", function($http, $location, WorkService){
+  var workService = WorkService;
+    var sendCustToken = function(plaid, user){
+      console.log(' plaid in factory before  sending Token', plaid);
       console.log(' plaid in factory before  sending Token', plaid);
 
-       $http.post("/authenticate", plaid).then(function(response){
+       $http.post("/updateCustomer/saveCustomerPlaidToken", plaid).then(function(response){
          console.log('in factory back from sending Token', response);
+         workService.getUser();
+       });
+    };
+
+    var sendContToken = function(plaid, user){
+      console.log(' plaid in factory before  sending Token', plaid);
+      console.log(' plaid in factory before  sending Token', plaid);
+
+       $http.post("/updateUser/saveUserPlaidToken", plaid).then(function(response){
+         console.log('in factory back from sending Token', response);
+         workService.getUser();
        });
     };
 
     return {
-        sendToken : sendToken
+        sendContToken : sendContToken,
+        sendCustToken: sendCustToken
     };
 }]);

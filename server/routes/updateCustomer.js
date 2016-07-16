@@ -54,7 +54,8 @@ router.post("/saveUserPhoneEmail", function(req, res, next){
 router.post("/saveCustomerGeneral", function(req, res, next){
   console.log('In saveCustomerGeneral',req.body);
   var display_name = req.body.display_name;
-  User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customer.id, customer: req.user.epirts.customer, customer_Display_Name: display_name } }, function(err, user) {
+  console.log('display_name',display_name);
+  User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customer.id, customer: req.user.epirts.customer, customer_display_name: display_name } }, function(err, user) {
     if (err) throw err;
     // we have the updated user returned to us
     console.log('after saving user"s stripe info oooo',user);
@@ -281,12 +282,12 @@ router.post('/stripecc', passport.authenticate('jwt', { session: false }), funct
 });
 
 
-router.post("/saveUserPlaidToken", function(req, res, next){
-  console.log('saveUserPlaidToken, req.body::::',req.body);
-  console.log('saveUserPlaidToken, req.body::::',req.body.token);
-  // console.log('saveUserPii, req.body.id::::',req.body.token.id);
+router.post("/saveCustomerPlaidToken", function(req, res, next){
+  console.log('/saveCustomerPlaidToken wakawaka, req.body::::',req.body);
+  console.log('/saveCustomerPlaidToken, req.body.public_token::::',req.body.public_token);
+  // console.log('saveUserPii, req.body.id::::',req.body.public_token.id);
 
-  var public_token = req.body.token;
+  var public_token = req.body.public_token;
   var account_id = req.body.account_id;
 
   // Exchange a public_token and account_id for a Plaid access_token
@@ -309,51 +310,80 @@ router.post("/saveUserPlaidToken", function(req, res, next){
       console.log('bank_account_token::', bank_account_token);
       //tell stripe to create a customer object on the stripe account id that is req.user.epirts.id
       //save the stripe_bank_account_token to the newly created customer object
-      stripe.customers.create({
-        description: 'Customer for test@example.com',
-        source:  bank_account_token, // obtained with plaid
-        email: req.user.email
-      }, function(err, customer) {
-        console.log('customer::',customer);
-        // asynchronously called
-        User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: customer.id} }, function(err, user) {
-          if (err) throw err;
+      var stripe = require("stripe")(
+      "sk_test_SfT5Rf2DMVfT0unJf7aIIskQ"
+    );
 
-          // we have the updated user returned to us
-          console.log('after saving user oooo',user);
+      stripe.customers.createSource(req.user.epirts.customerID, {
+        source: bank_account_token
+      }, function(err, card) {
+        console.log('customer after update::', card);
+        // asynchronously called
+        if (err) {
+          console.log(' stripe err::', err);
+          console.error('console.error::', err);
+        }
+        console.log(' stripe customer ', card);
+
+        stripe.customers.retrieve(
+          req.user.epirts.customerID,
+          function(err, customer) {
+            // asynchronously called
+            User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
+              if (err) throw err;
+              // we have the updated user returned to us
+              console.log('after saving user"s stripe info oooo',user);
+            });
+          }
+        );
+      }).then(function (response) {
+          console.log(' stripe card add to customer response:::: ', response);
         });
-      });
     }
   });
-
-  var Connected_stripe_ID = req.user.epirts.id;
-  console.log('req.user::::',req.user);
-  console.log('req.user.epirts.id::::',req.user.epirts.id);
-  console.log('Connected_stripe_ID::::',Connected_stripe_ID);
-
-  var stripe = require("stripe")(
-    req.user.epirts.keys.secret
-  );
-
-  stripe.accounts.createExternalAccount(
-  Connected_stripe_ID,
-  {external_account: public_token},
-  function(err, bank_account) {
-    // asynchronously called
-    console.log('bank_account::', bank_account);
-  }
-).then(function (response) {
-      console.log(' stripe plaidPublic_token response:::: ', response);
-      // console.log('token created for card ending in ', response.card.last4);
-      User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.response, account: req.user.epirts.account} }, function(err, user) {
-        if (err) throw err;
-        // we have the updated user returned to us
-        console.log('after saving user"s stripe info oooo',user);
-      });
-    });
     res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
 });
 
+router.post("/saveCustCheck", function(req, res, next){
+  console.log('/saveCustomerPlaidToken wowowo, req.body::::',req.body);
+  // console.log('/saveCustomerPlaidToken, req.body.public_token::::',req.body.public_token);
+  // console.log('saveUserPii, req.body.id::::',req.body.public_token.id);
+
+  // var public_token = req.body.public_token;
+  var token = req.body.token;
+
+      var stripe = require("stripe")(
+      "sk_test_SfT5Rf2DMVfT0unJf7aIIskQ"
+    );
+
+      stripe.customers.createSource(req.user.epirts.customerID, {
+        source: token
+      }, function(err, check) {
+        console.log('customer after update::', check);
+        // asynchronously called
+        if (err) {
+          console.log(' stripe err::', err);
+          console.error('console.error::', err);
+        }
+        console.log(' stripe customer ', check);
+
+        stripe.customers.retrieve(
+          req.user.epirts.customerID,
+          function(err, customer) {
+            // asynchronously called
+            User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
+              if (err) throw err;
+              // we have the updated user returned to us
+              console.log('after saving user"s stripe info oooo',user);
+            });
+          }
+        );
+      }).then(function (response) {
+          console.log(' stripe check add to customer response:::: ', response);
+        });
+
+    res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
+});
 
 router.post('/saveUserIdentityDocument', passport.authenticate('jwt', { session: false }), multipartyMiddleware, function(req, res) {
   console.log('inside updateUser/saveUserIdentityDocument::');

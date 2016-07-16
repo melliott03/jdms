@@ -1,0 +1,123 @@
+{
+  "_args": [
+    [
+      "angular-strap",
+      "/Users/mikeelliott/AtomProjects/04052016_1_work"
+    ]
+  ],
+  "_from": "angular-strap@latest",
+  "_id": "angular-strap@2.3.9",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/angular-strap",
+  "_nodeVersion": "6.2.0",
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/angular-strap-2.3.9.tgz_1465581605721_0.2232058234512806"
+  },
+  "_npmUser": {
+    "email": "olivier@mg-crea.com",
+    "name": "mgcrea"
+  },
+  "_npmVersion": "2.15.6",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "angular-strap",
+    "raw": "angular-strap",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/angular-strap/-/angular-strap-2.3.9.tgz",
+  "_shasum": "69b865e9e9627327e661ca16fbcac84da993ccf2",
+  "_shrinkwrap": null,
+  "_spec": "angular-strap",
+  "_where": "/Users/mikeelliott/AtomProjects/04052016_1_work",
+  "author": {
+    "email": "olivier@mg-crea.com",
+    "name": "Olivier Louvignes",
+    "url": "https://github.com/mgcrea"
+  },
+  "bugs": {
+    "url": "https://github.com/mgcrea/angular-strap/issues"
+  },
+  "contributors": [
+    {
+      "name": "Vitor Fernandes",
+      "url": "https://github.com/vmlf01"
+    },
+    {
+      "name": "Dale Alexander Webb",
+      "email": "dale.a.webb@gmail.com",
+      "url": "https://github.com/DaleWebb"
+    }
+  ],
+  "dependencies": {},
+  "description": "AngularStrap - AngularJS directives for Bootstrap",
+  "devDependencies": {
+    "codeclimate-test-reporter": "^0.3.2",
+    "del": "^2.2.0",
+    "eslint": "^2.12.0",
+    "eslint-config-mgcrea": "^8.0.0",
+    "eslint-plugin-import": "^1.8.1",
+    "factory-angular-channels": "^0.10.0",
+    "gulp-ng-annotate": "^2.0.0",
+    "gulp-pre": "^4.0.0-alpha.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.7",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-coverage": "^1.0.0",
+    "karma-jasmine": "^1.0.2",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "karma-sauce-launcher": "^1.0.0",
+    "ng-factory": "^1.1.0",
+    "phantomjs-prebuilt": "^2.1.7",
+    "through2": "^2.0.1",
+    "undertaker-lib-tasks": "^0.5.3"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "69b865e9e9627327e661ca16fbcac84da993ccf2",
+    "tarball": "https://registry.npmjs.org/angular-strap/-/angular-strap-2.3.9.tgz"
+  },
+  "gitHead": "29ca138afe34a37cb38e3855b97b46b87f008354",
+  "homepage": "http://mgcrea.github.io/angular-strap",
+  "keywords": [
+    "angular",
+    "bootstrap"
+  ],
+  "license": "MIT",
+  "main": "dist/angular-strap.js",
+  "maintainers": [
+    {
+      "name": "mkusher",
+      "email": "aleh.kashnikau@gmail.com"
+    },
+    {
+      "name": "mgcrea",
+      "email": "olivier@mg-crea.com"
+    }
+  ],
+  "name": "angular-strap",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mgcrea/angular-strap.git"
+  },
+  "scripts": {
+    "compile": "gulp build",
+    "lint": "eslint src/*/*.js",
+    "start": "gulp serve",
+    "test": "gulp karma:unit",
+    "test:watch": "npm run test -- -w"
+  },
+  "version": "2.3.9"
+}

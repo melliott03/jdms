@@ -150,13 +150,13 @@
     <md-list-item class="md-3-line xeditablecontainerInner" >
       <div class="md-list-item-text " >
           <strong><span class="title">AUTOMATIC Bank Account Verification</span></strong><span><small> (Funds Availble to Use Right Away)</small></span>
-          <div ng-controller="mainPlaidCtrl">
+          <div ng-controller="custPlaidCtrl">
             <button class="btn btn-success" ng-click="openPlaid()" ng-disabled="!plaidIsLoaded()">
                   Link Account
             </button>
           </div>
         </div>
-    </div>
+
     <md-button class="md-secondary">respond</md-button>
     <md-divider ng-if="!$last"></md-divider>
   </md-list-item>
@@ -173,7 +173,7 @@
       <!-- END STRIPE CHECK PAYMENT FORM -->
 
 <!--  MANUAL ENTER BANK ACCOUNT FOR STRIPE -->
-        <form editable-form name="editableForm_manualBank" onaftersave="ccAuthorize()" id="payment-form">
+        <form editable-form name="editableForm_manualBank" onaftersave="checkAuthorizeCust()" id="payment-form">
           <div  ng-click="editableForm_manualBank.$show()" ng-class="{'editable-click': enabled}" >
           <div>
             <span class="payment-errors"></span>
@@ -303,14 +303,6 @@
             </div>
           </div>
 
-          <div>
-            <!-- editable status (select-local) -->
-            <span class="title">Account Holder Type: </span>
-            <span class="focusoutlinenone" editable-select="payment.check.account_holder_type" e-name="account_holder_type" e-ng-options="s.value as s.text for s in account_holder_types">
-              {{ (account_holder_types | filter:{value: payment.check.account_holder_type})[0].text || 'Not set' }}
-            </span>
-          </div>
-
           <!-- buttons to submit / cancel form -->
           <span ng-show="editableForm_CreditCard.$visible">
             <md-button type="submit" class="md-raised" ng-disabled="editableForm_CreditCard.$waiting">
@@ -331,6 +323,10 @@
 </md-list>
 </md-content>
 <!-- end of category -->
+</div><!-- END OF XAccountCtrl2 -->
+
+
+
 
 <div ng-controller="XAccountCtrl2" ng-cloak>
   <md-toolbar class="md-theme-light">
@@ -374,3 +370,5 @@
   </md-list>
 </md-content>
 <!-- begin new category -->
+
+</div><!-- END OF XAccountCtrl2 -->

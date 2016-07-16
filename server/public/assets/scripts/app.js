@@ -1,4 +1,4 @@
-var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload']);
+var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad']);
 
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
     $mdThemingProvider.theme('default')
@@ -58,6 +58,10 @@ myApp.config(["$routeProvider", function($routeProvider){
       }).
       when("/accountCust", {
           templateUrl: "/assets/views/routes/account-customer.html",
+          controller: "ShowController"
+      }).
+      when("/sign", {
+          templateUrl: "/assets/views/routes/sign.html",
           controller: "ShowController"
       }).
       otherwise({
@@ -592,23 +596,24 @@ myApp.controller('XAccountCtrl2', ["$scope", "$location", '$filter', '$http', "W
    // END STRIPE Pii
 
   // START STRIPE BANK ACCOUNT
-  $scope.ccAuthorize = function () {
+  $scope.checkAuthorizeCust = function () {
     console.log('in controller $scope.payment.card::', $scope.payment.check);
     // $scope.payment.check.country = "US";
     // $scope.payment.check.currency = "USD";
-    console.log('stripe', stripe);
+    // console.log('stripe', stripe);
+    console.log('$scope.payment.check', $scope.payment.check);
     return stripe.bankAccount.createToken($scope.payment.check)
       .then(function (response) {
         console.log('token created response ', response);
         // console.log('token created for card ending in ', response.card.last4);
         console.log('$scope.payment::', $scope.payment);
-        var card = {};
-        card.token = response.id;
+        var check = {};
+        check.token = response.id;
         // cardToken.payment = angular.copy($scope.payment);
         // var payment = angular.copy($scope.payment);
         // $scope.payment.check = void 0;
         // payment.token = response.id;
-        return $http.post('/stripecc', card);
+        return $http.post('/updateCustomer/saveCustCheck', check);
       })
       .then(function (payment) {
         console.log('successfully submitted payment for $', payment);
@@ -824,4 +829,132 @@ myApp.controller('plaidController', ['$scope', 'PlaidService', function($scope, 
               });
             };
             $scope.sendTokens = plaidService.sendToken;
+}]);
+
+
+myApp.controller('SignModalCtrl', [
+  '$scope','$window' , 'WorkService', 'Upload',
+  function ($scope, $window, WorkService, Upload) {
+    var workService = WorkService;
+    // $scope.signature.backgroundColor = "rgb(255,255,255)";
+    $scope.done = function (signature, work_id) {
+      console.log('signature::', signature);
+      console.log('work_id: inside of SignModalCtrl:', work_id);
+      console.log('signature.toDataURL::', signature.toDataURL());
+      var workItemSig = {};
+        workItemSig.id = work_id;
+        workItemSig.sig = signature.toDataURL();
+        console.log('workItemSig::', workItemSig);
+        //Send workItemSig to server to be saved in the DB
+        workService.completeWork(workItemSig);
+
+
+      $window.open(signature.toDataURL());
+      // var signature = $scope.accept();
+      //
+      // if (signature.isEmpty) {
+      //   //do nothing
+      // } else {
+      //   //$modalInstance.close(
+      //     //upload file
+      //     console.log('signature.dataUrl::', signature.dataUrl);
+      //     // START OF NG-FILE-UPLOAD STUFF
+      //     // upload later on form submit or something similar
+      //     $scope.submitUpload = function() {
+      //       if ($scope.form.file.$valid && $scope.file) {
+      //         $scope.upload($scope.file);
+      //       }
+      //     };
+      //
+      //     // upload on file select or drop
+      //     $scope.upload = function (file) {
+      //         Upload.upload({
+      //             url: '/updateUser/saveUserIdentityDocument', //'upload/url'
+      //             data: {file: file, 'username': $scope.logedinUser.email}
+      //         }).then(function (resp) {
+      //             console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+      //         }, function (resp) {
+      //             console.log('Error status: ' + resp.status);
+      //         }, function (evt) {
+      //             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+      //             console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+      //         });
+      //     };
+      //     // END OF NG-FILE-UPLOAD STUFF
+      //
+      // }
+    };
+
+    $scope.clear = function (signature) {
+
+      $scope.signature.clear();
+    };
+  }
+]);
+
+myApp.controller('ngSignaturePadController', [
+  '$scope',
+  function ($scope) {
+    $scope.accept = function (signature) {
+      console.log('signature', signature);
+      // var signature = $scope.accept();
+      //
+      // if (signature.isEmpty) {
+      //   $modalInstance.dismiss();
+      // } else {
+      //   $modalInstance.close(signature.dataUrl);
+      // }
+    };
+  }
+]);
+
+myApp.controller('ModalDemoCtrl', ['$scope', '$uibModal', '$log', function($scope, $uibModal, $log) {
+    console.log('ModalDemoCtrl loaded');
+    $scope.items = ['item1', 'item2', 'item3'];
+
+  $scope.animationsEnabled = true;
+
+  $scope.open = function (size) {
+
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: 'sign.html',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+
+  $scope.toggleAnimation = function () {
+    $scope.animationsEnabled = !$scope.animationsEnabled;
+  };
+
+}]);
+
+myApp.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'items', function($scope, $uibModalInstance, items) {
+    console.log('ModalInstanceCtrl loaded');
+
+    $scope.items = items;
+ $scope.selected = {
+   item: $scope.items[0]
+ };
+
+ $scope.ok = function () {
+   $uibModalInstance.close($scope.selected.item);
+ };
+
+ $scope.cancel = function () {
+   $uibModalInstance.dismiss('cancel');
+ };
+
 }]);
