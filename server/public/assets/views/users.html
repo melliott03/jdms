@@ -142,15 +142,15 @@
               <md-button><a href="#acceptedView">ACCEPTED </a></md-button>
               <md-button><a href="#availibleView">NEW </a></md-button>
               <md-button><a href="#accountCont">ACCOUNT </a></md-button>
-              <md-button><a href="#sign">SIGN </a></md-button>
 
             </div>
             <div ng-if="customer()">
               <md-button><a href="#home">Dashboard</a></md-button>
-              <md-button><a href="#add">ADD</a></md-button>
+              <md-button class="md-primary" ng-click="addTabDialog($event)">
+                ADD
+              </md-button>
               <md-button><a href="#view">VIEW</a></md-button>
               <md-button><a href="#accountCust">ACCOUNT </a></md-button>
-              <md-button><a href="#sign">SIGN </a></md-button>
 
             </div>
 

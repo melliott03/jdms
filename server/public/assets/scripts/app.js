@@ -35,11 +35,7 @@ myApp.config(["$routeProvider", function($routeProvider){
       }).when("/acceptedView", {
           templateUrl: "/assets/views/routes/accepted.html",
           controller: "ShowController"
-      }).
-      when("/add", {
-          templateUrl: "/assets/views/routes/add.html",
-          controller: "AddController"
-      }).
+      }).      
       when("/view", {
           templateUrl: "/assets/views/routes/view.html",
           controller: "ShowController"

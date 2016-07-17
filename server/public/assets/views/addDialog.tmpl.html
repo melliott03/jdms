@@ -1,0 +1,147 @@
+<div ng-controller="AddController">
+
+
+<md-content layout-padding >
+    <div style="width : 600px; margin: 0 auto;">
+      <div layout-align="center center" layout="column">
+          <h3 class="md-title">Work Information</h3>
+      </div>
+      <form name="workEntry">
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Field</label>
+            <md-select ng-model="work.type" required="required">
+              <md-option ng-repeat="work in works" >
+                {{work}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Language</label>
+            <md-select ng-model="work.language" required="required">
+              <md-option ng-repeat="language in languages" >
+                {{language}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>        <div layout-gt-sm="row">
+          <div >
+            <!-- <md-datepicker ng-model="work.date"></md-datepicker> -->
+          <md-input-container class="md-block" flex-gt-sm>
+
+          <input name="dateField" type="datetime-local"
+          min="{{minDate}}"
+          md-min-date="{{minDate}}"
+          placeholder="Enter date & start time"
+          ng-model="work.date"
+          ng-model-options="{ updateOn: 'blur' }"
+          oninvalid="this.setCustomValidity('Witinnovation')"
+          required="required"
+          >
+          <p class="dateErrorMessage">{{dateErrorMessage_start}}</p>
+
+        </md-input-container>
+        <!-- <h4>Date-picker with min date and max date</h4>
+        <md-datepicker ng-model="myDate" md-placeholder="Enter date"
+        md-min-date="minDate" md-max-date="maxDate"></md-datepicker>
+        <md-datepicker name="dateField" ng-model="myDate" md-placeholder="Enter date"
+          required md-min-date="minDate" md-max-date="maxDate"
+          md-date-filter="onlyWeekendsPredicate"></md-datepicker>
+      <div class="validation-messages" ng-messages="workEntry.dateField.$error">
+        <div ng-message="valid">The entered value is not a date!</div>
+        <div ng-message="required">This date is required!</div>
+        <div ng-message="mindate">Date is too early!</div>
+        <div ng-message="maxdate">Date is too late!</div>
+        <div ng-message="filtered">Only weekends are allowed!</div>
+      </div> -->
+        </div>
+
+        <!-- <div>
+        <md-input-container class="md-block" flex-gt-sm>
+        <label>Start Time</label>
+        <input type="time"
+        placeholder="Start Time"
+        ng-model="work.StartTime"
+        ng-model-options="{ updateOn: 'blur' }">
+      </md-input-container>
+      </div> -->
+      <div >
+        <!-- <md-datepicker ng-model="work.endDateTime"></md-datepicker> -->
+      <md-input-container class="md-block" flex-gt-sm>
+      <input type="datetime-local" name="endDate" onblur="setDateErrorMessage()()"
+      min="{{minDate}}"
+      placeholder="End Date & Time"
+      ng-model="work.endDateTime"
+      ng-model-options="{ updateOn: 'blur' }"
+      ng-keyup="resetDateErrorMessage()"
+      required="required"
+      >
+      <p class="dateErrorMessage">{{dateErrorMessage_end}}</p>
+    </md-input-container>
+    </div>
+  </div>
+  <!--  -->
+
+
+        <!-- GoogleAutoComplete -->
+        <!-- <div ng-controller="GoogleController"> -->
+          <div layout-gt-sm="row">
+        	<md-input-container class="md-block" flex-gt-sm>
+              <input type="text" ng-model="work.address"
+            		   ng-places-autocomplete
+            		   ng-model="query"
+            		   pa-options="paOptions"
+            		   pa-on-place-ready="placesCallback"
+            		   pa-trigger="paTrigger"
+            			required="required"/>
+          </md-input-container>
+        		<md-button ng-click="paTrigger()">Send</md-button>
+          </div>
+          <p>
+            {{worklatlon}}
+          </p>
+          <input type="text" ng-model="work.location"
+               value="{{worklatlon}}"
+              />
+
+        <!-- </div> -->
+        <!-- End GoogleAutoComplete -->
+
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Other Work Details</label>
+            <input ng-model="work.details">
+          </md-input-container>
+        </div>
+        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+          <md-button ng-click="estimatePrice(work)" class="md-raised">GET ESTIMATE</md-button>
+        </section>
+        <p>
+          ${{estimatePriceObject.data.finalCost}} estimate
+          <p ng-model="work.customer_estimate" value="estimatePriceObject.data" ></p>
+        </p>
+        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+          <md-button ng-click="submit(work)" class="md-raised">SUBMIT REQUEST</md-button>
+        </section>
+      </form>
+      <p>
+        SCHEDULING 24 HOURS IN ADVANCE TO INCREASE THE LIKELYHOOD OF YOUR REQUEST BEING FILLED AND SAVE 20%.
+      </p>
+
+    </div>
+  </md-content>
+
+</div>
+
+<div >
+  <md-input-container class="md-block" flex-gt-sm>
+  <md-timepicker ng-model="startTime" md-placeholder="Enter time"></md-timepicker>
+</md-input-container>
+</div>
+
+
+
+</div><!--END OF AddController  -->

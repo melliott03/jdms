@@ -336,16 +336,13 @@ $scope.showTabDialog = function(ev, work_id) {
   console.log("Inside showTabDialog function");
   console.log('work_id', work_id);
   $scope.work_id = work_id;
-  $scope.work_id = '5345we';
   $mdDialog.show({
     controller: DialogController,
     templateUrl: 'workDialog.tmpl.html',
     parent: angular.element(document.body),
     targetEvent: ev,
     clickOutsideToClose:true,
-    locals: {
-           items: work_id
-         }
+    locals: { items: work_id }
   })
   .then(function(answer) {
     $scope.status = 'You said the information was "' + answer + '".';
@@ -354,7 +351,9 @@ $scope.showTabDialog = function(ev, work_id) {
   });
 };
 function DialogController($scope, $mdDialog, items) {
+  console.log('items::', items);
   $scope.work_id = items;
+
   $scope.hide = function() {
     $mdDialog.hide();
   };
@@ -366,7 +365,37 @@ function DialogController($scope, $mdDialog, items) {
   };
 }
 //END $mdDialog
-}]); //END ShowController
+
+//START $mdDialog
+$scope.addTabDialog = function(ev) {
+  console.log("Inside addTabDialog function");
+  $mdDialog.show({
+    controller: addDialogController,
+    templateUrl: 'addDialog.tmpl.html',
+    parent: angular.element(document.body),
+    targetEvent: ev,
+    clickOutsideToClose:true
+  })
+  .then(function(answer) {
+    $scope.status = 'You said the information was "' + answer + '".';
+  }, function() {
+    $scope.status = 'You cancelled the dialog.';
+  });
+};
+function addDialogController($scope, $mdDialog) { //, items
+  $scope.hide = function() {
+    $mdDialog.hide();
+  };
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  $scope.answer = function(answer) {
+    $mdDialog.hide(answer);
+  };
+}
+//END $mdDialog
+
+}]); //END
 
 // myApp.directive("contenteditable", function() {//PART OF contente
 //   return {
