@@ -9,7 +9,7 @@ var workRates = function(workItem){
 
  // TODO: search DB for pricing object with states as keys. replace hardcoded prices with those stored in DB
 //PRICING ALGORYMTHEM FOR MN
-if (parsedAddressObject.state == 'MN') {
+if (1==1) { //parsedAddressObject.state == 'MN'
   // var hour = workItem.date.getHours();
   var hour = moment(workItem.date).hour();
   console.log('hour::',hour);
@@ -39,7 +39,7 @@ if (parsedAddressObject.state == 'MN') {
             return {charge: 120}; //set charge and pay from input from DOM stored in DB
             break;
         default:
-            // alert("none");
+            return {charge: 60}; //set charge and pay from input from DOM stored in DB
             break;
     }
   }
@@ -69,7 +69,7 @@ if (parsedAddressObject.state == 'MN') {
             return {charge: 120}; //set charge and pay from input from DOM stored in DB
             break;
         default:
-            // alert("none");
+            return {charge: 60}; //set charge and pay from input from DOM stored in DB
             break;
     }
   }
@@ -99,7 +99,7 @@ if (parsedAddressObject.state == 'MN') {
             return {charge: 170}; //set charge and pay from input from DOM stored in DB
             break;
         default:
-            // alert("none");
+            return {charge: 60}; //set charge and pay from input from DOM stored in DB
             break;
     }
   }
@@ -129,7 +129,7 @@ if (parsedAddressObject.state == 'MN') {
             return {charge: 110}; //set charge and pay from input from DOM stored in DB
             break;
         default:
-            // alert("none");
+            return {charge: 60}; //set charge and pay from input from DOM stored in DB
             break;
     }
   }

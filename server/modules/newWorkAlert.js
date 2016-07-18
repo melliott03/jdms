@@ -15,8 +15,11 @@ var newWorkAlert = function(addedWork){
   // /**@todo FIND CONTRACTORS NEAR WORK -- done*/
   // //qury for nearby locations -- this code works
   var matchingContractors;
-
-      var distance = 1000 / 3963.2;
+console.log('addedWork.type::', addedWork.type);
+      var distance = 1120/3963.2; //distance to radians: divide the distance by the radius of the sphere (e.g. the Earth) in the same units as the distance measurement. The equatorial radius of the Earth is approximately 3,963.2 miles or 6,378.1 kilometers.
+      //https://docs.mongodb.com/manual/reference/operator/query/near/#op._S_near
+      //https://docs.mongodb.com/manual/tutorial/calculate-distances-using-spherical-geometry-with-2d-geospatial-indexes/
+      console.log('distance::', distance);
       var query = User.find({'geo': {
         $near: [
           addedWork.geo[0],
@@ -27,7 +30,7 @@ var newWorkAlert = function(addedWork){
         /**@todo figureout how to compair where contractor.type equals addedWork.type*/
       }).where('type').equals(addedWork.type);
       query.exec(function (err, contractors) {
-        console.log(' inside query.exec contractors nearby : ', contractors);
+        console.log(' inside query.exec contractors nearby blah: ', contractors);
         if (err) {
           console.log(err);
           throw err;

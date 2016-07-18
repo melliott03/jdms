@@ -332,6 +332,12 @@ myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "
 // //END Contenteditable
 
 //START $mdDialog
+$scope.hide = function() {
+  $mdDialog.hide();
+};
+$scope.cancel = function() {
+  $mdDialog.cancel();
+};
 $scope.showTabDialog = function(ev, work_id) {
   console.log("Inside showTabDialog function");
   console.log('work_id', work_id);
