@@ -165,11 +165,42 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkSe
 
 }]);
 
-myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "WorkService", 'uiGridConstants', 'stripe', '$mdDialog', function($scope, $location, $filter, $http, WorkService, uiGridConstants, stripe, $mdDialog){
-  // document.body.addEventListener('DOMSubtreeModified', function(event) {
-  //   var targets = document.getElementsByClassName('target');
-  //   console.log('targets::',targets);
-  // });
+myApp.controller("ShowController", ["$scope", "$window", "$location", '$filter', '$http', "WorkService", 'uiGridConstants', 'stripe', '$mdDialog', 'Socket', function($scope, $window, $location, $filter, $http, WorkService, uiGridConstants, stripe, $mdDialog, Socket){
+  Socket.connect();
+  $scope.$on('$locationChangeStart', function(event){
+    Socket.disconnect(true);
+  })
+
+  Socket.on('connect', function (msg) {
+            console.log("in controller, connected msg,::", msg);
+            $http.post("/testExpressSocket", msg).then(function(response){
+               console.log('return of updateUserSocketId in controller connect, response.data', response.data);
+            });
+            var userToken = $window.localStorage.token;
+            console.log("in controller, in Socket on 'connect' before emit 'authenticate', userToken::", userToken);
+            Socket.emit('authenticate', {token: userToken}); // send the jwt
+        });
+  Socket.on('connectedSocketID', function (msg) {
+            console.log("in controller, connectedSocketID msg,::", msg);
+            WorkService.saveSocketId(msg);
+        });
+  Socket.on('socketToMe', function (msg) {
+            console.log("in controller, socketToMe msg,::", msg);
+            // WorkService.saveSocketId(msg);
+        });
+  Socket.on('authenticated', function (msg) {
+            //Do
+            console.log("in controller, authenticated", msg);
+        });
+  Socket.on('unauthorized', function(msg){
+            console.log("unauthorized: " + JSON.stringify(msg.data));
+            throw new Error(msg.data.type);
+        });
+        // .on('chat message', function (msg) {
+        //     console.log("msg");
+        //     // $('#messages').append($('<li>').text(msg));
+        // });
+
   var workService = WorkService;
 
   // $scope.updateWorkEntered = function(work){
@@ -250,6 +281,8 @@ myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "
     // console.log('$scope.availibleWorks :', $scope.availibleWorks);
 
     $scope.works = WorkService.customerWorkObject;
+
+    $scope.displayWorkCollection = [].concat($scope.works.response);
     // console.log('$scope.works :', $scope.works);
     $scope.deleteWork = WorkService.deleteWork;
     $scope.cancelWork = WorkService.cancelWork;

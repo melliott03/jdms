@@ -9,7 +9,22 @@ var db = require("./modules/db");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var morgan = require('morgan');//brought in here for passport JWT but might be a dependency for others
-var http = require ('http');
+var http = require('http').Server(app);  // .createServer(app)
+var io = require('socket.io')(http);
+var socketioJwt = require('socketio-jwt');
+// var sio = socketIo.listen(http);
+
+// sio.set('authorization', socketioJwt.authorize({
+//   secret: jwtSecret,
+//   handshake: true
+// }));
+//
+// sio.sockets
+//   .on('connection', function (socket) {
+//      console.log(socket.handshake.decoded_token.email, 'connected');
+//      //socket.on('event');
+//   });
+
 var path = require('path');//Twilio Video
 var AccessToken = require('twilio').AccessToken;//Twilio Video
 var ConversationsGrant = AccessToken.ConversationsGrant;//Twilio Video
@@ -20,6 +35,11 @@ var Work = require('./models/work');
 var config = require('./config/main'); // Tokens http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
 var account = require('./routes/stripeCreateAccount');
 var stripe = require("stripe")(process.env.STRIPE_TEST);
+
+app.use(function(req, res, next){ //https://onedesigncompany.com/news/express-generator-and-socket-io
+  res.io = io;
+  next();
+});
 
 app.use(express.static(path.join(__dirname, 'public')));//Twilio Video
 
@@ -179,6 +199,72 @@ apiRoutes.post('/authenticate', function(req, res) {
       });
     }
   });
+});
+
+// socketioJwt.authorize({
+//    secret: config.secret, //Buffer(JSON.stringify(process.env.AUTH0_CLIENT_SECRET), 'base64'),
+//    timeout: 15000 // 15 seconds to send the authentication message
+//  })
+io.on('connection', function(socket){
+  console.log('A User has connected to socket!::', socket);
+  console.log('A User has connected to socket with socket.id::', socket.id);
+  console.log('A User has connected to socket.request::', socket.request);
+  console.log('A User has connected to socket.handshake::', socket.handshake);
+  console.log('A User has connected to socket.handshake._events::', socket.handshake._events);
+  console.log('A User has connected to socket.request::', socket.request);
+  // console.log('A User has connected to socket.client.Client.conn.request::', socket.client.Client.conn.request);
+  // console.log('A User has connected to socket.request.secret.data::', socket.request.secret.data);
+
+  // socket.on('authenticate', function(token){
+  //   console.log("A User has sent an authToken to server after connetion, token::!", token);
+  //   console.log("A User has sent an authToken to server after connetion, token::!", token);
+  //
+  //   // socketioJwt.authorize({
+  //   //     secret: config.secret, //Buffer(JSON.stringify(process.env.AUTH0_CLIENT_SECRET), 'base64'),
+  //   //     timeout: 15000 // 15 seconds to send the authentication message
+  //   //   });
+  //   io.emit('authenticated', {"authenticated": "from server: authenticated complete "});
+  //
+  // });
+  io.emit('connectedSocketID', {"socketid" : socket.id})
+  //Find the User and store their socketid on their user Object
+  socket.on('disconnect', function(){
+    console.log("A User has disconnected from socket::!", socket);
+  })
+});
+
+// io
+// 	.on('connection', socketioJwt.authorize({
+// 		secret: Buffer(JSON.stringify(process.env.AUTH0_CLIENT_SECRET), 'base64'),
+// 		timeout: 15000 // 15 seconds to send the authentication message
+// 	}))
+// 	.on('authenticated', function(socket){
+// 		console.log('connected & authenticated: ' + JSON.stringify(socket.decoded_token));
+// 		socket.on('chat message', function(msg){
+// 			debugger;
+// 			io.emit('chat message', msg);
+// 		});
+// 	});
+
+/* GET users listing. */
+app.post('/testExpressSocket', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+  console.log('testExpressSocket on server');
+  console.log('testExpressSocket on server req::', req);
+  console.log('testExpressSocket on server req.user::', req.user);
+
+  res.io.emit("socketToMe", "users");
+  res.send('respond with a resource.');
+});
+
+app.post('/updateUserSocketId', passport.authenticate('jwt', { session: false }), function(req, res) {
+  console.log('insode updateUserSocketId req.user._id:', req.user._id);
+  console.log('inside updateUserSocketId req.user._id:', req.body);
+  // Work.find({$or : [{'customer_id': req.user._id}, {'contractor_id': req.user._id}]}, function(err, messages) {
+  //   if (err)
+  //     res.send(err);
+  //
+  //   res.json(messages);
+  // });
 });
 
 // Protect dashboard route with JWT
@@ -640,7 +726,7 @@ app.get('/boink', passport.authenticate('jwt', { session: false }), function(req
 app.use("/", passport.authenticate('jwt', { session: false }), index);
 app.set("port", (process.env.PORT || 5100));
 
-app.listen(app.get("port"), function(){
+http.listen(app.get("port"), function(){
     console.log("Listening on port: ", app.get("port"));
 });
 
@@ -660,4 +746,5 @@ app.listen(app.get("port"), function(){
 // console.log('Wait 10 seconds...');
 // //END agenda module example for Node.js [npmawesome and nodejitsu]
 
-module.exports = app;
+// module.exports = app;
+module.exports = {app: app, server: http};

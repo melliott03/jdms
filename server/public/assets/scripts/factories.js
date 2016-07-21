@@ -199,6 +199,21 @@ myApp.factory("WorkService", ["$http", function($http){
       //  console.log('in getData allPetsReturned outside getcall', allPetsReturned);
     };
 
+    var saveSocketId = function(msg){
+      // if (work.date < minDate){
+      //   console.log('work.date < $scope.minDate');
+      // }
+      // console.log('work object', work);
+      // console.log('work.datetime:', work.date);
+
+       $http.post("/updateUserSocketId", msg).then(function(response){
+          // travelTimeReturned.theTime = response.data;
+          // estimatePriceObject.data = response.data;
+          console.log('return of updateUserSocketId in factory', response.data);
+       });
+      //  console.log('in getData allPetsReturned outside getcall', allPetsReturned);
+    };
+
     getUser();
     return {
         getUser : getUser,
@@ -223,7 +238,8 @@ myApp.factory("WorkService", ["$http", function($http){
         submitBankMicroDeposits:submitBankMicroDeposits,
         bankMicroDepositsObject:bankMicroDepositsObject,
         estimatePrice : estimatePrice,
-        estimatePriceObject : estimatePriceObject
+        estimatePriceObject : estimatePriceObject,
+        saveSocketId : saveSocketId
 
     };
 }]);
@@ -266,4 +282,9 @@ myApp.factory("PlaidService", ["$http", "$location", "WorkService", function($ht
         sendContToken : sendContToken,
         sendCustToken: sendCustToken
     };
+}]);
+
+// SOCKET
+myApp.factory("Socket", [ "socketFactory", function(socketFactory){
+    return socketFactory();
 }]);

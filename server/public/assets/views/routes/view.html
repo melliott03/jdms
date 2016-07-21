@@ -66,7 +66,7 @@
 
 <div>
   <div >
-  <table st-set-filter="customFilter" st-table="works.response" class="table table-bordered table-striped" wt-responsive-table> <!-- st-sticky-header -->
+  <table st-set-filter="customFilter" st-safe-src="works.response" st-table="displayWorkCollection" class="table table-bordered table-striped" wt-responsive-table> <!-- st-sticky-header -->
     <thead>
     <tr>
         <th><a class="btn btn-default" st-export>Export</a></th>
@@ -104,7 +104,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat-start="work in works.response">
+    <tr ng-repeat-start="work in displayWorkCollection">
         <td>
               <button ng-if="work.expanded" ng-click="work.expanded = false">-</button>
               <button ng-if="!work.expanded" ng-click="work.expanded = true">+</button>
@@ -126,7 +126,7 @@
         </td>
 
     </tr>
-      <tr ng-if="work.expanded" ng-repeat-end="work in works.response">
+      <tr ng-if="work.expanded" ng-repeat-end="work in displayWorkCollection">
             <td colspan="7" >
               <div class="" >
                 <!-- <img style="height:3%; width:6%; display:inline-block;" src="{{work.work_signatures.signature}}" alt="customer sig" /> -->
