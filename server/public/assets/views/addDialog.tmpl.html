@@ -95,13 +95,15 @@
             		   pa-options="paOptions"
             		   pa-on-place-ready="placesCallback"
             		   pa-trigger="paTrigger"
-            			required="required"/>
+                   aria-label="Work Address"
+            			 required="required"/>
           </md-input-container>
         		<md-button ng-click="paTrigger()">Send</md-button>
           </div>
           <p>
             {{worklatlon}}
           </p>
+
           <input type="text" ng-model="work.location"
                value="{{worklatlon}}"
               />
@@ -134,7 +136,7 @@
     </div>
   </md-content>
 
-</div>
+
 
 <div >
   <md-input-container class="md-block" flex-gt-sm>
@@ -142,6 +144,4 @@
 </md-input-container>
 </div>
 
-
-
-</div><!--END OF AddController  -->
+</div>

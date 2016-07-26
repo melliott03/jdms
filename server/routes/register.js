@@ -227,6 +227,7 @@ if (req.body.action === 'signup') {
           role: req.body.role,
           type: req.body.type,
           epirts: '',
+          socketID: '',
           geo: geo || ''
         });
         // console.log("newUserObject.geo : ", newUserObject.geo);
@@ -335,6 +336,7 @@ if (req.body.action === 'signup') {
       role: 'customer',
       clearance: 'user',
       epirts: '',
+      socketID: '',
       company: 'United Bank'//req.user.company
     });
     var agentAddress = req.body.address;

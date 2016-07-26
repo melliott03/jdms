@@ -1,5 +1,5 @@
 var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad', 'btford.socket-io']);
-
+//ngPlacesAutocomplete ngAutocomplete
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
     $mdThemingProvider.theme('default')
         .primaryPalette('blue-grey')
@@ -954,3 +954,19 @@ myApp.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'items', f
  };
 
 }]);
+
+myApp.controller('exampleController', function ($scope, $log) {
+		$scope.query = "";
+		$scope.paOptions = {
+			updateModel : true
+		};
+		$scope.paTrigger = {};
+		$scope.paDetails = {};
+		$scope.placesCallback = function (error, details) {
+            console.log($scope.query);
+			if (error) {
+				return console.error(error);
+			}
+			$scope.paDetails = details;
+		};
+	});

@@ -40,21 +40,13 @@ myApp.controller("AuthenticationController", ["$scope", "$location", "$http", "$
 }]);
 
 myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkService", function($scope, $http, $filter, $log, WorkService){
-  // GoogleController Content
-  $scope.query = "";
-  $scope.paOptions = {
-    updateModel : true
-  };
-  $scope.paTrigger = {};
-  $scope.paDetails = {};
-  $scope.placesCallback = function (error, details) {
-          console.log($scope.query);
-    if (error) {
-      return console.error(error);
-    }
-    $scope.paDetails = details;
-    $scope.worklatlon = details.geometry.location;
-  };
+    // http://ngmodules.org/modules/ngAutocomplete
+
+  console.log('inside AddController');
+
+
+
+
 
     var workService = WorkService;
     $scope.data = [];
@@ -162,10 +154,24 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkSe
       "content": "Hello Modal<br />This is a multiline message!"
     };
 
-
+    // GoogleController Content
+    $scope.query = "";
+    $scope.paOptions = {
+      updateModel : true
+    };
+    $scope.paTrigger = {};
+    $scope.paDetails = {};
+    $scope.placesCallback = function (error, details) {
+            console.log($scope.query);
+      if (error) {
+        return console.error(error);
+      }
+      $scope.paDetails = details;
+      $scope.worklatlon = details.geometry.location;
+    };
 }]);
 
-myApp.controller("ShowController", ["$scope", "$window", "$location", '$filter', '$http', "WorkService", 'uiGridConstants', 'stripe', '$mdDialog', 'Socket', function($scope, $window, $location, $filter, $http, WorkService, uiGridConstants, stripe, $mdDialog, Socket){
+myApp.controller("ShowController", ["$scope", "$window", "$location", '$filter', '$http', '$log', "WorkService", 'uiGridConstants', 'stripe', '$mdDialog', 'Socket', function($scope, $window, $location, $filter, $http, $log, WorkService, uiGridConstants, stripe, $mdDialog, Socket){
   Socket.connect();
   $scope.$on('$locationChangeStart', function(event){
     Socket.disconnect(true);
@@ -186,6 +192,11 @@ myApp.controller("ShowController", ["$scope", "$window", "$location", '$filter',
         });
   Socket.on('socketToMe', function (msg) {
             console.log("in controller, socketToMe msg,::", msg);
+            // WorkService.saveSocketId(msg);
+        });
+
+  Socket.on('socketToYou', function (msg) {
+            console.log("in controller, socketToYou msg,::", msg);
             // WorkService.saveSocketId(msg);
         });
   Socket.on('authenticated', function (msg) {
@@ -421,7 +432,7 @@ $scope.addTabDialog = function(ev) {
     $scope.status = 'You cancelled the dialog.';
   });
 };
-function addDialogController($scope, $mdDialog) { //, items
+function addDialogController($scope, $mdDialog, $log) { //, items
   $scope.hide = function() {
     $mdDialog.hide();
   };

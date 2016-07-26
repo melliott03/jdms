@@ -20,6 +20,7 @@ var UserSchema = new Schema({
     privilege_role: {type: String, required: false},
     action: {type: String, required: false},
     company: {type: String, required: false},
+    socketID: {type: String, required: false},
     lastlogin: {type: Date, default: Date.now },
     geo: {
         type: [Number],

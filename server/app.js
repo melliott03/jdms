@@ -44,6 +44,8 @@ app.use(function(req, res, next){ //https://onedesigncompany.com/news/express-ge
 app.use(express.static(path.join(__dirname, 'public')));//Twilio Video
 
 var mongoose = require("mongoose");
+// set Promise provider to bluebird
+mongoose.Promise = require('bluebird');
 var nev = require('email-verification')(mongoose); //this might need to be placed after the user model
 
 var updateUser = require('./routes/updateUser');
@@ -226,7 +228,8 @@ io.on('connection', function(socket){
   //   io.emit('authenticated', {"authenticated": "from server: authenticated complete "});
   //
   // });
-  io.emit('connectedSocketID', {"socketid" : socket.id})
+  io.to(socket.id).emit('connectedSocketID', {"socketid" : socket.id});
+  // io.emit('connectedSocketID', {"socketid" : socket.id})
   //Find the User and store their socketid on their user Object
   socket.on('disconnect', function(){
     console.log("A User has disconnected from socket::!", socket);
@@ -259,6 +262,14 @@ app.post('/testExpressSocket', passport.authenticate('jwt', { session: false }),
 app.post('/updateUserSocketId', passport.authenticate('jwt', { session: false }), function(req, res) {
   console.log('insode updateUserSocketId req.user._id:', req.user._id);
   console.log('inside updateUserSocketId req.user._id:', req.body);
+  var socketID = req.body.socketid;
+  User.findOneAndUpdate({ _id: req.user._id }, { socketID: socketID }, function(err, user) {
+    if (err) throw err;
+
+    // we have the updated user returned to us
+    console.log('after saving user oooo',user);
+  });
+
   // Work.find({$or : [{'customer_id': req.user._id}, {'contractor_id': req.user._id}]}, function(err, messages) {
   //   if (err)
   //     res.send(err);

@@ -1,4 +1,7 @@
 var mongoose = require("mongoose");
+var Promise = require('bluebird');
+// set Promise provider to bluebird
+mongoose.Promise = require('bluebird');
 var Schema = mongoose.Schema;
 // var User = require('../models/user');
 // var Contractor = require('../models/contractor');
@@ -7,49 +10,6 @@ var Work = require('../models/work');
 
 
 var newWorkAlert = function(addedWork){
-  var  contractorFname,
-       contractorLname,
-       contractorEmail;
-  console.log('INSIDE newWorkAlert addedWork:', addedWork);
-
-  // /**@todo FIND CONTRACTORS NEAR WORK -- done*/
-  // //qury for nearby locations -- this code works
-  var matchingContractors;
-console.log('addedWork.type::', addedWork.type);
-      var distance = 1120/3963.2; //distance to radians: divide the distance by the radius of the sphere (e.g. the Earth) in the same units as the distance measurement. The equatorial radius of the Earth is approximately 3,963.2 miles or 6,378.1 kilometers.
-      //https://docs.mongodb.com/manual/reference/operator/query/near/#op._S_near
-      //https://docs.mongodb.com/manual/tutorial/calculate-distances-using-spherical-geometry-with-2d-geospatial-indexes/
-      console.log('distance::', distance);
-      var query = User.find({'geo': {
-        $near: [
-          addedWork.geo[0],
-          addedWork.geo[1]
-        ],
-        $maxDistance: distance
-        }
-        /**@todo figureout how to compair where contractor.type equals addedWork.type*/
-      }).where('type').equals(addedWork.type);
-      query.exec(function (err, contractors) {
-        console.log(' inside query.exec contractors nearby blah: ', contractors);
-        if (err) {
-          console.log(err);
-          throw err;
-        }
-        if (!contractors) {
-          console.log('Found did not find any matching item : ' + contractors);
-          res.json({});
-        } else {
-          // console.log('Found matching contractors: ' + contractors);
-          // res.json(contractors);
-          sendSMS(contractors);
-          sendEmail(contractors);
-       }
-      });
-      //end of query
-
-  // /*@todo get their phone number and email address
-  // /*@todo send them sms and email with work details*/
-
   var sendEmail = function(contractors){
     var nodemailer = require('nodemailer');
 
@@ -81,7 +41,7 @@ console.log('addedWork.type::', addedWork.type);
   }//End sendEmail function
 
   var sendSMS = function(contractors){
-    console.log('NUMBER OF CONTRACTORS TO SMS AND EMAIL: ',contractors.length + 1);
+    console.log('NUMBER OF CONTRACTORS TO SMS AND EMAIL: ',contractors.length);
     for (var i = 0; i < contractors.length; i++) {
           contractorFname = contractors[i].firstname;
           contractorLname = contractors[i].lastname;
@@ -104,6 +64,58 @@ console.log('addedWork.type::', addedWork.type);
       }); //End client.messages.create function
   }//End forloop
 }//End sendSMS function
+return new Promise(function (resolve, reject){
+
+  var  contractorFname,
+       contractorLname,
+       contractorEmail;
+  console.log('INSIDE newWorkAlert addedWork:', addedWork);
+
+  // /**@todo FIND CONTRACTORS NEAR WORK -- done*/
+  // //qury for nearby locations -- this code works
+  var matchingContractors;
+console.log('addedWork.type::', addedWork.type);
+      var distance = 1120/3963.2; //distance to radians: divide the distance by the radius of the sphere (e.g. the Earth) in the same units as the distance measurement. The equatorial radius of the Earth is approximately 3,963.2 miles or 6,378.1 kilometers.
+      //https://docs.mongodb.com/manual/reference/operator/query/near/#op._S_near
+      //https://docs.mongodb.com/manual/tutorial/calculate-distances-using-spherical-geometry-with-2d-geospatial-indexes/
+      console.log('distance::', distance);
+      var query = User.find({'geo': {
+        $near: [
+          addedWork.geo[0],
+          addedWork.geo[1]
+        ],
+        $maxDistance: distance
+        }
+        /**@todo figureout how to compair where contractor.type equals addedWork.type*/
+      }).where('type').equals(addedWork.type);
+
+        query.exec(function (err, contractors) {
+          console.log(' inside query.exec contractors nearby blah: ', contractors);
+          if (err) reject(err); //first half of resolving the promise
+          if (contractors.length < 1) {
+            console.log('Did not find any matching item : ' , contractors);
+            // res.json({});
+          } else {
+            // console.log('Found matching contractors: ' + contractors);
+            // res.json(contractors);
+            sendSMS(contractors);
+            sendEmail(contractors);
+            var contractorSocketArrayWorkObject = {};
+                contractorSocketArrayWorkObject.contractorSocketArray = contractors;
+                contractorSocketArrayWorkObject.savedWork = addedWork;
+            console.log('contractorSocketArrayWorkObject::', contractorSocketArrayWorkObject);
+
+            resolve(contractorSocketArrayWorkObject); //second half of resolving the promise
+
+            }
+        });//end of query
+      });
+  // /*@todo get their phone number and email address
+  // /*@todo send them sms and email with work details*/
+
+
+
 }//End var newWorkAlert function
+
 
 module.exports = newWorkAlert;

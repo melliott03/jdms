@@ -5,9 +5,12 @@ var db = require("../modules/db");
 var path = require("path");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
+mongoose.Promise = require('bluebird'); // set Promise provider to bluebird
+var Promise = require('bluebird');
 var Schema = mongoose.Schema;
 var darksky = require('darksky');//not using
-var geocoder = require('geocoder');
+// var geocoder = require('geocoder');
+  var geocoder = Promise.promisifyAll(require("geocoder"));
 var restler = require('restler');
 // var sugar = require('sugar');
 var Agenda = require('agenda');//#AGENDA
@@ -38,6 +41,11 @@ client = twilio('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1
 // var Work = mongoose.model("Works");
 // var Contractor = mongoose.model("Contractors");
 
+
+// router.use(function(req, res, next){ //https://onedesigncompany.com/news/express-generator-and-socket-io
+//   res.io = io;
+//   next();
+// });
 
 
 router.route("/accept/")
@@ -190,8 +198,9 @@ router.route("/complete")
 
 
 
-router.post("/", function(req,res){
-  console.log('1 inside post on server req.user._id', req.body );
+router.post("/", function(req, res, next){
+
+  var newwork;
   var work = req.body;
   //GET contractor's estimate FEE
   var contractorEstimateFee = workPayTotal(work);
@@ -229,14 +238,26 @@ router.post("/", function(req,res){
 
   //set work pay
   console.log('2 inside post on server req.user._id', req.user );
-  // Geocode item work
-  geocoder.geocode(address, function ( err, geocodedData ) {
+
+// GET FORECAST FUNCTION
+
+  var Forecast = require('forecast.io');
+  var options = {
+    APIKey: process.env.FORECAST_API_KEY, // a7477969f3764bd6cd2bf01efa7a7365
+    timeout: 1000
+  },
+  forecast = new Forecast(options);
+  var past = Math.round((new Date()).getTime() / 1000) - 57600;
+  var time = datetime;
+  var gettingForecast = function(geocodedData){
+    console.log('geocodedData in gettingForecast::', geocodedData);
     var geocodedData = geocodedData.results[0].geometry.location;
     var geo = [];
     geo[0]=geocodedData.lat;
     geo[1]=geocodedData.lng;
     var lat = geo[0];
     var lon = geo[1];
+    console.log('geo inside gettingForecast::', geo);
     //getting weather info with Forecast.io package
     var workdatetime =  datetime;
     console.log('workdatetime:' ,workdatetime);
@@ -248,40 +269,130 @@ router.post("/", function(req,res){
     // unixtime = '2013-05-06T12:00:00-0400'; // '1461067200' or unixtime.slice(0, - 3);
     console.log(' (2).hoursBefore(workdatetime) in unixtime:' , workdatetime);
     var latLonTime = ""+geo[0]+","+geo[1]+","+workdatetime; //"34.6036,98.3959"
+    console.log('geocodedData.lat::', geocodedData.lat);
+    console.log('geocodedData.lng::', geocodedData.lng);
+    console.log('datetime::', datetime);
 
-    var Forecast = require('forecast.io');
-    var options = {
-      APIKey: 'a7477969f3764bd6cd2bf01efa7a7365', //process.env.FORECAST_API_KEY
-      timeout: 1000
-    },
-    forecast = new Forecast(options);
-    var past = Math.round((new Date()).getTime() / 1000) - 57600;
-    var getForecast = function(latitude, longitude, time){
-      forecast.getAtTime(latitude, longitude, time, function (err, res, data) {
-        if (err) throw err;
+    return new Promise(function (resolve, reject){
+      forecast.getAtTime(geocodedData.lat, geocodedData.lng, datetime, function (err, res, data) {
+
         console.log('H E L L O data inside forecast.js: ', data);
-        // console.log('data inside forecast.js: ', data);
-        // return data;
-        var work_signatures = {};
-        var workWeather =[];
-        workWeather.push(data);
-        //save work instence with geocode and weather info
-        // console.log('W E A T H E R !!! !!!!!  ::  ', res.headers);
-
-        var addedWork = new Work({"work_signatures" : work_signatures, "money" : money, "date_created" : date_created, "type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id" : contractor_id, geo : geo, weather : workWeather });
-
-        addedWork.save(function(err, data){
-          if(err){
-            console.log(err);
-          }
-          console.log('data (new work item SAVED inside addWork.save) ',data);
-          newWorkAlert(addedWork);
-        });//END addedWork.save
+        var weatherNgeo = {};
+        weatherNgeo.geo = geo;
+        weatherNgeo.workWeather = [];
+        weatherNgeo.workWeather.push(data);
+        console.log('weatherNgeo inside forecast.getAtTime::', weatherNgeo);
+        if (err) reject(err);
+        else resolve(weatherNgeo)
       });//END forecast.getAtTime
-    }//END var getForecast
-    getForecast(lat,lon,past);
-  });//END geocoder.geocode
+    });
+  }//END var gettingForecast
+
+  var saveWork = function(weatherNgeo){
+
+    console.log('weatherNgeo in saveWork::', weatherNgeo);
+    var workWeather = weatherNgeo.workWeather;
+    var geo = weatherNgeo.geo;
+    var work_signatures = {};
+    var addedWork = new Work({"work_signatures" : work_signatures, "money" : money, "date_created" : date_created, "type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id" : contractor_id, geo : geo, weather : workWeather });
+    // newwork = addedWork;
+    return new Promise(function (resolve, reject){
+      addedWork.save(function(err, data){
+        if (err) reject(err);
+        else resolve(data)
+      });//END addedWork.save
+    });
+  }
+
+  // Geocode item work
+  // var geocodeWorkAddress = function(){
+  //   console.log('address in geocodeWorkAddress::', address);
+  //   geocoder.geocode(address, function ( err, geocodedData ) {
+  //     if (err) {
+  //       console.log('err in geocode', err);
+  //     }
+  //     var geocodedData = geocodedData.results[0].geometry.location;
+  //     return geocodedData;
+  //   });//END geocoder.geocode
+  // }
+
+var geocodeWorkAddress = function(){
+  return new Promise(function (resolve, reject){
+    geocoder.geocode(address, function ( err, geocodedData ) {
+      if (err) reject(err);
+      else resolve(geocodedData)
+      // var geocodedData = geocodedData.results[0].geometry.location;
+      // return geocodedData;
+    });//END geocoder.geocode
+  });
+};
+// io.to(socket.id).emit("event", data);
+// var startGeocode = geocodeWorkAddress();
+
+// startGeocode(address).then(function(geocodedData) {
+//     return eval(contents);
+// }).then(function(result) {
+//     console.log("The result of evaluating myfile.js", result);
+// }).catch(SyntaxError, function(e) {
+//     console.log("File had syntax error", e);
+// //Catch any other error
+// }).catch(function(e) {
+//     console.log("Error reading file", e);
+// });
+
+// var startGeocode = BlueBirdPromise.promisify(geocodeWorkAddress());
+
+geocodeWorkAddress().then(function(geocodedData) {
+  console.log('geocodedData::', geocodedData);
+    // Get Forecast
+    return gettingForecast(geocodedData);
+  }).then(function(weatherNgeo){
+    console.log('weatherNgeo::', weatherNgeo);
+    // Save work
+    return saveWork(weatherNgeo);
+  }).then(function(savedWork){
+    console.log('savedWork::', savedWork);
+    // Alert Contractors via Email and SMS
+    return newWorkAlert(savedWork); //return contractorSocketArrayWorkObject
+  })
+  .then(function(contractorSocketArrayWorkObject){
+    console.log('contractorSocketArrayWorkObject::', contractorSocketArrayWorkObject);
+    console.log('contractorSocketArrayWorkObject::.savedWork', contractorSocketArrayWorkObject.savedWork);
+    console.log('contractorSocketArrayWorkObject.contractorSocketArray::', contractorSocketArrayWorkObject.contractorSocketArray);
+    var savedWork = contractorSocketArrayWorkObject.savedWork;
+    var contractorSocketArray = contractorSocketArrayWorkObject.contractorSocketArray;
+    console.log('contractorSocketArray[0].socketID::', contractorSocketArray[0].socketID);
+    // Alert Contractors via socketID
+    // res.io.emit("socketToYou", savedWork);
+    res.io.to(contractorSocketArray[0].socketID).emit('socketToYou', {note: 'for your eyes only', work: savedWork});
+    res.send(savedWork);
+  })
+  // .then(function(arrayOfContractorSocketIDs){
+  //   // Emit to Contractors
+  //   res.io.emit("socketToYou", savedWork);
+  //   res.send(savedWork);
+  // }).then(function(savedWork){
+  //   // Send Response
+  //   res.io.emit("socketToYou", savedWork);
+  //   res.send(savedWork);
+  // })
+  .catch(function(err){
+    next(err);
+  });
+
 });// END router.post
+
+// router.get("/", function(req, res, next){
+//     Promise.try(function(){
+//         return doSomeAsyncThing();
+//     }).then(function(value){
+//         return doAnotherAsyncThing(value);
+//     }).then(function(newValue){
+//         res.send("Done!");
+//     }).catch(function(err){
+//         next(err);
+//     });
+// });
 
 
 router.get("/availibleWork", function(req,res){
