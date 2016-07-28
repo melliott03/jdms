@@ -171,7 +171,7 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkSe
     };
 }]);
 
-myApp.controller("ShowController", ["$scope", "$window", "$location", '$filter', '$http', '$log', "WorkService", 'uiGridConstants', 'stripe', '$mdDialog', 'Socket', function($scope, $window, $location, $filter, $http, $log, WorkService, uiGridConstants, stripe, $mdDialog, Socket){
+myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location", '$filter', '$http', '$log', "WorkService", 'uiGridConstants', 'stripe', '$mdDialog', 'Socket', function($scope, $interval, $window, $location, $filter, $http, $log, WorkService, uiGridConstants, stripe, $mdDialog, Socket){
   Socket.connect();
   $scope.$on('$locationChangeStart', function(event){
     Socket.disconnect(true);
@@ -196,7 +196,36 @@ myApp.controller("ShowController", ["$scope", "$window", "$location", '$filter',
         });
 
   Socket.on('socketToYou', function (msg) {
-            console.log("in controller, socketToYou msg,::", msg);
+            console.log("in controller, socketToYou msg, BEFORE::", msg);
+            $scope.determinateTimeValue = 0;
+            var TimeValue = 1000;
+
+            // function setDelay(i) {
+            //   $timeout(function(){
+            //     $scope.determinateTimeValue = i;
+            //     console.log(i);
+            //   }, 1000);
+            // };
+            //
+            // for (i = 1; i <= 100; ++i) {
+            //   setDelay(i);
+            // };
+
+
+
+              var iterrateVal = .1;
+              var i = 0;
+              $interval(function () {
+                if (i < TimeValue) {
+                  $scope.determinateTimeValue += iterrateVal;
+                  i++;
+                } else {
+
+                }
+
+              }, 100);
+            console.log("in controller, socketToYou msg, AFTER::", msg);
+
             // WorkService.saveSocketId(msg);
         });
   Socket.on('authenticated', function (msg) {
@@ -838,3 +867,15 @@ $scope.user = {
   };
 
 }]);
+
+
+// myApp.controller('XeditableCtrl', ['$scope', '$filter', '$http', function($scope, $filter, $http) {
+//
+//    $scope.loadGroups = function() {
+//      time = 0;
+//      time++;
+//      return $scope.
+//    };
+//
+//
+// }]);

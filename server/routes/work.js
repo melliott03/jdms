@@ -10,7 +10,7 @@ var Promise = require('bluebird');
 var Schema = mongoose.Schema;
 var darksky = require('darksky');//not using
 // var geocoder = require('geocoder');
-  var geocoder = Promise.promisifyAll(require("geocoder"));
+var geocoder = Promise.promisifyAll(require('geocoder'));
 var restler = require('restler');
 // var sugar = require('sugar');
 var Agenda = require('agenda');//#AGENDA
@@ -326,6 +326,23 @@ var geocodeWorkAddress = function(){
     });//END geocoder.geocode
   });
 };
+
+
+geocoder.geocodeAsync = function (string, options) {
+    return Promise.fromCallback(function (callback) {
+        geocoder.geocode(string, callback, options);
+    });
+};
+
+// var geocodeWorkAddress2 = Promise.promisify(geocoder.geocode());
+
+    // var geocodeWorkAddress = geocoder.geocode(address, function ( err, geocodedData ) {
+    //   // if (err) reject(err);
+    //   // else resolve(geocodedData)
+    //   // var geocodedData = geocodedData.results[0].geometry.location;
+    //   // return geocodedData;
+    // });//END geocoder.geocode
+
 // io.to(socket.id).emit("event", data);
 // var startGeocode = geocodeWorkAddress();
 
@@ -342,7 +359,7 @@ var geocodeWorkAddress = function(){
 
 // var startGeocode = BlueBirdPromise.promisify(geocodeWorkAddress());
 
-geocodeWorkAddress().then(function(geocodedData) {
+geocoder.geocodeAsync(address).then(function(geocodedData) {
   console.log('geocodedData::', geocodedData);
     // Get Forecast
     return gettingForecast(geocodedData);
@@ -377,6 +394,7 @@ geocodeWorkAddress().then(function(geocodedData) {
   //   res.send(savedWork);
   // })
   .catch(function(err){
+    console.log('err in .catch in work.js::', err);
     next(err);
   });
 
