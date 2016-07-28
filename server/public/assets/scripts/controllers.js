@@ -197,6 +197,7 @@ myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location
 
   Socket.on('socketToYou', function (msg) {
             console.log("in controller, socketToYou msg, BEFORE::", msg);
+            $scope.myVar = true;
             $scope.determinateTimeValue = 0;
             var TimeValue = 1000;
 
