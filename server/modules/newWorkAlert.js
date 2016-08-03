@@ -26,9 +26,9 @@ var newWorkAlert = function(addedWork){
         to: contractorEmail, // list of receivers
         subject: 'Hello ✔', // Subject line
         text: 'Hello '+ contractorFname +'  '+ contractorLname +'🐴 New work availible. TYPE: '
-        +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime, // plaintext body
+        +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+" Click here to accept: "+process.env.APP_URL+'/work/work-accept/'+addedWork.shortid, // plaintext body
         html: '<b>Hello '+ contractorFname +'  '+ contractorLname +' 🐴 New work availible. TYPE: '
-        +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+"</b>" // html body
+        +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+" Click here to accept: "+process.env.APP_URL+'/work/work-accept/'+addedWork.shortid+"</b>" // html body
       };
       // send mail with defined transport object
       transporter.sendMail(mailOptions, function(error, info){
@@ -51,12 +51,12 @@ var newWorkAlert = function(addedWork){
       var accountSid = 'AC266d44c5ce01697df6f475b34f850d8f';
       var authToken = "ee3db5ce904dd188912ea24b1646b46c"; //"{{ auth_token }}";
       var client = require('twilio')(accountSid, authToken);
-
+        // console.log('addedWork.shrtid', addedWork.shortid);
       client.messages.create({
           body: 'Hello '+ contractorFname +'  '+ contractorLname +'🐴 New work availible. TYPE: '
-          +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime, // plaintext body
+          +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+" Click here to accept: "+process.env.APP_URL+'/work/work-accept/'+addedWork.shortid, // plaintext body
           html: '<b>Hello '+ contractorFname +'  '+ contractorLname +' 🐴 New work availible. TYPE: '
-          +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+"</b>", // html body
+          +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+" Click here to accept: "+process.env.APP_URL+'/work/work-accept/'+addedWork.shortid+"</b>", // html body
           to: "+16128121238",
           from: "+16122844292"
       }, function(err, message) {

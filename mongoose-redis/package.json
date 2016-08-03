@@ -1,0 +1,87 @@
+{
+  "_args": [
+    [
+      "mongoose-redis",
+      "/Users/mikeelliott/AtomProjects/04052016_1_work"
+    ]
+  ],
+  "_from": "mongoose-redis@latest",
+  "_id": "mongoose-redis@1.0.8",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/mongoose-redis",
+  "_nodeVersion": "5.9.1",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/mongoose-redis-1.0.8.tgz_1459917162024_0.6028139723930508"
+  },
+  "_npmUser": {
+    "email": "nasa8x@gmail.com",
+    "name": "nasa8x"
+  },
+  "_npmVersion": "3.7.3",
+  "_phantomChildren": {
+    "double-ended-queue": "2.1.0-0"
+  },
+  "_requested": {
+    "name": "mongoose-redis",
+    "raw": "mongoose-redis",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/mongoose-redis/-/mongoose-redis-1.0.8.tgz",
+  "_shasum": "20d9da26ea4c36e6b72153276027d0f5d5296224",
+  "_shrinkwrap": null,
+  "_spec": "mongoose-redis",
+  "_where": "/Users/mikeelliott/AtomProjects/04052016_1_work",
+  "author": {
+    "email": "nasa8x@gmail.com",
+    "name": "Nasa8x"
+  },
+  "dependencies": {
+    "redis": "^2.6.0-1"
+  },
+  "description": "Integrated Redis caching for Mongoose queries.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "20d9da26ea4c36e6b72153276027d0f5d5296224",
+    "tarball": "https://registry.npmjs.org/mongoose-redis/-/mongoose-redis-1.0.8.tgz"
+  },
+  "keywords": [
+    "cache",
+    "cached",
+    "caching",
+    "mongo cache",
+    "mongodb",
+    "mongodb cache",
+    "mongoose",
+    "mongoose cache",
+    "mongoose redis",
+    "node cache",
+    "nosql",
+    "performance",
+    "redis",
+    "redis cache",
+    "redis mongo",
+    "redis mongodb",
+    "redis mongoose"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "nasa8x",
+      "email": "nasa8x@gmail.com"
+    }
+  ],
+  "name": "mongoose-redis",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "scripts": {},
+  "version": "1.0.8"
+}

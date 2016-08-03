@@ -44,8 +44,16 @@ app.use(function(req, res, next){ //https://onedesigncompany.com/news/express-ge
 app.use(express.static(path.join(__dirname, 'public')));//Twilio Video
 
 var mongoose = require("mongoose");
+
 // set Promise provider to bluebird
 mongoose.Promise = require('bluebird');
+
+// MONGOOSE-REDIS
+var MongooseCache = require('mongoose-redis');
+var cache = MongooseCache(mongoose, {port: config.redisport, host: config.redishost});
+//Config with compress, with this configuration, the data will be compressed before saving on Redis
+// var cache = MongooseCache(mongoose, {port: 6379, host: 'localhost', compress: true});
+
 var nev = require('email-verification')(mongoose); //this might need to be placed after the user model
 
 var updateUser = require('./routes/updateUser');
@@ -270,6 +278,7 @@ app.post('/updateUserSocketId', passport.authenticate('jwt', { session: false })
     console.log('after saving user oooo',user);
   });
 
+
   // Work.find({$or : [{'customer_id': req.user._id}, {'contractor_id': req.user._id}]}, function(err, messages) {
   //   if (err)
   //     res.send(err);
@@ -277,6 +286,37 @@ app.post('/updateUserSocketId', passport.authenticate('jwt', { session: false })
   //   res.json(messages);
   // });
 });
+
+app.post('/updateUserSocketIdmobile', passport.authenticate('jwt', { session: false }), function(req, res) {
+  console.log('insode updateUserSocketId req.user._id:', req.user._id);
+  console.log('inside updateUserSocketId req.body:', req.body);
+  var socketID = req.body;
+  console.log('inside updateUserSocketId socketID:', socketID);
+  socketID = socketID.socketidit;
+  socketID = socketID.split(/[""]/); //substring(socketID.lastIndexOf('"')+1,socketID.lastIndexOf('"'));
+  var socketIDstore = socketID[1];
+  console.log('inside updateUserSocketId  socketIDstore after parsing:', socketIDstore);
+
+  User.findOneAndUpdate({ _id: req.user._id }, { socketID: socketIDstore }, function(err, user) {
+    if (err) throw err;
+
+    // we have the updated user returned to us
+    console.log('after saving user oooo',user);
+  });
+  });
+
+app.get('/detail/:id', function(req, res) {
+    var _id = req.params.id;
+      User.findOne({ _id: _id })
+            .cache(120, _id) // custom cache key by id
+            .exec(function(err, doc) {
+              console.log('doc::', doc);
+              res.send(doc);
+
+              // return res.render("info", { info: doc, title: doc.tl, image: doc.img, description: doc.desc });
+            });
+});
+
 
 // Protect dashboard route with JWT
 app.get('/dashboard', passport.authenticate('jwt', { session: false }), function(req, res) {

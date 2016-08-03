@@ -200,7 +200,7 @@ myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location
             $scope.myVar = true;
             $scope.determinateTimeValue = 0;
             var TimeValue = 1000;
-
+            // $scope.ding = WorkService.audioDing;
             // function setDelay(i) {
             //   $timeout(function(){
             //     $scope.determinateTimeValue = i;

@@ -37,6 +37,7 @@ var twilio = require('twilio'),
 client = twilio('AC266d44c5ce01697df6f475b34f850d8f', 'ee3db5ce904dd188912ea24b1646b46c'); //twilio('ACCOUNTSID', 'AUTHTOKEN'),
 // var acceptedWorkReminder = require('../modules/acceptedWorkReminder');
 
+var shortid = require('shortid');
 
 // var Work = mongoose.model("Works");
 // var Contractor = mongoose.model("Contractors");
@@ -294,7 +295,8 @@ router.post("/", function(req, res, next){
     var workWeather = weatherNgeo.workWeather;
     var geo = weatherNgeo.geo;
     var work_signatures = {};
-    var addedWork = new Work({"work_signatures" : work_signatures, "money" : money, "date_created" : date_created, "type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id" : contractor_id, geo : geo, weather : workWeather });
+    var shrtid = shortid.generate();
+    var addedWork = new Work({"shortid" : shrtid, "work_signatures" : work_signatures, "money" : money, "date_created" : date_created, "type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id" : contractor_id, geo : geo, weather : workWeather });
     // newwork = addedWork;
     return new Promise(function (resolve, reject){
       addedWork.save(function(err, data){
@@ -472,6 +474,11 @@ router.get("/contractorWork", function(req,res){
       // });
 });
 
+router.use("/work-accept/:id", function(req,res){
+  console.log('INSIDE /work-accept/:id req.params: ',req.params);
+  console.log('INSIDE /work-accept/:id req.user: ',req.user);
+
+});
 
 router.get("/", function(req,res){
 /**@todo find and send all works for this customer */

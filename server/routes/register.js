@@ -77,7 +77,7 @@ var createStripeAccount = function(user, req){
 
 //EMAIL VARIFICATION
 nev.configure({
-   verificationURL: process.env.APPURL+'/register/email-verification/${URL}',
+   verificationURL: process.env.APP_URL+'/register/email-verification/${URL}',
    persistentUserModel: User,
    tempUserCollection: 'work_tempusers',
 
@@ -290,7 +290,7 @@ if (req.body.action === 'signup') {
 }else if(req.body.action === 'invite') {
   //EMAIL VARIFICATION
   nev2nd.configure({
-     verificationURL: process.env.APPURL+'/register/invite-verification/${URL}',
+     verificationURL: process.env.APP_URL+'/register/invite-verification/${URL}',
      persistentUserModel: User,
      tempUserCollection: 'user_tempinvites',
       tempUserModel: User_TempInvited,
