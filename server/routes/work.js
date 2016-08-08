@@ -196,7 +196,37 @@ router.route("/complete")
 });
 
 
+router.post("/mobileWork", function(req,res){
+  console.log('INSIDE /mobileWork req.body: ',req.body.msg);
+  console.log('INSIDE /mobileWork req.user: ',req.user);
+  var user = req.user;
+  var workid = req.body.msg;
+  workid = workid.replace(/[^0-9a-zA-Z]/g, '');
+  console.log('in /mobileWork workid::', workid);
+  //FIND THE WORK AND SEND IT
 
+  var promise = Work.findById(''+workid).exec();
+  var date_now = Date.now();
+  promise.then(function(work) {
+    console.log('user._id::', user._id);
+    console.log('work asdf::', work);
+    work.notifications.push({user_id: user._id, datetime: date_now, action: ""});
+
+    return work.save(); // returns a promise
+  })
+  .then(function(work) {
+    console.log('updated work: ', work);
+    res.send({id:"return from mobileWork", work: work});
+    // do something with updated work
+  })
+  .catch(function(err){
+    // just need one of these
+    console.log('error:', err);
+  });
+
+
+
+});
 
 
 router.post("/", function(req, res, next){
@@ -226,6 +256,7 @@ router.post("/", function(req, res, next){
   customer_id = req.user._id,
   contractor_id = '',
   money = {},
+  notifications = [],
   status = req.body.status,
   date_created = moment().toISOString();
   console.log('work date_created',date_created);
@@ -383,7 +414,13 @@ geocoder.geocodeAsync(address).then(function(geocodedData) {
     console.log('contractorSocketArray[0].socketID::', contractorSocketArray[0].socketID);
     // Alert Contractors via socketID
     // res.io.emit("socketToYou", savedWork);
-    res.io.to(contractorSocketArray[0].socketID).emit('socketToYou', {note: 'for your eyes only', work: savedWork});
+    // savedWork = JSON.stringify(savedWork);
+    console.log('savedWork::', savedWork);
+    console.log('savedWork._id::', savedWork._id);
+    var workitem = [];
+    workitem.push({username:savedWork});
+    // socket.emit('login', {userList: userList})
+    res.io.to(contractorSocketArray[0].socketID).emit('socketToYou', JSON.stringify(savedWork._id));
     res.send(savedWork);
   })
   // .then(function(arrayOfContractorSocketIDs){
@@ -480,6 +517,49 @@ router.use("/work-accept/:id", function(req,res){
 
 });
 
+
+
+
+
+router.route("/:id")
+    .delete(function(req,res){
+        // console.log("Inside delete on server: ",  req.params.id);
+        Work.findByIdAndRemove(req.params.id, function(err, work){
+            if(err){
+              console.log(err);
+            }
+            res.send(work);
+        });
+    })
+    .get(function(req,res){
+        console.log("Inside get /:id on server: ",  req.params.id);
+        Work.findById(req.params.id, function(err, work){
+            if(err){
+              console.log(err);
+            }
+            console.log('work in /:id get::', work);
+            res.send(work);
+        });
+    })
+    // update the work with this id (accessed at PUT http://localhost:8080/api/works/:work_id)
+    .put(function(req, res) {
+      console.log('INSIDE cancel on server req.params.id:', req.params.id);
+      Work.findById(req.params.id, function(err, work){
+      console.log('INSIDE cancel on server work:', work);
+
+          if(err){
+            console.log(err);
+          }
+          work.status = 'canceled';
+          // save the work
+            work.save(function(err) {
+                if (err)
+                    res.send(err);
+          res.json({ message: 'work updated!' });
+      });
+    });
+  });
+
 router.get("/", function(req,res){
 /**@todo find and send all works for this customer */
 console.log('INSIDE get on work req.user._id: ',req.user._id);
@@ -518,34 +598,7 @@ router.route("/update")
     });
 
 
-router.route("/:id")
-    .delete(function(req,res){
-        // console.log("Inside delete on server: ",  req.params.id);
-        Work.findByIdAndRemove(req.params.id, function(err, work){
-            if(err){
-              console.log(err);
-            }
-            res.send(work);
-        });
-    })
-    // update the work with this id (accessed at PUT http://localhost:8080/api/works/:work_id)
-    .put(function(req, res) {
-      console.log('INSIDE cancel on server req.params.id:', req.params.id);
-      Work.findById(req.params.id, function(err, work){
-      console.log('INSIDE cancel on server work:', work);
 
-          if(err){
-            console.log(err);
-          }
-          work.status = 'canceled';
-          // save the work
-            work.save(function(err) {
-                if (err)
-                    res.send(err);
-          res.json({ message: 'work updated!' });
-      });
-    });
-  });
 
   var mongoURI =
     process.env.MONGOLAB_URI ||
