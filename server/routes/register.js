@@ -8,8 +8,15 @@ var geocoder = require('geocoder');
 // var createStripeAccount = require("../modules/createStripeAccount");
 var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
 var mongoose = require("mongoose");
+var Promise = require('bluebird');
+// set Promise provider to bluebird
+mongoose.Promise = require('bluebird');
 var nev = require('email-verification')(mongoose);
 var nev2nd = require('email-verification')(mongoose);
+// Load Chance
+var Chance = require('chance');
+// Instantiate Chance so it can be used
+var chance = new Chance();
 
 var createStripeCustomer = function(user, req){
   stripe.customers.create({
@@ -24,6 +31,7 @@ var createStripeCustomer = function(user, req){
 
       // we have the updated user returned to us
       console.log("after creating and saving the user's stripe customer info", user);
+      createTelephonicIDnPassCode(user, req);
     });
   });
 }
@@ -59,6 +67,7 @@ var createStripeAccount = function(user, req){
 
             // we have the updated user returned to us
             console.log('after saving user"s stripe info oooo',user);
+            createTelephonicIDnPassCode(user, req);
           });
           // asynchronously called
           //stripe terms of service acceptance
@@ -74,6 +83,119 @@ var createStripeAccount = function(user, req){
           // );
         });
       };
+
+
+var createTelephonicIDnPassCode = function(user, req){
+  //search db for the generated ids. if found, run the generator again
+  var userid = chance.natural({min: 1111111, max: 9999999});
+  var userid = 1375116;
+  // telephonic: {userID: uerID, passCode: passCode}
+  console.log('userid1::', userid);
+
+  //f I run a query in mongoose which matches no documents in the collection, what are the values of err and results in the callback function callback(err, results)?
+  //If it is a find, then results == []. If it is a findOne, then results == null
+  var promise = User.findOne({telephonicID: userid}).exec();
+  promise.then(function(anyUserWithID) {
+    console.log('anyUserWithID ::', anyUserWithID);
+    // if (anyUserWithID == null){
+    //   addTelephonicIDnPassCode();
+    // }
+    return anyUserWithID;
+
+  })
+  .then(function(anyUserWithID) {
+    console.log('inside .then of createTelephonicIDnPassCode, anyUserWithID::', anyUserWithID);
+    if (anyUserWithID == null) {
+      console.log('inside "if" of .then of createTelephonicIDnPassCode, anyUserWithID::', anyUserWithID);
+      addTelephonicIDnPassCode(user, req, userid);
+    } else {
+      console.log('inside "else" of .then of createTelephonicIDnPassCode, anyUserWithID::', anyUserWithID);
+      rerunCreateTelephonicIDnPassCode(user, req);
+    }
+    // do something with updated work
+  })
+  .catch(function(err){
+    // just need one of these
+    console.log('error:', err);
+  });
+
+};
+
+var addTelephonicIDnPassCode = function(aUser, req, userid){
+  // User.findOneAndUpdate({ _id: user._id }, { epirts: {customerID: customer.id, customer: customer} }, function(err, user) {
+console.log('inside addTelephonicIDnPassCode, userid::', userid);
+var passCode = chance.natural({min: 0000, max: 9999});
+console.log('inside addTelephonicIDnPassCode, passCode::', passCode);
+console.log('inside addTelephonicIDnPassCode, user::', aUser);
+User.update({_id: aUser._id}, {
+    telephonicID: userid,
+    telephonicPassCode: passCode
+    // username: newUser.username,
+    // password: newUser.password,
+    // rights: newUser.rights
+}, function(err, numberAffected, rawResponse) {
+  console.log('numberAffected::', numberAffected);
+  console.log('rawResponse::', rawResponse);
+   //handle it
+});
+// user.telephonicID = userid;
+// user.telephonicPassCode = passCode;
+// user.save(function (err, aUser) {
+//     if(err) {
+//         console.error('ERROR!');
+//     }
+//     console.log('after saving aUser telephonic ID and passCode',user);
+// });
+
+  // User.findOne({_id: aUser._id}, function (err, user) {
+  //   if (err) {
+  //     console.log(err);
+  //   }
+  //   console.log('user in find::',user);
+  //
+  //   user.telephonicID = userid;
+  //   user.telephonicPassCode = passCode;
+  //
+  //   user.save(function (err) {
+  //       if(err) {
+  //           console.error('ERROR!');
+  //       }
+  //       console.log('after saving user"s telephonic ID and passCode',user);
+  //   });
+  // });
+
+};
+
+var rerunCreateTelephonicIDnPassCode = function(user, req){
+  //search db for the generated ids. if found, run the generator again
+  var userid = chance.natural({min: 1111111, max: 9999999});
+  console.log('inside rerunCreateTelephonicIDnPassCode, userid::', userid);
+
+  //f I run a query in mongoose which matches no documents in the collection, what are the values of err and results in the callback function callback(err, results)?
+  //If it is a find, then results == []. If it is a findOne, then results == null
+  var promise = User.findOne({telephonicID: userid}).exec();
+  promise.then(function(anyUserWithID) {
+    console.log('anyUserWithID ::', anyUserWithID);
+    // if (anyUserWithID == null){
+    //   addTelephonicIDnPassCode();
+    // }
+    return anyUserWithID;
+
+  })
+  .then(function(anyUserWithID) {
+    if (anyUserWithID == null) {
+      addTelephonicIDnPassCode(user, req, userid);
+    } else {
+      rerunCreateTelephonicIDnPassCode(user, req);
+    }
+    // do something with updated work
+  })
+  .catch(function(err){
+    // just need one of these
+    console.log('error:', err);
+  });
+
+};
 
 //EMAIL VARIFICATION
 nev.configure({
@@ -215,6 +337,7 @@ if (req.body.action === 'signup') {
     //
     //     var reqbody =req.body;
 
+
         newUser = new User({
           username: req.body.username,
           email: email,
@@ -228,7 +351,9 @@ if (req.body.action === 'signup') {
           type: req.body.type,
           epirts: '',
           socketID: '',
-          geo: geo || ''
+          geo: geo || '',
+          telephonicPassCode: 0,
+          telephonicID: 0
         });
         // console.log("newUserObject.geo : ", newUserObject.geo);
 

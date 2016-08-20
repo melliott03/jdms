@@ -95,6 +95,7 @@ var path = require("path");
 
 var twilio = require("twilio");
 
+var telephonic = require("./routes/telephonic");
 var ivr = require("./routes/ivr");
 
 // //brought in from previous experiment
@@ -185,7 +186,7 @@ app.use(morgan('dev'));
 //START: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
 // Authenticate the user and get a JSON Web Token to include in the header of future requests.
 apiRoutes.post('/authenticate', function(req, res) {
-  console.log('req.body::', req.body);
+  console.log('req.body in apiRoutes.post /authenticate::', req.body);
   User.findOne({
     email: req.body.email
   }, function(err, user) {
@@ -701,7 +702,167 @@ app.get('/voice', (req, res) => {
 });
 //END https://www.twilio.com/blog/2015/09/monitoring-call-progress-events-with-node-js-and-express.html
 
+
+app.post('/phoneAnInterpreter', (req, res) => {
+  console.log("req::", req);
+
+  var callStatus = req.body.DialCallStatus;
+  var callDuration = req.body.DialCallDuration;
+
+  if (callStatus) {
+    console.log("callStatus::", callStatus);
+    console.log("callDuration::", callDuration);
+  }
+
+  var twiml = new twilio.TwimlResponse();
+  // Talk in a robot voice over the phone.
+  // twiml.say('Hello, ' + 'so you need an interpreter, right? Well, hold on let me get one for you.');
+  //PRESS ONE FOR Spanish
+  // grab list of interpreters currently logged in for voice interpretation
+  //res.io to an interpreter make sure they are availible and if yes, dial them
+  // twiml.dial('+16128121238');
+  // twiml.dial({ action: '/phoneAnInterpreterAgain?agentId=' + '123' }, function() {
+        // this.number('+16128121238'
+        // , {
+        //   url: '/phoneAnInterpreter'
+        // }
+      // );
+  // });
+
+  // Set the response type as XML.
+  res.header('Content-Type', 'text/xml');
+  // Send the TwiML as the response.
+  res.send(twiml.toString());
+
+
+  //
+  // console.log('req.query : ', req.query.user_id);
+  // //Find the user in the database
+  // Work.findById(req.query.work_id, function(err, work){
+  //   console.log('INSIDE /voice on server "work:"', work);
+  //   if(err){
+  //     console.log(err);
+  //   }
+  //     User.findById(req.query.user_id, function(err, contractor){
+  //       console.log('INSIDE accept on server work.contractor_id contractor:', contractor);
+  //       if(err){
+  //         console.log(err);
+  //       }
+  //         deliverUserMessage(work, contractor);
+  //       });
+  // });
+    // var deliverUserMessage = function(work, contractor){
+    //   //Start of original voice call response
+    //   var firstname = contractor.firstname;
+    //   var lastname = contractor.lastname;
+    //   var address = work.address;
+    //   var date = work.datetime;
+    //    date = Date.create(date).format(); //http://sugarjs.com/api/Date/format
+    //   console.log('Date.create(date):' ,Date.create(date));
+    //   // Generate a TwiML response
+    //   var twiml = new twilio.TwimlResponse();
+    //   // Talk in a robot voice over the phone.
+    //   twiml.say('Hello, ' + firstname + " , " + lastname + 'this is a reminder for your work appointment on'+ date +' Please plan to arrive 10 minutes early. This is Mike Elliot saying, we love you. ');
+    //   // Set the response type as XML.
+    //   res.header('Content-Type', 'text/xml');
+    //   // Send the TwiML as the response.
+    //   res.send(twiml.toString());
+    //   //END of original voice call response
+    // }
+});
+
+app.post('/phoneAnInterpreterAgain', (req, res) => {
+  console.log("req::", req);
+
+  var callstatus = req.body.DialCallStatus;
+  if (callstatus) {
+    console.log("callstatus::", callstatus);
+  }
+
+  var twiml = new twilio.TwimlResponse();
+  // Talk in a robot voice over the phone.
+  twiml.say('please hold while we connect you to an interpreter');
+  //PRESS ONE FOR Spanish
+  // grab list of interpreters currently logged in for voice interpretation
+  //res.io to an interpreter make sure they are availible and if yes, dial them
+  // twiml.dial('+16128121238');
+  twiml.dial({ action: '/phoneAnInterpreter?agentId=' + '123' }, function() {
+        this.number('+16128121238'
+      );
+  });
+  // Set the response type as XML.
+  res.header('Content-Type', 'text/xml');
+  // Send the TwiML as the response.
+  res.send(twiml.toString());
+
+});
+//END https://www.twilio.com/blog/2015/09/monitoring-call-progress-events-with-node-js-and-express.html
+
+
+
+app.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res) => {
+  //twilio@3.3.1-edge
+  console.log("req.body in app.post CallCenterCallback::", req.body);
+  // var callbody = req.body;
+  });
+
+app.use('/AssignmentCallbackUrl', twilio.webhook({validate: false}), (req, res) => {
+  //twilio@3.3.1-edge
+  console.log("req.body in app.post AssignmentCallbackUrl::", req.body);
+  var callbody = req.body;
+  var accountSid = process.env.TWILIO_ACCOUNT_SID;
+  var authToken = process.env.TWILIO_AUTH_TOKEN;
+  var workspaceSid = callbody.WorkspaceSid;
+  var taskSid = callbody.TaskSid;
+  var reservationSid = callbody.ReservationSid;
+  console.log('reservationSid::', reservationSid);
+  console.log('taskSid::', taskSid);
+
+  var twilioLibrary = require('twilio');
+
+  var client = new twilioLibrary.TaskRouterClient(accountSid, authToken, workspaceSid);
+  // call using a reservation
+    client.workspace.tasks(taskSid).reservations(reservationSid).update({
+        instruction: 'dequeue',
+        dequeueFrom: '+16122172551',
+        dequeueTo: '+16128121238'
+        // dequeueFrom: '+16122172551',
+        // callUrl: '/telephonic/screencall',
+        // callStatusCallbackUrl: '/telephonic/callSummary',
+        // callAccept: 'true',
+        // to:'+16128121238'
+    }, function(err, reservation) {
+      if (err) {
+        console.log('err in reservation callback::', err);
+      }
+      console.log('reservation::', reservation);
+
+    });
+
+    client.workspace.tasks(taskSid).reservations(reservationSid).update({
+        instruction: 'call',
+        callFrom: '+16122172551',
+        callUrl: 'https://9d550a07.ngrok.io/telephonic/screencall',
+        callStatusCallbackUrl: 'https://9d550a07.ngrok.io/telephonic/callSummary',
+        callAccept: 'true',
+        callTo: '+16128121238'
+        // ,
+        // callTimeout: '77'
+
+    }, function(err, reservation) {
+      if (err) {
+        console.log('err in reservation callback::', err);
+      }
+      console.log('reservation::', reservation);
+
+    });
+
+  });
+
+
+app.use('/telephonic', telephonic);
 app.use('/ivr', ivr);
+
 
 // app.get('/logout', logout());
 

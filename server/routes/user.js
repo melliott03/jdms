@@ -74,6 +74,8 @@ router.get("/name", function(req,res,next){
         role: req.user.role,
         id: req.user._id,
         display_name: req.user.epirts.customer_display_name,
+        telephonicID: req.user.telephonicID,
+        telephonicPassCode: req.user.telephonicPassCode,
         sources: {
           total_count: req.user.epirts.customer.sources.total_count,
           data: paymentSourcesNewArray

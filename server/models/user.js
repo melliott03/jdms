@@ -22,6 +22,9 @@ var UserSchema = new Schema({
     company: {type: String, required: false},
     socketID: {type: String, required: false},
     lastlogin: {type: Date, default: Date.now },
+    telephonicID: {type: Number, required: false},
+    telephonicPassCode: {type: Number, required: false},
+
     geo: {
         type: [Number],
         index: '2d'
