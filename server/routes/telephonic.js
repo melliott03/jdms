@@ -23,7 +23,7 @@ router.post('/welcome', twilio.webhook({validate: false}), function (request, re
         // twiml.say('Please choose the language of interpretation. Spanish, 1. Hmong, 2. Somali, 3. Oromo, 4. Amharic, 5.');
 
         // node.play("http://howtodocs.s3.amazonaws.com/et-phone.mp3", {loop: 3});
-    });
+    }).redirect('/telephonic/welcome');
     response.send(twiml);
 });
 
@@ -152,30 +152,31 @@ router.post('/menu', twilio.webhook({validate: false}), function (request, respo
         var twiml = new twilio.TwimlResponse();
         optionActions[selectedOption](twiml);
         response.send(twiml);
+    }else {
+      response.send(redirectWelcome());
     }
-    response.send(redirectWelcome());
 });
 
 // POST: '/ivr/planets'
-router.post('/callSummary', (req, res) => {
-  console.log("req.body::", req.body);
+router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
+  console.log("req.body in /callSummary::", req.body);
 
-  var DialCallStatus = req.body.DialCallStatus;
-  var callDuration = req.body.DialCallDuration;
-
-  if (DialCallStatus) {
-    console.log("DialCallStatus::", DialCallStatus);
-    console.log("callDuration::", callDuration);
-  }
-
+  // var DialCallStatus = req.body.DialCallStatus;
+  // var callDuration = req.body.DialCallDuration;
+  //
+  // if (DialCallStatus) {
+  //   console.log("DialCallStatus::", DialCallStatus);
+  //   console.log("callDuration::", callDuration);
+  // }
+  //
   var twiml = new twilio.TwimlResponse();
-  if (DialCallStatus === 'no-answer') {
-    //no-answer
-    twiml.redirect('/telephonic/getSpanishInterpreter');
-  } else {
-    twiml.say("Thank you for using NowLanguage TeleInterpret Service - the " +
-        "please come again.");
-    }
+  // if (DialCallStatus === 'no-answer') {
+  //   //no-answer
+  //   twiml.redirect('/telephonic/getSpanishInterpreter');
+  // } else {
+  //   twiml.say("Thank you for using NowLanguage TeleInterpret Service - the " +
+  //       "please come again.");
+  //   }
 
 
   // Set the response type as XML.
@@ -186,27 +187,46 @@ router.post('/callSummary', (req, res) => {
 
 router.post('/screencall', twilio.webhook({validate: false}), function (req, res) {
   console.log('inside /screencall');
+  console.log('inside /screencall req.query.reservationSid::', req.query.reservationSid);
+  var reservationSid = req.query.reservationSid;
   var twiml = new twilio.TwimlResponse();
+  twiml.say('Please press any key to accept this interpreting session.');
   twiml.gather({
-      action: '/telephonic/connectmessage',
+      action: '/telephonic/connectmessage?reservationSid='+reservationSid,
       numDigits: '1'
     }, function () {
       this
         .say('Please press any key to accept this interpreting session.');
-    });
+    })
     // .queue('Spanish Queue');
-    // .say('Sorry. Did not get your response')
-    // .redirect('/telephonic/getSpanishInterpreter');
-    // .hangup();
+    .say('Sorry. Did not get your response')
+    .redirect('/telephonic/screencall');
+    // .hangup()
 
   res.send(twiml.toString());
 });
 // POST: /telephonic/connectmessage
 router.post('/connectmessage', twilio.webhook({validate: false}), function (req, res) {
+  console.log('in connectmessage req.body', req.body);
+  console.log('inside /connectmessage req.query.reservationSid::', req.query.reservationSid);
+  var reservationSid = req.query.reservationSid;
+
+
   var twiml = new twilio.TwimlResponse();
+  // twiml.say('You will now be connected to the first caller in the queue.')
 
-  twiml.say('Connecting you to the client now');
+  ///*
+  twiml.say('You will now be connected to the interpreting session.')
+    .dial({}, function() {
+        this.queue({reservationSid: ''+reservationSid});
+        // this.queue({queueSid:'QU764c27d4fad6b2d3f06d9481441f1e43'});
+        // this.queue('spanish');
 
+    });
+    // .redirect();
+    //*/
+  console.log(twiml.toString());
+  res.header('Content-Type', 'application/xml');
   res.send(twiml.toString());
 });
 

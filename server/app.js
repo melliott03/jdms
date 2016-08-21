@@ -808,6 +808,7 @@ app.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res) =>
 
 app.use('/AssignmentCallbackUrl', twilio.webhook({validate: false}), (req, res) => {
   //twilio@3.3.1-edge
+
   console.log("req.body in app.post AssignmentCallbackUrl::", req.body);
   var callbody = req.body;
   var accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -815,6 +816,7 @@ app.use('/AssignmentCallbackUrl', twilio.webhook({validate: false}), (req, res) 
   var workspaceSid = callbody.WorkspaceSid;
   var taskSid = callbody.TaskSid;
   var reservationSid = callbody.ReservationSid;
+    /*
   console.log('reservationSid::', reservationSid);
   console.log('taskSid::', taskSid);
 
@@ -822,32 +824,26 @@ app.use('/AssignmentCallbackUrl', twilio.webhook({validate: false}), (req, res) 
 
   var client = new twilioLibrary.TaskRouterClient(accountSid, authToken, workspaceSid);
   // call using a reservation
-    client.workspace.tasks(taskSid).reservations(reservationSid).update({
-        instruction: 'dequeue',
-        dequeueFrom: '+16122172551',
-        dequeueTo: '+16128121238'
-        // dequeueFrom: '+16122172551',
-        // callUrl: '/telephonic/screencall',
-        // callStatusCallbackUrl: '/telephonic/callSummary',
-        // callAccept: 'true',
-        // to:'+16128121238'
-    }, function(err, reservation) {
-      if (err) {
-        console.log('err in reservation callback::', err);
-      }
-      console.log('reservation::', reservation);
-
-    });
+    // client.workspace.tasks(taskSid).reservations(reservationSid).update({
+    //     instruction: 'dequeue'
+    //     // dequeueFrom: '+16122172551',
+    //     // dequeueTo: '+16128121238'
+    // }, function(err, reservation) {
+    //   if (err) {
+    //     console.log('err in reservation callback::', err);
+    //   }
+    //   console.log('reservation::', reservation);
+    //
+    // });
 
     client.workspace.tasks(taskSid).reservations(reservationSid).update({
         instruction: 'call',
         callFrom: '+16122172551',
-        callUrl: 'https://9d550a07.ngrok.io/telephonic/screencall',
-        callStatusCallbackUrl: 'https://9d550a07.ngrok.io/telephonic/callSummary',
+        callUrl: process.env.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid,
+        callStatusCallbackUrl: process.env.APP_URL+'/telephonic/callSummary',
         callAccept: 'true',
-        callTo: '+16128121238'
-        // ,
-        // callTimeout: '77'
+        callTo: '+16128121238' //16128121238 16122671744
+        // callTimeout: '177'
 
     }, function(err, reservation) {
       if (err) {
@@ -856,6 +852,27 @@ app.use('/AssignmentCallbackUrl', twilio.webhook({validate: false}), (req, res) 
       console.log('reservation::', reservation);
 
     });
+    */
+
+    /*
+    // this code worked
+    var assignmentInstruction = {
+      instruction: 'dequeue',
+      post_work_activity_sid: 'WA442ed2a8dcf0fa1b169207b8cd80dbab',
+      from: '+16122172551' // a verified phone number from your twilio account
+    };
+    */
+
+    var assignmentInstruction = {
+      instruction: 'call',
+      // post_work_activity_sid: 'WA442ed2a8dcf0fa1b169207b8cd80dbab',
+      url: process.env.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid,
+      status_callback_url: process.env.APP_URL+'/telephonic/callSummary',
+      from: '+16122172551' // a verified phone number from your twilio account
+    };
+
+    res.header('Content-Type', 'application/json');
+    res.json(assignmentInstruction);
 
   });
 
