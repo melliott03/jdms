@@ -18,6 +18,13 @@ var Chance = require('chance');
 // Instantiate Chance so it can be used
 var chance = new Chance();
 
+// These vars are your accountSid and authToken from twilio.com/user/account
+var twilio = require('twilio');
+
+var accountSid = process.env.TWILIO_ACCOUNT_SID;
+var authToken = process.env.TWILIO_AUTH_TOKEN;
+var workspaceSid = process.env.TWILIO_WORKSPACE_SID;
+
 var createStripeCustomer = function(user, req){
   stripe.customers.create({
     description: 'Customer for work app',
@@ -32,7 +39,9 @@ var createStripeCustomer = function(user, req){
       // we have the updated user returned to us
       console.log("after creating and saving the user's stripe customer info", user);
       createTelephonicIDnPassCode(user, req);
+
     });
+
   });
 }
 
@@ -84,6 +93,40 @@ var createStripeAccount = function(user, req){
         });
       };
 
+var createTwilioWorker = function(user, telephonicUser){
+  console.log('in createTwilioWorker user::', user);
+  console.log('in createTwilioWorker user::', telephonicUser);
+
+
+  var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
+  // Create a worker using promises
+  var promise = client.workspace.workers.create({
+    friendlyName: user.firstname+'  '+user.lastname+' '+telephonicUser,
+    attributes: '{"languages":["Spanish"]}'
+  });
+  promise.then(function(worker) {
+    console.log('Worker created! is: ', worker);
+    console.log('in createTwilioWorker 2 user::', user);
+    User.update({_id: user._id}, {
+        twilioSids: {
+          workerSid: worker.sid,
+          workspaceSid: worker.workspaceSid}
+
+    }, function(err, numberAffected, rawResponse) {
+      console.log('numberAffected::', numberAffected);
+      console.log('rawResponse::', rawResponse);
+       //handle it
+    });
+
+  }).fail(function(error) {
+    // This callback will be invoked on any error returned in the process.
+    console.log('Creating the workerfailed. Reason: '+error.message);
+  }).fin(function() {
+      // You can use this optional callback like a "finally" block
+      // It will always execute last.  Perform any cleanup necessary here.
+  });
+
+}
 
 var createTelephonicIDnPassCode = function(user, req){
   //search db for the generated ids. if found, run the generator again
@@ -111,7 +154,11 @@ var createTelephonicIDnPassCode = function(user, req){
     } else {
       console.log('inside "else" of .then of createTelephonicIDnPassCode, anyUserWithID::', anyUserWithID);
       rerunCreateTelephonicIDnPassCode(user, req);
+
     }
+    // do something with updated work
+  }).then(function(userid) {
+    console.log('inside .then of createTelephonicIDnPassCode, anyUserWithID in .then::', userid);
     // do something with updated work
   })
   .catch(function(err){
@@ -122,7 +169,6 @@ var createTelephonicIDnPassCode = function(user, req){
 };
 
 var addTelephonicIDnPassCode = function(aUser, req, userid){
-  // User.findOneAndUpdate({ _id: user._id }, { epirts: {customerID: customer.id, customer: customer} }, function(err, user) {
 console.log('inside addTelephonicIDnPassCode, userid::', userid);
 var passCode = chance.natural({min: 0000, max: 9999});
 console.log('inside addTelephonicIDnPassCode, passCode::', passCode);
@@ -130,40 +176,11 @@ console.log('inside addTelephonicIDnPassCode, user::', aUser);
 User.update({_id: aUser._id}, {
     telephonicID: userid,
     telephonicPassCode: passCode
-    // username: newUser.username,
-    // password: newUser.password,
-    // rights: newUser.rights
 }, function(err, numberAffected, rawResponse) {
   console.log('numberAffected::', numberAffected);
   console.log('rawResponse::', rawResponse);
-   //handle it
+  createTwilioWorker(aUser, userid);
 });
-// user.telephonicID = userid;
-// user.telephonicPassCode = passCode;
-// user.save(function (err, aUser) {
-//     if(err) {
-//         console.error('ERROR!');
-//     }
-//     console.log('after saving aUser telephonic ID and passCode',user);
-// });
-
-  // User.findOne({_id: aUser._id}, function (err, user) {
-  //   if (err) {
-  //     console.log(err);
-  //   }
-  //   console.log('user in find::',user);
-  //
-  //   user.telephonicID = userid;
-  //   user.telephonicPassCode = passCode;
-  //
-  //   user.save(function (err) {
-  //       if(err) {
-  //           console.error('ERROR!');
-  //       }
-  //       console.log('after saving user"s telephonic ID and passCode',user);
-  //   });
-  // });
-
 };
 
 var rerunCreateTelephonicIDnPassCode = function(user, req){
@@ -297,6 +314,8 @@ router.post("/", function(req, res, next){
     var pw = req.body.password;
     var password = req.body.password;
 
+
+
     // register button was clicked
 if (req.body.action === 'signup') {
   console.log("Im in signup req.body:", req.body);
@@ -336,25 +355,54 @@ if (req.body.action === 'signup') {
     //     newUserObject.epirts;
     //
     //     var reqbody =req.body;
+    var languages = [];
+    if (req.body.role == 'contractor') {
+      console.log('req.body.languages before push::', req.body.languages);
+      languages.push(req.body.languages);
+      console.log('languages after push::', languages);
+      newUser = new User({
+        username: req.body.username,
+        email: email,
+        password: password,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        phone: req.body.phone,
+        privilege_role: req.body.privilege_role || '',
+        address: req.body.address || '',
+        role: req.body.role,
+        type: req.body.type,
+        epirts: '',
+        socketID: '',
+        geo: geo || '',
+        telephonicPassCode: 0,
+        telephonicID: 0,
+        languages: languages,
+        twilioSids: {testing:'string'}
+      });
+    } else {
+
+      newUser = new User({
+        username: req.body.username,
+        email: email,
+        password: password,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        phone: req.body.phone,
+        privilege_role: req.body.privilege_role || '',
+        address: req.body.address || '',
+        role: req.body.role,
+        type: req.body.type,
+        epirts: '',
+        socketID: '',
+        geo: geo || '',
+        telephonicPassCode: 0,
+        telephonicID: 0
+    });
+
+    }
 
 
-        newUser = new User({
-          username: req.body.username,
-          email: email,
-          password: password,
-          firstname: req.body.firstname,
-          lastname: req.body.lastname,
-          phone: req.body.phone,
-          privilege_role: req.body.privilege_role || '',
-          address: req.body.address || '',
-          role: req.body.role,
-          type: req.body.type,
-          epirts: '',
-          socketID: '',
-          geo: geo || '',
-          telephonicPassCode: 0,
-          telephonicID: 0
-        });
+
         // console.log("newUserObject.geo : ", newUserObject.geo);
 
 

@@ -1,6 +1,12 @@
 
 <!-- BEGIN ACCOUNT SETTING  -->
 <div ng-controller="XAccountCtrl2" ng-cloak>
+  <p>Add your language(s) you interpret:</p>
+  <div ng-controller="RegisterCntrl">
+    <input type="text" name="languages" value="{{example9model}}" hidden/>
+    <div ng-dropdown-multiselect="" options="example9data" ng-model="work.languages" selected-model="example9model" extra-settings="example9settings"></div>
+  </div>
+
   <md-toolbar class="md-theme-light">
     <h2 class="md-toolbar-tools">
       <span class="account-page-headers">general</span>

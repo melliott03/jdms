@@ -8,6 +8,48 @@ var Promise = require('bluebird');
 mongoose.Promise = require('bluebird');
 var User = require('../models/user');
 var Work = require('../models/work');
+var Work_Tel = require('../models/work_tel');
+// var Work_Tel = mongoose.model('Work_Tel');
+Promise.promisifyAll(Work_Tel);
+Promise.promisifyAll(Work_Tel.prototype);
+
+var shortid = require('shortid');
+
+router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res) => {
+  //twilio@3.3.1-edge
+  console.log("req.body in router.post CallCenterCallback::", req.body);
+  // var callbody = req.body;
+});
+
+router.use('/AssignmentCallbackUrl', twilio.webhook({validate: false}), (req, res) => {
+  //twilio@3.3.1-edge
+  console.log("req.query in app.post AssignmentCallbackUrl::", req.query);
+  console.log("req.body in app.post AssignmentCallbackUrl::", req.body);
+  var callbody = req.body;
+  var accountSid = process.env.TWILIO_ACCOUNT_SID;
+  var authToken = process.env.TWILIO_AUTH_TOKEN;
+  var workspaceSid = callbody.WorkspaceSid;
+  var taskSid = callbody.TaskSid;
+  var reservationSid = callbody.ReservationSid;
+
+  console.log('callbody.TaskAttributes::', callbody.TaskAttributes);
+  var str =  callbody.TaskAttributes;
+  console.log('callbody.TaskAttributes.call_sid JSON.stringify::', JSON.stringify(eval('('+str+')')) );
+  console.log('callbody.TaskAttributes.call_sid JSON.parse(str)::', JSON.parse(str) );
+  str = JSON.parse(str);
+
+  console.log('str.call_sid::', str.call_sid );
+  var call_sid = str.call_sid;
+  var assignmentInstruction = {
+    instruction: 'call',
+    // post_work_activity_sid: 'WA442ed2a8dcf0fa1b169207b8cd80dbab',
+    url: process.env.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid,
+    status_callback_url: process.env.APP_URL+'/telephonic/callSummary?callSid='+call_sid+'&workerSid='+callbody.WorkerSid,
+    from: '+16122172551' // a verified phone number from your twilio account
+  };
+  res.header('Content-Type', 'application/json');
+  res.json(assignmentInstruction);
+});
 
 //https://www.twilio.com/docs/tutorials/walkthrough/ivr-phone-tree/node/express#6
 // POST: '/ivr/welcome'
@@ -64,7 +106,6 @@ router.post('/telephonicUserID', twilio.webhook({validate: false}), function (re
       console.log('error:', err);
     });
 
-
 });
 
 router.post('/telephonicPassCode', twilio.webhook({validate: false}), function (request, response) {
@@ -80,32 +121,12 @@ router.post('/telephonicPassCode', twilio.webhook({validate: false}), function (
         "3": getSomaliInterpreter,
         "4": getOromoInterpreter,
         "5": getAmharicInterpreter
-
     };
-    var twiml = new twilio.TwimlResponse();
-
-
-    // if (passCode == '1234') {
-    //   console.log("I'm inside if (passCode == '1234') ::", passCode);
-    //   twiml.gather({
-    //       action: "/telephonic/menu",
-    //       numDigits: "1",
-    //       method: "POST"
-    //   }, function (node) {
-    //     twiml.say('Please choose the language of interpretation. Spanish, 1. Hmong, 2. Somali, 3. Oromo, 4. Amharic, 5.');
-    //   });
-    //   response.send(twiml);
-    // }
-
     var twiml = new twilio.TwimlResponse();
     var promise = User.findOne({telephonicID: telephonicUserID}).exec();
     promise.then(function(aUserWithID) {
       console.log('aUserWithID ::', aUserWithID);
-      // if (anyUserWithID == null){
-      //   addTelephonicIDnPassCode();
-      // }
       return aUserWithID;
-
     })
     .then(function(aUserWithID) {
       // do something with
@@ -113,8 +134,9 @@ router.post('/telephonicPassCode', twilio.webhook({validate: false}), function (
       if (aUserWithID.telephonicPassCode == passCode) {
         console.log("I'm inside if (aUserWithID) ::", aUserWithID);
         // var twiml = new twilio.TwimlResponse();
+        //TODO reconsider sending userID...perhaps base64encode it
         twiml.gather({
-            action: "/telephonic/menu",
+            action: "/telephonic/menu?userID="+aUserWithID._id,
             numDigits: "1",
             method: "POST"
         }, function (node) {
@@ -135,6 +157,7 @@ router.post('/telephonicPassCode', twilio.webhook({validate: false}), function (
 
 // POST: '/ivr/menu'
 router.post('/menu', twilio.webhook({validate: false}), function (request, response) {
+    var customerUserID = request.query.userID;
     var selectedOption = request.body.Digits;
     var optionActions = {
         "1": getSpanishInterpreter,
@@ -142,44 +165,130 @@ router.post('/menu', twilio.webhook({validate: false}), function (request, respo
         "3": getSomaliInterpreter,
         "4": getOromoInterpreter,
         "5": getAmharicInterpreter
-
     };
-    var twiml = new twilio.TwimlResponse();
 
-    if (optionActions[selectedOption]) {
-      twiml.say('selected '+ selectedOption +'please wait while we connect you to an interpreter.');
+    var teleAppCallID = shortid.generate();
+    //DONE create new telephonic work item in mongodb Works_Tel collection Works_Tel
+    //DONE store the shoirtid with it and the caller's userID
+    //TODO first check to make sure there isn't a duplicate for shortid in DB before saving
+    // "callSummary" : Object, "customer_id" : String, "contractor_id" : String, "money" : Object, "shortid" : String
+    var promise = new Work_Tel({workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", money: {}, shortid: teleAppCallID});
+    // var promise = Work_Tel.create({callSummary: {}, customer_id: '', contractor_id: "", money: {}, shortid: teleAppCallID}).exec();
+    promise.save()
+    .then(function(data) {
+      console.log('Works_Tel item after saving ::', data);
+      var twiml = new twilio.TwimlResponse();
 
-        var twiml = new twilio.TwimlResponse();
-        optionActions[selectedOption](twiml);
-        response.send(twiml);
-    }else {
-      response.send(redirectWelcome());
-    }
+      if (optionActions[selectedOption]) {
+        twiml.say('selected '+ selectedOption +'please wait while we connect you to an interpreter.');
+
+          var twiml = new twilio.TwimlResponse();
+          optionActions[selectedOption](twiml, teleAppCallID);
+          response.send(twiml);
+      }else {
+        response.send(redirectWelcome());
+      }
+    })
+    .catch(function(err){
+      // just need one of these
+      console.log('error in .then :', err);
+    });
+
+
+
 });
 
 // POST: '/ivr/planets'
 router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
   console.log("req.body in /callSummary::", req.body);
-
-  // var DialCallStatus = req.body.DialCallStatus;
-  // var callDuration = req.body.DialCallDuration;
-  //
-  // if (DialCallStatus) {
-  //   console.log("DialCallStatus::", DialCallStatus);
-  //   console.log("callDuration::", callDuration);
-  // }
-  //
+  var callSummaryBody = req.body;
   var twiml = new twilio.TwimlResponse();
-  // if (DialCallStatus === 'no-answer') {
-  //   //no-answer
-  //   twiml.redirect('/telephonic/getSpanishInterpreter');
-  // } else {
-  //   twiml.say("Thank you for using NowLanguage TeleInterpret Service - the " +
-  //       "please come again.");
-  //   }
+  var callShortID = req.query.callShortID;
+  console.log('inside /callSummary req.query::', req.query);
+  // console.log('inside /callSummary req.query.callShortID::', callShortID);
+  // console.log('inside /callSummary req.body::', callSummaryBody);
+  var call_sid = req.query.call_sid;
+  var workerSid = req.query.workerSid;
 
 
-  // Set the response type as XML.
+  if (callSummaryBody.QueueResult == 'bridged') {
+    var promise = Work_Tel.findOne({shortid: callShortID}).exec();
+    promise.then(function(theTeleWorkWithShortID) {
+      console.log('theTeleWorkWithShortID ::', theTeleWorkWithShortID);
+      theTeleWorkWithShortID.inboundSummary = callSummaryBody;
+      theTeleWorkWithShortID.inboundCallSid = callSummaryBody.CallSid;
+      theTeleWorkWithShortID.save();
+      return theTeleWorkWithShortID;
+    })
+    .then(function(theTeleWorkWithShortID) {
+      // console.log('inside the then theTeleWorkWithShortID::', theTeleWorkWithShortID);
+    })
+    .catch(function(err){
+      // just need one of these
+      console.log('error:', err);
+    });
+
+  } else if (callSummaryBody.CallStatus == 'completed'){
+    console.log('im inside else if (callSummaryBody.CallStatus == completed::');
+    // then save the duration in the database as an appointment to charge client and pay the interpreter for
+    // console.log('callSummaryBody.CallDuration::', callSummaryBody.CallDuration);
+    var promise = Work_Tel.findOne({inboundCallSid: call_sid}).exec();
+    promise.then(function(theTeleWorkWithShortID) {
+      console.log('theTeleWorkWithShortID found call item in db with call_sid to save to::', theTeleWorkWithShortID);
+      theTeleWorkWithShortID.outboundSummary = callSummaryBody;
+      theTeleWorkWithShortID.workerSid = workerSid;
+
+      theTeleWorkWithShortID.save();
+      return theTeleWorkWithShortID;
+    })
+    .then(function(theTeleWorkWithShortID) {
+      // console.log('inside the then theTeleWorkWithShortID::', theTeleWorkWithShortID);
+    })
+    .catch(function(err){
+      // just need one of these
+      console.log('error:', err);
+    });
+  }
+/*
+  var promise = Work_Tel.findOne({shortid: callShortID}).exec();
+  promise.then(function(theTeleWorkWithShortID) {
+    console.log('theTeleWorkWithShortID ::', theTeleWorkWithShortID);
+    if (callSummaryBody.QueueResult == 'bridged') {
+
+      theTeleWorkWithShortID.inboundSummary = callSummaryBody;
+      //update the running call with a new callback url with shortid addedWork
+      var callbody = req.body;
+      var accountSid = process.env.TWILIO_ACCOUNT_SID;
+      var authToken = process.env.TWILIO_AUTH_TOKEN;
+
+      console.log('callbody.CallSid::', callbody.CallSid);
+      var client = new twilio(accountSid, authToken);
+      client.calls(callbody.CallSid).update({
+          StatusCallback: process.env.APP_URL+'/telephonic/callSummary?callShortID='+callShortID
+      }, function(err, call) {
+        if (err) {
+          console.log('err in client.calls.update::',err);
+        }
+            console.log('in client.calls(callback.CallSid).update call::', call);
+          console.log('in client.calls(callback.CallSid).update after upding live call callback with querystring call.direction::', call.direction);
+      });
+    } else if (callSummaryBody.CallStatus == 'completed') {
+      theTeleWorkWithShortID.outboundSummary = callSummaryBody;
+    }
+    theTeleWorkWithShortID.save();
+
+    return theTeleWorkWithShortID;
+
+  })
+  .then(function(theTeleWorkWithShortID) {
+    // console.log('inside the then theTeleWorkWithShortID::', theTeleWorkWithShortID);
+  })
+  .catch(function(err){
+    // just need one of these
+    console.log('error:', err);
+  });
+*/
+
   res.header('Content-Type', 'text/xml');
   // Send the TwiML as the response.
   res.send(twiml.toString());
@@ -296,14 +405,14 @@ router.use('/CallCenterCallback', (req, res) => {
 
 });
 
-var getSpanishInterpreter = function (twiml) {
+var getSpanishInterpreter = function (twiml, teleAppCallID) {
     twiml.say("Please hold while we connect you with a Spanish interpreter",
         {voice: "alice", language: "en-GB"});
 
-    var arr = {selected_language:"es"};
+    var arr = {selected_language:"Spanish"};
     var json = JSON.stringify(arr);
 
-    twiml.enqueue({workflowSid:"WW2f071edf445c3e932ff733ae5013a515", action:"/telephonic/callSummary"}, function(node) {
+    twiml.enqueue({workflowSid:"WW2f071edf445c3e932ff733ae5013a515", action:"/telephonic/callSummary?callShortID="+teleAppCallID}, function(node) {
         node.task(json);
     });
     console.log("I'm right after enqueue in getSpanishInterpreter");

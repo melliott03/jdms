@@ -136,6 +136,7 @@ router.get("/name", function(req,res,next){
         geo: req.user.geo,
         role: req.user.role,
         id: req.user._id,
+        languages: req.user.languages,
         // display_name: req.user.epirts.customer_display_name,
         sources: {
           total_count: req.user.epirts.account.external_accounts.total_count,

@@ -61,7 +61,14 @@
                   </md-input-container>
                   <md-input-container>
                 <label for="phone">PHONE: </label>
-                <input type="text" name="phone" id="phone" class="md-block" flex-gt-sm required/>
+                <!-- <input type="text" ng-intl-tel-input name="phone" id="phone" class="md-block" placeholder="-XXXX" flex-gt-sm required/> -->
+                <!-- <input type="text" ng-model="model.tel" ng-intl-tel-input> -->
+                <div class="wrapper" ng-controller="PhoneInputCtlr">
+                    <div class="info">Raw Value: {{phoneVal}}</div>
+                    <div class="info">Filtered Value: {{phoneVal | tel}}</div>
+
+                    <input class="input-phone" type='text' name="phone" phone-input ng-model="phoneVal"/>
+                </div>
                   </md-input-container>
                   <md-input-container>
                 <label for="email">EMAIL: </label>
@@ -114,10 +121,23 @@
                         <option>Marketer</option>
                       </select>
                       </md-input-container>
+                      <p>Add a language now and add more later:</p>
+                      <md-input-container>
+                      <select type="text" name="languages" class="md-block" flex-gt-sm >
+                        <option>Spanish</option>
+                        <option>Hmong</option>
+                        <option>Somali</option>
+                        <option>Russian</option>
+                        <option>Oromo</option>
+                        <option>Amharic</option>
+                      </select>
+                      </md-input-container>
+
                       <!-- <label for="dob">DOB: </label>
                       <input type="text" name="dob" id="dob" class="md-block"  flex-gt-sm />
                       <label for="last4sos">last 4 digits of Social: </label>
                       <input type="text" name="last4sos" id="last4sos" class="md-block"  flex-gt-sm /> -->
+
                   </div>
                   <input type="text" name="action" value="signup" hidden/>
 
@@ -175,3 +195,6 @@
 
 
 </md-dialog>
+<p>
+  Phone Number
+</p>

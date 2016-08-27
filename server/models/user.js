@@ -19,12 +19,13 @@ var UserSchema = new Schema({
     role: {type: String, required: false},
     privilege_role: {type: String, required: false},
     action: {type: String, required: false},
+    languages: {type: Array, required: false},
     company: {type: String, required: false},
     socketID: {type: String, required: false},
     lastlogin: {type: Date, default: Date.now },
     telephonicID: {type: Number, required: false},
     telephonicPassCode: {type: Number, required: false},
-
+    twilioSids: {type: Object, required: false},
     geo: {
         type: [Number],
         index: '2d'

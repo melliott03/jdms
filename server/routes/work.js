@@ -327,7 +327,7 @@ router.post("/", function(req, res, next){
     var geo = weatherNgeo.geo;
     var work_signatures = {};
     var shrtid = shortid.generate();
-    var addedWork = new Work({"shortid" : shrtid, "work_signatures" : work_signatures, "money" : money, "date_created" : date_created, "type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id" : contractor_id, geo : geo, weather : workWeather });
+    var addedWork = new Work({"shortid" : shrtid, "work_signatures" : work_signatures, "money" : money, "date_created" : date_created, "type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id": contractor_id, "geo": geo, "weather": workWeather });
     // newwork = addedWork;
     return new Promise(function (resolve, reject){
       addedWork.save(function(err, data){
