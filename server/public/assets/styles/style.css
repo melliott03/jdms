@@ -484,4 +484,30 @@ form[name="editableForm"] select {
     border-radius: 0;
 }
 
+/*Side nav stuff*/
+.primary_nav {
+  background: rgb(230, 230, 230);
+  width: 60px;
+  align-content: center;
+
+}
+.secondary_nav {
+  background: rgb(246, 246, 246);
+  width: 160px;
+  align-content: center;
+
+}
+.main_content_area {
+  width: 100%;
+}
+.nav-icon {
+  list-style: none;
+  align-self: center;
+  align-items: center;
+  align-content: center;
+}
+.icon {
+  align-self: center;
+}
+/*End side nav stuff*/
 </style>

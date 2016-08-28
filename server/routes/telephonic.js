@@ -157,6 +157,8 @@ router.post('/telephonicPassCode', twilio.webhook({validate: false}), function (
 
 // POST: '/ivr/menu'
 router.post('/menu', twilio.webhook({validate: false}), function (request, response) {
+  console.log('inside /menu request.body :: ', request.body);
+  var CallSid = request.body.CallSid;
     var customerUserID = request.query.userID;
     var selectedOption = request.body.Digits;
     var optionActions = {
@@ -172,7 +174,7 @@ router.post('/menu', twilio.webhook({validate: false}), function (request, respo
     //DONE store the shoirtid with it and the caller's userID
     //TODO first check to make sure there isn't a duplicate for shortid in DB before saving
     // "callSummary" : Object, "customer_id" : String, "contractor_id" : String, "money" : Object, "shortid" : String
-    var promise = new Work_Tel({workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", money: {}, shortid: teleAppCallID});
+    var promise = new Work_Tel({inboundCallSid: CallSid, workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", money: {}, shortid: teleAppCallID});
     // var promise = Work_Tel.create({callSummary: {}, customer_id: '', contractor_id: "", money: {}, shortid: teleAppCallID}).exec();
     promise.save()
     .then(function(data) {
@@ -201,22 +203,24 @@ router.post('/menu', twilio.webhook({validate: false}), function (request, respo
 // POST: '/ivr/planets'
 router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
   console.log("req.body in /callSummary::", req.body);
-  var callSummaryBody = req.body;
+
   var twiml = new twilio.TwimlResponse();
-  var callShortID = req.query.callShortID;
+
   console.log('inside /callSummary req.query::', req.query);
   // console.log('inside /callSummary req.query.callShortID::', callShortID);
   // console.log('inside /callSummary req.body::', callSummaryBody);
-  var call_sid = req.query.call_sid;
-  var workerSid = req.query.workerSid;
+  var callSummaryBody = req.body;
+
 
 
   if (callSummaryBody.QueueResult == 'bridged') {
-    var promise = Work_Tel.findOne({shortid: callShortID}).exec();
-    promise.then(function(theTeleWorkWithShortID) {
+    console.log('callSummaryBody.CallSid::', callSummaryBody.CallSid);
+    var callShortID = req.query.callShortID;
+    var promised = Work_Tel.findOne({shortid: callShortID}).exec();
+    promised.then(function(theTeleWorkWithShortID) {
       console.log('theTeleWorkWithShortID ::', theTeleWorkWithShortID);
       theTeleWorkWithShortID.inboundSummary = callSummaryBody;
-      theTeleWorkWithShortID.inboundCallSid = callSummaryBody.CallSid;
+      theTeleWorkWithShortID.inboundCallSidSecond = callSummaryBody.CallSid;
       theTeleWorkWithShortID.save();
       return theTeleWorkWithShortID;
     })
@@ -230,24 +234,33 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
 
   } else if (callSummaryBody.CallStatus == 'completed'){
     console.log('im inside else if (callSummaryBody.CallStatus == completed::');
+    console.log('im inside else if (callSummaryBody.CallStatus == completed callSummaryBody::', callSummaryBody);
+    var call_sid = req.query.callSid;
+    var workerSid = req.query.workerSid;
+    console.log('else if req.query::', req.query);
+    console.log('else if call_sid::', call_sid);
+    console.log('else if workerSid::', workerSid);
+    
     // then save the duration in the database as an appointment to charge client and pay the interpreter for
     // console.log('callSummaryBody.CallDuration::', callSummaryBody.CallDuration);
-    var promise = Work_Tel.findOne({inboundCallSid: call_sid}).exec();
-    promise.then(function(theTeleWorkWithShortID) {
-      console.log('theTeleWorkWithShortID found call item in db with call_sid to save to::', theTeleWorkWithShortID);
-      theTeleWorkWithShortID.outboundSummary = callSummaryBody;
-      theTeleWorkWithShortID.workerSid = workerSid;
 
-      theTeleWorkWithShortID.save();
-      return theTeleWorkWithShortID;
+    var promise = Work_Tel.findOne({inboundCallSid: call_sid}).exec();
+    promise.then(function(theTeleWorkWithcall_sid) {
+      console.log('theTeleWorkWithcall_sid found call item in db with call_sid to save to::', theTeleWorkWithcall_sid);
+      theTeleWorkWithcall_sid.outboundSummary = callSummaryBody;
+      theTeleWorkWithcall_sid.workerSid = workerSid;
+
+      theTeleWorkWithcall_sid.save();
+      // return theTeleWorkWithcall_sid;
     })
-    .then(function(theTeleWorkWithShortID) {
+    .then(function(theTeleWorkWithcall_sid) {
       // console.log('inside the then theTeleWorkWithShortID::', theTeleWorkWithShortID);
     })
     .catch(function(err){
       // just need one of these
       console.log('error:', err);
     });
+    
   }
 /*
   var promise = Work_Tel.findOne({shortid: callShortID}).exec();

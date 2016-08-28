@@ -2,7 +2,9 @@
 myApp.controller('Ctrl', function($scope) {
 
 });
-
+myApp.controller('NavCtrl', function($scope) {
+  $scope.show = 1;
+});
 myApp.controller("AuthenticationController", ["$scope", "$location", "$http", "$window", "AuthenticationService", "WorkService", function($scope, $location, $http, $window, AuthenticationService, WorkService){
     console.log("Authentication Controller");
     var authenticationService = AuthenticationService;
