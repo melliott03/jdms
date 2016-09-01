@@ -27,7 +27,10 @@ var moment = require('moment');
 // var Contractor = require('../models/contractor');
 var User = require('../models/user');
 var Work = require('../models/work');
-
+var Work_Tel = require('../models/work_tel');
+// var Work_Tel = mongoose.model('Work_Tel');
+Promise.promisifyAll(Work_Tel);
+Promise.promisifyAll(Work_Tel.prototype);
 
 // ---- Modules ---- //
 var newWorkAlert = require('../modules/newWorkAlert');
@@ -47,6 +50,26 @@ var shortid = require('shortid');
 //   res.io = io;
 //   next();
 // });
+
+router.get("/calls", function(req,res){
+/**@todo find and send all works for this customer */
+console.log('INSIDE get on work req.user._id: ',req.user._id);
+console.log(req.user._id);
+var promised = Work_Tel.find({customer_id: req.user._id}).exec();
+promised.then(function(work_Tels) {
+  console.log('Work_Tels found for customer ::', work_Tels);
+
+  return work_Tels;
+})
+.then(function(work_Tels) {
+  // console.log('inside the then work_Tels::', work_Tels);
+  res.send(work_Tels);
+})
+.catch(function(err){
+  // just need one of these
+  console.log('error:', err);
+});
+});// END router.get
 
 
 router.route("/accept/")
@@ -327,7 +350,7 @@ router.post("/", function(req, res, next){
     var geo = weatherNgeo.geo;
     var work_signatures = {};
     var shrtid = shortid.generate();
-    var addedWork = new Work({"shortid" : shrtid, "work_signatures" : work_signatures, "money" : money, "date_created" : date_created, "type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id": contractor_id, "geo": geo, "weather": workWeather });
+    var addedWork = new Work({"shortid" : shrtid, "work_signatures" : work_signatures, "money" : money, "date_created" : date_created, "type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id" : contractor_id, geo : geo, "weather" : workWeather });
     // newwork = addedWork;
     return new Promise(function (resolve, reject){
       addedWork.save(function(err, data){

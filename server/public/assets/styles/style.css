@@ -502,12 +502,38 @@ form[name="editableForm"] select {
 }
 .nav-icon {
   list-style: none;
-  align-self: center;
-  align-items: center;
-  align-content: center;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  outline: 0;
+}
+.mdiconx svg {
+  fill: black;
+}
+.mdicon svg {
+  fill: red;
+  outline: none;
 }
 .icon {
-  align-self: center;
+  background-color: white;
+  outline: 0;
 }
+.nohighlight:focus{
+  /*outline: none;*/
+  outline: 0;
+}
+md-icon{
+  outline: none;
+  outline: 0;
+}
+.navuser{
+  font-size: 15px;
+  text-align: center;
+}
+.bold-sub-nav-text {
+  font-weight: bold;
+}
+
 /*End side nav stuff*/
 </style>

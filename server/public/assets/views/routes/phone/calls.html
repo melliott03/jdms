@@ -1,0 +1,126 @@
+
+<div>
+  <div >
+  <table st-set-filter="customFilter" st-safe-src="works_tel.response" st-table="displayWorkTelCollection" class="table table-bordered table-striped" wt-responsive-table>
+    <thead>
+    <tr>
+        <th><a class="btn btn-default" st-export>Export</a></th>
+        <th  st-sort="inboundSummary.From">From</th>
+        <th  st-sort="status">Status</th>
+        <th  st-sort="datetime">Date</th>
+        <th  st-sort="address">Address</th>
+        <th st-sort="customer_rate">Cost</th>
+        <th  st-sort="date_created">created</th>
+        <th ></th>
+
+    </tr>
+    <tr>
+        <th></th>
+        <th>
+            <input placeholder="search From" st-search="From" />
+        </th>
+        <th>
+            <input placeholder="search status" st-search="status" />
+        </th>
+        <th>
+            <st-date-range predicate="datetime" before="query.before" after="query.after"></st-date-range>
+        </th>
+        <th>
+        <input placeholder="search address" st-search="address" />
+        </th>
+        <th>
+            <st-number-range predicate="customer_rate" lower="query.lower" higher="query.higher"></st-number-range>
+        </th>
+        <th>
+            <st-date-range predicate="date_created" before="query.before" after="query.after"></st-date-range>
+        </th>
+        <th ></th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat-start="work in displayWorkTelCollection">
+        <td>
+              <button ng-if="work.expanded" ng-click="work.expanded = false">-</button>
+              <button ng-if="!work.expanded" ng-click="work.expanded = true">+</button>
+        </td>
+        <!-- <td cs-select="row"></td> -->
+        <td inline-edit="work.inboundSummary.From" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+        <td inline-edit="work.status | uppercase" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+        <td inline-edit="work.datetime | date" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+        <td inline-edit="work.address" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+        <td inline-edit="work.customer_rate | currency" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+        <td inline-edit="work.date_created | date" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+
+        <td >
+          <md-button ng-click="cancelWork(work._id)">Cancel</md-button>
+          <!-- <md-button ng-click="completeWork(work)">completed</md-button> -->
+          <md-button class="md-primary" ng-click="showTabDialog($event, work._id)" >
+            Mark Complete
+          </md-button>
+        </td>
+
+    </tr>
+      <tr ng-if="work.expanded" ng-repeat-end="work in displayWorkTelCollection">
+            <td colspan="7" >
+              <div class="" >
+
+                <span class="">
+              </span>
+
+              <md-content class="md-padding" layout-xs="column" layout="row">
+    <div flex-xs="" flex-gt-xs="50" layout="column">
+      <md-card>
+
+        <md-card-title>
+          <md-card-title-text>
+            <span class="md-headline">Action buttons</span>
+          </md-card-title-text>
+        </md-card-title>
+        <md-card-content>
+          <div>Date Created: {{ work.date_created }} </div>
+          <div>Contractor ID: {{ work.contractor_id }} </div>
+          <div>WEATHER:  {{ work.weather[0].daily.data[0].summary}} </div>
+
+          <span>
+            Approval Date: {{work.work_signatures.date}} Name: {{work.work_signatures.name}} Signature: <img ng-src="{{work.work_signatures.signature}}" class="md-card-image signature-img"  alt="Customer Signature" />
+          </span>
+
+          <span class="">
+            <ng-map zoom="11" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP" style="height:20%; width:50%; display:inline-block;">
+             <marker position="{{ work.geo }}"  centered="true"></marker>
+           </ng-map>
+         </span>
+        </md-card-content>
+      </md-card>
+
+                <span>Work Details:</span>
+               <input class="inputs" style="border-style: none;
+              border-width: 0px;
+              border-color: none;"
+                ng-model="work.details"
+                inline-edit="work.details"
+                ng-model="work"
+                inline-edit-placeholder="Type your value here"
+                inline-edit-btn-edit=""
+                inline-edit-on-blur="save"
+                ng-blur="updateWorkEntered(work)"
+                inline-edit-on-click
+                inline-edit-callback="updateWorkEntered(work)" />
+              </div>
+
+
+           </td>
+
+    </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+				<td colspan="6" class="text-center">
+					<div st-pagination="" st-items-by-page="itemsByPage" st-displayed-pages="7"></div>
+				</td>
+			</tr>
+    </tfoot>
+</table>
+</div>
+</div>

@@ -2,8 +2,67 @@
 myApp.controller('Ctrl', function($scope) {
 
 });
-myApp.controller('NavCtrl', function($scope) {
+myApp.controller('NavCtrl', function($scope, $location) {
   $scope.show = 1;
+
+  $scope.collection = [
+    {number:'1', path: 'home', name: '../img/icons/ic_home_black_24px.svg'},
+    {number:'2', path: 'phone', name: '../img/icons/ic_call_black_24px.svg'},
+    {number:'3', path: 'onsite', name: '../img/icons/ic_business_black_24px.svg'},
+    {number:'4', path: 'accountCust', name: '../img/icons/ic_settings_black_24px.svg'}
+];
+  // $scope.selectedIndex = 0;
+  // when($location.path() == )
+  var pathdata = $location.path().split('/');
+  console.log('pathdata::', pathdata);
+  console.log('pathdata[1]::', pathdata[1]);
+
+  console.log('not click $location.path()::', $location.path());
+  if (pathdata[1] == 'home') {
+    $scope.selectedIndex = 0;
+    $scope.show = '1';
+    $location.path('home');
+  } else if (pathdata[1] == 'phone'){
+    $scope.selectedIndex = 1;
+    $scope.show = '2';
+    $location.path('phone');
+  } else if (pathdata[1] == 'onsite'){
+    $scope.selectedIndex = 2;
+    $scope.show = '3';
+    $location.path('onsite');
+  } else if (pathdata[1] == 'accountCust'){
+    $scope.selectedIndex = 3;
+    $scope.show = '4';
+    $location.path('accountCust');
+  }else {
+  }
+
+  $scope.itemClicked = function ($index, item) {
+    console.log('inside $scope.itemClicked $index::', $index);
+    console.log('inside $scope.itemClicked item::', item);
+
+    $scope.selectedIndex = $index;
+    $scope.show = item.number;
+    $location.path(item.path);
+    console.log('$location.path() in NavCtrl::', $location.path());
+
+    var pathdata = $location.path().split('/');
+    console.log('pathdata::', pathdata);
+    console.log('pathdata[1]::', pathdata[1]);
+
+    console.log('been clicked $location.path()::', $location.path());
+    if (pathdata[1] == 'home') {
+      $scope.selectedIndex = 0;
+    } else if (pathdata[1] == 'phone'){
+      $scope.selectedIndex = 1;
+    } else if (pathdata[1] == 'onsite'){
+      $scope.selectedIndex = 2;
+    } else if (pathdata[1] == 'accountCust'){
+      $scope.selectedIndex = 3;
+    }else {
+    }
+
+  }
 });
 myApp.controller("AuthenticationController", ["$scope", "$location", "$http", "$window", "AuthenticationService", "WorkService", function($scope, $location, $http, $window, AuthenticationService, WorkService){
     console.log("Authentication Controller");
@@ -174,6 +233,8 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkSe
 }]);
 
 myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location", '$filter', '$http', '$log', "WorkService", 'uiGridConstants', 'stripe', '$mdDialog', 'Socket', function($scope, $interval, $window, $location, $filter, $http, $log, WorkService, uiGridConstants, stripe, $mdDialog, Socket){
+  // console.log('$routeParams in ShowController::', $routeParams);
+  // console.log('$routeParams::', $routeParams.qa_id);
   Socket.connect();
   $scope.$on('$locationChangeStart', function(event){
     Socket.disconnect(true);
@@ -293,6 +354,7 @@ myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location
   // WorkService.getMovies();//this triggers my other sms and voice calls
     // WorkService.getSMS(); //this triggers ANOTHER other sms and voice calls
     WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
+    WorkService.getWorksTel(); 
     WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
     WorkService.getContractorWork(); //gets all the work contractor has accepted
     // $scope.expand = {};
@@ -331,6 +393,11 @@ myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location
     $scope.cancelWork = WorkService.cancelWork;
     $scope.acceptWork = WorkService.acceptWork;
     $scope.completeWork = WorkService.completeWork;
+
+    //Phone Call Version    $scope.works = WorkService.customerWorkObject;
+    $scope.works_tel = WorkService.customerWorkTelObject;
+    $scope.displayWorkTelCollection = [].concat($scope.works_tel.response);
+
 
 // datatable
     $scope.selected = [];

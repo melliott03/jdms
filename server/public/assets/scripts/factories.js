@@ -43,6 +43,7 @@ myApp.factory("WorkService", ["$http", function($http){
     var postedWork = {};
     var data = {};
     var customerWorkObject = {};
+    var customerWorkTelObject = {};
     var userObject = {};
     var availibleWorkObject = {};
     var contractorWorkObject = {};
@@ -69,6 +70,16 @@ myApp.factory("WorkService", ["$http", function($http){
         $http.get("/work").then(function(response){
             customerWorkObject.response = response.data;
             console.log('RETRUN OF GET WROKS FUNCTION !!! !!!!!  ::  ', response);
+
+            // getWeather(response.data);
+            // console.log(response.data);
+        });
+    };
+
+    var getWorksTel = function(){
+        $http.get("/work/calls").then(function(response){
+            customerWorkTelObject.response = response.data;
+            console.log('RETRUN OF GET WROKS_TEL FUNCTION !!! !!!!!  ::  ', response);
 
             // getWeather(response.data);
             // console.log(response.data);
@@ -220,6 +231,7 @@ myApp.factory("WorkService", ["$http", function($http){
         postWork : postWork,
         postedWork : postedWork,
         getWorks : getWorks,
+        getWorksTel : getWorksTel,
         deleteWork : deleteWork,
         acceptWork : acceptWork,
         completeWork : completeWork,
@@ -234,6 +246,7 @@ myApp.factory("WorkService", ["$http", function($http){
         contractorWorkObject : contractorWorkObject,
         updateWork : updateWork,
         customerWorkObject : customerWorkObject,
+        customerWorkTelObject : customerWorkTelObject,
         submitCC : submitCC,
         submitBankMicroDeposits:submitBankMicroDeposits,
         bankMicroDepositsObject:bankMicroDepositsObject,

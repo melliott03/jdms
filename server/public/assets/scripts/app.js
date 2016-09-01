@@ -37,8 +37,20 @@ myApp.config(["$routeProvider", function($routeProvider){
           templateUrl: "/assets/views/routes/accepted.html",
           controller: "ShowController"
       }).
-      when("/view", {
-          templateUrl: "/assets/views/routes/view.html",
+      when("/onsite", {
+          templateUrl: "/assets/views/routes/onsite/dashboard.html",
+          controller: "ShowController"
+      }).
+      when("/onsite/dashboard", {
+          templateUrl: "/assets/views/routes/onsite/dashboard.html",
+          controller: "ShowController"
+      }).
+      when("/onsite/appointments", {
+          templateUrl: "/assets/views/routes/onsite/appointments.html",
+          controller: "ShowController"
+      }).
+      when("/onsite/billing", {
+          templateUrl: "/assets/views/routes/onsite/billing.html",
           controller: "ShowController"
       }).
       when("/workdetail", {
@@ -59,6 +71,22 @@ myApp.config(["$routeProvider", function($routeProvider){
       }).
       when("/sign", {
           templateUrl: "/assets/views/routes/sign.html",
+          controller: "ShowController"
+      }).
+      when("/phone", {
+          templateUrl: "/assets/views/routes/phone/dashboard.html",
+          controller: "ShowController"
+      }).
+      when("/phone/dashboard", {
+          templateUrl: "/assets/views/routes/phone/dashboard.html",
+          controller: "ShowController"
+      }).
+      when("/phone/calls", {
+          templateUrl: "/assets/views/routes/phone/calls.html",
+          controller: "ShowController"
+      }).
+      when("/phone/billing", {
+          templateUrl: "/assets/views/routes/phone/billing.html",
           controller: "ShowController"
       }).
       otherwise({

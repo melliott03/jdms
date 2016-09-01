@@ -181,27 +181,25 @@
     <div ng-controller="ShowController" layout="column" ng-cloak>
       <md-toolbar class="md-warn">
         <div class="md-toolbar-tools">
-          <h2 class="md-flex">Work</h2>
+          <h2 class="md-flex">NowLanguage</h2>
 
             <div ng-if="contractor()">
-              <md-button><a href="#home">Dashboard</a></md-button>
-              <md-button><a href="#acceptedView">ACCEPTED </a></md-button>
-              <md-button><a href="#availibleView">NEW </a></md-button>
-              <md-button><a href="#accountCont">ACCOUNT </a></md-button>
+              <!-- <md-button><a href="#acceptedView">ACCEPTED </a></md-button> -->
+              <!-- <md-button><a href="#availibleView">NEW </a></md-button> -->
+              <!-- <md-button><a href="#accountCont">ACCOUNT </a></md-button> -->
 
             </div>
             <div ng-if="customer()">
-              <md-button><a href="#home">Dashboard</a></md-button>
               <md-button class="md-primary" ng-click="addTabDialog($event)">
                 ADD
               </md-button>
-              <md-button><a href="#view">VIEW</a></md-button>
-              <md-button><a href="#accountCust">ACCOUNT </a></md-button>
+              <!-- <md-button><a href="#view">VIEW</a></md-button> -->
+              <!-- <md-button><a href="#accountCust">ACCOUNT </a></md-button> -->
 
             </div>
 
             <div ng-controller="AddController">
-            <p  align="right">
+            <p class="navuser"  align="right">
               Hello {{logedinUser.response.firstname}}  ({{logedinUser.response.role}})
             </p>
           </div>
@@ -224,40 +222,46 @@
 
         <script src="https://checkout.stripe.com/checkout.js"></script>
 
-        <div ng-controller="NavCtrl">
+        <div ng-controller="NavCtrl" > <!-- ng-init="showData()" -->
           <div layout="row" class="full-heigth">
 
             <div class="primary_nav full-heigth">
-              <ul class="nav-icon">
-                <li class="icon"><md-icon md-svg-src="../img/icons/ic_home_black_24px.svg" ng-click="show = 1"></md-icon>
-                </li>
-                <li class="icon"><md-icon md-svg-src="../img/icons/ic_call_black_24px.svg" ng-click="show = 2"></md-icon>
-                </li>
-                <li class="icon"><md-icon md-svg-src="../img/icons/ic_business_black_24px.svg" ng-click="show = 3"></md-icon>
-                </li>
 
+
+              <ul class="nav-icon">
+              <span ng-repeat="item in collection"
+                     ng-class="{ 'selected-class-name': $index == selectedIndex }" class='nohighlight'>
+                <li ng-class="{ 'icon': $index == selectedIndex }"><md-icon ng-class="{ 'mdicon svg': $index == selectedIndex }" md-svg-src="{{item.name}}" ng-click="itemClicked($index, item)"></md-icon>
+                </li>
+              </span>
               </ul>
 
-  
+
             </div>
             <div class="secondary_nav">
               <div ng-show="show==1">
                 <strong>Home Dashboard </strong>
               </div>
               <div ng-show="show==2">
-                <strong>Calls subnav</strong>
+                <strong>Phone subnav</strong>
                 <ul class="nav-icon">
-                  <li>Dashboard</li>
-                  <li>Calls</li>
-                  <li>Billing</li>
+                  <li ng-class="{ 'bold-sub-nav-text': $index == selectedIndex }"><a href="#phone/dashboard">Dashboard</a></li>
+                  <li><a href="#phone/calls">Calls</a></li>
+                  <li><a href="#phone/billing">Billing</a></li>
                 </ul>
               </div>
               <div ng-show="show==3">
                 <strong>OnSite subnav</strong>
                 <ul class="nav-icon">
-                  <li>Dashboard</li>
-                  <li>Appointments</li>
-                  <li>Billing</li>
+                  <li><a href="#onsite/dashboard">Dashboard</a></li>
+                  <li><a href="#onsite/appointments">Appointments</a></li>
+                  <li><a href="#onsite/billing">Billing</a></li>
+                </ul>
+              </div>
+              <div ng-show="show==4">
+                <strong>Account Settings</strong>
+                <ul class="nav-icon">
+
                 </ul>
               </div>
 

@@ -212,7 +212,10 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
   var callSummaryBody = req.body;
 
 
-
+  if (callSummaryBody.QueueResult != 'bridged') {
+    console.log("callSummaryBody.QueueResult != 'bridged', redirecting to another worker::");
+    twiml.redirect('/telephonic/AssignmentCallbackUrl');
+  }
   if (callSummaryBody.QueueResult == 'bridged') {
     console.log('callSummaryBody.CallSid::', callSummaryBody.CallSid);
     var callShortID = req.query.callShortID;
@@ -240,7 +243,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
     console.log('else if req.query::', req.query);
     console.log('else if call_sid::', call_sid);
     console.log('else if workerSid::', workerSid);
-    
+
     // then save the duration in the database as an appointment to charge client and pay the interpreter for
     // console.log('callSummaryBody.CallDuration::', callSummaryBody.CallDuration);
 
@@ -260,7 +263,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       // just need one of these
       console.log('error:', err);
     });
-    
+
   }
 /*
   var promise = Work_Tel.findOne({shortid: callShortID}).exec();
@@ -548,6 +551,7 @@ var redirectWelcome = function () {
     return twiml;
 };
 //https://www.twilio.com/docs/tutorials/walkthrough/ivr-phone-tree/node/express#6
+
 
 
 module.exports = router;
