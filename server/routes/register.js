@@ -29,8 +29,12 @@ var createStripeCustomer = function(user, req){
   stripe.customers.create({
     description: 'Customer for work app',
     // source:  bank_account_token, // obtained with plaid
+    plan: "pn110",
     email: user.email
   }, function(err, customer) {
+    if (err) {
+      console.log('err while creating customer on stripe::', err);
+    }
     console.log('customer::',customer);
     // asynchronously called
     User.findOneAndUpdate({ _id: user._id }, { epirts: {customerID: customer.id, customer: customer, customer_display_name: ''} }, function(err, user) {
@@ -43,6 +47,23 @@ var createStripeCustomer = function(user, req){
     });
 
   });
+  /*
+  var getInvoiceList = Promise.promisify(stripe.getInvoiceList);
+
+  stripe.customers.create({
+  email: 'foo-customer@example.com'
+}).then(function(customer) {
+  return stripe.charges.create({
+    amount: 1600,
+    currency: 'usd',
+    customer: customer.id
+  });
+}).then(function(charge) {
+  // New charge created on a new customer
+}, function(err) {
+  // Deal with an error
+});
+  */
 }
 
 var createStripeAccount = function(user, req){

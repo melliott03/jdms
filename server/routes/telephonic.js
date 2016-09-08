@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var twilio = require('twilio');
+var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
 
 var mongoose = require("mongoose");
 var Promise = require('bluebird');
@@ -15,10 +16,32 @@ Promise.promisifyAll(Work_Tel.prototype);
 
 var shortid = require('shortid');
 
+var stripeCharge = require('../modules/stripeCharge');
+
 router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res) => {
   //twilio@3.3.1-edge
   console.log("req.body in router.post CallCenterCallback::", req.body);
   // var callbody = req.body;
+  var workerSid = req.body.WorkerSid;
+  if (req.body.EventType == 'reservation.accepted' && req.body.TaskSid) {
+    console.log('Im inside the eventtype = reservation.accepted, req.body::', req.body);
+    //find user in mongo with matching workerSid and add there contractor_id
+    var promise = User.findOne({'twilioSids.workerSid': workerSid}).exec();
+    promise.then(function(aUserWithWorkerSid) {
+      console.log('aUserWithWorkerSid | ::', aUserWithWorkerSid);
+      return aUserWithWorkerSid;
+    })
+    .then(function(aUserWithWorkerSid) {
+      // do something with
+
+
+
+    })
+    .catch(function(err){
+      // just need one of these
+      console.log('error:', err);
+    });
+  }
 });
 
 router.use('/AssignmentCallbackUrl', twilio.webhook({validate: false}), (req, res) => {
@@ -44,7 +67,7 @@ router.use('/AssignmentCallbackUrl', twilio.webhook({validate: false}), (req, re
     instruction: 'call',
     // post_work_activity_sid: 'WA442ed2a8dcf0fa1b169207b8cd80dbab',
     url: process.env.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid,
-    status_callback_url: process.env.APP_URL+'/telephonic/callSummary?callSid='+call_sid+'&workerSid='+callbody.WorkerSid,
+    status_callback_url: process.env.APP_URL+'/telephonic/callSummary?callSid='+call_sid+'&workerSid='+callbody.WorkerSid+'&TaskSid='+callbody.TaskSid,
     from: '+16122172551' // a verified phone number from your twilio account
   };
   res.header('Content-Type', 'application/json');
@@ -174,7 +197,7 @@ router.post('/menu', twilio.webhook({validate: false}), function (request, respo
     //DONE store the shoirtid with it and the caller's userID
     //TODO first check to make sure there isn't a duplicate for shortid in DB before saving
     // "callSummary" : Object, "customer_id" : String, "contractor_id" : String, "money" : Object, "shortid" : String
-    var promise = new Work_Tel({inboundCallSid: CallSid, workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", money: {}, shortid: teleAppCallID});
+    var promise = new Work_Tel({taskSid: "first", inboundCallSid: CallSid, workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", money: {}, shortid: teleAppCallID});
     // var promise = Work_Tel.create({callSummary: {}, customer_id: '', contractor_id: "", money: {}, shortid: teleAppCallID}).exec();
     promise.save()
     .then(function(data) {
@@ -217,6 +240,8 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
     twiml.redirect('/telephonic/AssignmentCallbackUrl');
   }
   if (callSummaryBody.QueueResult == 'bridged') {
+    console.log('inside /callSummary req.query inside bridged::', req.query);
+    console.log('inside /callSummary req.body inside bridged::', req.body);
     console.log('callSummaryBody.CallSid::', callSummaryBody.CallSid);
     var callShortID = req.query.callShortID;
     var promised = Work_Tel.findOne({shortid: callShortID}).exec();
@@ -224,6 +249,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       console.log('theTeleWorkWithShortID ::', theTeleWorkWithShortID);
       theTeleWorkWithShortID.inboundSummary = callSummaryBody;
       theTeleWorkWithShortID.inboundCallSidSecond = callSummaryBody.CallSid;
+      // theTeleWorkWithShortID.taskSid = req.query.TaskSid;
       theTeleWorkWithShortID.save();
       return theTeleWorkWithShortID;
     })
@@ -249,15 +275,40 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
 
     var promise = Work_Tel.findOne({inboundCallSid: call_sid}).exec();
     promise.then(function(theTeleWorkWithcall_sid) {
+      console.log('after finding work assignment else if req.query::', req.query);
+      console.log('after finding work assignment else if req.query.TaskSid::', req.query.TaskSid);
       console.log('theTeleWorkWithcall_sid found call item in db with call_sid to save to::', theTeleWorkWithcall_sid);
       theTeleWorkWithcall_sid.outboundSummary = callSummaryBody;
       theTeleWorkWithcall_sid.workerSid = workerSid;
+      // theTeleWorkWithcall_sid.taskSid = req.query.TaskSid;
 
       theTeleWorkWithcall_sid.save();
-      // return theTeleWorkWithcall_sid;
+      return theTeleWorkWithcall_sid;
     })
     .then(function(theTeleWorkWithcall_sid) {
-      // console.log('inside the then theTeleWorkWithShortID::', theTeleWorkWithShortID);
+      console.log('inside the then theTeleWorkWithcall_sid::', theTeleWorkWithcall_sid);
+      //add invoiceitem to customer in stripe
+      var promisesy = User.findOne({'twilioSids.workerSid': theTeleWorkWithcall_sid.workerSid}).exec();
+      return promisesy.then(function(aUserWithWorkerSid) {
+        console.log('aUserWithWorkerSid ::', aUserWithWorkerSid);
+        console.log('aUserWithWorkerSid._id ::', aUserWithWorkerSid._id);
+        theTeleWorkWithcall_sid.contractor_id = aUserWithWorkerSid._id;
+        theTeleWorkWithcall_sid.save();
+        var data = {};
+        data.theTeleWorkWithcall_sid = theTeleWorkWithcall_sid;
+        data.aUserWithWorkerSid = aUserWithWorkerSid;
+        return data;
+      })
+
+    })
+    .then(function(data) {
+      console.log('inside the then theTeleWorkWithcall_sid | ::', data.theTeleWorkWithcall_sid);
+      console.log('inside the then aUserWithWorkerSid::', data.aUserWithWorkerSid);
+
+      //add invoiceitem to customer in stripe
+      stripeCharge.weekly(data);
+      // return theTeleWorkWithcall_sid;
+
     })
     .catch(function(err){
       // just need one of these
