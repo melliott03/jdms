@@ -11,6 +11,7 @@ var mongoose = require("mongoose");
 // var stripe = require("stripe")("sk_test_SfT5Rf2DMVfT0unJf7aIIskQ");
 // var stripe = require("stripe")('pk_test_C6pNjUH41hCQ87RXmeLBIAa5');
 // var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
+var twilio = require('twilio');
 
 var plaid = require('plaid');
 
@@ -443,6 +444,71 @@ router.post('/saveUserIdentityDocument', passport.authenticate('jwt', { session:
 
 
 });
+
+
+router.post('/switch/tel', twilio.webhook({validate: false}), function (req, res) {
+  console.log('inside /switch/tel req.body::', req.body);
+  var accountSid = process.env.TWILIO_ACCOUNT_SID;
+  var authToken = process.env.TWILIO_AUTH_TOKEN;
+  var workspaceSid = process.env.TWILIO_WORKSPACE_SID;
+  var post_work_activity_sid = '';
+  if (req.body.TelStatus == true) {
+    post_work_activity_sid = 'WAbaf024ac1c7fc5d4b9f138173ac3ca12';
+  } else if (req.body.TelStatus == false) {
+    post_work_activity_sid = 'WA158de9d717dfb9577acbb6f5de403291';
+  }
+
+
+  //Find workerSid in DB
+  var promise = User.findById(req.user._id).exec();
+  promise.then(function(contractor) {
+    console.log('contractor | ::', contractor);
+    return contractor;
+  })
+  .then(function(contractor) {
+    // do something with
+    var workerSid = contractor.twilioSids.workerSid;
+
+    var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
+
+    client.workspace.workers(workerSid).update({
+        // attributes: '{"type":"support"}'
+        activitySid: post_work_activity_sid
+    }, function(err, worker) {
+      if (err) {
+        console.log('err updating post_work_activity_sid::', err);
+      }else if (worker) {
+        contractor.switchs.tel = true;
+        contractor.save();
+        console.log('worker after updating post_work_activity_sid from switch::', worker);
+      }
+    });
+
+  })
+  .catch(function(err){
+    // just need one of these
+    console.log('error:', err);
+  });
+
+});
+
+router.post("/switch", function(req, res, next){
+  console.log('/switch, req.body::::',req.body);
+
+  console.log('req.user::::',req.user);
+  //if req.body.
+  if (req.body.OnsiteStatus == true || req.body.OnsiteStatus == false) {
+    //find the contractor and update their status
+  } else if (req.body.TelStatus == true || req.body.TelStatus == false) {
+    // update the user status with twilio
+
+    // then find the contractor and update their status
+
+  }
+    res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
+});
+
+
 
 
 module.exports = router;

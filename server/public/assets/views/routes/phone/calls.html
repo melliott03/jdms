@@ -39,8 +39,8 @@
 
         <td inline-edit="work.inboundSummary.From" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
         <td inline-edit="work.outboundSummary.Timestamp | date " inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
-        <td inline-edit="work.outboundSummary.CallDuration | uppercase" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
-        <td inline-edit="work.customer_rate | currency" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+        <td > <strong>{{work.outboundSummary.durationObj.minutes}} min {{work.outboundSummary.durationObj.seconds}} sec</strong></td>
+        <td >${{work.money.cost.costDollars}}.{{work.money.cost.costPennies}}</td>
 
 
 

@@ -536,4 +536,10 @@ md-icon{
 }
 
 /*End side nav stuff*/
+/*start md switch stuff*/
+.switch {
+  display: inline-block;
+}
+/*start md switch stuff*/
+
 </style>

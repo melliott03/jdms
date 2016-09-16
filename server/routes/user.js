@@ -141,7 +141,8 @@ router.get("/name", function(req,res,next){
         sources: {
           total_count: req.user.epirts.account.external_accounts.total_count,
           data: paymentSourcesNewArray
-        }
+        },
+        switchs: req.user.switchs
         // reminderDateTime: reminderDateTime
       }
     }

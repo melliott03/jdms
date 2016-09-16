@@ -77,6 +77,11 @@ var createStripeAccount = function(user, req){
           managed: true,
           country: 'US',
           email: user.email,
+          transfer_schedule: {
+           delay_days: 2,
+           interval: 'weekly',
+           weekly_anchor: 'monday'
+         },
           tos_acceptance: {
             date: Math.floor(Date.now() / 1000),
             ip: req.connection.remoteAddress // Assumes you're not using a proxy
@@ -398,7 +403,8 @@ if (req.body.action === 'signup') {
         telephonicPassCode: 0,
         telephonicID: 0,
         languages: languages,
-        twilioSids: {testing:'string'}
+        twilioSids: {testing:'string'},
+        switchs: {tel: false, onSite: false}
       });
     } else {
 

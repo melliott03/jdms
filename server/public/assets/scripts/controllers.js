@@ -132,7 +132,13 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkSe
   }
 
 
+// moment().seconds(duration);
+// var duration = moment().seconds('123').format("mm:ss");
+// console.log('convert seconds to HH:MM duration::', duration);
 
+
+// moment("123", "hmm").format("HH:mm") === "01:23"
+// moment(duration, "ss").format("HH:mm") === "01:23"
 
 
     $scope.works = ['Legal','Social Service','Medical', 'Other', 'Plumber', 'Machenic', 'Marketer', 'Accountant', 'Tutor', 'Painter'];
@@ -354,7 +360,7 @@ myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location
   // WorkService.getMovies();//this triggers my other sms and voice calls
     // WorkService.getSMS(); //this triggers ANOTHER other sms and voice calls
     WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
-    WorkService.getWorksTel(); 
+    WorkService.getWorksTel();
     WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
     WorkService.getContractorWork(); //gets all the work contractor has accepted
     // $scope.expand = {};
@@ -939,6 +945,46 @@ $scope.user = {
     return ($scope.user.status && selected.length) ? selected[0].text : 'Not set';
   };
 
+}]);
+
+myApp.controller("CommunicationsController", ["$scope", "WorkService", function($scope, WorkService){
+    console.log("Communications Controller");
+
+    $scope.data = WorkService.data;
+}]);
+
+myApp.controller("SwitchCtrl", ["$scope", "WorkService", function($scope, WorkService){
+  console.log("SwitchCtrl Controller");
+
+  // console.log('$scope.logedinUser.response.switchs.tel::', $scope.logedinUser.response.switchs.tel);
+  var workService = WorkService;
+  // var logedinUser = workService.userObject;
+  // console.log('logedinUser::', logedinUser);
+  console.log('workService.userObject.response.switchs::', workService.userObject.response.switchs);
+  console.log('workService.userObject.response.switchs.tel::', workService.userObject.response.switchs.tel);
+  console.log('workService.userObject.response.switchs.onSite::', workService.userObject.response.switchs.onSite);
+
+  // console.log('logedinUser.response.switchs.onSite::', logedinUser.response.switchs.onSite);
+
+  $scope.data = {
+    cb1: workService.userObject.response.switchs.tel,
+    cb2: workService.userObject.response.switchs.onSite
+    // ,
+    // cb5: workService.userObject.response.switchs.onSite
+  };
+
+  $scope.message = 'false';
+
+  $scope.onChangeOnsite = function(cbState) {
+  	$scope.message = cbState;
+    console.log('onChangeOnsite cbState:::', cbState);
+    workService.updateContractorSwitchStatus({'OnsiteStatus': cbState});
+  };
+  $scope.onChangeTel = function(cbState) {
+  	$scope.message = cbState;
+    console.log('onChangeTel cbState:::', cbState);
+    workService.updateContractorSwitchStatus({'TelStatus': cbState});
+  };
 }]);
 
 

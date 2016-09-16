@@ -278,6 +278,13 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       console.log('after finding work assignment else if req.query::', req.query);
       console.log('after finding work assignment else if req.query.TaskSid::', req.query.TaskSid);
       console.log('theTeleWorkWithcall_sid found call item in db with call_sid to save to::', theTeleWorkWithcall_sid);
+      //convert duration seconds to minutes and seconds
+      console.log('callSummaryBody::', callSummaryBody);
+      var durationSeconds = callSummaryBody.CallDuration;
+      var secsremain = durationSeconds % 60;
+      var minutes = Math.floor(durationSeconds/60);
+      console.log('Duration:: '+minutes+' min '+secsremain+'sec');
+      callSummaryBody.durationObj = {minutes: minutes, seconds: secsremain}
       theTeleWorkWithcall_sid.outboundSummary = callSummaryBody;
       theTeleWorkWithcall_sid.workerSid = workerSid;
       // theTeleWorkWithcall_sid.taskSid = req.query.TaskSid;
@@ -306,8 +313,29 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       console.log('inside the then aUserWithWorkerSid::', data.aUserWithWorkerSid);
 
       //add invoiceitem to customer in stripe
-      stripeCharge.weekly(data);
+      stripeCharge.perEvent(data);
       // return theTeleWorkWithcall_sid;
+      //reset worker to idle
+      var callbody = req.body;
+      var accountSid = process.env.TWILIO_ACCOUNT_SID;
+      var authToken = process.env.TWILIO_AUTH_TOKEN;
+      var workspaceSid = callbody.WorkspaceSid;
+      var taskSid = callbody.TaskSid;
+      var reservationSid = callbody.ReservationSid;
+      var post_work_activity_sid = 'WAbaf024ac1c7fc5d4b9f138173ac3ca12';
+      var workerSid = data.theTeleWorkWithcall_sid.workerSid;
+      // console.log('worker_activity_sid before updating post_work_activity_sid::', );
+
+      var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
+
+      client.workspace.workers(workerSid).update({
+          // attributes: '{"type":"support"}'
+          activitySid: post_work_activity_sid
+      }, function(err, worker) {
+        if (err) console.log('err updating post_work_activity_sid::', err);
+          console.log('worker after updating post_work_activity_sid::', worker);
+      });
+
 
     })
     .catch(function(err){
@@ -602,6 +630,7 @@ var redirectWelcome = function () {
     return twiml;
 };
 //https://www.twilio.com/docs/tutorials/walkthrough/ivr-phone-tree/node/express#6
+
 
 
 

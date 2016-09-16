@@ -26,6 +26,8 @@ var UserSchema = new Schema({
     telephonicID: {type: Number, required: false},
     telephonicPassCode: {type: Number, required: false},
     twilioSids: {type: Object, required: false},
+    switchs: {type: Object, required: false},
+
     geo: {
         type: [Number],
         index: '2d'

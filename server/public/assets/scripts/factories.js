@@ -47,6 +47,8 @@ myApp.factory("WorkService", ["$http", function($http){
     var userObject = {};
     var availibleWorkObject = {};
     var contractorWorkObject = {};
+    var contractorSwitchStatusObject = {};
+
 
     var postWork = function(data){
         $http.post("/work", data).then(function(response){
@@ -225,6 +227,24 @@ myApp.factory("WorkService", ["$http", function($http){
       //  console.log('in getData allPetsReturned outside getcall', allPetsReturned);
     };
 
+    var updateContractorSwitchStatus = function(data){
+      console.log('data in updateContractorSwitchStatus::', data);
+      if (data.TelStatus == false || data.TelStatus == true ) {
+        $http.post("/updateUser/switch/tel", data).then(function(response){
+            console.log("SWITCH Tel STATUS UPDATE! ", response);
+            contractorSwitchStatusObject.data = response.data;
+            getUser();
+        });
+      } else if (data.OnsiteStatus) {
+
+        $http.post("/switch", data).then(function(response){
+            console.log("SWITCH OnsiteStatus STATUS UPDATE! ", response);
+            contractorSwitchStatusObject.data = response.data;
+            getUser();
+        });
+      }
+    };
+
     getUser();
     return {
         getUser : getUser,
@@ -252,7 +272,8 @@ myApp.factory("WorkService", ["$http", function($http){
         bankMicroDepositsObject:bankMicroDepositsObject,
         estimatePrice : estimatePrice,
         estimatePriceObject : estimatePriceObject,
-        saveSocketId : saveSocketId
+        saveSocketId : saveSocketId,
+        updateContractorSwitchStatus: updateContractorSwitchStatus
 
     };
 }]);

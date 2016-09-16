@@ -419,6 +419,8 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
 
   app.post('/stripeMicro', passport.authenticate('jwt', { session: false }), function(req, res) {
     console.log('req.user::::', req.user);
+    console.log('in /stripeMicro req.user.epirts.customerID::::', req.user.epirts.customerID);
+
     console.log('req.body::::', req.body);
 
     var deposit = req.body;
