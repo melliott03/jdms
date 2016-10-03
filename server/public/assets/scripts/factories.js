@@ -50,15 +50,7 @@ myApp.factory("WorkService", ["$http", function($http){
     var contractorSwitchStatusObject = {};
 
 
-    var postWork = function(data){
-        $http.post("/work", data).then(function(response){
-            console.log("WORK SAVED! ", response);
-            postedWork.data = response.data;
-            getWorks();
-            getContractorWork();
-            getAvailibleWorks();
-        });
-    };
+
 
     var getUser = function(){
         $http.get("/user/name").then(function(response){
@@ -71,10 +63,20 @@ myApp.factory("WorkService", ["$http", function($http){
     var getWorks = function(){
         $http.get("/work").then(function(response){
             customerWorkObject.response = response.data;
-            console.log('RETRUN OF GET WROKS FUNCTION !!! !!!!!  ::  ', response);
+            console.log('RETRUN OF GET WROKS FUNCTION response:::  ', response);
+            console.log('RETRUN OF GET WROKS FUNCTION response.data:::  ', response.data);
+
 
             // getWeather(response.data);
             // console.log(response.data);
+        });
+    };
+
+    var postWork = function(data){
+        $http.post("/work", data).then(function(response){
+            console.log("WORK SAVED! ", response);
+            postedWork.data = response.data;
+            getWorks();
         });
     };
 
@@ -321,4 +323,92 @@ myApp.factory("PlaidService", ["$http", "$location", "WorkService", function($ht
 // SOCKET
 myApp.factory("Socket", [ "socketFactory", function(socketFactory){
     return socketFactory();
+}]);
+
+myApp.factory('SmartTableWorkService', ['$q', '$filter', '$timeout', '$http', function ($q, $filter, $timeout, $http) {
+
+  var getWorks = function(){
+      $http.get("/work").then(function(response){
+          console.log('RETRUN OF GET WROKS FUNCTION response:::  ', response);
+          console.log('RETRUN OF GET WROKS FUNCTION response.data::: filtering sorting ', response.data);
+
+          return response.data;
+
+
+          // getWeather(response.data);
+          // console.log(response.data);
+      });
+  };
+
+	//this would be the service to call your server, a standard bridge between your model an $http
+
+	// the database (normally on your server)
+	var randomsItems = [];
+
+	function createRandomItem(id) {
+		var heroes = ['Batman', 'Superman', 'Robin', 'Thor', 'Hulk', 'Niki Larson', 'Stark', 'Bob Leponge'];
+		return {
+			id: id,
+			name: heroes[Math.floor(Math.random() * 7)],
+			age: Math.floor(Math.random() * 1000),
+			saved: Math.floor(Math.random() * 10000)
+		};
+
+	}
+
+	for (var i = 0; i < 1000; i++) {
+		randomsItems.push(createRandomItem(i));
+	}
+
+  var workItems = getWorks();
+
+
+
+	//fake call to the server, normally this service would serialize table state to send it to the server (with query parameters for example) and parse the response
+	//in our case, it actually performs the logic which would happened in the server
+	function getPage(start, number, params) {
+      console.log('inside getPage');
+    function getWorks(){
+        $http.get("/work").then(function(response){
+            console.log('RETRUN OF GET WROKS FUNCTION response:::  ', response);
+            console.log('RETRUN OF GET WROKS FUNCTION response.data::: filtering sorting ', response.data);
+
+             var workItems =  response.data;
+
+
+            var deferred = $q.defer();
+            var workItemsToSend = {};
+
+
+            var filtered = params.search.predicateObject ? $filter('filter')(workItems, params.search.predicateObject) : workItems;
+
+            if (params.sort.predicate) {
+              filtered = $filter('orderBy')(filtered, params.sort.predicate, params.sort.reverse);
+            }
+
+            var result = filtered.slice(start, start + number);
+
+            $timeout(function () {
+              //note, the server passes the information about the data set size
+              workItemsToSend = {
+                data: result,
+                numberOfPages: Math.ceil(1000 / number)
+              };
+            });
+
+            console.log('workItemsToSend::', workItemsToSend);
+
+            return workItemsToSend;
+
+        });
+    };
+
+
+
+	}
+
+	return {
+		getPage: getPage
+	};
+
 }]);

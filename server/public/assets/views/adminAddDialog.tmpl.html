@@ -1,0 +1,241 @@
+<div ng-controller="AddController">
+
+  <p>
+    ON THE ADMIN ADD PAGE
+  </p>
+  <md-content layout-padding >
+    <div >
+      <div layout-align="center center" layout="column">
+        <h3 class="md-title">Work Information</h3>
+      </div>
+      <form name="workEntry">
+        <div layout-gt-sm="row" ng-controller="AutocompleteController as ctrl">
+
+
+          <md-autocomplete flex
+            md-selected-item="ctrl.selectedItem"
+            md-search-text="ctrl.searchText"
+            md-items="company in ctrl.querySearch(ctrl.searchText)"
+            md-item-text="company.name"
+            
+            md-floating-label="Company">
+          <div layout="row" class="item" layout-align="start center">
+            <img ng-src="{{company.avatar_url}}" class="avatar" />
+            &nbsp;&nbsp;
+            <span md-highlight-text="ctrl.searchText">{{company.name}}</span>
+          </div>
+
+
+        </md-autocomplete>
+
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>PO</label>
+            <input ng-model="work.details.po">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Field</label>
+            <md-select ng-model="work.type" required="required">
+              <md-option ng-repeat="work in works" >
+                {{work}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Language</label>
+            <md-select ng-model="work.language" required="required">
+              <md-option ng-repeat="language in languages" >
+                {{language}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+
+            <input name="dateField" type="datetime-local"
+            min="{{minDate}}"
+            md-min-date="{{minDate}}"
+            placeholder="Enter date & start time"
+            ng-model="work.date"
+            ng-model-options="{ updateOn: 'blur' }"
+            oninvalid="this.setCustomValidity('Witinnovation')"
+            required="required">
+            <p class="dateErrorMessage">{{dateErrorMessage_start}}</p>
+
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <input type="datetime-local" name="endDate" onblur="setDateErrorMessage()()"
+            min="{{minDate}}"
+            placeholder="End Date & Time"
+            ng-model="work.endDateTime"
+            ng-model-options="{ updateOn: 'blur' }"
+            ng-keyup="resetDateErrorMessage()"
+            required="required">
+            <p class="dateErrorMessage">{{dateErrorMessage_end}}</p>
+          </md-input-container>
+
+        </div>
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <input type="text" ng-model="work.address"
+            ng-places-autocomplete
+            ng-model="query"
+            pa-options="paOptions"
+            pa-on-place-ready="placesCallback"
+            pa-trigger="paTrigger"
+            aria-label="Work Address"
+            required="required"/>
+          </md-input-container>
+          <md-button ng-click="paTrigger()">Send</md-button>
+          <!-- <p> {{worklatlon}}  </p> -->
+          <input type="text" ng-model="work.location" value="{{worklatlon}}" hidden/>
+        </div>
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Requester</label>
+            <input ng-model="work.details.requester">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Patient</label>
+            <input ng-model="work.details.patient">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Doctor</label>
+            <input ng-model="work.details.doctor">
+          </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>cDuration</label>
+            <input ng-model="work.details.cDuration">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>cRate</label>
+            <input ng-model="work.details.cRate">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>cMiles</label>
+            <input ng-model="work.details.cMiles">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>cMileRate</label>
+            <input ng-model="work.details.cMileRate">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>cTravelTime</label>
+            <input ng-model="work.details.cTravelTime">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>cTravelRate</label>
+            <input ng-model="work.details.cTravelRate">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>cCustomer(autocomplete)</label>
+            <input ng-model="work.details.cCustomer">
+          </md-input-container>
+
+        </div>
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>aDuration</label>
+            <input ng-model="work.details.aDuration">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>aRate</label>
+            <input ng-model="work.details.aRate">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>aMiles</label>
+            <input ng-model="work.details.aMiles">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>aMileRate</label>
+            <input ng-model="work.details.aMileRate">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>aTravelTime</label>
+            <input ng-model="work.details.aTravelTime">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>aTravelRate</label>
+            <input ng-model="work.details.aTravelRate">
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>aContractor(autocomplete)</label>
+            <input ng-model="work.details.aContractor">
+          </md-input-container>
+        </div>
+
+        <div layout-gt-sm="row">
+          <input ng-model="work.details.atotal" value="work.details.aRate * work.details.aDuration + work.details.aMiles * work.details.aMileRate + work.aTravelRate * work.aTravelTime | number" hidden> <br>
+          clientTotal: {{work.details.cRate * work.details.cDuration + work.details.cMiles * work.details.cMileRate + work.details.cTravelRate * work.details.cTravelTime | number}}<br>
+          agentTotal: {{work.details.aRate * work.details.aDuration + work.details.aMiles * work.details.aMileRate + work.details.details.aTravelRate * work.details.aTravelTime | number}}<br>
+          profit: {{(work.details.cRate * work.details.cDuration + work.details.cMiles * work.details.cMileRate + work.details.cTravelRate * work.details.cTravelTime)-(work.details.aRate * work.details.aDuration + work.details.aMiles * work.details.aMileRate + work.details.aTravelRate * work.details.aTravelTime) | number}}<br>
+
+          <input ng-model="work.details.ctotal" value="{{(work.details.cRate/work.details.cDuration)+(work.details.cMiles/work.details.cMileRate)  | number}}" hidden><br>
+          <input ng-model="work.details.profit" value="{{(work.details.ctotal-work.details.atotal)  | number}}" hidden><br>
+          <span>Customer Fee: {{ work.details.ctotal }}</span><br>
+          <span> | Agent Pay: {{work.details.atotal }}</span><br>
+          <span> | Profit: {{work.details.profit }}</span><br>
+        </div>
+        <!--  -->
+
+
+        <!-- GoogleAutoComplete -->
+        <!-- <div ng-controller="GoogleController"> -->
+
+
+
+        <!-- </div> -->
+        <!-- End GoogleAutoComplete -->
+
+
+        <div layout-gt-sm="row">
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Other Work Details</label>
+            <input ng-model="work.details.notes">
+          </md-input-container>
+        </div>
+        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+          <md-button ng-click="estimatePrice(work)" class="md-raised">GET ESTIMATE</md-button>
+        </section>
+        <p>
+          ${{estimatePriceObject.data.finalCost}} estimate
+          <p ng-model="work.customer_estimate" value="estimatePriceObject.data" ></p>
+        </p>
+        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+          <md-button ng-click="submit(work)" class="md-raised">SUBMIT REQUEST</md-button>
+        </section>
+      </form>
+      <p>
+        SCHEDULING 24 HOURS IN ADVANCE TO INCREASE THE LIKELYHOOD OF YOUR REQUEST BEING FILLED AND SAVE 20%.
+      </p>
+
+    </div>
+  </md-content>
+
+
+
+  <div >
+    <md-input-container class="md-block" flex-gt-sm>
+      <md-timepicker ng-model="startTime" md-placeholder="Enter time"></md-timepicker>
+    </md-input-container>
+  </div>
+
+
+  <table>
+      <tr>
+          <th>Value</th><th>Quantity</th>
+      </tr>
+      <tr ng-repeat="number in workNumbers">
+          <td><input type="text" ng-model="number.val"></td>
+          <td><input type="text" ng-model="number.qty"></td>
+          <td><input type="button" ng-click="deleteNumber($index)" value= "Delete"></td>
+      </tr>
+      </table>
+      <input type="button" ng-click="add()" value="Add new">Result : {{total()}}
+
+
+</div>

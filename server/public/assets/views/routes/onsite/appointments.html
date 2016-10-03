@@ -76,9 +76,17 @@
         <th  st-sort="address">Address</th>
         <th st-sort="customer_rate">Cost</th>
         <th  st-sort="date_created">created</th>
-        <th ></th>
+        <th ><span class="button" ng-click="addRow()">Add Search {{counter}}</span></th>
 
     </tr>
+    <tr ng-repeat="rowContent in rows">
+      <th>
+      {{rowContent}}
+        <input st-search placeholder="global search" class="input-sm form-control" type="search"/>
+        <button ng-click="deleteRow($index)">Remove</button>
+      </th>
+    </tr>
+
     <tr>
         <th></th>
         <th>
@@ -123,6 +131,12 @@
           <md-button class="md-primary" ng-click="showTabDialog($event, work._id)" >
             Mark Complete
           </md-button>
+          <md-button class="md-primary" ng-click="EditWorkTabDialog($event, work)" >
+            Edit
+          </md-button>
+          <md-button class="md-primary" ng-click="DuplicateWorkTabDialog($event, work)" >
+            Duplicate
+          </md-button>
         </td>
 
     </tr>
@@ -162,12 +176,12 @@
         </md-card-content>
       </md-card>
 
-                <span>Work Details:</span>
+                <span>Work Notes:</span>
                <input class="inputs" style="border-style: none;
               border-width: 0px;
               border-color: none;"
-                ng-model="work.details"
-                inline-edit="work.details"
+                ng-model="work.details.notes"
+                inline-edit="work.details.notes"
                 ng-model="work"
                 inline-edit-placeholder="Type your value here"
                 inline-edit-btn-edit=""

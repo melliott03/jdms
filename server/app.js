@@ -83,6 +83,7 @@ var twilio = require('twilio');
 var index = require("./routes/index");
 var register = require("./routes/register");
 var invite = require("./routes/invite");
+var company = require("./routes/company");
 var work = require("./routes/work");
 var user = require("./routes/user");
 var sms = require("./routes/sms");
@@ -748,6 +749,8 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
 
   app.use('/telephonic', telephonic);
   app.use('/ivr', ivr);
+
+  app.use('/company', passport.authenticate('jwt', { session: false }), company);
 
 
   // app.get('/logout', logout());

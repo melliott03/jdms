@@ -1,4 +1,7 @@
-var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad', 'btford.socket-io', 'angularjs-dropdown-multiselect']);
+var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad', 'btford.socket-io', 'angularjs-dropdown-multiselect',
+'myApp.core.services',
+'myApp.core.directives',
+'myApp.videochat']);
 /*'bc.TelephoneFilter' is replaced by 'ngIntlTelInput'*/
 //ngPlacesAutocomplete ngAutocomplete
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
@@ -49,6 +52,10 @@ myApp.config(["$routeProvider", function($routeProvider){
           templateUrl: "/assets/views/routes/onsite/appointments.html",
           controller: "ShowController"
       }).
+      when("/onsite/appointments2", {
+          templateUrl: "/assets/views/routes/onsite/appointments2.html",
+          controller: "pipeCtrl"
+      }).
       when("/onsite/billing", {
           templateUrl: "/assets/views/routes/onsite/billing.html",
           controller: "ShowController"
@@ -87,6 +94,18 @@ myApp.config(["$routeProvider", function($routeProvider){
       }).
       when("/phone/billing", {
           templateUrl: "/assets/views/routes/phone/billing.html",
+          controller: "ShowController"
+      }).
+      when("/admin_addwork", {
+          templateUrl: "/assets/views/adminAddDialog.tmpl.html",
+          controller: "ShowController"
+      }).
+      when("/videoCust", {
+          templateUrl: "/assets/views/routes/getvideointerpreter.html",
+          controller: "ShowController"
+      }).
+      when("/translateCust", {
+          templateUrl: "/assets/views/routes/translate/documentTranslate.html",
           controller: "ShowController"
       }).
       otherwise({

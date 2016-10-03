@@ -266,6 +266,9 @@ table {
     flex-direction: column;
     align-items: stretch;
     height: 700px; /* this can vary */
+    letter-spacing: .0px;
+    font-family: 'GothamBook' , sans-serif;
+    font-size: 14px;
 }
 
 table * {
@@ -448,10 +451,10 @@ form[name="editableForm"] select {
   position: relative;
   width: 400px;
   height: 200px;
-  -moz-user-select: none;
+  /*-moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
-  user-select: none;
+  user-select: none;*/
 }
 /*img {
   position: absolute;
@@ -489,39 +492,95 @@ form[name="editableForm"] select {
   background: rgb(230, 230, 230);
   width: 60px;
   align-content: center;
+  /*position:fixed;*/
 
 }
 .secondary_nav {
   background: rgb(246, 246, 246);
   width: 160px;
   align-content: center;
+  /*position: fixed;*/
+}
+.subnavheader{
+  margin: 20px 0px 10px 10px; /*top right bottom left*/
+  /*padding: 20px 0px 2px 0px; */
 
+  /*display: inline!important;*/
+
+
+  /*line-height: 1.2em;*/
+/*should be in body*/
+  /*font-weight: 400;*/
+  font-style: normal;
+  /*letter-spacing: -.01em;*/
+  font-family: "Whitney SSm A","Whitney SSm B","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.sub-nav-header{
+  margin: 20px 0px 20px 13px; /*top right bottom left*/
+  padding: 20px 0px 2px 0px; /*top right bottom left*/
+  color: #f22f46;
+  text-decoration: none;
+  font-size: 18px;
 }
 .main_content_area {
   width: 100%;
+}
+.fixed {
+    position: fixed;
 }
 .nav-icon {
   list-style: none;
   text-align: center;
   padding: 0;
-  margin: 0;
   outline: none;
   outline: 0;
+  margin: 0;
+  padding: 0;
+}
+.sub-nav-icon {
+  list-style: none;
+  /*text-align: center;*/
+  padding: 0;
+  outline: none;
+  outline: 0;
+  margin: 0;
+  padding: 0;
 }
 .mdiconx svg {
   fill: black;
+}
+#mdiconx:hover svg {
+  opacity: 0.5;
 }
 .mdicon svg {
   fill: red;
   outline: none;
 }
 .icon {
-  background-color: white;
+  background-color: rgb(246, 246, 246);
   outline: 0;
 }
+.padding{
+  margin: 9px 0px 9px 0px;
+  padding: 9px 0px 9px 0px;
+}
+.padsub{
+  margin: 2px 0px 3px 7px;
+  padding: 2px 0px 2px 0px;
+
+}
+.padsub-link:active {
+    /*background-color: yellow;*/
+    color: black;
+}
+
 .nohighlight:focus{
   /*outline: none;*/
   outline: 0;
+}
+.nohighlight:hover{
+  fill: white;
+  outline: none;
 }
 md-icon{
   outline: none;
@@ -541,5 +600,14 @@ md-icon{
   display: inline-block;
 }
 /*start md switch stuff*/
+
+/*TWILIO VIDEO STUFF*/
+.blackbackground {
+  background-color: black;
+  background: black;
+  background: yellow;
+
+}
+/*TWILIO VIDEO STUFF*/
 
 </style>

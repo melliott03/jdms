@@ -9,7 +9,9 @@ myApp.controller('NavCtrl', function($scope, $location) {
     {number:'1', path: 'home', name: '../img/icons/ic_home_black_24px.svg'},
     {number:'2', path: 'phone', name: '../img/icons/ic_call_black_24px.svg'},
     {number:'3', path: 'onsite', name: '../img/icons/ic_business_black_24px.svg'},
-    {number:'4', path: 'accountCust', name: '../img/icons/ic_settings_black_24px.svg'}
+    {number:'4', path: 'videoCust', name: '../img/icons/ic_videocam_black_24px.svg'},
+    {number:'5', path: 'translateCust', name: '../img/icons/ic_translate_black_24px.svg'},
+    {number:'5', path: 'accountCust', name: '../img/icons/ic_settings_black_24px.svg'}
 ];
   // $scope.selectedIndex = 0;
   // when($location.path() == )
@@ -239,8 +241,19 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkSe
 }]);
 
 myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location", '$filter', '$http', '$log', "WorkService", 'uiGridConstants', 'stripe', '$mdDialog', 'Socket', function($scope, $interval, $window, $location, $filter, $http, $log, WorkService, uiGridConstants, stripe, $mdDialog, Socket){
+  console.log('Inside ShowController:::');
+
+  // WorkService.getMovies();//this triggers my other sms and voice calls
+    // WorkService.getSMS(); //this triggers ANOTHER other sms and voice calls
+    WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
+    WorkService.getWorksTel();
+    WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
+    WorkService.getContractorWork(); //gets all the work contractor has accepted
+
   // console.log('$routeParams in ShowController::', $routeParams);
   // console.log('$routeParams::', $routeParams.qa_id);
+
+   //Secket.io suff turning off to code further
   Socket.connect();
   $scope.$on('$locationChangeStart', function(event){
     Socket.disconnect(true);
@@ -311,6 +324,7 @@ myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location
         //     // $('#messages').append($('<li>').text(msg));
         // });
 
+
   var workService = WorkService;
 
   // $scope.updateWorkEntered = function(work){
@@ -357,12 +371,6 @@ myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location
             "firstName": "Cox",
             "lastName": "Carney"
       }];
-  // WorkService.getMovies();//this triggers my other sms and voice calls
-    // WorkService.getSMS(); //this triggers ANOTHER other sms and voice calls
-    WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
-    WorkService.getWorksTel();
-    WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
-    WorkService.getContractorWork(); //gets all the work contractor has accepted
     // $scope.expand = {};
     $scope.setWorkDetail = function(work) {
       console.log('inside workdtail in controller::::work', work);
@@ -381,10 +389,18 @@ myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location
   $scope.customer = function(){
     if(WorkService.userObject.response.role == "customer" ){
         return true;
-  }else{
-        return false;
+    }else{
+          return false;
+    }
   }
-}
+
+  $scope.admin = function(){
+    if(WorkService.userObject.response.role == "admin" ){
+        return true;
+    }else{
+          return false;
+    }
+  }
 
     // console.log('WorkService.userObject.response.role:', WorkService.userObject.response.role);
     $scope.contractorWorks = WorkService.contractorWorkObject;
@@ -550,6 +566,175 @@ function addDialogController($scope, $mdDialog, $log) { //, items
 }
 //END $mdDialog
 
+//START $mdDialog
+$scope.hide = function() {
+  $mdDialog.hide();
+};
+$scope.cancel = function() {
+  $mdDialog.cancel();
+};
+$scope.EditWorkTabDialog = function(ev, work_id) {
+  console.log("Inside EditWorkTabDialog function");
+  console.log('work_id', work_id);
+  $scope.work_id = work_id;
+  $mdDialog.show({
+    controller: DialogController,
+    templateUrl: 'adminAddDialog.tmpl.html',
+    parent: angular.element(document.body),
+    targetEvent: ev,
+    clickOutsideToClose:true,
+    locals: { items: work_id }
+  })
+  .then(function(answer) {
+    $scope.status = 'You said the information was "' + answer + '".';
+  }, function() {
+    $scope.status = 'You cancelled the dialog.';
+  });
+};
+function EditWorkController($scope, $mdDialog, items) {
+  console.log('items::', items);
+  $scope.work = items;
+  // $scope.loadGroups = function() {
+  //   return $scope.groups.length ? null : $http.get('/groups').success(function(data) {
+  //     $scope.groups = data;
+  //   });
+  // };
+
+  $scope.hide = function() {
+    $mdDialog.hide();
+  };
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  $scope.answer = function(answer) {
+    $mdDialog.hide(answer);
+  };
+}
+//END $mdDialog
+
+//START $mdDialog
+$scope.hide = function() {
+  $mdDialog.hide();
+};
+$scope.cancel = function() {
+  $mdDialog.cancel();
+};
+$scope.DuplicateWorkTabDialog = function(ev, work_id) {
+  console.log("Inside duplicateTabDialog function");
+  console.log('work_id', work_id);
+  $scope.work_id = work_id;
+  $mdDialog.show({
+    controller: DuplicateWorkController,
+    templateUrl: 'adminAddDialog.tmpl.html',
+    parent: angular.element(document.body),
+    targetEvent: ev,
+    clickOutsideToClose:true,
+    locals: { items: work_id }
+  })
+  .then(function(answer) {
+    $scope.status = 'You said the information was "' + answer + '".';
+  }, function() {
+    $scope.status = 'You cancelled the dialog.';
+  });
+};
+function DuplicateWorkController($scope, $mdDialog, items) {
+  console.log('inside DuplicateWorkController:::');
+  console.log('items::', items);
+  $scope.work = items;
+  // $scope.loadGroups = function() {
+  //   return $scope.groups.length ? null : $http.get('/groups').success(function(data) {
+  //     $scope.groups = data;
+  //   });
+  // };
+
+  $scope.hide = function() {
+    $mdDialog.hide();
+  };
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  $scope.answer = function(answer) {
+    $mdDialog.hide(answer);
+  };
+}
+//END $mdDialog
+
+//start add row to smart-table
+$scope.rows = ['Search 1'];
+
+$scope.counter = 1;
+
+$scope.addRow = function() {
+  $scope.counter++;
+  $scope.rows.push('Search ' + $scope.counter);
+}
+$scope.deleteRow = function(index) {
+  console.log('index::', index);
+  console.log('$scope.rows(index::', $scope.rows[index]);
+  $scope.counter--;
+  // $scope.rows.pop(item);
+  $scope.rows.splice(index, 1);
+}
+// $scope.removeItem = function(index){
+//     $scope.items.splice(index, 1);
+//   }
+//end add row to smart-table
+
+//TOTALLING CUSTOMER AND CONTRACTOR MONEY
+$scope.workNumbers = [{
+        val: 100,
+        qty: 200,
+      }];
+
+
+      $scope.add = function() {
+        $scope.workNumbers.push({
+          val: 0,
+          qty: 0
+        });
+      };
+
+      $scope.deleteNumber = function(val) {
+        $scope.workNumbers.splice(val, 1);
+      };
+
+      $scope.total = function(){
+        var total = 0;
+        angular.forEach($scope.workNumbers, function(num) {
+          total += (num.val * num.qty);
+        });
+        return total;
+      }
+      $scope.work = {};
+      $scope.work.details = {};
+
+      $scope.work.details.aRate = 20;
+      $scope.work.details.aDuration = 2;
+      $scope.work.details.aMiles = 0;
+      $scope.work.details.aMileRate = 0;
+      $scope.work.details.aTravelRate = 0;
+      $scope.work.details.aTravelTime = 0;
+      $scope.work.details.atotal = 0;
+
+      $scope.work.details.cRate = 75;
+      $scope.work.details.cDuration = 2;
+      $scope.work.details.cMiles = 90;
+      $scope.work.details.cMileRate = .54;
+      $scope.work.details.cTravelRate = 0;
+      $scope.work.details.cTravelTime = 0;
+      $scope.work.details.ctotal = 0;
+
+      $scope.work.details.requester = 'William Carvajal';
+      $scope.work.details.doctor = 'Dr. Steven Rothke';
+      $scope.work.details.patient = 'Mondg Kor';
+      $scope.work.details.po = '1009876';
+      $scope.work.address = '3710 Commercial Ave Suite 6, NORTHBROOK, COOK, ILLINOIS, 60062';
+
+
+
+
+
+
 }]); //END
 
 // myApp.directive("contenteditable", function() {//PART OF contente
@@ -607,6 +792,43 @@ function DialogController($scope, $mdDialog) {
 
 $scope.submitContractorPersonal = homeService.createContractorAccount;
 
+}]);
+
+myApp.controller('pipeCtrl', ['SmartTableWorkService', function (SmartTableWorkService) {
+  var smartTableWorkService = SmartTableWorkService;
+  var ctrl = this;
+
+  this.displayed = [];
+
+  this.callServer = function callServer(tableState) {
+
+    ctrl.isLoading = true;
+
+    var pagination = tableState.pagination;
+
+    var start = pagination.start || 0;     // This is NOT the page number, but the index of item in the list that you want to use to display the table.
+    var number = pagination.number || 10;  // Number of entries showed per page.
+
+    smartTableWorkService.getPage(start, number, tableState).then(function (result) {
+      console.log('result::', result);
+      ctrl.displayed = result.data;
+      tableState.pagination.numberOfPages = result.numberOfPages;//set the number of pages so the pagination can update
+      ctrl.isLoading = false;
+    });
+  };
+
+}]);
+
+myApp.controller("AutocompleteController", ["$scope", "$http", "WorkService", function($scope, $http, WorkService){
+    console.log("AutocompleteController Controller");
+    // $scope.data = WorkService.data;
+    this.querySearch = function(query){
+            return $http.get("/company/list", {params: {q: query}})
+            .then(function(response){
+              console.log('response.data:::', response.data);
+              return response.data;
+            });
+          };
 }]);
 
 myApp.controller("CommunicationsController", ["$scope", "WorkService", function($scope, WorkService){
@@ -728,6 +950,19 @@ $scope.chartObject_column = {};
 
 }]);
 
+myApp.controller("VideoDialogController", ["$scope", "WorkService", function($scope, WorkService){
+    console.log("Communications Controller");
+
+    $scope.data = WorkService.data;
+}]);
+
+myApp.controller("VideoChatController", ["$scope", "$log", "WorkService", function($scope, $log, WorkService){
+    console.log("VideoChatController Controller");
+
+    var vm = this;
+
+    $scope.data = WorkService.data;
+}]);
 
 myApp.controller("VideoDialogController", ["$scope", "$mdDialog", function($scope, $mdDialog){
   console.log(" Video Dialog Controller");

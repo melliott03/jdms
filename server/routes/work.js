@@ -52,12 +52,20 @@ var shortid = require('shortid');
 // });
 
 router.get("/calls", function(req,res){
+  var requser = req.user;
 /**@todo find and send all works for this customer */
-console.log('INSIDE get on work req.user._id: ',req.user._id);
+console.log('INSIDE get on work req.user._id:: ',req.user._id);
+console.log('INSIDE get on work req.user:: ',req.user);
 console.log(req.user._id);
-var promised = Work_Tel.find({customer_id: req.user._id}).exec();
+if (requser.role == 'customer') {
+  var promised = Work_Tel.find({customer_id: req.user._id}).exec();
+} else if(requser.role == 'contractor') {
+  var promised = Work_Tel.find({contractor_id: req.user._id}).exec();
+} else if (requser.role == 'admin'){
+  var promised = Work_Tel.find({}).exec();
+}
 promised.then(function(work_Tels) {
-  console.log('Work_Tels found for customer ::', work_Tels);
+  console.log('Work_Tels documents found for '+requser.role+' are ::', work_Tels);
 
   return work_Tels;
 })
@@ -275,8 +283,12 @@ router.post("/", function(req, res, next){
   datetime = req.body.datetime,
   endTime = req.body.endTime,
   address = req.body.address,
-  details = req.body.details,
+  details = req.body.details || {},
   customer_id = req.user._id,
+  details = req.body.details,
+  company = req.body.company || {},
+
+
   contractor_id = '',
   money = {},
   notifications = [],
@@ -350,7 +362,7 @@ router.post("/", function(req, res, next){
     var geo = weatherNgeo.geo;
     var work_signatures = {};
     var shrtid = shortid.generate();
-    var addedWork = new Work({"shortid" : shrtid, "work_signatures" : work_signatures, "money" : money, "date_created" : date_created, "type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id" : contractor_id, geo : geo, "weather" : workWeather });
+    var addedWork = new Work({"company" : company, "shortid" : shrtid, "work_signatures" : work_signatures, "money" : money, "date_created" : date_created, "type" : type, "datetime" : datetime, "endTime" : endTime,  "address" : address, "details" : details, "status" : status, "customer_id" : customer_id, "contractor_id" : contractor_id, "geo" : geo, "weather" : workWeather });
     // newwork = addedWork;
     return new Promise(function (resolve, reject){
       addedWork.save(function(err, data){
@@ -586,18 +598,64 @@ router.route("/:id")
 router.get("/", function(req,res){
 /**@todo find and send all works for this customer */
 console.log('INSIDE get on work req.user._id: ',req.user._id);
-console.log(req.user._id);
-var workArray = [];
-Work.find(function (err, work) {
-      if (err) {
-        res.send(err, null);
-      }
-      res.send(work);
-      var resSend = function(){
-        console.log('workArray :', workArray);
-        res.send(workArray);
-      };
-    }).or([{ customer_id: ''+req.user._id }, { contractor_id: ''+req.user._id }]).where('status').ne('canceled');
+var requser = req.user;
+
+if (requser.role == 'customer') {
+  var promised = Work.find({customer_id: req.user._id}).where('status').ne('canceled').exec();
+} else if(requser.role == 'contractor') {
+  var promised = Work.find({contractor_id: req.user._id}).where('status').ne('canceled').exec();
+} else if (requser.role == 'admin'){
+  var promised = Work.find({}).limit(150).exec();
+}
+promised.then(function(works) {
+  console.log('Works documents found for '+requser.role+' are ::', works);
+  console.log('inside the then works.length::', works.length);
+  res.send(works);
+  // return works;
+})
+.then(function(works) {
+  // console.log('inside the then works.length::', works.length);
+  // res.send(works);
+})
+.catch(function(err){
+  // just need one of these
+  console.log('error:', err);
+});
+
+
+/*
+if (requser.role === 'customer' || requser.role === 'contractor'){
+  Work.find(function (err, work) {
+        if (err) {
+          console.log('err::', err);
+        } else if (work) {
+          console.log('work::', work);
+          console.log('work[1]::', work[1]);
+          res.send(work);
+        } else {
+          //nothing
+        }
+      }).or([{ customer_id: ''+req.user._id }, { contractor_id: ''+req.user._id }]).where('status').ne('canceled');
+} else if (requser.role === 'admin') {
+  Work.find(function (err, work) {
+        if (err) {
+          console.log('err::', err);
+        } else if (work) {
+          console.log('work::', work);
+          console.log('work[1]::', work[1]);
+          res.send(work);
+        } else {
+          //nothing
+        }
+
+        // var resSend = function(){
+        //   console.log('workArray :', workArray);
+        //   res.send(workArray);
+        // };
+      });
+}
+*/
+
 });
 
 router.route("/update")

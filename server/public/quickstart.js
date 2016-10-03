@@ -22,10 +22,18 @@ $.getJSON('/boink', function(data) {
 
     // Check the browser console to see your generated identity.
     // Send an invite to yourself if you want!
-    console.log(identity);
+    console.log('identity::', identity);
+
+    console.log('data.token::', data.token);
+    console.log('data.identity::', data.identity);
+    console.log('data::', data);
+
+
 
     // Create a Conversations Client and connect to Twilio
+    // conversationsClient = new Twilio.Conversations.Client(accessManager, {logLevel: 'debug'});
     conversationsClient = new Twilio.Conversations.Client(accessManager);
+
     conversationsClient.listen().then(clientConnected, function (error) {
         log('Could not connect to Twilio: ' + error.message);
     });
@@ -34,7 +42,7 @@ $.getJSON('/boink', function(data) {
 // Successfully connected!
 function clientConnected() {
     document.getElementById('invite-controls').style.display = 'block';
-    log("Connected to Twilio. Listening for incoming Invites as '" + conversationsClient.identity + "'");
+    log("Connected to Twio. Listening for incoming Invites as '" + conversationsClient.identity + "'");
 
     conversationsClient.on('invite', function (invite) {
         log('Incoming invite from: ' + invite.from);
@@ -43,7 +51,14 @@ function clientConnected() {
 
     // Bind button to create conversation
     document.getElementById('button-invite').onclick = function () {
-        var inviteTo = this.value;
+      console.log('inside button-invite.onclick this.value::', this.value );
+      var inviteTo = document.getElementById('invite-to').value;
+        // var inviteTo = this.value;
+            // inviteTo = '57d70ead2c43dea30e1fb192';
+            // inviteTo = '57cf41ef372aa1ba47d87162';
+            console.log('inside button-invite.onclick inviteTo::', inviteTo );
+
+
         if (activeConversation) {
             // Add a participant
             activeConversation.invite(inviteTo);

@@ -146,6 +146,30 @@ router.get("/name", function(req,res,next){
         // reminderDateTime: reminderDateTime
       }
     }
+  } else if (req.user.role == 'admin') {
+    //UPDATE USER SOURCES IF null
+
+      //loop over payment sources take only :
+      // exp_month
+      // exp_year
+      // last4
+      // object
+
+      resUser = {
+        username: req.user.username,
+        firstname: req.user.firstname,
+        lastname: req.user.lastname,
+        datecreated: req.user.lastlogin,
+        phone: req.user.phone,
+        address: req.user.address,
+        type: req.user.type,
+        email: req.user.email,
+        geo: req.user.geo,
+        role: req.user.role,
+        id: req.user._id
+        // reminderDateTime: reminderDateTime
+      }
+
   }
   res.json(resUser);
 });

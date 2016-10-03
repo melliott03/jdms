@@ -99,11 +99,16 @@ router.post('/telephonicUserID', twilio.webhook({validate: false}), function (re
     var twiml = new twilio.TwimlResponse();
     var promise = User.findOne({telephonicID: telephonicUserID}).exec();
     promise.then(function(aUserWithID) {
-      console.log('aUserWithID ::', aUserWithID);
-      // if (anyUserWithID == null){
-      //   addTelephonicIDnPassCode();
-      // }
-      return aUserWithID;
+
+      if (aUserWithID) {
+        console.log("aUserWithID ::", aUserWithID);
+        return aUserWithID;
+      }else {
+        twiml.say('You entered an incorrect User ID');
+        response.send(twiml,redirectWelcome());
+      }
+      //Gather the USERID and the Password then find see if that combination exists in the DB
+      //that way, hackers can't dial until the figure out a userID (by not validating after UserID is entered)
 
     })
     .then(function(aUserWithID) {

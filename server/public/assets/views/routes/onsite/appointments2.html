@@ -1,0 +1,42 @@
+<div ng-controller="pipeCtrl">
+    <div class="container">
+      <div class="table-container" ng-controller="pipeCtrl as mc">
+    		<table class="table" st-pipe="mc.callServer" st-table="mc.displayed">
+    			<thead>
+    			<tr>
+    				<th st-sort="id">id</th>
+    				<th st-sort-default="reverse" st-sort="name">name</th>
+    				<th st-sort="age">age</th>
+    				<th st-sort="saved">saved people</th>
+    			</tr>
+    			<tr>
+    				<th><input st-search="id"/></th>
+    				<th><input st-search="name"/></th>
+    				<th><input st-search="age"/></th>
+    				<th><input st-search="saved"/></th>
+    			</tr>
+    			</thead>
+    			<tbody ng-show="!mc.isLoading">
+    			<tr ng-repeat="row in mc.displayed">
+    				<td>{{row.id}}</td>
+    				<td>{{row.name}}</td>
+    				<td>{{row.age}}</td>
+    				<td>{{row.saved}}</td>
+    			</tr>
+    			</tbody>
+    			<tbody ng-show="mc.isLoading">
+    			<tr>
+    				<td colspan="4" class="text-center"><div class="loading-indicator"></div>
+    				</td>
+    			</tr>
+    			</tbody>
+    			<tfoot>
+    			<tr>
+    				<td class="text-center" st-pagination="" st-items-by-page="10" colspan="4">
+    				</td>
+    			</tr>
+    			</tfoot>
+    		</table>
+	    </div>
+    </div>
+  </div>
