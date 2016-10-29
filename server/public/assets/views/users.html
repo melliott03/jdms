@@ -97,7 +97,7 @@
     <script type="text/javascript" src="/assets/scripts/app.js"></script>
     <script type="text/javascript" src="/assets/scripts/phoneInput.js"></script>
     <script type="text/javascript" src="/assets/scripts/controllers.js"></script>
-    <script type="text/javascript" src="/assets/scripts/videochat.controller.js"></script>
+    <script type="text/javascript" src="/assets/scripts/twiliovideo/videochat.controller.js"></script>
     <script type="text/javascript" src="/assets/scripts/authFactory.js"></script>
     <script type="text/javascript" src="/assets/scripts/authController.js"></script>
     <script type="text/javascript" src="/assets/scripts/factories.js"></script>
@@ -286,6 +286,10 @@
             <div class="secondary_nav">
               <div class="subnavheader" ng-show="show==1">
                 <span class="sub-nav-header">Home</span>
+                <ul class="sub-nav-icon padsub">
+                  <li class="padsub" ng-class="{ 'bold-sub-nav-text': $index == selectedIndex }"><a href="#home/dashboard">Dashboard</a></li>
+                  <li class="padsub"><a href="#home/billing">Billing</a></li>
+                </ul>
               </div>
               <div class="subnavheader" ng-show="show==2">
                 <span class="sub-nav-header">Phone</span>

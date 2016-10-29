@@ -11,7 +11,7 @@ myApp.controller('NavCtrl', function($scope, $location) {
     {number:'3', path: 'onsite', name: '../img/icons/ic_business_black_24px.svg'},
     {number:'4', path: 'videoCust', name: '../img/icons/ic_videocam_black_24px.svg'},
     {number:'5', path: 'translateCust', name: '../img/icons/ic_translate_black_24px.svg'},
-    {number:'5', path: 'accountCust', name: '../img/icons/ic_settings_black_24px.svg'}
+    {number:'6', path: 'accountCust', name: '../img/icons/ic_settings_black_24px.svg'}
 ];
   // $scope.selectedIndex = 0;
   // when($location.path() == )
@@ -32,11 +32,19 @@ myApp.controller('NavCtrl', function($scope, $location) {
     $scope.selectedIndex = 2;
     $scope.show = '3';
     $location.path('onsite');
-  } else if (pathdata[1] == 'accountCust'){
+  } else if (pathdata[1] == 'videoCust'){
     $scope.selectedIndex = 3;
     $scope.show = '4';
+    $location.path('videoCust');
+  } else if (pathdata[1] == 'translateCust'){
+    $scope.selectedIndex = 4;
+    $scope.show = '5';
+    $location.path('translateCust');
+  } else if (pathdata[1] == 'accountCust'){
+    $scope.selectedIndex = 5;
+    $scope.show = '6';
     $location.path('accountCust');
-  }else {
+  } else {
   }
 
   $scope.itemClicked = function ($index, item) {
@@ -59,8 +67,12 @@ myApp.controller('NavCtrl', function($scope, $location) {
       $scope.selectedIndex = 1;
     } else if (pathdata[1] == 'onsite'){
       $scope.selectedIndex = 2;
-    } else if (pathdata[1] == 'accountCust'){
+    } else if (pathdata[1] == 'videoCust'){
       $scope.selectedIndex = 3;
+    }else if (pathdata[1] == 'translateCust'){
+      $scope.selectedIndex = 4;
+    }else if (pathdata[1] == 'accountCust'){
+      $scope.selectedIndex = 5;
     }else {
     }
 
@@ -242,13 +254,19 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkSe
 
 myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location", '$filter', '$http', '$log', "WorkService", 'uiGridConstants', 'stripe', '$mdDialog', 'Socket', function($scope, $interval, $window, $location, $filter, $http, $log, WorkService, uiGridConstants, stripe, $mdDialog, Socket){
   console.log('Inside ShowController:::');
-
+  this.$onInit = function() {
+    this.state = 'Loaded!';
+  };
+  var workService = WorkService;
   // WorkService.getMovies();//this triggers my other sms and voice calls
     // WorkService.getSMS(); //this triggers ANOTHER other sms and voice calls
-    WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
-    WorkService.getWorksTel();
-    WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
-    WorkService.getContractorWork(); //gets all the work contractor has accepted
+    workService.getWorks(); //this triggers ANOTHER other sms and voice calls
+    workService.getWorksTel();
+    workService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
+    workService.getContractorWork(); //gets all the work contractor has accepted
+    workService.getCustomerBalance();
+    workService.getCustomerCharges();
+
 
   // console.log('$routeParams in ShowController::', $routeParams);
   // console.log('$routeParams::', $routeParams.qa_id);
@@ -325,7 +343,6 @@ myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location
         // });
 
 
-  var workService = WorkService;
 
   // $scope.updateWorkEntered = function(work){
   //   console.log('work:::',work);
@@ -419,6 +436,9 @@ myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location
     //Phone Call Version    $scope.works = WorkService.customerWorkObject;
     $scope.works_tel = WorkService.customerWorkTelObject;
     $scope.displayWorkTelCollection = [].concat($scope.works_tel.response);
+
+    $scope.customerBalance = workService.customerBalanceObject;
+    $scope.customerCharges = workService.customerChargesObject;
 
 
 // datatable

@@ -9,6 +9,7 @@ var User = require("../models/user");
 var geocoder = require('geocoder');
 var mongoose = require("mongoose");
 
+var moment = require("moment");
 var stripe = require("stripe");
 
 var plaid = require('plaid');
@@ -438,6 +439,136 @@ router.post('/saveUserIdentityDocument', passport.authenticate('jwt', { session:
 
 
 });
+
+
+
+router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: false }), function(req, res) {
+  console.log('inside updateUser/customerMoneyBalance::');
+  var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
+
+  var customer = req.user;
+  var customer_id = customer.epirts.customer.id;
+  var data = {};
+
+  //GET CUSTOMER'S BALANCE
+  stripe.customers.retrieve(customer_id)
+  .then(function(customer){
+    var balance = customer.account_balance;
+      if (customer){
+        data.stripeCustomer = customer;
+        data.balance = balance;
+        data.customer_id = customer_id;
+        return data;
+      }
+  }).then(function(data){
+    return stripe.invoices.retrieveUpcoming(data.customer_id).then(function(upcoming){
+      data.upcomingInvoice = upcoming;
+      return data;
+    })
+
+/*
+    stripe.invoices.list(data.customer_id).then(function(invoices){
+      data.invoices = invoices ;
+      return data;
+    })
+
+
+      stripe.invoices.list(
+        { limit: 3 },
+        function(err, invoices) {
+          // asynchronously called
+        }
+      );
+    */
+
+  }).catch(function(error){
+    console.log('catch error top :', error);
+
+    if (error.message.includes("No upcoming invoices for customer") ) {
+        console.log('catch error.message.includes("No upcoming invoices for customer error.message::")  :', error.message);
+      // res.status(404).send({ error: "No upcoming invoices for customer "});
+      return data;
+    } else{
+      console.log('catch error:', error);
+      res.status(500).send({ error: "some error"});
+    }
+    // just need one of these
+  }).then(function(data){
+    var upcomingInvoicetotal;
+    if (data.upcomingInvoice) {
+      upcomingInvoicetotal = data.upcomingInvoice.total;
+    } else {
+      upcomingInvoicetotal = 0;
+    }
+    var newdata = {};
+    money_available = data.stripeCustomer.account_balance + upcomingInvoicetotal;
+    money_available = money_available*-1;
+    money_available = money_available/100;
+    newdata.available_balance = money_available;
+    console.log('newdata::', newdata);
+    res.send(newdata);
+
+  }).catch(function(error){
+    console.log('catch error top :', error);
+
+    if (error.message.includes("No upcoming invoices for customer") ) {
+      console.log('catch error.message.includes("No upcoming invoices for customer error.message::")  :', error.message);
+      // res.status(404).send({ error: "No upcoming invoices for customer "});
+
+    } else if (2 > 6) {
+
+    } else{
+      console.log('catch error:', error);
+      res.status(500).send({ error: "some error"});
+
+    }
+    // just need one of these
+  });
+
+});
+
+
+
+router.get('/customerMoneyCharges', passport.authenticate('jwt', { session: false }), function(req, res) {
+  console.log('inside updateUser/customerMoneyCharges::');
+  var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
+
+  var customer = req.user;
+  var customer_id = customer.epirts.customer.id;
+  var data = {};
+
+  //GET CUSTOMER'S CHARGES
+  stripe.charges.list({customer: customer_id})
+  .then(function(charges){
+      if (charges){
+        console.log('charges at top before map:: ', charges);
+        charges.data.map(function(obj){
+          obj.createdDateReadable = moment.unix(obj.created).format("dd, MMM Do YYYY, h:mm:ss a");
+            console.log('obj.created:: ', obj.created);
+          console.log('obj.createdDateReadable:: ', obj.createdDateReadable);
+
+        });
+        res.send(charges);
+      }
+  }).catch(function(error){
+    console.log('catch error top :', error);
+
+    if (error.message.includes("No upcoming invoices for customer") ) {
+      console.log('catch error.message.includes("No upcoming invoices for customer error.message::")  :', error.message);
+      // res.status(404).send({ error: "No upcoming invoices for customer "});
+
+    } else if (2 > 6) {
+
+    } else{
+      console.log('catch error:', error);
+      res.status(500).send({ error: "some error"});
+
+    }
+    // just need one of these
+  });
+
+});
+
 
 
 module.exports = router;

@@ -23,19 +23,6 @@ var weekly = function(data){
     // customer.save();
     return customer;
   })
-  // .then(function(customer) {
-  //   console.log('inside the then customer::', customer);
-  //   var contractorid = theTeleWorkWithcall_sid.contractor_id;
-  //   console.log('theTeleWorkWithcall_sid::', theTeleWorkWithcall_sid);
-  //   console.log('contractorid::', contractorid);
-  //   var promise = User.findById(contractorid).exec();
-  //   promise.then(function(contractor) {
-  //     console.log('contractor found ::', contractor);
-  //
-  //     // contractor.save();
-  //     return contractor;
-  //   })
-  // })
   .then(function(customer) {
     // console.log('inside the then contractor::', contractor);
     console.log('inside the then after found customer: customer::', customer);
@@ -43,13 +30,10 @@ var weekly = function(data){
     console.log('inside the then after found customer: data.theTeleWorkWithcall_sid::', data.theTeleWorkWithcall_sid);
     var contractor_id = data.theTeleWorkWithcall_sid.contractor_id;
     var theTeleWorkWithcall_sid = data.theTeleWorkWithcall_sid;
-    // console.log('add invoiceitem to contractor in stripe::');
-    //add invoiceitem to contractor in stripe
     var promise = User.findById(contractor_id).exec();
     promise.then(function(contractor) {
       console.log('contractor found ::', contractor);
       createStripeInvoiceItem(customer, theTeleWorkWithcall_sid, contractor);
-      // return contractor;
     })
   })
   .catch(function(err){
@@ -105,13 +89,8 @@ var createStripeCharge = function(customer, theTeleWorkWithcall_sid, contractor)
   console.log('customer.epirts.customer.id in createStripeInvoiceItem::', customer.epirts.customer.id);
   var duration = theTeleWorkWithcall_sid.outboundSummary.CallDuration;
   var rate = 3.35/60;
-  // var amount = Math.round(100*duration*rate)/100;
-  // console.log('amount after Math.round/100::', amount);
   var amount = Math.round(100*duration*rate);
   console.log('amount Math.round::', amount);
-  // amount = 11000;
-  // amount = (amount*100).toFixed( 2 );
-  // console.log('(amount*100).toFixed( 2 )::', amount);
 
   var app_fee = Math.round(amount*.70);
   console.log('app_fee::', app_fee);
@@ -153,111 +132,52 @@ stripe.charges.create({
 
 };
 
-var createStripeInvoiceItem = function(customer, theTeleWorkWithcall_sid, contractor){
+var createStripeInvoiceItem = function(data){
+  var customer = data.aUserWithCustomer_ID;
+  var contractor = data.aUserWithWorkerSid;
+  var telwork = data.theTeleWorkWithcall_sid;
+
   console.log('contractor in createStripeInvoiceItem::', contractor);
   console.log('customer in createStripeInvoiceItem::', customer);
-  console.log('theTeleWorkWithcall_sid in createStripeInvoiceItem::', theTeleWorkWithcall_sid);
+  console.log('telwork in createStripeInvoiceItem::', telwork);
   console.log('customer.epirts.customer.id in createStripeInvoiceItem::', customer.epirts.customer.id);
-  var duration = theTeleWorkWithcall_sid.outboundSummary.CallDuration;
+  var duration = telwork.outboundSummary.CallDuration;
+  if (duration < 60) {
+    duration = 60;
+  }
+  //if there is a fraction of a minute
+  if (duration % 60 != 0 ) {
+    //round  the fraction up one minute
+    duration = parseInt(duration) + 60;
+  }
   var rate = 3.35/60;
-  var amount = Math.round(100*duration*rate)/100;
-  console.log('amount before parseInt::', amount);
-  amount = 11000;
+  var amount = duration*rate;
+  console.log('amount before amount.toFixed( 2 )*100::', amount);
+      amount = amount.toFixed( 2 )*100;
+  console.log('amount after amount.toFixed( 2 )*100::', amount);
+  // amount = 11000;
   console.log('amount after Math.round to 100th and x 100 to get in pennies::', amount);
   console.log('rate::', rate);
   console.log('duration::', duration);
   console.log('contractor.epirts.account.id::', contractor.epirts.account.id);
 
-  //retrieve the account check if there is a subscription, if not, add one
-
-
-
-  //add invoice item
-  // stripe.invoiceItems.create({ /* invoice-y stuff*/ }, {stripe_account: CONNECTED_STRIPE_ACCOUNT_ID}, done);
-  /*
-  stripe.invoiceItems.create({
-  customer: customer.epirts.customer.id,
-  amount: amount,
-  currency: "usd",
-  description: "cost of telephonic: "+theTeleWorkWithcall_sid._id
-  // application_fee: 100
-  }, {stripe_account: contractor.epirts.account.id})
-  .then(function(charge) {
-  console.log('charge in then after invoiceItem::', charge);
-  console.log('theTeleWorkWithcall_sid in then after invoiceItem::', theTeleWorkWithcall_sid);
-  // Get customer's account balance from stripe
-  return stripe.customers.retrieve(customer.epirts.customer.id);
-}).then(function(customer) {
-  //then update customer in MongoDB
-console.log('customer after retrieve customer::', customer);
-}, function(err) {if (err) {console.log('err after invoiceItems create::', err);}});
-  */
-
-/*
 stripe.invoiceItems.create({
-customer: SHARED_CUSTOMER_ID,
-amount: 2500,
-currency: "usd",
-description: "cost of work "
-},{application_fee: 100}, {stripe_account: CONNECTED_STRIPE_ACCOUNT_ID})
-.then(function(charge) {
-
-}).then(function() {
-}, function(err) {if (err) {console.log('err ', err);}});
-*/
-
-/* works
-stripe.charges.create({
-customer: customer.epirts.customer.id,
-amount: amount,
-currency: "usd",
-description: "cost of telephonic: "+theTeleWorkWithcall_sid._id
-// application_fee: 100
-}, {stripe_account: contractor.epirts.account.id})
-.then(function(charge) {
-console.log('charge in then after invoiceItem::', charge);
-console.log('theTeleWorkWithcall_sid in then after invoiceItem::', theTeleWorkWithcall_sid);
-// Get customer's account balance from stripe
-return stripe.customers.retrieve(customer.epirts.customer.id);
-}).then(function(customer) {
-//then update customer in MongoDB
-console.log('customer after retrieve customer::', customer);
-}, function(err) {if (err) {console.log('err after invoiceItems create::', err);}});
-*/
-
-stripe.charges.create({
+    customer: customer.epirts.customer.id, // Previously stored, then retrieved customer
     amount: amount, // amount in cents, again
     currency: "usd",
-    description: "cost of telephonic: "+theTeleWorkWithcall_sid._id,
-    customer: customer.epirts.customer.id, // Previously stored, then retrieved customer
-    destination: contractor.epirts.account.id,
-    application_fee: 123,
-    metadata: {'telephonic_id ': ''+theTeleWorkWithcall_sid._id}
+    description: "cost of telephonic: "+telwork._id,
+    // destination: contractor.epirts.account.id,
+    // application_fee: 123,
+    metadata: {'telephonic_id': ''+telwork._id, 'shortid': ''+telwork.shortid }
   }, function(err, charge) {
     if (err) {console.log('err after charges create::', err);
   } else if(charge) {
     console.log('charge::',charge);
   }
 
-    // Work.findById(req.body._id, function(err, work){
-    //   console.log('INSIDE complete on server work:', work);
-    //   if(err){
-    //     console.log(err);
-    //   }
-    //   work.epirts.charge_id = charge.id;
-    //   // save the work
-    //   work.save(function(err, work) {
-    //     console.log('WORK UPDATED WITH COMPLETE !!!!!!!');
-    //     postToPayable();
-    //     stripeChargePay(work);
-    //     if (err)
-    //     res.send(err);
-    // });
-    // });
-    if (err && err.type === 'StripeCardError') {
-      // The card has been declined
-    }
-
+  if (err && err.type === 'StripeCardError') {
+    // The card has been declined
+  }
 
   });
 
@@ -265,8 +185,171 @@ stripe.charges.create({
 };
 
 
+var prePaid = function(data){
+  //GET ALL MY VARIABLES READY
+  var customer = data.aUserWithCustomer_ID;
+  var contractor = data.aUserWithWorkerSid;
+  var telwork = data.theTeleWorkWithcall_sid;
+  var customer_id = customer.epirts.customer.id;
+  data.telwork = telwork;
+
+    //ADJUST THE DURATION IF NECESSARY
+  var duration = telwork.outboundSummary.CallDuration;
+  if (duration < 60) {
+    duration = 60;
+  }
+    //if there is a fraction of a minute
+  if (duration % 60 != 0 ) {
+    //round  the fraction up one minute
+    duration = parseInt(duration) + 60;
+  }
+  var rate = 3.35/60;
+  var amount = duration*rate;
+      amount = amount.toFixed( 2 )*100;
+  //GET CUSTOMER'S BALANCE
+  stripe.customers.retrieve(customer_id)
+  .then(function(customer){
+    var balance = customer.account_balance;
+      if (customer){
+        data.stripeCustomer = customer;
+        data.balance = balance;
+        data.customer_id = customer_id;
+        return data;
+      }
+  })
+  .then(function(data){
+    return stripe.invoices.retrieveUpcoming(data.customer_id).then(function(upcoming){
+      data.upcomingInvoice = upcoming;
+      return data;
+    })
+
+  })
+  .then(function(data){
+    console.log('just before data.balance - data.upcomingInvoice data::',data);
+    reupCharge = 2000; //+data.upcomingInvoice.amount_due;
+    var chargeObj = {
+        amount: reupCharge, // amount in cents, again
+        currency: "usd",
+        description: "Account recharge balance fell below $10 : "+reupCharge,
+        customer: data.customer_id, // Previously stored, then retrieved customer
+        metadata: {'telephonic_id ': ''+data.telwork._id}
+    };
+    console.log('data.stripeCustomer.account_balance:: ', data.stripeCustomer.account_balance);
+    console.log('data.upcomingInvoice.total:: ', data.upcomingInvoice.total);
+    var abalanceMinusAmountDue = data.stripeCustomer.account_balance - data.upcomingInvoice.total;
+    console.log('data.stripeCustomer.account_balance - data.upcomingInvoice.total:: ', abalanceMinusAmountDue);
+    if ( (data.stripeCustomer.account_balance + data.upcomingInvoice.total) > -1000) { //1000 equals $10.00
+    //         negative number (credit)         positive number (debit) -9000 > 10000
+        console.log('inside if data.stripeCustomer.account_balance - data.upcomingInvoice.total < 500:: ');
+      return stripe.charges.create(chargeObj).then(function(charge){
+        console.log('recharge stripeCustomer balance with :: '+reupCharge+'', charge);
+        data.charge = charge;
+        return data;
+      })
+    } else {
+      return data;
+    }
+
+  })
+  .then(function(data){
+    console.log('just before data.balance - data.upcomingInvoice data::',data);
+    if (data.charge) {
+      return stripe.customers.update(data.customer_id, {
+        account_balance: data.stripeCustomer.account_balance - data.charge.amount
+      }).then(function(stripeCustomer){
+        console.log('stripeCustomer account_balance updated with recharge amount:: '+reupCharge+'', stripeCustomer);
+        data.rechargedCustomer = stripeCustomer;
+        return data;
+      })
+    } else {
+      return data;
+    }
+
+  })
+  .then(function(data){
+    console.log('data before stripe.invoiceItems.create::', data);
+    stripe.invoiceItems.create({
+        customer: customer_id, // Previously stored, then retrieved customer
+        amount: amount, // amount in cents, again
+        currency: "usd",
+        description: "cost of telephonic: "+telwork._id,
+        // destination: contractor.epirts.account.id,
+        // application_fee: 123,
+        metadata: {'telephonic_id': ''+telwork._id, 'shortid': ''+telwork.shortid }
+      }, function(err, invoiceItem) {
+        if (err) {console.log('err after charges create::', err);
+      } else if(invoiceItem) {
+            console.log('inside else if invoiceItem::',invoiceItem);
+            /*
+            data.invoiceItemCreated = invoiceItem;
+            //
+            //
+            if (data.rechargedCustomer) {
+              stripeCustomer = data.rechargedCustomer;
+            } else if(data.stripeCustomer) {
+              stripeCustomer = data.stripeCustomer;
+            }
+              return stripe.customers.update(data.customer_id, {
+                account_balance: stripeCustomer.account_balance
+              }).then(function(stripeCustomer){
+                console.log('stripeCustomer account_balance updated with recharge amount:: '+reupCharge+'', stripeCustomer);
+                data.reRechargedCustomer = stripeCustomer;
+                return data;
+              })
+            */
+        return data;
+      }
+
+      if (err && err.type === 'StripeCardError') {
+        // The card has been declined
+      }
+
+      });
+
+      // customerPrepaidBalance = account_balance - upcomingInvoice.amount_due
+  })
+  .catch(function(err){
+    // just need one of these
+    console.log('error:', err);
+  });
+
+
+
+
+
+};
+
+
+
+var getCustomerAccountDetails = function(user){
+  //GET ALL MY VARIABLES READY
+  var customer_id = user.epirts.customer.id;
+
+  //GET CUSTOMER'S BALANCE
+  stripe.customers.retrieve(customer_id)
+  .then(function(customer){
+    console.log('customer object retreived::', customer);
+    var data = {};
+    data.balance = customer.account_balance;
+    data.balance = customer.account_balance;
+
+
+    var balance = customer.account_balance;
+      if (customer){
+        return customer;
+      }
+  })
+  .catch(function(err){
+    // just need one of these
+    console.log('error:', err);
+  });
+
+};
+
 
 module.exports = {
 'weekly': weekly,
-'perEvent' : perEvent
+'perEvent' : perEvent,
+'createStripeInvoiceItem': createStripeInvoiceItem,
+'prePaid': prePaid
 };

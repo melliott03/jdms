@@ -24,12 +24,14 @@ var twilio = require('twilio');
 var accountSid = process.env.TWILIO_ACCOUNT_SID;
 var authToken = process.env.TWILIO_AUTH_TOKEN;
 var workspaceSid = process.env.TWILIO_WORKSPACE_SID;
+var payable = require('../modules/payable');
+var waveapps = require('../modules/waveapps');
 
 var createStripeCustomer = function(user, req){
   stripe.customers.create({
     description: 'Customer for work app',
     // source:  bank_account_token, // obtained with plaid
-    plan: "pn110",
+    plan: "pn110", //charged Weekly
     email: user.email
   }, function(err, customer) {
     if (err) {
@@ -47,23 +49,7 @@ var createStripeCustomer = function(user, req){
     });
 
   });
-  /*
-  var getInvoiceList = Promise.promisify(stripe.getInvoiceList);
 
-  stripe.customers.create({
-  email: 'foo-customer@example.com'
-}).then(function(customer) {
-  return stripe.charges.create({
-    amount: 1600,
-    currency: 'usd',
-    customer: customer.id
-  });
-}).then(function(charge) {
-  // New charge created on a new customer
-}, function(err) {
-  // Deal with an error
-});
-  */
 }
 
 var createStripeAccount = function(user, req){
@@ -283,8 +269,10 @@ router.get('/email-verification/:URL', function(req, res) {
       //create stripe account object for contractor or customer object customer
       if (user.role == 'customer') {
         createStripeCustomer(user, req);
+        // waveapps.createCustomer(user)
       } else if (user.role == 'contractor') {
         createStripeAccount(user, req);
+        payable.createWorker(user)
       }
 
       nev.sendConfirmationEmail(user.email, function(err, info) {
@@ -404,7 +392,9 @@ if (req.body.action === 'signup') {
         telephonicID: 0,
         languages: languages,
         twilioSids: {testing:'string'},
-        switchs: {tel: false, onSite: false}
+        switchs: {tel: false, onSite: false},
+        payable: {worker: ''}
+
       });
     } else {
 
@@ -423,7 +413,9 @@ if (req.body.action === 'signup') {
         socketID: '',
         geo: geo || '',
         telephonicPassCode: 0,
-        telephonicID: 0
+        telephonicID: 0,
+        payable: {}
+
     });
 
     }

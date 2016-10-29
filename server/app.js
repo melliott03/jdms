@@ -98,6 +98,7 @@ var twilio = require("twilio");
 
 var telephonic = require("./routes/telephonic");
 var ivr = require("./routes/ivr");
+var video = require("./routes/video");
 
 // //brought in from previous experiment
 // var Schema = mongoose.Schema;
@@ -749,6 +750,8 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
 
   app.use('/telephonic', telephonic);
   app.use('/ivr', ivr);
+  app.use('/video', video);
+
 
   app.use('/company', passport.authenticate('jwt', { session: false }), company);
 

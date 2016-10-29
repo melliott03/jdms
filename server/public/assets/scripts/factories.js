@@ -48,6 +48,8 @@ myApp.factory("WorkService", ["$http", function($http){
     var availibleWorkObject = {};
     var contractorWorkObject = {};
     var contractorSwitchStatusObject = {};
+    var customerBalanceObject = {};
+    var customerChargesObject = {};
 
 
 
@@ -65,10 +67,22 @@ myApp.factory("WorkService", ["$http", function($http){
             customerWorkObject.response = response.data;
             console.log('RETRUN OF GET WROKS FUNCTION response:::  ', response);
             console.log('RETRUN OF GET WROKS FUNCTION response.data:::  ', response.data);
+        });
+    };
 
+    var getCustomerBalance = function(){
+        $http.get("/updateCustomer/customerMoneyBalance").then(function(response){
+            customerBalanceObject.response = response.data;
+            console.log('RETRUN OF getCustomerBalance FUNCTION response:::  ', response);
+            console.log('RETRUN OF getCustomerBalance FUNCTION response.data:::  ', response.data);
+        });
+    };
 
-            // getWeather(response.data);
-            // console.log(response.data);
+    var getCustomerCharges = function(){
+        $http.get("/updateCustomer/customerMoneyCharges").then(function(response){
+            customerChargesObject.response = response.data;
+            console.log('RETRUN OF getCustomerCharges FUNCTION response:::  ', response);
+            console.log('RETRUN OF getCustomerCharges FUNCTION response.data:::  ', response.data);
         });
     };
 
@@ -275,7 +289,12 @@ myApp.factory("WorkService", ["$http", function($http){
         estimatePrice : estimatePrice,
         estimatePriceObject : estimatePriceObject,
         saveSocketId : saveSocketId,
-        updateContractorSwitchStatus: updateContractorSwitchStatus
+        updateContractorSwitchStatus: updateContractorSwitchStatus,
+        getCustomerBalance : getCustomerBalance,
+        customerBalanceObject : customerBalanceObject,
+        getCustomerCharges : getCustomerCharges,
+        customerChargesObject : customerChargesObject
+
 
     };
 }]);

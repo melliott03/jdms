@@ -1,0 +1,31 @@
+
+
+<h1>Home Billing</h1>
+
+<!-- CHARTS -->
+<md-content layout="row" layout-sm="column" layout-padding>
+<p>
+  Showing billing data.
+</p>
+<div >
+
+</div>
+
+<table style="width:400px">
+  <thead>
+    <tr>
+      <th>Amount</th>
+      <th>Date</th>
+      <th>Payment Method</th>
+    </tr>
+  </thead>
+  <tbody>
+     <tr ng-repeat="charge in customerCharges.response.data">
+      <td>{{ charge.amount }}</td>
+      <td width="50%">{{ charge.createdDateReadable }}</td>
+      <td>{{ charge.source.brand }}...{{ charge.source.last4 }}</td>
+    </tr>
+  </tbody>
+</table>
+
+</md-content>

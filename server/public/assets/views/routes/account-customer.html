@@ -2,8 +2,12 @@
 <div ng-controller="XAccountCtrl2" ng-cloak>
 <div class="">
   <p>
-    <strong>TeleInterpret</strong> UserID: {{logedinUser.response.telephonicID}}    PassCode: {{logedinUser.response.telephonicPassCode}} 
+    <strong>TeleInterpret</strong> UserID: {{logedinUser.response.telephonicID}}    PassCode: {{logedinUser.response.telephonicPassCode}}
   </p>
+  <p>
+    <strong>Balance: </strong>{{customerBalance.response.available_balance | currency : $}}
+  </p>
+
 </div>
 
 

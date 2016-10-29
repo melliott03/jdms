@@ -1,4 +1,40 @@
-<div ng-app="app" ng-controller="VideoChatController as vm">
+<div ng-controller="VideoChatController as vm">
+  <form name="videoEntry">
+    <div layout-gt-sm="row">
+      <md-input-container class="md-block" flex-gt-sm>
+        <label>Field</label>
+        <md-select ng-model="video.type" required="required">
+          <md-option  >
+            Medical
+          </md-option>
+          <md-option >
+            Legal
+          </md-option>
+          <md-option >
+            Social Service
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+    <div layout-gt-sm="row">
+      <md-input-container class="md-block" flex-gt-sm>
+        <label>Language</label>
+        <md-select ng-model="video.language" required="required">
+          <md-option >
+            Spanish
+          </md-option>
+          <md-option >
+            Hmong
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+      <md-button ng-click="submitVideo(video)" class="md-raised">SUBMIT REQUEST</md-button>
+    </section>
+  </form>
+
+
   <div id="remote-media"></div>
   <div id="controls">
     <div id="preview">

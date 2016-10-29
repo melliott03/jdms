@@ -18,72 +18,45 @@ var shortid = require('shortid');
 
 var stripeCharge = require('../modules/stripeCharge');
 
-var payable = require('../modules/payable');
+router.post('/new', function(req, res) {
+  console.log('inside video/new');
+  var accountSid = process.env.TWILIO_ACCOUNT_SID;
+  var authToken = process.env.TWILIO_AUTH_TOKEN;
+  var workspaceSid = 'WS74baf6dd30ead8306f310450b290cbb2';
+  var workflowSid = "WW4641b95360367b10cec28753644d043c";
+  var videoChannelSid = 'TC2eae701e12864f7382abbe99d53ecacf';
+
+
+  var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
+  client.workspace.tasks.create({
+      workflowSid: workflowSid,
+      taskChannel: 'video',
+      attributes: '{"selected_language":"Spanish", "selected_medium":"Video"}'
+      // selected_language:"Spanish", selected_medium:"Voice"
+  }).then(function(data) {
+    console.log('return of client.workspace.tasks.create::',data);
+
+    res.send(data);
+  })
+  .catch(function(err){
+    // just need one of these
+    console.log('error:', err);
+  });;
+
+// /*
+
+// */
+
+
+});
 
 router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res) => {
   //twilio@3.3.1-edge
   console.log("req.body in router.post CallCenterCallback::", req.body);
   // var callbody = req.body;
   var workerSid = req.body.WorkerSid;
-
-  if (req.body.EventType == 'reservation.accepted' && req.body.TaskSid && req.body.WorkflowName == 'VideoWorkflow') {
-    console.log('Im inside the eventtype = reservation.accepted req.body.WorkflowName == VideoWorkflow, telephonic/CallCenterCallback req.body::', req.body);
-
-    var accountSid = process.env.TWILIO_ACCOUNT_SID;
-    var authToken = process.env.TWILIO_AUTH_TOKEN;
-    var workspaceSid = 'WS74baf6dd30ead8306f310450b290cbb2';
-    var workflowSid = "WW4641b95360367b10cec28753644d043c";
-    var videoChannelSid = 'TC2eae701e12864f7382abbe99d53ecacf';
-
-
-    var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
-
-    //find user in mongo with matching workerSid and add there contractor_id
-    var promisen = User.findOne({'twilioSids.workerSid': workerSid}).exec();
-    promisen.then(function(aUserWithWorkerSid) {
-      console.log('aUserWithWorkerSid | ::', aUserWithWorkerSid);
-      return aUserWithWorkerSid;
-    })
-    .then(function(aUserWithWorkerSid) {
-      /*
-      // complete a task
-      var taskSid = req.body.TaskSid;
-      client.workspace.tasks(taskSid).update({
-          assignmentStatus: 'completed', //pending, reserved, assigned, canceled, and completed
-          reason: 'video call completed'
-      }, function(err, task) {
-        if (task) {
-          console.log('task::', task);
-          console.log(task.assignment_status);
-          console.log(task.reason);
-
-          //update worker activity_sid
-          var post_work_activity_sid = 'WAbaf024ac1c7fc5d4b9f138173ac3ca12';
-          var workerSid = aUserWithWorkerSid.twilioSids.workerSid;
-          // console.log('worker_activity_sid before updating post_work_activity_sid::', );
-          client.workspace.workers(workerSid).update({
-              // attributes: '{"type":"support"}'
-              activitySid: post_work_activity_sid
-          }, function(err, worker) {
-            if (err) console.log('err updating post_work_activity_sid::', err);
-              console.log('worker after updating post_work_activity_sid::', worker);
-          });
-
-
-        } else if (err) {
-          console.log('err in task complete::',err);
-        }
-
-      });
-      */
-    })
-    .catch(function(err){
-      // just need one of these
-      console.log('error:', err);
-    });
-  } else if (req.body.EventType == 'reservation.accepted' && req.body.TaskSid) {
-    console.log('Im inside the eventtype = reservation.accepted, telephonic/CallCenterCallback req.body::', req.body);
-
+  if (req.body.EventType == 'reservation.accepted' && req.body.TaskSid) {
+    console.log('Im inside the eventtype = reservation.accepted, video/CallCenterCallback req.body::', req.body);
     //find user in mongo with matching workerSid and add there contractor_id
     var promise = User.findOne({'twilioSids.workerSid': workerSid}).exec();
     promise.then(function(aUserWithWorkerSid) {
@@ -92,47 +65,56 @@ router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res)
     })
     .then(function(aUserWithWorkerSid) {
       // do something with
-      res.sendStatus(200);
+
+
+
     })
     .catch(function(err){
       // just need one of these
       console.log('error:', err);
     });
-  }else {
-    //do nothing
   }
-  // res.status(200);
-
 });
 
-router.use('/VoiceAssignmentCallbackUrl', twilio.webhook({validate: false}), (req, res) => {
+router.use('/VideoAssignmentCallbackUrl', twilio.webhook({validate: false}), (req, res) => {
   //twilio@3.3.1-edge
-  console.log("req.query in app.post AssignmentCallbackUrl::", req.query);
-  console.log("req.body in app.post AssignmentCallbackUrl::", req.body);
-  var callbody = req.body;
-  var accountSid = process.env.TWILIO_ACCOUNT_SID;
-  var authToken = process.env.TWILIO_AUTH_TOKEN;
-  var workspaceSid = callbody.WorkspaceSid;
-  var taskSid = callbody.TaskSid;
-  var reservationSid = callbody.ReservationSid;
+  console.log('inside /VideoAssignmentCallbackUrl::');
+  console.log('inside /VideoAssignmentCallbackUrl req.body::', req.body);
 
-  console.log('callbody.TaskAttributes::', callbody.TaskAttributes);
-  var str =  callbody.TaskAttributes;
-  console.log('callbody.TaskAttributes.call_sid JSON.stringify::', JSON.stringify(eval('('+str+')')) );
-  console.log('callbody.TaskAttributes.call_sid JSON.parse(str)::', JSON.parse(str) );
-  str = JSON.parse(str);
-
-  console.log('str.call_sid::', str.call_sid );
-  var call_sid = str.call_sid;
   var assignmentInstruction = {
-    instruction: 'call',
-    // post_work_activity_sid: 'WA442ed2a8dcf0fa1b169207b8cd80dbab',
-    url: process.env.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid,
-    status_callback_url: process.env.APP_URL+'/telephonic/callSummary?callSid='+call_sid+'&workerSid='+callbody.WorkerSid+'&TaskSid='+callbody.TaskSid,
-    from: '+16122172551' // a verified phone number from your twilio account
+    instruction: 'accept'
   };
   res.header('Content-Type', 'application/json');
-  res.json(assignmentInstruction);
+  res.json(assignmentInstruction); // immidately accept
+  // res.sendStatus(200); send status ok while worker accepts
+
+
+  // console.log("req.query in app.post AssignmentCallbackUrl::", req.query);
+  // console.log("req.body in app.post AssignmentCallbackUrl::", req.body);
+  // var callbody = req.body;
+  // var accountSid = process.env.TWILIO_ACCOUNT_SID;
+  // var authToken = process.env.TWILIO_AUTH_TOKEN;
+  // var workspaceSid = callbody.WorkspaceSid;
+  // var taskSid = callbody.TaskSid;
+  // var reservationSid = callbody.ReservationSid;
+  //
+  // console.log('callbody.TaskAttributes::', callbody.TaskAttributes);
+  // var str =  callbody.TaskAttributes;
+  // console.log('callbody.TaskAttributes.call_sid JSON.stringify::', JSON.stringify(eval('('+str+')')) );
+  // console.log('callbody.TaskAttributes.call_sid JSON.parse(str)::', JSON.parse(str) );
+  // str = JSON.parse(str);
+  //
+  // console.log('str.call_sid::', str.call_sid );
+  // var call_sid = str.call_sid;
+  // var assignmentInstruction = {
+  //   instruction: 'call',
+  //   // post_work_activity_sid: 'WA442ed2a8dcf0fa1b169207b8cd80dbab',
+  //   url: process.env.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid,
+  //   status_callback_url: process.env.APP_URL+'/telephonic/callSummary?callSid='+call_sid+'&workerSid='+callbody.WorkerSid+'&TaskSid='+callbody.TaskSid,
+  //   from: '+16122172551' // a verified phone number from your twilio account
+  // };
+  // res.header('Content-Type', 'application/json');
+  // res.json(assignmentInstruction);
 });
 
 //https://www.twilio.com/docs/tutorials/walkthrough/ivr-phone-tree/node/express#6
@@ -155,16 +137,9 @@ router.post('/welcome', twilio.webhook({validate: false}), function (request, re
 
 // POST: '/ivr/menu'
 router.post('/telephonicUserID', twilio.webhook({validate: false}), function (request, response) {
-    var twiml = new twilio.TwimlResponse();
-
     var telephonicUserID = request.body.Digits;
-    if (telephonicUserID.length < 7 ) {
-      console.log('telephonicUserID.length::', telephonicUserID.length);
-      // twiml.say('You entered an incorrect User ID');
-      // response.send(twiml,redirectWelcome());
-      twiml.redirect('/telephonic/welcome');
-    }else {
     console.log('telephonicUserID::', telephonicUserID);
+    var twiml = new twilio.TwimlResponse();
     var promise = User.findOne({telephonicID: telephonicUserID}).exec();
     promise.then(function(aUserWithID) {
 
@@ -181,6 +156,7 @@ router.post('/telephonicUserID', twilio.webhook({validate: false}), function (re
     })
     .then(function(aUserWithID) {
       // do something with
+      if (aUserWithID.telephonicID == telephonicUserID) {
         console.log("I'm inside if (aUserWithID) ::", aUserWithID);
         // var twiml = new twilio.TwimlResponse();
         twiml.gather({
@@ -191,21 +167,21 @@ router.post('/telephonicUserID', twilio.webhook({validate: false}), function (re
             twiml.say('Please enter your 4 digit pass code');
         });
         response.send(twiml);
+      }else {
+        response.send(redirectWelcome());
+      }
 
     })
     .catch(function(err){
       // just need one of these
       console.log('error:', err);
     });
-  }
+
 });
 
 router.post('/telephonicPassCode', twilio.webhook({validate: false}), function (request, response) {
     var passCode = request.body.Digits;
     var telephonicUserID = request.query.ID;
-    if (telephonicUserID.length < 4 ) {
-      response.send(twiml,redirectWelcome());
-    }
 
     console.log('passCode::', passCode);
     console.log('telephonicUserID::', telephonicUserID);
@@ -381,48 +357,11 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
 
     })
     .then(function(data) {
-      console.log('inside the then data::', data);
-      console.log('inside the then data.theTeleWorkWithcall_sid::', data.theTeleWorkWithcall_sid);
-
-      //add invoiceitem to customer in stripe
-      var promisesyo = User.findById(data.theTeleWorkWithcall_sid.customer_id).exec();
-      return promisesyo.then(function(aUserWithCustomer_ID) {
-        console.log('aUserWithCustomer_ID ::', aUserWithCustomer_ID);
-        data.aUserWithCustomer_ID = aUserWithCustomer_ID;
-        return data;
-      })
-
-    })
-    .then(function(data){
       console.log('inside the then theTeleWorkWithcall_sid | ::', data.theTeleWorkWithcall_sid);
       console.log('inside the then aUserWithWorkerSid::', data.aUserWithWorkerSid);
-      console.log('inside the then aUserWithCustomer_ID::', data.aUserWithCustomer_ID);
-      console.log('inside the then just before stripeCharge.createStripeInvoiceItem ::');
 
-      //CHARGE CUSTOMER
-           //Add invoiceitem to customer in stripe (customer and subscription on platform account)
-      /*stripeCharge.createStripeInvoiceItem(data);*/
-           //Charge customer's credit card or bank account right away with stripe ~ and pay worker
-             // *stripeCharge.perEvent();
-           // subtract from customer's stripe balance
-               //check if  balance is below limit, recharge to amount, then add invoiceitem
-            stripeCharge.prePaid(data);
-      //INVOICE CUSTOMER
-           //Send to waveapps, or
-           //Send to Payable, or
-           //Do nothing. Invoice will be send at the end of the month Code Internal Process
-
-      //PAY WORKER
-        //WITH PAYABLE
-        payable.postWork(data) // add this work item to the worker's Payable.com account
-        //WITH STRIPE
-        //(Do here)
-
-      //2 @TODO charge customer and pay agent with stripe destination paremeter
-          // stripeCharge.perEvent(data);
-      //3
-
-
+      //add invoiceitem to customer in stripe
+      stripeCharge.perEvent(data);
       // return theTeleWorkWithcall_sid;
       //reset worker to idle
       var callbody = req.body;
@@ -445,30 +384,6 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
           console.log('worker after updating post_work_activity_sid::', worker);
       });
 
-      client.workspace.tasks(taskSid).update({
-        assignmentStatus: 'completed',
-        reason: 'call completed'
-      }, function(err, task) {
-        if (err) console.log('err updating post_work_activity_sid::', err);
-          console.log('task after updating task to completed::', task);
-      });
-
-      return taskSid;;
-
-
-    })
-    .then(function(taskSid){
-      //update task status at completed
-      // var taskSid =
-      /*
-      client.workspace.tasks(taskSid).update({
-        assignmentStatus: 'completed',
-        reason: 'call completed'
-      }).then(function(reservation) {
-        console.log('return of client.workspace.tasks.create::',data);
-
-      });
-      */
 
     })
     .catch(function(err){
@@ -606,7 +521,6 @@ router.post('/getSpanishInterpreter', function(request, response) {
 
 });
 
-/*
 router.use('/CallCenterCallback', (req, res) => {
   console.log("req.body::", req.body);
   var callbody = req.body;
@@ -633,20 +547,15 @@ router.use('/CallCenterCallback', (req, res) => {
 
 
 });
-*/
 
 var getSpanishInterpreter = function (twiml, teleAppCallID) {
     twiml.say("Please hold while we connect you with a Spanish interpreter",
         {voice: "alice", language: "en-GB"});
 
-    var arr = {selected_language:"Spanish", selected_medium:"Voice"};
+    var arr = {selected_language:"Spanish"};
     var json = JSON.stringify(arr);
-    var voiceChannelSid = 'TC930839dfbc7a503a57b90e57e7a12648';
-    twiml.enqueue({
-      // taskChannel: 'voice',
-      // taskChannelSid: 'TC930839dfbc7a503a57b90e57e7a12648',
-      workflowSid:"WW2f071edf445c3e932ff733ae5013a515",
-      action:"/telephonic/callSummary?callShortID="+teleAppCallID}, function(node) {
+
+    twiml.enqueue({workflowSid:"WW2f071edf445c3e932ff733ae5013a515", action:"/telephonic/callSummary?callShortID="+teleAppCallID}, function(node) {
         node.task(json);
     });
     console.log("I'm right after enqueue in getSpanishInterpreter");

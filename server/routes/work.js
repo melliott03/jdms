@@ -19,6 +19,8 @@ var stripeChargePay = require('../modules/stripeTransactions');
 var stripe = require("stripe")(process.env.STRIPE_TEST);
 var workRatesTotal = require('../modules/workRatesTotal');
 var workPayTotal = require('../modules/workPayTotal');
+var payable = require('../modules/payable');
+
 var moment = require('moment');
 
 // var restrict = require("../modules/restrict"); // restricts user to be logedin to access route
@@ -800,30 +802,7 @@ var acceptedWorkReminder =  function(acceptedWork, contractor){
 }
 
 
-var postToPayable = function(){
-  var request = require('request'),
-  username = "1064627855",
-  password = "ZLBKgzq2XskgkLj-D4Eo7VUiwo8fucN7",
-  url = "https://" + username + ":" + password + "@api.payable.com/v1/work";
 
-  request.post({
-    url:url,
-    form: {
-      worker_id : '2665370794',
-      work_type_id : 2413827961,
-      quantity : 24,
-      start:'2016-03-17T08:16:19Z',
-      end:'2016-03-17T010:16:19Z',
-      notes:'Hello great job on this assignment Ben',
-      amount: 500
-  }},
-  function(err,httpResponse,body){
-
-    console.log('body in app.post return from Payable ',body);
-    // res.send(body);
-
- });
-}
 
 
 module.exports = router;
