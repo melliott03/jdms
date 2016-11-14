@@ -9,10 +9,18 @@
       <form name="workEntry">
         <div layout-gt-sm="row">
           <md-input-container class="md-block" flex-gt-sm>
-            <label>Field</label>
+            <label>Channel</label>
             <md-select ng-model="work.type" required="required">
-              <md-option ng-repeat="work in works" >
-                {{work}}
+              <md-option ng-repeat="channel in channels" >
+                {{channel}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-sm>
+            <label>Field</label>
+            <md-select ng-model="field.type" required="required">
+              <md-option ng-repeat="field in fields" >
+                {{field}}
               </md-option>
             </md-select>
           </md-input-container>

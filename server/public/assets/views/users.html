@@ -147,6 +147,11 @@
       <script src="/assets/scripts/twiliovideo/video.directive.js"></script>
       <script src="/assets/scripts/twiliovideo/token.service.js"></script>
 
+
+      <script src="/assets/vendors/chart.js/Chart.min.js"></script>
+      <script src="/assets/vendors/angular-chart.js/angular-chart.min.js"></script>
+
+
   </head>
   <body ng-cloak>
 
@@ -288,24 +293,23 @@
                 <span class="sub-nav-header">Home</span>
                 <ul class="sub-nav-icon padsub">
                   <li class="padsub" ng-class="{ 'bold-sub-nav-text': $index == selectedIndex }"><a href="#home/dashboard">Dashboard</a></li>
-                  <li class="padsub"><a href="#home/billing">Billing</a></li>
+                  <li class="padsub"><a href="#home/charges">Charges</a></li>
+                  <!-- <li class="padsub"><a href="#home/invoices">Invoices</a></li> -->
                 </ul>
               </div>
               <div class="subnavheader" ng-show="show==2">
                 <span class="sub-nav-header">Phone</span>
                 <ul class="sub-nav-icon padsub">
-                  <li class="padsub" ng-class="{ 'bold-sub-nav-text': $index == selectedIndex }"><a href="#phone/dashboard">Dashboard</a></li>
+                  <!-- <li class="padsub" ng-class="{ 'bold-sub-nav-text': $index == selectedIndex }"><a href="#phone/dashboard">Dashboard</a></li> -->
                   <li class="padsub"><a href="#phone/calls">Calls</a></li>
-                  <li class="padsub"><a href="#phone/billing">Billing</a></li>
                 </ul>
               </div>
               <div class="subnavheader" ng-show="show==3">
                 <span class="sub-nav-header">OnSite</span>
                 <ul class="sub-nav-icon padsub">
-                  <li class="padsub"><a class="padsub-link" href="#onsite/dashboard">Dashboard</a></li>
+                  <!-- <li class="padsub"><a class="padsub-link" href="#onsite/dashboard">Dashboard</a></li> -->
                   <li class="padsub"><a class="padsub-link" href="#onsite/appointments">Appointments</a></li>
-                  <li class="padsub"><a class="padsub-link" href="#onsite/appointments2">Appointments2</a></li>
-                  <li class="padsub"><a class="padsub-link" href="#onsite/billing">Billing</a></li>
+                  <!-- <li class="padsub"><a class="padsub-link" href="#onsite/appointments2">Appointments2</a></li> -->
                 </ul>
               </div>
               <div class="subnavheader" ng-show="show==4">

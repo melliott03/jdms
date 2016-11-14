@@ -1,13 +1,15 @@
-var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad', 'btford.socket-io', 'angularjs-dropdown-multiselect',
-'myApp.core.services',
-'myApp.core.directives',
-'myApp.videochat']);
+var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad', 'btford.socket-io', 'angularjs-dropdown-multiselect', 'myApp.core.services', 'myApp.core.directives', 'myApp.videochat', 'chart.js']);
 /*'bc.TelephoneFilter' is replaced by 'ngIntlTelInput'*/
 //ngPlacesAutocomplete ngAutocomplete
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
     $mdThemingProvider.theme('default')
+        // .dark();
         .primaryPalette('blue-grey')
         .accentPalette('grey');
+
+    // $mdThemingProvider.theme('altTheme')
+    //      .primaryPalette('purple')
+    //      .accentPalette('green');
 }]);
 
 myApp.config(function($mdDateLocaleProvider) {
@@ -28,14 +30,16 @@ myApp.config(function(uiGmapGoogleMapApiProvider) {
 //   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 // });
 
+
+
 myApp.config(["$routeProvider", function($routeProvider){
   $routeProvider.
       when("/home", {
-          templateUrl: "/assets/views/routes/home.html",
+          templateUrl: "/assets/views/routes/home/dashboard.html",
           controller: "HomeController"
       }).
-      when("/home/billing", {
-          templateUrl: "/assets/views/routes/home/billing.html",
+      when("/home/charges", {
+          templateUrl: "/assets/views/routes/home/charges.html",
           controller: "ShowController"
       }).
       when("/home/dashboard", {
@@ -51,7 +55,7 @@ myApp.config(["$routeProvider", function($routeProvider){
           controller: "ShowController"
       }).
       when("/onsite", {
-          templateUrl: "/assets/views/routes/onsite/dashboard.html",
+          templateUrl: "/assets/views/routes/onsite/appointments.html",
           controller: "ShowController"
       }).
       when("/onsite/dashboard", {
@@ -65,10 +69,6 @@ myApp.config(["$routeProvider", function($routeProvider){
       when("/onsite/appointments2", {
           templateUrl: "/assets/views/routes/onsite/appointments2.html",
           controller: "pipeCtrl"
-      }).
-      when("/onsite/billing", {
-          templateUrl: "/assets/views/routes/onsite/billing.html",
-          controller: "ShowController"
       }).
       when("/workdetail", {
           templateUrl: "/assets/views/routes/workdetail.html",
@@ -91,7 +91,7 @@ myApp.config(["$routeProvider", function($routeProvider){
           controller: "ShowController"
       }).
       when("/phone", {
-          templateUrl: "/assets/views/routes/phone/dashboard.html",
+          templateUrl: "/assets/views/routes/phone/calls.html",
           controller: "ShowController"
       }).
       when("/phone/dashboard", {
@@ -100,10 +100,6 @@ myApp.config(["$routeProvider", function($routeProvider){
       }).
       when("/phone/calls", {
           templateUrl: "/assets/views/routes/phone/calls.html",
-          controller: "ShowController"
-      }).
-      when("/phone/billing", {
-          templateUrl: "/assets/views/routes/phone/billing.html",
           controller: "ShowController"
       }).
       when("/admin_addwork", {
@@ -1028,3 +1024,36 @@ myApp.controller('exampleController', function ($scope, $log) {
 			$scope.paDetails = details;
 		};
 	});
+
+// http://codepen.io/chrisota/pen/rCGIF
+// WIP
+
+/* To Do:
+1. Selecting a new plan from the drop down menu will regenerate the data associated below.
+2. On-click for description title to show specific description below; one description opens all.
+3. Prices recalculate as you select different features.
+*/
+
+$('.heading').each(function(){
+  var $content = $(this).closest('thead').find('ul');
+  $(this).click(function(e){
+    e.preventDefault();
+    $content.not(':animated').slideToggle();
+  });
+});
+
+$('.feat td:first-child').each(function(){
+  var $content = $(this).closest('table').find('.desc');
+  $(this).click(function(e){
+    e.preventDefault();
+    $content.not(':animated').slideToggle();
+  });
+});
+
+$("input[type='checkbox']").click(function() {
+  if($(this).prop('checked'))
+    $(this).closest('td').addClass('color');
+  else
+    $(this).closest('td').removeClass('color');
+});
+// http://codepen.io/chrisota/pen/rCGIF

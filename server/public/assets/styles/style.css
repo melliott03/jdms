@@ -1,3 +1,4 @@
+
 header {
   background: rgba(0, 0, 0, 0.2);
   width: 100vw;
@@ -22,7 +23,7 @@ header {
   height: 100vh z-index: -100;
   -ms-transform: translateX(-50%) translateY(-50%);
   -moz-transform: translateX(-50%) translateY(-50%);
-  -webkit-transform: translateX(-50%) translateY(-50%);
+  /*-webkit-transform: translateX(-50%) translateY(-50%);*/
   transform: translateX(-50%) translateY(-50%);
   background: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') no-repeat;
   background-size: cover;
@@ -269,6 +270,7 @@ table {
     letter-spacing: .0px;
     font-family: 'GothamBook' , sans-serif;
     font-size: 14px;
+    border-collapse:collapse;
 }
 
 table * {
@@ -556,6 +558,14 @@ form[name="editableForm"] select {
   fill: red;
   outline: none;
 }
+.mdicon-more svg {
+  fill: black;
+  outline: none;
+}
+.mdicon-less svg {
+  fill: orange;
+  outline: none;
+}
 .icon {
   background-color: rgb(246, 246, 246);
   outline: 0;
@@ -609,5 +619,32 @@ md-icon{
 
 }
 /*TWILIO VIDEO STUFF*/
+
+
+md-nav-bar .md-nav-bar {
+  background: black;
+}
+/*md-toolbar .md-toolbar{
+  background: black;
+}*/
+
+
+
+
+
+
+
+p,a,h1,h2,h3,h4,h5,h6,div,br,li,td,article{
+    -o-user-select: text;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+
+
+
+
+
 
 </style>

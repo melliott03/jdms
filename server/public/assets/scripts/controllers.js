@@ -2,6 +2,60 @@
 myApp.controller('Ctrl', function($scope) {
 
 });
+//ANGULAR CHARTS
+myApp.controller("DoughnutCtrl", function ($scope) {
+  $scope.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+  $scope.data = [300, 500, 100];
+});
+
+myApp.config(['ChartJsProvider', function (ChartJsProvider) {
+    // Configure all charts
+    ChartJsProvider.setOptions({
+      colors : [ '#803690', '#00ADF9', '#DCDCDC', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
+      chartColors: ['#FF5252', '#FF8A80'],
+      responsive: false
+    });
+    // Configure all line charts
+    ChartJsProvider.setOptions('line', {
+      showLines: true
+    });
+  }])
+  .controller("BarCtrl", function ($scope) {
+    $scope.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+    $scope.series = ['Series A', 'Series B'];
+
+    $scope.data = [
+      [65, 59, 80, 81, 56, 55, 40],
+      [28, 48, 40, 19, 86, 27, 90]
+    ];
+  })
+  .controller("LineCtrl", ['$scope', '$timeout','WorkService', function ($scope, $timeout, WorkService) {
+  var workService = WorkService;
+  this.$onInit = function () {
+    workService.getCustomerGraphData();
+  };
+
+
+  $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+  $scope.series = ['Series A', 'Series B'];
+  $scope.data = [
+    [65, 59, 80, 81, 56, 55, 40],
+    [28, 48, 40, 19, 86, 27, 90]
+  ];
+  $scope.onClick = function (points, evt) {
+    console.log(points, evt);
+  };
+
+  // Simulate async data update
+  $timeout(function () {
+    $scope.data = [
+      [28, 48, 40, 19, 86, 27, 90],
+      [65, 59, 80, 81, 56, 55, 40]
+    ];
+  }, 3000);
+
+}]);
+
 myApp.controller('NavCtrl', function($scope, $location) {
   $scope.show = 1;
 
@@ -155,7 +209,9 @@ myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkSe
 // moment(duration, "ss").format("HH:mm") === "01:23"
 
 
-    $scope.works = ['Legal','Social Service','Medical', 'Other', 'Plumber', 'Machenic', 'Marketer', 'Accountant', 'Tutor', 'Painter'];
+    $scope.fields = ['Legal','Social Service','Medical'];
+    $scope.channels = ['OnSite','Phone'];
+
     $scope.languages = ['Spanish', 'Oromo', 'Somali', 'Hmong'];
     $scope.estimatePriceObject = workService.estimatePriceObject;
     var workItem={};
@@ -266,6 +322,8 @@ myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location
     workService.getContractorWork(); //gets all the work contractor has accepted
     workService.getCustomerBalance();
     workService.getCustomerCharges();
+    // workService.getCustomerInvoices();
+
 
 
   // console.log('$routeParams in ShowController::', $routeParams);
@@ -439,7 +497,7 @@ myApp.controller("ShowController", ["$scope", "$interval", "$window", "$location
 
     $scope.customerBalance = workService.customerBalanceObject;
     $scope.customerCharges = workService.customerChargesObject;
-
+    // $scope.customerInvoices = workService.customerInvoicesObject;
 
 // datatable
     $scope.selected = [];

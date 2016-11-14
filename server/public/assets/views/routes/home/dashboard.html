@@ -2,10 +2,26 @@
 
 <h1>Home Dashboard</h1>
 
+<!-- ANGULAR CHARTS -->
+<div class="" ng-controller="BarCtrl">
+  <canvas id="bar" class="chart chart-bar"
+    chart-data="data" chart-labels="labels"> chart-series="series"
+  </canvas
+</div>
+
+<div class="" ng-controller="LineCtrl">
+  <canvas class="chart chart-line" chart-data="data" chart-labels="labels"
+      chart-series="series" chart-click="onClick"></canvas>
+</div>
+<div class="" ng-controller="DoughnutCtrl">
+  <canvas id="doughnut" class="chart chart-doughnut"
+    chart-data="data" chart-labels="labels">
+  </canvas>
+</div>
+
 <!-- CHARTS -->
-<md-content layout="row" layout-sm="column" layout-padding>
- <!-- style="height:200px; width:100%;" -->
+<!-- <md-content layout="row" layout-sm="column" layout-padding>
 <div ng-controller="ChartController">
 <div google-chart chart="chartObject" flex></div>
 <div google-chart chart="chartObject_column" flex></div>
-</md-content>
+</md-content> -->

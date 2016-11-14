@@ -1,72 +1,6 @@
-
-
-<!--  -->
-
-<!--  -->
-<!-- <div ng-controller="SignModalCtrl"> -->
-<!-- <span style="height:300px; width:100%; ">
-<signature-pad accept="accept" clear="clear" style="height:100px; width:100%; "></signature-pad>
-<button ng-click="clear()">Clear signature</button>
-<button ng-click="signature = accept()">Sign</button>
-</span> -->
-<!-- </div> -->
-<!--  -->
-<!-- <div ng-controller="ModalDemoCtrl">
-    <script type="text/ng-template" id="sign.html">
-        <div class="modal-header">
-            <h3 class="modal-title">I'm a modal!</h3>
-        </div>
-        <div class="modal-body">
-            <ul>
-                <li ng-repeat="item in items">
-                    <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
-                </li>
-            </ul>
-            Selected: <b>{{ selected.item }}</b>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-        </div>
-    </script>
-
-    <button type="button" class="btn btn-default" ng-click="open()">Open me!</button>
-    <button type="button" class="btn btn-default" ng-click="open('lg')">Large modal</button>
-    <button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>
-    <button type="button" class="btn btn-default" ng-click="toggleAnimation()">Toggle Animation ({{ animationsEnabled }})</button>
-    <div ng-show="selected">Selection from a modal: {{ selected }}</div>
-</div> -->
-<!--  -->
-
-
-<!-- START SIGNITURE PAD -->
-<!-- <div ng-controller="SignModalCtrl">
-  <script type="text/ng-template" id="sign.html">
-    <div class="modal-header">
-        <h3 class="modal-title">Sign</h3>
-    </div>
-    <div class="modal-body">
-        <signature-pad accept="accept" clear="clear"></signature-pad>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-default pull-left" ng-click="clear()">Clear signature</button>
-        <button class="btn btn-default" ng-click="$dismiss()">Cancel</button>
-        <button class="btn btn-primary" ng-click="done()">Sign</button>
-    </div>
-  </script>
-
-  <button type="button" class="btn btn-default" ng-click="open()">Open me!</button>
-  <button type="button" class="btn btn-default" ng-click="open('lg')">Large modal</button>
-  <button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>
-  <button type="button" class="btn btn-default" ng-click="toggleAnimation()">Toggle Animation ({{ animationsEnabled }})</button>
-  <div ng-show="selected">Selection from a modal: {{ selected }}</div>
-</div> -->
-<!-- END SIGNITURE PAD -->
-
-
 <div>
   <div >
-  <table st-set-filter="customFilter" st-safe-src="works.response" st-table="displayWorkCollection" class="table table-bordered table-striped" wt-responsive-table> <!-- st-sticky-header -->
+  <table st-set-filter="customFilter" st-safe-src="works.response" st-table="displayWorkCollection" class="table-striped" wt-responsive-table> <!-- st-sticky-header -->
     <thead>
     <tr>
         <th><a class="btn btn-default" st-export>Export</a></th>
@@ -83,7 +17,7 @@
       <th>
       {{rowContent}}
         <input st-search placeholder="global search" class="input-sm form-control" type="search"/>
-        <button ng-click="deleteRow($index)">Remove</button>
+        <md-button ng-click="deleteRow($index)">Remove</md-button>
       </th>
     </tr>
 
@@ -114,8 +48,8 @@
     <tbody>
     <tr ng-repeat-start="work in displayWorkCollection">
         <td>
-              <button ng-if="work.expanded" ng-click="work.expanded = false">-</button>
-              <button ng-if="!work.expanded" ng-click="work.expanded = true">+</button>
+          <md-button ng-if="work.expanded" ng-click="work.expanded = false"><md-icon class="mdicon-less svg" md-svg-src="../img/icons/ic_expand_less_white_24px.svg"></md-icon></md-button>
+          <md-button ng-if="!work.expanded" ng-click="work.expanded = true"><md-icon class="mdicon-more svg" md-svg-src="../img/icons/ic_expand_more_black_24px.svg"></md-icon></md-button>
         </td>
         <!-- <td cs-select="row"></td> -->
         <td inline-edit="work.type" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
@@ -151,45 +85,40 @@
               </span>
 
               <md-content class="md-padding" layout-xs="column" layout="row">
-    <div flex-xs="" flex-gt-xs="50" layout="column">
-      <md-card>
+    <div layout="row" layout-xs="column">
+      <div flex>
+        <div>Date Created: {{ work.date_created }} </div>
+        <div>Contractor ID: {{ work.contractor_id }} </div>
+        <div>WEATHER:  {{ work.weather[0].daily.data[0].summary}} </div>
 
-        <md-card-title>
-          <md-card-title-text>
-            <span class="md-headline">Action buttons</span>
-          </md-card-title-text>
-        </md-card-title>
-        <md-card-content>
-          <div>Date Created: {{ work.date_created }} </div>
-          <div>Contractor ID: {{ work.contractor_id }} </div>
-          <div>WEATHER:  {{ work.weather[0].daily.data[0].summary}} </div>
+        <span>
+          Approval Date: {{work.work_signatures.date}} Name: {{work.work_signatures.name}} Signature: <img ng-src="{{work.work_signatures.signature}}" class="md-card-image signature-img"  alt="Customer Signature" />
+        </span>
 
-          <span>
-            Approval Date: {{work.work_signatures.date}} Name: {{work.work_signatures.name}} Signature: <img ng-src="{{work.work_signatures.signature}}" class="md-card-image signature-img"  alt="Customer Signature" />
-          </span>
+              <span>Work Notes:</span>
+             <input class="inputs" style="border-style: none;
+            border-width: 0px;
+            border-color: none;"
+              ng-model="work.details.notes"
+              inline-edit="work.details.notes"
+              ng-model="work"
+              inline-edit-placeholder="Type your value here"
+              inline-edit-btn-edit=""
+              inline-edit-on-blur="save"
+              ng-blur="updateWorkEntered(work)"
+              inline-edit-on-click
+              inline-edit-callback="updateWorkEntered(work)" />
+            </div>
+      </div>
+      <div flex>
+        <span class="">
+          <ng-map zoom="13" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP" style="height:100%; width:100%; display:inline-block;">
+           <marker position="{{ work.geo }}"  centered="true"></marker>
+         </ng-map>
+       </span>
+      </div>
 
-          <span class="">
-            <ng-map zoom="11" center="{{ work.geo }}" map-type-id="MapTypeId.ROADMAP" style="height:20%; width:50%; display:inline-block;">
-             <marker position="{{ work.geo }}"  centered="true"></marker>
-           </ng-map>
-         </span>
-        </md-card-content>
-      </md-card>
 
-                <span>Work Notes:</span>
-               <input class="inputs" style="border-style: none;
-              border-width: 0px;
-              border-color: none;"
-                ng-model="work.details.notes"
-                inline-edit="work.details.notes"
-                ng-model="work"
-                inline-edit-placeholder="Type your value here"
-                inline-edit-btn-edit=""
-                inline-edit-on-blur="save"
-                ng-blur="updateWorkEntered(work)"
-                inline-edit-on-click
-                inline-edit-callback="updateWorkEntered(work)" />
-              </div>
 
 
               <!-- TERRAIN TRAFFIC SATELLITE CONSTANT -->

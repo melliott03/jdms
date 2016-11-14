@@ -636,7 +636,7 @@ router.use('/CallCenterCallback', (req, res) => {
 */
 
 var getSpanishInterpreter = function (twiml, teleAppCallID) {
-    twiml.say("Please hold while we connect you with a Spanish interpreter",
+    twiml.say("The call ID is 4352DF4. Please hold while we connect you with a Spanish interpreter",
         {voice: "alice", language: "en-GB"});
 
     var arr = {selected_language:"Spanish", selected_medium:"Voice"};

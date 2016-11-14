@@ -50,9 +50,17 @@ myApp.factory("WorkService", ["$http", function($http){
     var contractorSwitchStatusObject = {};
     var customerBalanceObject = {};
     var customerChargesObject = {};
+    var customerGraphData = {};
+    // var customerInvoicesObject = {};
 
 
+    var getCustomerGraphData = function(){
+        $http.get("/updateCustomer/customerGraphData").then(function(response){
+            availibleWorkObject.data = response.data;
+            console.log('return of getCustomerGraphData ::  ', response.data);
 
+        });
+    };
 
     var getUser = function(){
         $http.get("/user/name").then(function(response){
@@ -85,6 +93,14 @@ myApp.factory("WorkService", ["$http", function($http){
             console.log('RETRUN OF getCustomerCharges FUNCTION response.data:::  ', response.data);
         });
     };
+
+    // var getCustomerInvoices = function(){
+    //     $http.get("/updateCustomer/customerInvoices").then(function(response){
+    //         customerInvoicesObject.response = response.data;
+    //         console.log('RETRUN OF getCustomerInvoices FUNCTION response:::  ', response);
+    //         console.log('RETRUN OF getCustomerInvoices FUNCTION response.data:::  ', response.data);
+    //     });
+    // };
 
     var postWork = function(data){
         $http.post("/work", data).then(function(response){
@@ -261,6 +277,14 @@ myApp.factory("WorkService", ["$http", function($http){
       }
     };
 
+    var getUser = function(){
+        $http.get("/user/name").then(function(response){
+            console.log(response.data);
+            userObject.response = response.data;
+            console.log('userObject in factory', userObject);
+        });
+    };
+
     getUser();
     return {
         getUser : getUser,
@@ -293,9 +317,11 @@ myApp.factory("WorkService", ["$http", function($http){
         getCustomerBalance : getCustomerBalance,
         customerBalanceObject : customerBalanceObject,
         getCustomerCharges : getCustomerCharges,
-        customerChargesObject : customerChargesObject
-
-
+        customerChargesObject : customerChargesObject,
+        customerGraphData : customerGraphData,
+        getCustomerGraphData : getCustomerGraphData,
+        // getCustomerInvoices : getCustomerInvoices,
+        // customerInvoicesObject : customerInvoicesObject
     };
 }]);
 

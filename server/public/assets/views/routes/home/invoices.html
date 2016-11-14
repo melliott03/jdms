@@ -1,0 +1,56 @@
+
+
+<h1>Invoices</h1>
+
+<!-- CHARTS -->
+<md-content layout="row" layout-sm="column" layout-padding>
+<p>
+  Showing billing data.
+</p>
+<div >
+
+</div>
+
+<table style="width:400px">
+  <thead>
+    <tr>
+      <th>Amount</th>
+      <th>Date</th>
+      <th>Paid</th>
+      <th>line</th>
+
+    </tr>
+  </thead>
+  <tbody>
+     <tr ng-repeat="invoice in customerInvoices.response.data">
+       <div ng-repeat="line_item in invoice.lines.data">
+
+      <td>
+           <button ng-if="work.expanded" ng-click="work.expanded = false">-</button>
+           <button ng-if="!work.expanded" ng-click="work.expanded = true">+</button>
+      </td>
+      <td>{{ invoice.amount_due }}</td>
+      <td >{{ invoice.date }}</td>
+      <td>{{ invoice.paid }} </td>
+        <!-- <td>{{ line_item.amount }}</td>
+        <td>{{ line_item.description }}</td> -->
+
+
+      <!-- <td>{{ invoice.lines.data }}</td> -->
+<!--
+         <span>{{ line_item.amount }}</span>
+         <span width="50%">{{ line_item }}</span>
+         <span></span> -->
+         <!-- <div ng-repeat="line_item in invoice.lines.data">
+        </div> -->
+      </div>
+    </tr >
+    <tr ng-if="work.expanded" >
+      dfsfgsgfd
+    </tr>
+
+
+  </tbody>
+</table>
+
+</md-content>

@@ -32,6 +32,98 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
                                   //    { api_key: CONNECTED_ACCOUNT_SECRET_KEY } // account's access token from the Connect flow
                                   //  );
 
+var Promise = require('bluebird');
+// set Promise provider to bluebird
+mongoose.Promise = require('bluebird');
+var Work = require('../models/work');
+var Work_Tel = require('../models/work_tel');
+// var Work_Tel = mongoose.model('Work_Tel');
+Promise.promisifyAll(Work_Tel);
+Promise.promisifyAll(Work_Tel.prototype);
+
+
+router.get("/customerGraphData", function(req, res, next){
+  console.log('inside post/customerGraphData::::',req.body);
+
+  var promisen = Work.find({customer_id: req.user._id}).exec();
+  promisen.then(function(workitems) {
+    console.log('workitems | for graph::', workitems);
+    return workitems;
+  })
+  .then(function(workitems) {
+    var promise = Work_Tel.find({customer_id: req.user._id}).exec();
+    var data = {};
+    return promise.then(function(work_tels) {
+      console.log('work_tels | before promise return::', work_tels);
+      data.work = workitems;
+      data.work_tels = work_tels;
+
+      return data;
+    })
+  })
+  .then(function(works) {
+    console.log('works tel and onsite before filter and map etc:: ', works);
+
+    works.work_telsGraphs = {};
+    works.work_telsGraphs.calls_per_month = {};
+    works.work_telsGraphs.calls_cost_per_month = {};
+    works.work_telsGraphs.calls_per_month.labels = ["January",	"February",	"March", "April",	"May", "June", "July", "August", "September", "October", "November", "December"];
+    works.work_telsGraphs.calls_per_month.data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    works.work_telsGraphs.calls_cost_per_month.data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    works.workGraphs = {};
+    works.workGraphs.appointments_per_month = {};
+    works.workGraphs.appointments_costs_per_month = {};
+    works.workGraphs.appointments_per_month.labels = ["January",	"February",	"March", "April",	"May", "June", "July", "August", "September", "October", "November", "December"];
+    works.workGraphs.appointments_per_month.data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    works.workGraphs.appointments_costs_per_month.data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    works.combinedGraphs = {};
+    works.combinedGraphs.per_month = {};
+    works.combinedGraphs.cost_per_month = {};
+    works.combinedGraphs.per_month.labels = ["January",	"February",	"March", "April",	"May", "June", "July", "August", "September", "October", "November", "December"];
+    works.combinedGraphs.per_month.data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    works.combinedGraphs.cost_per_month.data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+      var workitems = works.work;
+      var work_tels = works.work_tels;
+      console.log('works at top before map:: ', works);
+
+    return works.work_tels
+      .filter(function(obj){
+        return (obj.outboundSummary); //returns all objects which has an outboundSummary (if the return statement is true)
+      })
+      .map(function(obj){
+        console.log('in .map work obj:: ', obj);
+
+        if (obj.outboundSummary) { // filter above takes out !obj.outboundSummary cases so this if statement is not really needed
+          console.log('obj.outboundSummary is tru for ::', obj);
+          obj.date = {};
+          obj.date.year = moment.unix(obj.outboundSummary.Timestamp).format("YYYY"); //format("dd, MMM Do YYYY, h:mm:ss a");
+          obj.date.month = moment.unix(obj.outboundSummary.Timestamp).format("M"); //format("dd, MMM Do YYYY, h:mm:ss a");
+          obj.date.day = moment.unix(obj.outboundSummary.Timestamp).format("Do"); //format("dd, MMM Do YYYY, h:mm:ss a");
+          obj.date.weekday = moment.unix(obj.outboundSummary.Timestamp).format("dd"); //format("dd, MMM Do YYYY, h:mm:ss a");
+          obj.date.full = moment.unix(obj.outboundSummary.Timestamp).format("dd, MMM Do YYYY"); //format("dd, MMM Do YYYY, h:mm:ss a");
+          obj.date.fuller = moment.unix(obj.outboundSummary.Timestamp).format("dd, MMM Do YYYY, h:mm:ss a"); //format("dd, MMM Do YYYY, h:mm:ss a");
+            console.log('work obj.created:: ', obj);
+        }
+      });
+
+
+  })
+  .then(function(works) {
+    console.log('works inside then after filter and map applied to work_tels:: ', works);
+    //APPLY FILTER TO WORK ONSITE
+
+    res.send(works);
+  })
+  .catch(function(err){
+    // just need one of these
+    console.log('error:', err);
+  });
+
+});
+
 router.post("/saveCustomerAddress", function(req, res, next){
   console.log('Geocoding, req.body::::',req.body);
   var address = req.body.address;
@@ -530,7 +622,7 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
 
 
 router.get('/customerMoneyCharges', passport.authenticate('jwt', { session: false }), function(req, res) {
-  console.log('inside updateUser/customerMoneyCharges::');
+  console.log('inside updateUser/customerMoneyCharges::', req.user);
   var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
 
   var customer = req.user;
@@ -543,24 +635,64 @@ router.get('/customerMoneyCharges', passport.authenticate('jwt', { session: fals
       if (charges){
         console.log('charges at top before map:: ', charges);
         charges.data.map(function(obj){
-          obj.createdDateReadable = moment.unix(obj.created).format("dd, MMM Do YYYY, h:mm:ss a");
+          obj.createdDateReadable = moment.unix(obj.created).format("MMM. Do, YYYY"); //format("dd, MMM Do YYYY, h:mm:ss a");
             console.log('obj.created:: ', obj.created);
-          console.log('obj.createdDateReadable:: ', obj.createdDateReadable);
+            console.log('obj.createdDateReadable:: ', obj.createdDateReadable);
 
         });
         res.send(charges);
       }
   }).catch(function(error){
-    console.log('catch error top :', error);
+    console.log('catch error top stripe.charges.list:', error);
 
     if (error.message.includes("No upcoming invoices for customer") ) {
-      console.log('catch error.message.includes("No upcoming invoices for customer error.message::")  :', error.message);
+      console.log('catch stripe.charges.list("No upcoming invoices for customer error.message::")  :', error.message);
       // res.status(404).send({ error: "No upcoming invoices for customer "});
 
     } else if (2 > 6) {
 
     } else{
-      console.log('catch error:', error);
+      console.log('catch error stripe.charges.list:', error);
+      res.status(500).send({ error: "some error"});
+
+    }
+    // just need one of these
+  });
+
+});
+
+router.get('/customerInvoices', passport.authenticate('jwt', { session: false }), function(req, res) {
+  console.log('inside updateUser/customerInvoices::');
+  var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
+
+  var customer = req.user;
+  var customer_id = customer.epirts.customer.id;
+  var data = {};
+
+  //GET CUSTOMER'S CHARGES
+  stripe.invoices.list({customer: customer_id})
+  .then(function(invoices){
+      if (invoices){
+        console.log('invoices at top before map:: ', invoices);
+        // invoices.data.map(function(obj){
+        //   obj.createdDateReadable = moment.unix(obj.created).format("MMM. Do, YYYY"); //format("dd, MMM Do YYYY, h:mm:ss a");
+        //     console.log('obj.created:: ', obj.created);
+        //     console.log('obj.createdDateReadable:: ', obj.createdDateReadable);
+        //
+        // });
+        res.send(invoices);
+      }
+  }).catch(function(error){
+    console.log('catch error top stripe.charges.list:', error);
+
+    if (error.message.includes("No upcoming invoices for customer") ) {
+      console.log('catch stripe.charges.list("No upcoming invoices for customer error.message::")  :', error.message);
+      // res.status(404).send({ error: "No upcoming invoices for customer "});
+
+    } else if (2 > 6) {
+
+    } else{
+      console.log('catch error stripe.charges.list:', error);
       res.status(500).send({ error: "some error"});
 
     }

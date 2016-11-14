@@ -142,7 +142,7 @@ var createTwilioWorker = function(user, telephonicUser){
 
 var createTelephonicIDnPassCode = function(user, req){
   //search db for the generated ids. if found, run the generator again
-  var userid = chance.natural({min: 1111111, max: 9999999});
+  var userid = chance.integer({min: 1111111, max: 9999999});
   var userid = 1375116;
   // telephonic: {userID: uerID, passCode: passCode}
   console.log('userid1::', userid);
@@ -182,7 +182,7 @@ var createTelephonicIDnPassCode = function(user, req){
 
 var addTelephonicIDnPassCode = function(aUser, req, userid){
 console.log('inside addTelephonicIDnPassCode, userid::', userid);
-var passCode = chance.natural({min: 0000, max: 9999});
+var passCode = chance.integer({min: 1111, max: 9999});
 console.log('inside addTelephonicIDnPassCode, passCode::', passCode);
 console.log('inside addTelephonicIDnPassCode, user::', aUser);
 User.update({_id: aUser._id}, {
@@ -197,7 +197,7 @@ User.update({_id: aUser._id}, {
 
 var rerunCreateTelephonicIDnPassCode = function(user, req){
   //search db for the generated ids. if found, run the generator again
-  var userid = chance.natural({min: 1111111, max: 9999999});
+  var userid = chance.integer({min: 1111111, max: 9999999});
   console.log('inside rerunCreateTelephonicIDnPassCode, userid::', userid);
 
   //f I run a query in mongoose which matches no documents in the collection, what are the values of err and results in the callback function callback(err, results)?

@@ -1,14 +1,14 @@
 
 <div>
   <div >
-  <table st-set-filter="customFilter" st-safe-src="works_tel.response" st-table="displayWorkTelCollection" class="table table-bordered table-striped" wt-responsive-table>
+  <table st-set-filter="customFilter" st-safe-src="works_tel.response" st-table="displayWorkTelCollection" class="table-striped" wt-responsive-table>
     <thead>
     <tr>
         <th><a class="btn btn-default" st-export>Export</a></th>
         <th  st-sort="inboundSummary.From">From</th>
         <th  st-sort="inboundSummary.Timestamp">DateTime</th>
-         <th  st-sort="outboundSummary.CallDuration">Duration (seconds)</th>
-        <th st-sort="customer_rate">Cost</th>
+        <th  st-sort="outboundSummary.CallDuration">Duration (seconds)</th>
+        <th  st-sort="customer_rate">Cost</th>
 
     </tr>
     <tr>
@@ -32,8 +32,8 @@
     <tbody>
     <tr ng-repeat-start="work in displayWorkTelCollection">
         <td>
-              <button ng-if="work.expanded" ng-click="work.expanded = false">-</button>
-              <button ng-if="!work.expanded" ng-click="work.expanded = true">+</button>
+              <md-button ng-if="work.expanded" ng-click="work.expanded = false"><md-icon class="mdicon-less svg" md-svg-src="../img/icons/ic_expand_less_white_24px.svg"></md-icon></md-button>
+              <md-button ng-if="!work.expanded" ng-click="work.expanded = true"><md-icon class="mdicon-more svg" md-svg-src="../img/icons/ic_expand_more_black_24px.svg"></md-icon></md-button>
         </td>
         <!-- <td cs-select="row"></td> -->
 
@@ -53,7 +53,11 @@
               </span>
 
 
-                <span>Call Details:</span>
+                <strong>Call Details</strong>
+                                <p>Language:</p>
+                                <p>Call ref #:</p>
+
+
                <input class="inputs" style="border-style: none;
               border-width: 0px;
               border-color: none;"
