@@ -266,7 +266,7 @@ table {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    height: 700px; /* this can vary */
+    /*height: 700px;*/  /* this can vary */
     letter-spacing: .0px;
     font-family: 'GothamBook' , sans-serif;
     font-size: 14px;
@@ -365,6 +365,76 @@ tfoot td {
 /*account.html*/
 .account-page-headers{
   text-transform: uppercase;
+  font-size: 15px;
+}
+
+#mdtoolbar{
+  background: rgb(244, 245, 246);
+  min-height: 34px;
+  height: 30px;
+  color: rgb(117, 117, 117);
+  font-family: "Montserrat",sans-serif;
+  text-transform: uppercase;
+}
+.mdlistitemtext, .leftmargin{
+  padding: 20px;
+}
+.leftmarginmodal{
+  /*padding: 20px;*/
+  margin: 0px 20px 0px 20px;
+}
+.rightalign{
+  text-align: right;
+  -webkit-align-content: right;
+  align-content: right;
+}
+.centeralign{
+  text-align: center center;
+  -webkit-align-content: center;
+  align-content: center;
+}
+.rechargemodal-footer {
+  background: rgba(246, 246, 246, .99);
+}
+.rechargemodal-text {
+  font-size: 10px;
+  font: rgba(246, 246, 246, .99);
+}
+.radioButtondemoBasicUsage body {
+  padding: 20px; }
+
+.radioButtondemoBasicUsage hr {
+  margin-left: -20px;
+  opacity: 0.3; }
+
+.radioButtondemoBasicUsage md-radio-group {
+  width: 150px; }
+
+.radioButtondemoBasicUsage p:last-child {
+  padding-bottom: 50px; }
+
+.radioButtondemoBasicUsage [ng-controller] {
+  padding: 0 20px; }
+
+.radioButtondemoBasicUsage .radioValue {
+  margin-left: 5px;
+  color: #0f9d58;
+  font-weight: bold;
+  padding: 5px; }
+
+.radioButtondemoBasicUsage md-icon {
+  margin: 0 20px 20px;
+  width: 128px;
+  height: 128px; }
+
+.radioButtondemoBasicUsage .ipsum {
+  color: saddlebrown;
+  font-size: 0.9em; }
+.mdbtnCancel{
+  border-radius: 1px;
+  border-color: red;
+  outline-width: thin;
+  outline-color: red;
 }
 /*xeditable stuff*/
 div[ng-app] { margin: 10px; }
@@ -624,15 +694,6 @@ md-icon{
 md-nav-bar .md-nav-bar {
   background: black;
 }
-/*md-toolbar .md-toolbar{
-  background: black;
-}*/
-
-
-
-
-
-
 
 p,a,h1,h2,h3,h4,h5,h6,div,br,li,td,article{
     -o-user-select: text;
@@ -641,10 +702,26 @@ p,a,h1,h2,h3,h4,h5,h6,div,br,li,td,article{
     user-select: text;
 }
 
+.call-details{
+  padding: 20px;
+  border: 1px;
+  border-top:none;
+}
 
+/*.mdtoolbar{
+  background: black;
+  height: 20px;
+}*/
 
-
-
-
+/*https://material.angularjs.org/latest/demo/datepicker*/
+.datepickerdemoBasicUsage {
+  /** Demo styles for mdCalendar. */ }
+  .datepickerdemoBasicUsage md-content {
+    padding-bottom: 200px; }
+  .datepickerdemoBasicUsage .validation-messages {
+    font-size: 12px;
+    color: #dd2c00;
+    margin-left: 15px; }
+/*https://material.angularjs.org/latest/demo/datepicker*/
 
 </style>

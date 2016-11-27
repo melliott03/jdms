@@ -219,12 +219,12 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
   //    timeout: 15000 // 15 seconds to send the authentication message
   //  })
   io.on('connection', function(socket){
-    console.log('A User has connected to socket!::', socket);
-    console.log('A User has connected to socket with socket.id::', socket.id);
-    console.log('A User has connected to socket.request::', socket.request);
-    console.log('A User has connected to socket.handshake::', socket.handshake);
-    console.log('A User has connected to socket.handshake._events::', socket.handshake._events);
-    console.log('A User has connected to socket.request::', socket.request);
+    console.log('A User socket connection, socket!::', socket);
+    console.log('A User socket connection, socket.id::', socket.id);
+    console.log('A User socket connection, socket.request::', socket.request);
+    console.log('A User socket connection, socket.handshake::', socket.handshake);
+    console.log('A User socket connection, socket.handshake._events::', socket.handshake._events);
+    console.log('A User socket connection, socket.request::', socket.request);
     // console.log('A User has connected to socket.client.Client.conn.request::', socket.client.Client.conn.request);
     // console.log('A User has connected to socket.request.secret.data::', socket.request.secret.data);
 
@@ -243,8 +243,9 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
     // io.emit('connectedSocketID', {"socketid" : socket.id})
     //Find the User and store their socketid on their user Object
     socket.on('disconnect', function(){
-      console.log("A User has disconnected from socket::!", socket);
+      console.log("A User socket connection has disconnected", socket);
     })
+
   });
 
   // io
@@ -425,20 +426,25 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
 
     console.log('req.body::::', req.body);
 
-    var deposit = req.body;
+    var deposit = req.body.microDeposits;
+    var bankAccountID = req.body.payment_source_to_varify.id;
     deposit.one = (deposit.one.length && deposit.one[0] == '.') ? deposit.one.slice(1) : deposit.one;
     deposit.two = (deposit.two.length && deposit.two[0] == '.') ? deposit.two.slice(1) : deposit.two;
     stripe.customers.verifySource(
       req.user.epirts.customerID, //'cus_7iLOlPKxhQJ75a',
-      'ba_18JOibDfqZ6t9CGDv9Kp6qkC', //req.user.epirts.bankAccount,
+      bankAccountID, //req.user.epirts.bankAccount,
       {
-        amounts: [deposit.one, deposit.two]
+        amounts: [deposit.one, deposit.two] //amounts: [32,45]
       },
       function(err, bankAccount) {
         if (err) {
-          console.log('err', err);
+          console.log('err in bank account varify::', err);
+          res.send({'err': err});
+        }else {
+          console.log('returned bankAccount::', bankAccount);
+          res.send({'success': 'succeeded!'});
         }
-        console.log('returned bankAccount::', bankAccount);
+
       });
 
     });

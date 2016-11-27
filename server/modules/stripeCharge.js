@@ -111,13 +111,16 @@ stripe.charges.create({
     if (err) {console.log('err after charges create::', err);
   } else if(charge) {
     console.log('charge::',charge);
-    theTeleWorkWithcall_sid.money = {};
-    theTeleWorkWithcall_sid.money.charge = charge;
-    theTeleWorkWithcall_sid.money.app_fee = app_fee;
+    console.log('theTeleWorkWithcall_sid.moneySummary::', theTeleWorkWithcall_sid.moneySummary);
+    if (!theTeleWorkWithcall_sid.moneySummary) {
+      theTeleWorkWithcall_sid.moneySummary = {};
+    }
+    theTeleWorkWithcall_sid.moneySummary.charge = charge;
+    theTeleWorkWithcall_sid.moneySummary.app_fee = app_fee;
     costDollars = Math.floor(amount/100);
     costPennies = amount % 100;
-    theTeleWorkWithcall_sid.money.cost = {inPennies : amount, costDollars : costDollars, costPennies : costPennies};
-    theTeleWorkWithcall_sid.money.worker_pay = amount-app_fee;
+    theTeleWorkWithcall_sid.moneySummary.cost = {inPennies : amount, costDollars : costDollars, costPennies : costPennies};
+    theTeleWorkWithcall_sid.moneySummary.worker_pay = amount-app_fee;
     theTeleWorkWithcall_sid.save();
     console.log('new theTeleWorkWithcall_sid::', theTeleWorkWithcall_sid);
   }
@@ -187,6 +190,7 @@ stripe.invoiceItems.create({
 
 var prePaid = function(data){
   //GET ALL MY VARIABLES READY
+  console.log('inside prePaid 1::');
   var customer = data.aUserWithCustomer_ID;
   var contractor = data.aUserWithWorkerSid;
   var telwork = data.theTeleWorkWithcall_sid;
@@ -211,38 +215,71 @@ var prePaid = function(data){
   .then(function(customer){
     var balance = customer.account_balance;
       if (customer){
+        console.log('inside prePaid customer::');
         data.stripeCustomer = customer;
         data.balance = balance;
         data.customer_id = customer_id;
         return data;
+      }else {
+        console.log('err 1 inside prePaid::');
       }
   })
   .then(function(data){
-    return stripe.invoices.retrieveUpcoming(data.customer_id).then(function(upcoming){
+    console.log('inside prePaid 2::');
+    return stripe.invoices.retrieveUpcoming(data.customer_id).then(
+    function(upcoming) {
+      console.log('inside prePaid 3::');
+      data.upcomingInvoice = upcoming;
+      return data;
+    },
+    function(err) {
+      console.log('inside prePaid 4::');
+      var upcoming = {};
+      upcoming.total = 0;
       data.upcomingInvoice = upcoming;
       return data;
     })
 
   })
+
   .then(function(data){
     console.log('just before data.balance - data.upcomingInvoice data::',data);
-    reupCharge = 2000; //+data.upcomingInvoice.amount_due;
-    var chargeObj = {
-        amount: reupCharge, // amount in cents, again
-        currency: "usd",
-        description: "Account recharge balance fell below $10 : "+reupCharge,
-        customer: data.customer_id, // Previously stored, then retrieved customer
-        metadata: {'telephonic_id ': ''+data.telwork._id}
-    };
+    var rechargeTo = parseInt(data.aUserWithCustomer_ID.autoRecharge.rechargeTo);
+        rechargeTo = rechargeTo * -100;
+        console.log('rechargeTo -40000 after parseInt::', rechargeTo);
+    var account_balance = data.stripeCustomer.account_balance;
+    console.log('account_balance 1 ::', account_balance);
+
+
+
     console.log('data.stripeCustomer.account_balance:: ', data.stripeCustomer.account_balance);
     console.log('data.upcomingInvoice.total:: ', data.upcomingInvoice.total);
-    var abalanceMinusAmountDue = data.stripeCustomer.account_balance - data.upcomingInvoice.total;
-    console.log('data.stripeCustomer.account_balance - data.upcomingInvoice.total:: ', abalanceMinusAmountDue);
-    if ( (data.stripeCustomer.account_balance + data.upcomingInvoice.total) > -1000) { //1000 equals $10.00
+    var abalanceMinusAmountDue = data.stripeCustomer.account_balance + data.upcomingInvoice.total;
+    console.log('data.stripeCustomer.account_balance + data.upcomingInvoice.total:: ', abalanceMinusAmountDue);
+    var fallsbelow = parseInt(data.aUserWithCustomer_ID.autoRecharge.fallsBelow);
+        fallsbelow =  fallsbelow * -100;
+        console.log('fallsbelow -39000::', fallsbelow);
+    if ( abalanceMinusAmountDue > fallsbelow) { //1000 equals $10.00
     //         negative number (credit)         positive number (debit) -9000 > 10000
-        console.log('inside if data.stripeCustomer.account_balance - data.upcomingInvoice.total < 500:: ');
+        console.log('abalanceMinusAmountDue -38275::', abalanceMinusAmountDue); // abalanceMinusAmountDue = -38275
+        console.log('fallsbelow -39000::', fallsbelow);
+
+        var reupChargeAmount = rechargeTo - abalanceMinusAmountDue;
+        console.log('after fallsbelow - abalanceMinusAmountDue reupChargeAmount::', reupChargeAmount);
+        reupChargeAmount = Math.abs(reupChargeAmount);
+        console.log('after Math.abs(reupChargeAmount)::', reupChargeAmount);
+
+        console.log('inside if data.stripeCustomer.account_balance - data.upcomingInvoice.total < '+fallsbelow+' ::');
+        var chargeObj = {
+            amount: reupChargeAmount, // amount in cents, again
+            currency: "usd",
+            description: "Account recharge balance fell below $10 : "+reupChargeAmount,
+            customer: data.customer_id, // Previously stored, then retrieved customer
+            metadata: {'telephonic_id ': ''+data.telwork._id}
+        };
+        console.log('chargeObj before stripe.charges.create::', chargeObj);
       return stripe.charges.create(chargeObj).then(function(charge){
-        console.log('recharge stripeCustomer balance with :: '+reupCharge+'', charge);
+        console.log('recharge stripeCustomer balance with :: ', charge);
         data.charge = charge;
         return data;
       })
@@ -257,7 +294,7 @@ var prePaid = function(data){
       return stripe.customers.update(data.customer_id, {
         account_balance: data.stripeCustomer.account_balance - data.charge.amount
       }).then(function(stripeCustomer){
-        console.log('stripeCustomer account_balance updated with recharge amount:: '+reupCharge+'', stripeCustomer);
+        console.log('stripeCustomer account_balance updated with recharge amount:: ', stripeCustomer);
         data.rechargedCustomer = stripeCustomer;
         return data;
       })
@@ -280,6 +317,18 @@ var prePaid = function(data){
         if (err) {console.log('err after charges create::', err);
       } else if(invoiceItem) {
             console.log('inside else if invoiceItem::',invoiceItem);
+            console.log('telwork',telwork);
+            var theTeleWorkWithcall_sid = data.theTeleWorkWithcall_sid;
+            // telwork.amount = ''+amount;
+            // if (!telwork.moneySummary) {
+            //   console.log('inside if (!telwork.moneySummary)');
+            //   telwork.moneySummary = {};
+            // }
+            // console.log('setting telwork.moneySummary.customerCost = ');
+            // telwork.moneySummary.customerCost = ''+amount;
+            // telwork.save();
+            // console.log('in else if(invoiceItem) telwork after save::');
+            saveMoneyToDB(telwork, amount);
             /*
             data.invoiceItemCreated = invoiceItem;
             //
@@ -292,7 +341,7 @@ var prePaid = function(data){
               return stripe.customers.update(data.customer_id, {
                 account_balance: stripeCustomer.account_balance
               }).then(function(stripeCustomer){
-                console.log('stripeCustomer account_balance updated with recharge amount:: '+reupCharge+'', stripeCustomer);
+                console.log('stripeCustomer account_balance updated with recharge amount:: '+reupChargeAmount+'', stripeCustomer);
                 data.reRechargedCustomer = stripeCustomer;
                 return data;
               })
@@ -311,6 +360,10 @@ var prePaid = function(data){
   .catch(function(err){
     // just need one of these
     console.log('error:', err);
+    if (err && err.type === 'StripeInvalidRequestError') {
+      // There is no upcoming invoice
+      console.log('the user has no upcoming invoice');
+    }
   });
 
 
@@ -345,7 +398,90 @@ var getCustomerAccountDetails = function(user){
   });
 
 };
+/*
+var saveMoneyToDB = function(telworkitem, amount){
+  console.log('top of saveMoneyToDB telworkitem::', telworkitem);
+  var promisedi = Work_Tel.findOne({_id: telworkitem._id}).exec();
+  promisedi.then(function(theTeleWorkWithCallSid2) {
+    console.log('theTeleWorkWithCallSid2 inside saveMoneyToDB::', theTeleWorkWithCallSid2);
+    console.log('amount inside saveMoneyToDB::', amount);
+    if (!theTeleWorkWithCallSid2.money) {
+      console.log('inside   if (!theTeleWorkWithCallSid2.money:: ');
+      theTeleWorkWithCallSid2.money = {};
+      theTeleWorkWithCallSid2.money.customerCost = amount;
+    } else {
+      console.log('inside else (!theTeleWorkWithCallSid2.money:: ');
+      theTeleWorkWithCallSid2.money.customerCost = ''+amount;
+      console.log('theTeleWorkWithCallSid2.money.customerCost:: ', theTeleWorkWithCallSid2.money.customerCost);
+      console.log('theTeleWorkWithCallSid2.money:: ', theTeleWorkWithCallSid2.money);
 
+    }
+    // theTeleWorkWithCallSid2.taskSid = req.query.TaskSid;
+    theTeleWorkWithCallSid2.save(function (err, doc) {
+                    if (err) {
+                      console.log('err theTeleWorkWithCallSid2.save():: ', err);
+                        // res.json({error: true, msg: JSON.stringify(err)});
+                    }
+                    else {
+
+                      console.log('success theTeleWorkWithCallSid2.save() doc:: ', doc);
+                        // res.json({success: true, cra: cra})
+                    }
+                  });
+    console.log('after theTeleWorkWithCallSid2.save():: ');
+
+    console.log();
+    return theTeleWorkWithCallSid2;
+  })
+  .then(function(theTeleWorkWithCallSid2) {
+    // Do nothing
+  })
+  .catch(function(err){
+    // just need one of these
+    console.log('error:', err);
+  });
+
+}
+*/
+var saveMoneyToDB = function(data, amount){
+  console.log('saveMoneyToDB data::', data);
+  console.log('saveMoneyToDB amount::', amount);
+
+  var CallSid = data.inboundCallSid;
+  var promised = Work_Tel.findOne({inboundCallSid: CallSid}).exec();
+  promised.then(function(telwork) {
+    console.log('telwork in saveMoneyToDB function::', telwork);
+
+    // telwork.amount = ''+amount;
+    // if (!telwork.moneySummary) {
+    //   console.log('inside if (!telwork.moneySummary)');
+      // telwork.moneySummary = {};
+    // }
+    if (!telwork.money) {
+      telwork.money = {};
+    }
+    console.log('setting telwork.moneySummary.customerCost = ');
+    // telwork.moneySummary.customerCost = ''+amount;
+    telwork.money.customerCost = amount;
+    telwork.markModified('money');
+    // telwork.markModified('moneySummary');
+    telwork.save();
+
+    // telwork.moneySummary.customerCost = '';
+    // telwork.moneySummary.customerCost = ''+amount;
+    // telwork.taskSid = req.query.TaskSid;
+    // telwork.save();
+    return telwork;
+  })
+  .then(function(telwork) {
+    // Do nothing
+  })
+  .catch(function(err){
+    // just need one of these
+    console.log('error:', err);
+  });
+
+}
 
 module.exports = {
 'weekly': weekly,

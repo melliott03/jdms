@@ -2,7 +2,8 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 mongoose.model("Works_Tel", new Schema({
-   "taskSid" : String, "workerSid" : String, "inboundCallSid" : String, "inboundCallSidSecond" : String, "inboundSummary" : Object, "outboundSummary" : Object, "customer_id" : String, "contractor_id" : String, "money" : Object, "shortid" : String
+   "amount" : String, "taskSid" : String, "workerSid" : String, "inboundCallSid" : String, "inboundCallSidSecond" : String, "inboundSummary" : Object, "outboundSummary" : Object, "customer_id" : String, "contractor_id" : String, "moneySummary" : Object, "shortid" : String,
+   "language" : String, "money" : Object
 }));
 
 var Work_Tel = mongoose.model("Works_Tel");

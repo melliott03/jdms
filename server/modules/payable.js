@@ -70,8 +70,13 @@ var postWork = function(data){
    console.log('inside then of Payable postWorkToPayable, httpResponse::', postedwork);
    console.log('inside then of Payable postWorkToPayable, body::', body);
    //@TODO save worker returned object to mongo
-   telwork.money = {};
-   telwork.money.payable = postedwork;
+   if (!telwork.money) {
+     telwork.money = {};
+   }
+  console.log('setting telwork.money.payable = postedwork;');
+   telwork.money.payable = JSON.parse(postedwork);
+  //  telwork.money.amount = '';
+
    telwork.save();
    console.log('the worker payable returned object has been saved, telwork::', telwork);
  })

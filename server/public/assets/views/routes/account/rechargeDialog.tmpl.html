@@ -1,0 +1,47 @@
+<div ng-controller="XAccountCtrl3">
+
+  <div layout="column" style="width : 600px;">
+    <div ng-controller="XAccountCtrl3">
+    <form name="userForm">
+    <div flex>
+      <div layout="row"  class="leftmarginmodal centeralign">
+        <h4 class="centeralign">Add Funds</h4>
+      </div>
+      <hr>
+    </div>
+    <div class="leftmarginmodal" flex>
+      <p>Specify how much to add to your balance.</p>
+
+        <span class="rechargemodal-text">AMOUNT TO ADD </span>
+
+          <md-input-container>
+            <!-- <label>Email</label> -->
+            <input ng-model="recharge.amount" type="number">
+          </md-input-container><br>
+
+          <span class="rechargemodal-text">PAYMENT METHOD </span>
+          <md-input-container>
+          <md-select ng-model="recharge.source" required="required">
+            <md-option value="{{paymentSource}}" ng-repeat="paymentSource in varifiedPaymentSource" >
+              {{paymentSource.object}} {{paymentSource.last4}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+
+
+        <!-- <input type="submit" ngClick="submitRecharge(recharge)"> -->
+
+
+    </div>
+    <div class="rechargemodal-footer" flex>
+      <div layout="row"  class="leftmarginmodal">
+        <!-- <md-button ng-click="showRechargeDialog($event)">Add Funds</md-button> -->
+        <md-button class="mdbtnCancel" ng-click="cancel($event)">Cancel</md-button>
+        <md-button class="md-warn md-raised md-hue-2" ng-click="submitRecharge(recharge)">Save</md-button>
+      </div>
+    </div>
+  </form>
+  </div>
+  </div>
+
+</div>

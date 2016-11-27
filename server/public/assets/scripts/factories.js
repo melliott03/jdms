@@ -50,13 +50,23 @@ myApp.factory("WorkService", ["$http", function($http){
     var contractorSwitchStatusObject = {};
     var customerBalanceObject = {};
     var customerChargesObject = {};
-    var customerGraphData = {};
+    var customerGraphDataObject = {};
+    var customerPaymentSourceObject = {};
+    var customerDefaultPaymentSourceObject = {};
     // var customerInvoicesObject = {};
 
 
-    var getCustomerGraphData = function(){
-        $http.get("/updateCustomer/customerGraphData").then(function(response){
-            availibleWorkObject.data = response.data;
+    var updateCustomerDefaultPaymentSource = function(source){
+        $http.post("/updateCustomer/customerDefaultPaymentSource", source).then(function(response){
+            customerDefaultPaymentSourceObject.data = response.data;
+            console.log('return of customerDefaultPaymentSourceObject ::  ', response.data);
+            getUser();
+        });
+    };
+
+    var getCustomerGraphData = function(dates){
+        $http.post("/updateCustomer/customerGraphData", dates).then(function(response){
+            customerGraphDataObject.data = response.data;
             console.log('return of getCustomerGraphData ::  ', response.data);
 
         });
@@ -82,7 +92,7 @@ myApp.factory("WorkService", ["$http", function($http){
         $http.get("/updateCustomer/customerMoneyBalance").then(function(response){
             customerBalanceObject.response = response.data;
             console.log('RETRUN OF getCustomerBalance FUNCTION response:::  ', response);
-            console.log('RETRUN OF getCustomerBalance FUNCTION response.data:::  ', response.data);
+            console.log('RETRUN OF getCustomerBalance FUNCTION customerBalanceObject.response:::  ', customerBalanceObject.response);
         });
     };
 
@@ -218,11 +228,15 @@ myApp.factory("WorkService", ["$http", function($http){
 
 
     var bankMicroDepositsObject={};
-    var submitBankMicroDeposits = function(microDeposits){
-       $http.post("/stripeMicro", microDeposits).then(function(response){
+    var submitBankMicroDeposits = function(microDeposits, payment_source_to_varify){
+        data = {};
+        data.microDeposits = microDeposits;
+        data.payment_source_to_varify = payment_source_to_varify;
+       $http.post("/stripeMicro", data).then(function(response){
           // travelTimeReturned.theTime = response.data;
           bankMicroDepositsObject.data = response.data;
           console.log('return of CC response.data', response.data);
+          getUser();
        });
       //  console.log('in getData allPetsReturned outside getcall', allPetsReturned);
     };
@@ -282,8 +296,87 @@ myApp.factory("WorkService", ["$http", function($http){
             console.log(response.data);
             userObject.response = response.data;
             console.log('userObject in factory', userObject);
+            console.log('userObject.response.sources.data in factory', userObject.response.sources.data);
+            var sourcesLast4Array = [];
+            sourcesArray = userObject.response.sources.data;
+            var sourcesToVarifyArray = [];
+            var varifiedSourcesArray = [];
+
+            var default_source = userObject.response.sources.default_source;
+            sourcesArray.map(function(obj){
+              console.log('obj after sourcesArray.map::', obj);
+              if (obj.object == "bank_account" && obj.last4 && obj.status == "verified") {
+                var groupObj = {id: obj.object+' '+obj.last4, text: obj.object+' '+obj.last4, acc_id: obj.id}
+                sourcesLast4Array.push(groupObj);
+                varifiedSourcesArray.push(obj);
+              }else if (obj.object == "card" && obj.last4) {
+                var groupObj = {id: obj.object+' '+obj.last4, text: obj.object+' '+obj.last4, acc_id: obj.id}
+                sourcesLast4Array.push(groupObj);
+                varifiedSourcesArray.push(obj);
+              }
+              console.log('sourcesLast4Array first::', sourcesLast4Array);
+              if (obj.id == default_source) {
+                console.log('obj default_source::', obj);
+                var userSources = {
+                  group: obj.object+' '+obj.last4,
+                  groupName: obj.object+' '+obj.last4, // original value
+                  acc_id: obj.id
+                };
+                customerPaymentSourceObject.default_source = userSources;
+              }
+
+              if (obj.object == 'bank_account' && obj.status && obj.status != 'verified') {
+                console.log('obj bank_account needs to be verified::', obj);
+                var userSourceToVarify = {
+                  object: obj.object,
+                  last4: obj.last4,
+                  groupName: obj.object+' '+obj.last4, // original value
+                  id: obj.id
+                };
+                sourcesToVarifyArray.push(userSourceToVarify);
+              }
+
+            });
+            customerPaymentSourceObject.varifiedSource = varifiedSourcesArray;
+            customerPaymentSourceObject.verify = sourcesToVarifyArray;
+            console.log('sourcesLast4Array::', sourcesLast4Array);
+            customerPaymentSourceObject.data = sourcesLast4Array;
+            var verifyArray = customerPaymentSourceObject.verify;
+            if (verifyArray.length < 1) {
+              console.log('inside if verifyArray.length < 1');
+              customerPaymentSourceObject.showMicrodepositDiv = false;
+            }else {
+              console.log('inside else verifyArray.length < 1');
+              customerPaymentSourceObject.showMicrodepositDiv = true;
+            }
+            console.log('customerPaymentSourceObject::', customerPaymentSourceObject);
+            console.log('default_source on server::', default_source);
+            // var userSources = {
+            //   group: 'vip',
+            //   groupName: 'vip' // original value
+            // };
+            // customerPaymentSourceObject.default_source = sourcesLast4Array;
+
         });
     };
+
+    var submitRecharge = function(data){
+        $http.post("/updateCustomer/rechargeCustomerAccount", data).then(function(response){
+            // customerDefaultPaymentSourceObject.data = response.data;
+            console.log('return of customerDefaultPaymentSourceObject ::  ', response.data);
+            getCustomerBalance();
+            getUser();
+        });
+    };
+    var submitAutoRecharge = function(data){
+        $http.post("/updateCustomer/autoRechargeCustomerAccount", data).then(function(response){
+            // customerDefaultPaymentSourceObject.data = response.data;
+            console.log('return of customerDefaultPaymentSourceObject ::  ', response.data);
+            getCustomerBalance();
+            getUser();
+        });
+    };
+
 
     getUser();
     return {
@@ -318,10 +411,15 @@ myApp.factory("WorkService", ["$http", function($http){
         customerBalanceObject : customerBalanceObject,
         getCustomerCharges : getCustomerCharges,
         customerChargesObject : customerChargesObject,
-        customerGraphData : customerGraphData,
+        customerGraphDataObject : customerGraphDataObject,
         getCustomerGraphData : getCustomerGraphData,
+        updateCustomerDefaultPaymentSource :updateCustomerDefaultPaymentSource,
+        customerPaymentSourceObject : customerPaymentSourceObject,
+        customerDefaultPaymentSourceObject : customerDefaultPaymentSourceObject,
         // getCustomerInvoices : getCustomerInvoices,
         // customerInvoicesObject : customerInvoicesObject
+        submitRecharge: submitRecharge,
+        submitAutoRecharge: submitAutoRecharge
     };
 }]);
 

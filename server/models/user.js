@@ -14,7 +14,7 @@ var UserSchema = new Schema({
     email: {type: String, required: true},
     dob: {type: String, required: false},
     last4sos: {type: String, required: false},
-    epirts: {type: Object, required: false},
+    epirts: {type: {Object}, required: false},
     plaidTokens: {type: Object, required: false},
     role: {type: String, required: false},
     privilege_role: {type: String, required: false},
@@ -28,6 +28,7 @@ var UserSchema = new Schema({
     twilioSids: {type: Object, required: false},
     switchs: {type: Object, required: false},
     payable: {type: Object, required: false},
+    autoRecharge: {},
 
     geo: {
         type: [Number],

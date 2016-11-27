@@ -1,29 +1,31 @@
-var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad', 'btford.socket-io', 'angularjs-dropdown-multiselect', 'myApp.core.services', 'myApp.core.directives', 'myApp.videochat', 'chart.js']);
+var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad', 'btford.socket-io', 'angularjs-dropdown-multiselect', 'myApp.core.services', 'myApp.core.directives', 'myApp.videochat', 'chart.js', 'duScroll'])
+.value('duScrollDuration', 2000)
+.value('duScrollOffset', 30);
 /*'bc.TelephoneFilter' is replaced by 'ngIntlTelInput'*/
 //ngPlacesAutocomplete ngAutocomplete
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
-    $mdThemingProvider.theme('default')
-        // .dark();
-        .primaryPalette('blue-grey')
-        .accentPalette('grey');
+  $mdThemingProvider.theme('default')
+  // .dark();
+  .primaryPalette('blue-grey')
+  .accentPalette('grey');
 
-    // $mdThemingProvider.theme('altTheme')
-    //      .primaryPalette('purple')
-    //      .accentPalette('green');
+  // $mdThemingProvider.theme('altTheme')
+  //      .primaryPalette('purple')
+  //      .accentPalette('green');
 }]);
 
 myApp.config(function($mdDateLocaleProvider) {
-    $mdDateLocaleProvider.formatDate = function(date) {
-       return moment(date).format('YYYY-MM-DD');
-    };
+  $mdDateLocaleProvider.formatDate = function(date) {
+    return moment(date).format('YYYY-MM-DD');
+  };
 });
 
 myApp.config(function(uiGmapGoogleMapApiProvider) {
-    uiGmapGoogleMapApiProvider.configure({
-        //    key: 'your api key',
-        v: '3.20', //defaults to latest 3.X anyhow
-        libraries: 'weather,geometry,visualization'
-    });
+  uiGmapGoogleMapApiProvider.configure({
+    //    key: 'your api key',
+    v: '3.20', //defaults to latest 3.X anyhow
+    libraries: 'weather,geometry,visualization'
+  });
 });
 
 // myApp.run(function(editableOptions) {
@@ -34,89 +36,89 @@ myApp.config(function(uiGmapGoogleMapApiProvider) {
 
 myApp.config(["$routeProvider", function($routeProvider){
   $routeProvider.
-      when("/home", {
-          templateUrl: "/assets/views/routes/home/dashboard.html",
-          controller: "HomeController"
-      }).
-      when("/home/charges", {
-          templateUrl: "/assets/views/routes/home/charges.html",
-          controller: "ShowController"
-      }).
-      when("/home/dashboard", {
-          templateUrl: "/assets/views/routes/home/dashboard.html",
-          controller: "ShowController"
-      }).
-      when("/availibleView", {
-          templateUrl: "/assets/views/routes/availibleView.html",
-          controller: "ShowController"
-      }).
-      when("/acceptedView", {
-          templateUrl: "/assets/views/routes/accepted.html",
-          controller: "ShowController"
-      }).
-      when("/onsite", {
-          templateUrl: "/assets/views/routes/onsite/appointments.html",
-          controller: "ShowController"
-      }).
-      when("/onsite/dashboard", {
-          templateUrl: "/assets/views/routes/onsite/dashboard.html",
-          controller: "ShowController"
-      }).
-      when("/onsite/appointments", {
-          templateUrl: "/assets/views/routes/onsite/appointments.html",
-          controller: "ShowController"
-      }).
-      when("/onsite/appointments2", {
-          templateUrl: "/assets/views/routes/onsite/appointments2.html",
-          controller: "pipeCtrl"
-      }).
-      when("/workdetail", {
-          templateUrl: "/assets/views/routes/workdetail.html",
-          controller: "ShowController"
-      }).
-      when("/terms", {
-          templateUrl: "/assets/views/routes/terms.html",
-          controller: "ShowController"
-      }).
-      when("/accountCont", {
-          templateUrl: "/assets/views/routes/account-contractor.html",
-          controller: "ShowController"
-      }).
-      when("/accountCust", {
-          templateUrl: "/assets/views/routes/account-customer.html",
-          controller: "ShowController"
-      }).
-      when("/sign", {
-          templateUrl: "/assets/views/routes/sign.html",
-          controller: "ShowController"
-      }).
-      when("/phone", {
-          templateUrl: "/assets/views/routes/phone/calls.html",
-          controller: "ShowController"
-      }).
-      when("/phone/dashboard", {
-          templateUrl: "/assets/views/routes/phone/dashboard.html",
-          controller: "ShowController"
-      }).
-      when("/phone/calls", {
-          templateUrl: "/assets/views/routes/phone/calls.html",
-          controller: "ShowController"
-      }).
-      when("/admin_addwork", {
-          templateUrl: "/assets/views/adminAddDialog.tmpl.html",
-          controller: "ShowController"
-      }).
-      when("/videoCust", {
-          templateUrl: "/assets/views/routes/getvideointerpreter.html",
-          controller: "ShowController"
-      }).
-      when("/translateCust", {
-          templateUrl: "/assets/views/routes/translate/documentTranslate.html",
-          controller: "ShowController"
-      }).
-      otherwise({
-          redirectTo: '/home'
-      });
+  when("/home", {
+    templateUrl: "/assets/views/routes/home/dashboard.html",
+    controller: "HomeController"
+  }).
+  when("/home/charges", {
+    templateUrl: "/assets/views/routes/home/charges.html",
+    controller: "ShowController"
+  }).
+  when("/home/dashboard", {
+    templateUrl: "/assets/views/routes/home/dashboard.html",
+    controller: "ShowController"
+  }).
+  when("/availibleView", {
+    templateUrl: "/assets/views/routes/availibleView.html",
+    controller: "ShowController"
+  }).
+  when("/acceptedView", {
+    templateUrl: "/assets/views/routes/accepted.html",
+    controller: "ShowController"
+  }).
+  when("/onsite", {
+    templateUrl: "/assets/views/routes/onsite/appointments.html",
+    controller: "ShowController"
+  }).
+  when("/onsite/dashboard", {
+    templateUrl: "/assets/views/routes/onsite/dashboard.html",
+    controller: "ShowController"
+  }).
+  when("/onsite/appointments", {
+    templateUrl: "/assets/views/routes/onsite/appointments.html",
+    controller: "ShowController"
+  }).
+  when("/onsite/appointments2", {
+    templateUrl: "/assets/views/routes/onsite/appointments2.html",
+    controller: "pipeCtrl"
+  }).
+  when("/workdetail", {
+    templateUrl: "/assets/views/routes/workdetail.html",
+    controller: "ShowController"
+  }).
+  when("/terms", {
+    templateUrl: "/assets/views/routes/terms.html",
+    controller: "ShowController"
+  }).
+  when("/accountCont", {
+    templateUrl: "/assets/views/routes/account-contractor.html",
+    controller: "ShowController"
+  }).
+  when("/accountCust", {
+    templateUrl: "/assets/views/routes/account-customer.html",
+    controller: "ShowController"
+  }).
+  when("/sign", {
+    templateUrl: "/assets/views/routes/sign.html",
+    controller: "ShowController"
+  }).
+  when("/phone", {
+    templateUrl: "/assets/views/routes/phone/calls.html",
+    controller: "ShowController"
+  }).
+  when("/phone/dashboard", {
+    templateUrl: "/assets/views/routes/phone/dashboard.html",
+    controller: "ShowController"
+  }).
+  when("/phone/calls", {
+    templateUrl: "/assets/views/routes/phone/calls.html",
+    controller: "ShowController"
+  }).
+  when("/admin_addwork", {
+    templateUrl: "/assets/views/adminAddDialog.tmpl.html",
+    controller: "ShowController"
+  }).
+  when("/videoCust", {
+    templateUrl: "/assets/views/routes/getvideointerpreter.html",
+    controller: "ShowController"
+  }).
+  when("/translateCust", {
+    templateUrl: "/assets/views/routes/translate/documentTranslate.html",
+    controller: "ShowController"
+  }).
+  otherwise({
+    redirectTo: '/home'
+  });
 }]);
 
 // //START PLAID RE STUFF
@@ -254,57 +256,57 @@ myApp.config(function (stripeProvider) {
 
 
 myApp.controller('AppCtrl', function($scope) {
-    var imagePath = 'img/list/60.jpeg';
-    $scope.messages = [{
-      face : imagePath,
-      what: 'Brunch this weekend?',
-      who: 'Min Li Chan',
-      when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands"
-    }, {
-      face : imagePath,
-      what: 'Brunch this weekend?',
-      who: 'Min Li Chan',
-      when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands"
-    },  {
-      face : imagePath,
-      what: 'Brunch this weekend?',
-      who: 'Min Li Chan',
-      when: '3:08PM',
-      notes: " I'll be in your neighborhood doing errands"
-    }];
-  });
+  var imagePath = 'img/list/60.jpeg';
+  $scope.messages = [{
+    face : imagePath,
+    what: 'Brunch this weekend?',
+    who: 'Min Li Chan',
+    when: '3:08PM',
+    notes: " I'll be in your neighborhood doing errands"
+  }, {
+    face : imagePath,
+    what: 'Brunch this weekend?',
+    who: 'Min Li Chan',
+    when: '3:08PM',
+    notes: " I'll be in your neighborhood doing errands"
+  },  {
+    face : imagePath,
+    what: 'Brunch this weekend?',
+    who: 'Min Li Chan',
+    when: '3:08PM',
+    notes: " I'll be in your neighborhood doing errands"
+  }];
+});
 
-  myApp.run(function(editableOptions) {
-    editableOptions.theme = 'bs3';
-    //   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default', 'md'
+myApp.run(function(editableOptions) {
+  editableOptions.theme = 'bs3';
+  //   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default', 'md'
 
-  });
+});
 
-  myApp.controller('main', function($scope, $timeout, $http){
-      // Create the array to hold the list of Birthdays
-      $scope.bdays = [];
+myApp.controller('main', function($scope, $timeout, $http){
+  // Create the array to hold the list of Birthdays
+  $scope.bdays = [];
 
-      // Create the function to push the data into the "bdays" array
-      $scope.newBirthday = function(){
-          $scope.bdays.push({name:'', date: '', isNew: true});
-          var updateBDaylist = $scope.bdays;
-          console.log('updateBDaylist', updateBDaylist);
+  // Create the function to push the data into the "bdays" array
+  $scope.newBirthday = function(){
+    $scope.bdays.push({name:'', date: '', isNew: true});
+    var updateBDaylist = $scope.bdays;
+    console.log('updateBDaylist', updateBDaylist);
 
-          $http.post("/bdays", updateBDaylist).then(function(response){
-              console.log("back from /bdays! ", response.data);
+    $http.post("/bdays", updateBDaylist).then(function(response){
+      console.log("back from /bdays! ", response.data);
 
-          });
-      };
-      $scope.savebdays = function(bdays){
-          // console.log('bdays', bdays);
-          // $http.post("/bdays", bdays).then(function(response){
-          //     console.log("back from /bdays! ", response.data);
+    });
+  };
+  $scope.savebdays = function(bdays){
+    // console.log('bdays', bdays);
+    // $http.post("/bdays", bdays).then(function(response){
+    //     console.log("back from /bdays! ", response.data);
 
-          // });
-      };
-  });
+    // });
+  };
+});
 
 
 // module example
@@ -313,7 +315,7 @@ myApp.controller('MainCtrl', function($scope, $http) {
   $scope.updateTodo = function(value) {
     console.log('Saving object ' , value);
     $http.post("/bdays", value).then(function(response){
-        console.log("back from /bdays! ", response.data);
+      console.log("back from /bdays! ", response.data);
 
     });
     // alert('Saving title ' + value);
@@ -396,26 +398,28 @@ myApp.controller('XAccountCtrl', function($scope, $timeout) {
 
   };
 
-   $scope.ranks = [
-      {value: 1, text: 'ranks1'},
-      {value: 2, text: 'ranks2'},
-      {value: 3, text: 'ranks3'},
-      {value: 4, text: 'ranks4'}
-    ];
+  $scope.ranks = [
+    {value: 1, text: 'ranks1'},
+    {value: 2, text: 'ranks2'},
+    {value: 3, text: 'ranks3'},
+    {value: 4, text: 'ranks4'}
+  ];
 
-    $scope.ages = [
-      {value: 32, text: 'age32'},
-      {value: 24, text: 'age24'},
-      {value: 53, text: 'age53'},
-      {value: 8, text: 'age8'}
-    ];
+  $scope.ages = [
+    {value: 32, text: 'age32'},
+    {value: 24, text: 'age24'},
+    {value: 53, text: 'age53'},
+    {value: 8, text: 'age8'}
+  ];
 
-    $timeout(function() {
-        $scope.textBtnForm.$show();
-    }, 1000);
+  $timeout(function() {
+    $scope.textBtnForm.$show();
+  }, 1000);
 
 
 });
+
+
 
 // //http://jsfiddle.net/jjdJX/3/ AND  http://stackoverflow.com/questions/16891123/x-editable-input-editable-on-click-on-other-element
 // $(function(){
@@ -457,10 +461,42 @@ myApp.controller('XAccountCtrl', function($scope, $timeout) {
 // myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "WorkService", 'uiGridConstants', 'stripe', function($scope, $location, $filter, $http, WorkService, uiGridConstants, stripe){
 // myApp.controller("ShowController", ["$scope", "$location", '$filter', '$http', "WorkService", 'uiGridConstants', 'stripe', function($scope, $location, $filter, $http, WorkService, uiGridConstants, stripe){
 
-myApp.controller('XAccountCtrl2', ["$scope", "$location", '$filter', '$http', "WorkService", 'stripe', 'Upload', function($scope, $location, $filter, $http, WorkService, stripe, Upload) {
+myApp.controller('XAccountCtrl2', ["$scope", "$location", '$anchorScroll','$filter', '$http', '$timeout', '$document', '$mdDialog', "WorkService", 'stripe', 'Upload', function($scope, $location, $anchorScroll, $filter, $http, $timeout, $document, $mdDialog, WorkService, stripe, Upload) {
   var workService = WorkService;
- $scope.logedinUser = WorkService.userObject;
- $scope.user = {
+
+  $scope.accountsToVarify = workService.customerPaymentSourceObject.verify;
+  // $scope.work.microDepositsExpanded = workService.customerPaymentSourceObject.showMicrodepositDiv;
+  $scope.varifiedPaymentSource = workService.customerPaymentSourceObject.varifiedSource;
+  $scope.work.microDepositsExpanded = workService.customerPaymentSourceObject.showMicrodepositDiv;
+
+  // $scope.value = workService.customerPaymentSourceObject.showMicrodepositDiv;
+  // $scope.value = workService.customerPaymentSourceObject.showMicrodepositDiv;
+  workService.getCustomerBalance();
+  $scope.customerBalance = workService.customerBalanceObject;
+
+  $scope.scrollTo = function() {
+    $scope.work.addPaymentSourceExpanded = true;
+    $timeout(function () {
+      var el = document.getElementById('smoothscroll'); //https://jsfiddle.net/t34z7/
+      angular.element(el).triggerHandler('click');
+      // $anchorScroll(id);
+    }, 0);
+  };
+
+
+  // $scope.toTheTop = function() {
+  //     $document.scrollTopAnimated(0, 5000).then(function() {
+  //       console && console.log('You just scrolled to the top!');
+  //     });
+  //   }
+  //   var section3 = angular.element(document.getElementById('section-3'));
+  //   $scope.toSection3 = function() {
+  //     $document.scrollToElementAnimated(section3);
+  //   }
+
+
+  $scope.logedinUser = WorkService.userObject;
+  $scope.user = {
     id: 1,
     name: '',
     currency: 1,
@@ -591,59 +627,59 @@ myApp.controller('XAccountCtrl2', ["$scope", "$location", '$filter', '$http', "W
       country: "US",
       currency: "USD"
     }
-   };
+  };
 
-   // START STRIPE Pii
-   $scope.Pii = function () {
-     console.log('in controller $scope.logedinUser.ssnum::', $scope.logedinUser.ssnum);
-     // $scope.payment.check.country = "US";
-     // $scope.payment.check.currency = "USD";
-     console.log('stripe', stripe);
-      // stripe.tokens.create({
-      //   pii: {
-      //     personal_id_number: '000000000'
-      //   }
-      // }, function(err, token) {
-      //   console.log('pii token', token);
-      //   // asynchronously called
-      // });
+  // START STRIPE Pii
+  $scope.Pii = function () {
+    console.log('in controller $scope.logedinUser.ssnum::', $scope.logedinUser.ssnum);
+    // $scope.payment.check.country = "US";
+    // $scope.payment.check.currency = "USD";
+    console.log('stripe', stripe);
+    // stripe.tokens.create({
+    //   pii: {
+    //     personal_id_number: '000000000'
+    //   }
+    // }, function(err, token) {
+    //   console.log('pii token', token);
+    //   // asynchronously called
+    // });
 
-     return stripe.piiData.createToken({personal_id_number: $scope.logedinUser.ssnum}) //$scope.logedinUser.ssnum or '000000000'
-       .then(function (response) {
-         console.log('token created response ', response);
-         // console.log('token created for card ending in ', response.card.last4);
-        //  console.log('$scope.logedinUser::', $scope.logedinUser);
-         var pii = {};
-         pii.piiTokenID = response.id; //reponse.id
-         // cardToken.payment = angular.copy($scope.payment);
-         // var payment = angular.copy($scope.payment);
-         // $scope.payment.check = void 0;
-         // payment.token = response.id;
-         return $http.post('/updateUser/saveUserPii', pii);
-       })
-       .then(function (payment) {
-         console.log('successfully submitted payment for $', payment);
-       })
-       .catch(function (err) {
-         if(err.field && err.msg) {
-           // err like {field: "name", msg: "Server-side error for this username!"}
-           $scope.editableForm.$setError(err.field, err.msg);
-         } else {
-           // unknown error
-           $scope.editableForm.$setError('name', 'Unknown error!');
-         }
-         if (err.type && /^Stripe/.test(err.type)) {
-           console.log('Stripe error: ', err.message);
-         }
-         else {
-           console.log('Other error occurred, possibly with your API', err.message);
-         }
+    return stripe.piiData.createToken({personal_id_number: $scope.logedinUser.ssnum}) //$scope.logedinUser.ssnum or '000000000'
+    .then(function (response) {
+      console.log('token created response ', response);
+      // console.log('token created for card ending in ', response.card.last4);
+      //  console.log('$scope.logedinUser::', $scope.logedinUser);
+      var pii = {};
+      pii.piiTokenID = response.id; //reponse.id
+      // cardToken.payment = angular.copy($scope.payment);
+      // var payment = angular.copy($scope.payment);
+      // $scope.payment.check = void 0;
+      // payment.token = response.id;
+      return $http.post('/updateUser/saveUserPii', pii);
+    })
+    .then(function (payment) {
+      console.log('successfully submitted payment for $', payment);
+    })
+    .catch(function (err) {
+      if(err.field && err.msg) {
+        // err like {field: "name", msg: "Server-side error for this username!"}
+        $scope.editableForm.$setError(err.field, err.msg);
+      } else {
+        // unknown error
+        $scope.editableForm.$setError('name', 'Unknown error!');
+      }
+      if (err.type && /^Stripe/.test(err.type)) {
+        console.log('Stripe error: ', err.message);
+      }
+      else {
+        console.log('Other error occurred, possibly with your API', err.message);
+      }
 
 
 
-       });
-   };
-   // END STRIPE Pii
+    });
+  };
+  // END STRIPE Pii
 
   // START STRIPE BANK ACCOUNT
   $scope.checkAuthorizeCust = function () {
@@ -653,39 +689,39 @@ myApp.controller('XAccountCtrl2', ["$scope", "$location", '$filter', '$http', "W
     // console.log('stripe', stripe);
     console.log('$scope.payment.check', $scope.payment.check);
     return stripe.bankAccount.createToken($scope.payment.check)
-      .then(function (response) {
-        console.log('token created response ', response);
-        // console.log('token created for card ending in ', response.card.last4);
-        console.log('$scope.payment::', $scope.payment);
-        var check = {};
-        check.token = response.id;
-        // cardToken.payment = angular.copy($scope.payment);
-        // var payment = angular.copy($scope.payment);
-        // $scope.payment.check = void 0;
-        // payment.token = response.id;
-        return $http.post('/updateCustomer/saveCustCheck', check);
-      })
-      .then(function (payment) {
-        console.log('successfully submitted payment for $', payment);
-      })
-      .catch(function (err) {
-        if(err.field && err.msg) {
-          // err like {field: "name", msg: "Server-side error for this username!"}
-          $scope.editableForm.$setError(err.field, err.msg);
-        } else {
-          // unknown error
-          $scope.editableForm.$setError('name', 'Unknown error!');
-        }
-        if (err.type && /^Stripe/.test(err.type)) {
-          console.log('Stripe error: ', err.message);
-        }
-        else {
-          console.log('Other error occurred, possibly with your API', err.message);
-        }
+    .then(function (response) {
+      console.log('token created response ', response);
+      // console.log('token created for card ending in ', response.card.last4);
+      console.log('$scope.payment::', $scope.payment);
+      var check = {};
+      check.token = response.id;
+      // cardToken.payment = angular.copy($scope.payment);
+      // var payment = angular.copy($scope.payment);
+      // $scope.payment.check = void 0;
+      // payment.token = response.id;
+      return $http.post('/updateCustomer/saveCustCheck', check);
+    })
+    .then(function (payment) {
+      console.log('successfully submitted payment for $', payment);
+    })
+    .catch(function (err) {
+      if(err.field && err.msg) {
+        // err like {field: "name", msg: "Server-side error for this username!"}
+        $scope.editableForm.$setError(err.field, err.msg);
+      } else {
+        // unknown error
+        $scope.editableForm.$setError('name', 'Unknown error!');
+      }
+      if (err.type && /^Stripe/.test(err.type)) {
+        console.log('Stripe error: ', err.message);
+      }
+      else {
+        console.log('Other error occurred, possibly with your API', err.message);
+      }
 
 
 
-      });
+    });
   };
   // END STRIPE BANK ACCOUNT
 
@@ -742,143 +778,380 @@ myApp.controller('XAccountCtrl2', ["$scope", "$location", '$filter', '$http', "W
 
 
   // START STRIPE CREDIT CARDS
-    $scope.charge = function () {
-      console.log('in controller $scope.payment.card::', $scope.payment.card);
-      $scope.payment.card.currency = 'usd';
-      return stripe.card.createToken($scope.payment.card)
-        .then(function (response) {
-          console.log('token created response ', response);
-          console.log('token created for card ending in ', response.card.last4);
-          console.log('$scope.payment::', $scope.payment);
-          var card = {};
-          card.token = response.id;
-          // cardToken.payment = angular.copy($scope.payment);
-          // var payment = angular.copy($scope.payment);
-          // payment.card = void 0;
-          // payment.token = response.id;
-          return $http.post('/updateUser/stripecc', card);
-        })
-        .then(function (payment) {
-          console.log('successfully submitted payment for $', payment.amount);
-        })
-        .catch(function (err) {
-          if (err.type && /^Stripe/.test(err.type)) {
-            console.log('Stripe error: ', err.message);
-          }
-          else {
-            console.log('Other error occurred, possibly with your API', err.message);
-          }
-        });
-    };
-    // END STRIPE CREDIT CARDS
-
-
-
-// START STRIPE CREDIT CARDS
-  $scope.customerChargeCard = function () {
+  $scope.charge = function () {
     console.log('in controller $scope.payment.card::', $scope.payment.card);
     $scope.payment.card.currency = 'usd';
     return stripe.card.createToken($scope.payment.card)
-      .then(function (response) {
-        console.log('token created response ', response);
-        console.log('token created for card ending in ', response.card.last4);
-        console.log('$scope.payment::', $scope.payment);
-        var card = {};
-        card.token = response.id;
-        // cardToken.payment = angular.copy($scope.payment);
-        // var payment = angular.copy($scope.payment);
-        // payment.card = void 0;
-        // payment.token = response.id;
-        return $http.post('/updateCustomer/stripecc', card);
-      })
-      .then(function (payment) {
-        console.log('successfully submitted payment for $', payment.amount);
-      })
-      .catch(function (err) {
-        if (err.type && /^Stripe/.test(err.type)) {
-          console.log('Stripe error: ', err.message);
-        }
-        else {
-          console.log('Other error occurred, possibly with your API', err.message);
-        }
-      });
+    .then(function (response) {
+      console.log('token created response ', response);
+      console.log('token created for card ending in ', response.card.last4);
+      console.log('$scope.payment::', $scope.payment);
+      var card = {};
+      card.token = response.id;
+      // cardToken.payment = angular.copy($scope.payment);
+      // var payment = angular.copy($scope.payment);
+      // payment.card = void 0;
+      // payment.token = response.id;
+      return $http.post('/updateUser/stripecc', card);
+    })
+    .then(function (payment) {
+      console.log('successfully submitted payment for $', payment.amount);
+    })
+    .catch(function (err) {
+      if (err.type && /^Stripe/.test(err.type)) {
+        console.log('Stripe error: ', err.message);
+      }
+      else {
+        console.log('Other error occurred, possibly with your API', err.message);
+      }
+    });
   };
   // END STRIPE CREDIT CARDS
 
 
-    // START OF NG-FILE-UPLOAD STUFF
-    // upload later on form submit or something similar
-    $scope.submitUpload = function() {
-      if ($scope.form.file.$valid && $scope.file) {
-        $scope.upload($scope.file);
+
+  // START STRIPE CREDIT CARDS
+  $scope.customerChargeCard = function () {
+    console.log('in controller $scope.payment.card::', $scope.payment.card);
+    $scope.payment.card.currency = 'usd';
+    return stripe.card.createToken($scope.payment.card)
+    .then(function (response) {
+      console.log('token created response ', response);
+      console.log('token created for card ending in ', response.card.last4);
+      console.log('$scope.payment::', $scope.payment);
+      var card = {};
+      card.token = response.id;
+      // cardToken.payment = angular.copy($scope.payment);
+      // var payment = angular.copy($scope.payment);
+      // payment.card = void 0;
+      // payment.token = response.id;
+      return $http.post('/updateCustomer/stripecc', card);
+    })
+    .then(function (payment) {
+      console.log('successfully submitted payment for $', payment.amount);
+    })
+    .catch(function (err) {
+      if (err.type && /^Stripe/.test(err.type)) {
+        console.log('Stripe error: ', err.message);
       }
-    };
+      else {
+        console.log('Other error occurred, possibly with your API', err.message);
+      }
+    });
+  };
+  // END STRIPE CREDIT CARDS
 
-    // upload on file select or drop
-    $scope.upload = function (file) {
-      // return $http.post('/updateUser/saveUserIdentityDocument', file).error(function(err) {
-      //   if(err.field && err.msg) {
-      //     // err like {field: "name", msg: "Server-side error for this username!"}
-      //     // $scope.editableForm.$setError(err.field, err.msg);
-      //     console.log('err.msg::', err.msg);
-      //   } else {
-      //     // unknown error
-      //     // $scope.editableForm.$setError('name', 'Unknown error!');
-      //     console.log('Unknown error!');
-      //   }
-      // });
 
-        Upload.upload({
-            url: '/updateUser/saveUserIdentityDocument', //'upload/url'
-            data: {file: file, 'username': $scope.logedinUser.email}
-        }).then(function (resp) {
-            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-        }, function (resp) {
-            console.log('Error status: ' + resp.status);
-        }, function (evt) {
-            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-        });
-    };
-    // for multiple files:
-    // $scope.uploadFiles = function (files) {
-    //   if (files && files.length) {
-    //     for (var i = 0; i < files.length; i++) {
-    //       Upload.upload({..., data: {file: files[i]}, ...})...;
-    //     }
-    //     // or send them all together for HTML5 browsers:
-    //     Upload.upload({..., data: {file: files}, ...})...;
+  // START OF NG-FILE-UPLOAD STUFF
+  // upload later on form submit or something similar
+  $scope.submitUpload = function() {
+    if ($scope.form.file.$valid && $scope.file) {
+      $scope.upload($scope.file);
+    }
+  };
+
+  // upload on file select or drop
+  $scope.upload = function (file) {
+    // return $http.post('/updateUser/saveUserIdentityDocument', file).error(function(err) {
+    //   if(err.field && err.msg) {
+    //     // err like {field: "name", msg: "Server-side error for this username!"}
+    //     // $scope.editableForm.$setError(err.field, err.msg);
+    //     console.log('err.msg::', err.msg);
+    //   } else {
+    //     // unknown error
+    //     // $scope.editableForm.$setError('name', 'Unknown error!');
+    //     console.log('Unknown error!');
     //   }
-    // }
+    // });
 
-    // END OF NG-FILE-UPLOAD STUFF
+    Upload.upload({
+      url: '/updateUser/saveUserIdentityDocument', //'upload/url'
+      data: {file: file, 'username': $scope.logedinUser.email}
+    }).then(function (resp) {
+      console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+    }, function (resp) {
+      console.log('Error status: ' + resp.status);
+    }, function (evt) {
+      var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+    });
+  };
+  // for multiple files:
+  // $scope.uploadFiles = function (files) {
+  //   if (files && files.length) {
+  //     for (var i = 0; i < files.length; i++) {
+  //       Upload.upload({..., data: {file: files[i]}, ...})...;
+  //     }
+  //     // or send them all together for HTML5 browsers:
+  //     Upload.upload({..., data: {file: files}, ...})...;
+  //   }
+  // }
+
+  // END OF NG-FILE-UPLOAD STUFF
+
+  //start add input to smart-table
+  $scope.inputs = ['Input 1'];
+
+  $scope.counter = 1;
+
+  $scope.addInput = function() {
+    $scope.counter++;
+    $scope.inputs.push('Input ' + $scope.counter);
+  }
+  $scope.deleteInput = function(index) {
+    console.log('index::', index);
+    console.log('$scope.inputs(index::', $scope.inputs[index]);
+    $scope.counter--;
+    // $scope.inputs.pop(item);
+    $scope.inputs.splice(index, 1);
+  }
+
+
+
+}]);
+
+myApp.controller('XAccountCtrl3', ["$scope", "$location", '$anchorScroll','$filter', '$http', '$timeout', '$document', '$mdDialog', "WorkService", 'stripe', 'Upload', function($scope, $location, $anchorScroll, $filter, $http, $timeout, $document, $mdDialog, WorkService, stripe, Upload) {
+  var workService = WorkService;
+
+  $scope.varifiedPaymentSource = workService.customerPaymentSourceObject.varifiedSource;
+  $scope.submitRecharge = function(recharge){
+    console.log('in controller recharge:::', recharge);
+    workService.submitRecharge(recharge);
+  }
+
+// START showRechargeDialog
+$scope.showRechargeDialog = function(ev) {
+  console.log("Inside showRechargeDialog function");
+  $mdDialog.show({
+    controller: RechargeDialogController,
+    templateUrl: 'routes/account/rechargeDialog.tmpl.html',
+    parent: angular.element(document.body),
+    targetEvent: ev,
+    clickOutsideToClose:true,
+    openFrom: {
+      top: -50,
+      width: 30,
+      height: 80
+    },
+    closeTo: {
+      top: 1500
+    }
+  })
+  .then(function(answer) {
+    $scope.status = 'You said the information was "' + answer + '".';
+  }, function() {
+    $scope.status = 'You cancelled the dialog.';
+  });
+};
+function RechargeDialogController($scope, $mdDialog) {
+  $scope.hide = function() {
+    $mdDialog.hide();
+  };
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  $scope.answer = function(answer) {
+    $mdDialog.hide(answer);
+  };
+}
+// END showTabDialog
+
+}]);
+
+
+myApp.controller('XAccountCtrl4', ["$scope", "$location", '$anchorScroll','$filter', '$http', '$timeout', '$document', '$mdDialog', "WorkService", 'stripe', 'Upload', function($scope, $location, $anchorScroll, $filter, $http, $timeout, $document, $mdDialog, WorkService, stripe, Upload) {
+  var workService = WorkService;
+
+  $scope.varifiedPaymentSource = workService.customerPaymentSourceObject.varifiedSource;
+  $scope.submitAutoRecharge = function(recharge){
+    console.log('in controller recharge:::', recharge);
+    workService.submitAutoRecharge(recharge);
+  }
+
+  $scope.rechargeThresholds = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 380, 390, 400, 410, 420, 430, 440, 450, 460, 470, 480, 490, 500, 510, 520, 530, 540, 550, 560, 570, 580, 590, 600, 610, 620, 630, 640, 650, 660, 670, 680, 690, 700, 710, 720, 730, 740, 750, 760, 770, 780, 790, 800, 810, 820, 830, 840, 850, 860, 870, 880, 890, 900, 910, 920, 930, 940, 950, 960, 970, 980, 990, 1000]
+  $scope.rechargeAmounts = [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 380, 390, 400, 410, 420, 430, 440, 450, 460, 470, 480, 490, 500, 510, 520, 530, 540, 550, 560, 570, 580, 590, 600, 610, 620, 630, 640, 650, 660, 670, 680, 690, 700, 710, 720, 730, 740, 750, 760, 770, 780, 790, 800, 810, 820, 830, 840, 850, 860, 870, 880, 890, 900, 910, 920, 930, 940, 950, 960, 970, 980, 990, 1000, 1010, 1020, 1030, 1040, 1050, 1060, 1070, 1080, 1090, 1100, 1110, 1120, 1130, 1140, 1150, 1160, 1170, 1180, 1190, 1200, 1210, 1220, 1230, 1240, 1250, 1260, 1270, 1280, 1290, 1300, 1310, 1320, 1330, 1340, 1350, 1360, 1370, 1380, 1390, 1400, 1410, 1420, 1430, 1440, 1450, 1460, 1470, 1480, 1490, 1500, 1510, 1520, 1530, 1540, 1550, 1560, 1570, 1580, 1590, 1600, 1610, 1620, 1630, 1640, 1650, 1660, 1670, 1680, 1690, 1700, 1710, 1720, 1730, 1740, 1750, 1760, 1770, 1780, 1790, 1800, 1810, 1820, 1830, 1840, 1850, 1860, 1870, 1880, 1890, 1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000]
+  /*
+  $scope.rechargeAmounts =
+  var rechargeThresholdIncrements = [];
+  var createRechargeThresholdArray = function(){
+    var finalNum = 1000;
+    for (var i = 0; i < finalNum;) {
+      var val = i+10;
+      rechargeThresholdIncrements.push(val);
+      console.log('rechargeThresholdIncrements::', rechargeThresholdIncrements);
+      i = i+10;
+    }
+    $scope.rechargeThresholds = rechargeThresholdIncrements;
+  }
+  createRechargeThresholdArray();
+  */
+  /*
+  var rechargeAmountIncrements = [];
+  var createRechargeAmountArray = function(){
+    var finalNum = 2000;
+    for (var i = 30; i <= finalNum;) {
+      var val = i;
+      rechargeAmountIncrements.push(val);
+      console.log('rechargeAmountIncrements::', rechargeAmountIncrements);
+      i = i+10;
+    }
+    $scope.rechargeAmounts = rechargeAmountIncrements;
+  }
+  createRechargeAmountArray();
+  */
+
+  $scope.$watch('autoRecharge.rechargeoffon', function(newVal, oldVal) {
+    console.log('newVal ::', newVal);
+    console.log('oldVal ::', oldVal);
+    if (newVal !== oldVal) {
+      console.log('newVal !== oldVal');
+      // var selected = $filter('filter')($scope.groups, {id: $scope.user.group});
+      // $scope.user.groupName = selected.length ? selected[0].text : null;
+      // console.log('$scope.user.acc_id::', $scope.user.acc_id);
+      // console.log('$scope.user::', $scope.user);
+      // console.log('$scope.user.groupName::', $scope.user.groupName);
+      // console.log('$scope.groups::', $scope.groups);
+      //
+      // workService.updateCustomerDefaultPaymentSource($scope.user);
+
+    }
+  });
+
+// START showAutoChargeDialog
+$scope.showAutoChargeDialog = function(ev) {
+  console.log("Inside showAutoChargeDialog function");
+  $mdDialog.show({
+    controller: AutoRechargeDialogController,
+    templateUrl: 'routes/account/autoRechargeDialog.tmpl.html',
+    parent: angular.element(document.body),
+    targetEvent: ev,
+    clickOutsideToClose:true,
+    openFrom: {
+      top: -50,
+      width: 30,
+      height: 80
+    },
+    closeTo: {
+      top: 1500
+    }
+  })
+  .then(function(answer) {
+    $scope.status = 'You said the information was "' + answer + '".';
+  }, function() {
+    $scope.status = 'You cancelled the dialog.';
+  });
+};
+function AutoRechargeDialogController($scope, $mdDialog) {
+  $scope.hide = function() {
+    $mdDialog.hide();
+  };
+  $scope.cancel = function() {
+    $mdDialog.cancel();
+  };
+  $scope.answer = function(answer) {
+    $mdDialog.hide(answer);
+  };
+}
+// END showTabDialog
+
 }]);
 
 myApp.factory("showmeFactory", ["$http", "$location", function($http, $location){
 
-    // var showme = function(){
-    //   return true;
-    // };
-    // var showme =  true;
-    //
-    // return {
-    //     showme : showme
-    // };
+  // var showme = function(){
+  //   return true;
+  // };
+  // var showme =  true;
+  //
+  // return {
+  //     showme : showme
+  // };
 }]);
 
+myApp.controller('xSelectCtrl', ["$scope", "$location", '$filter', '$http', "WorkService", function($scope, $location, $filter, $http, WorkService) {
+  var workService = WorkService;
+
+  $scope.user = workService.customerPaymentSourceObject.default_source;
+
+  $scope.groups = workService.customerPaymentSourceObject.data;
+
+  $scope.loadGroups = function() {
+    var userObject = {};
+    return $scope.groups.length ? null : $http.get('/user/name').success(function(data) {
+
+      // $scope.groups = data;
+
+      console.log('in controller data::', data);
+      userObject.response = data;
+      console.log('userObject in controller', userObject);
+      console.log('userObject.response.sources.data in controller', userObject.response.sources.data);
+      var sourcesLast4Array = [];
+      var sourcesArray = userObject.response.sources.data;
+      var default_source = userObject.response.sources.default_source;
+      var userDefaultSource = {};
+      sourcesArray.map(function(obj){
+        console.log('controller obj::', obj);
+        if (obj.object == "bank_account" && obj.last4 && obj.status == "verified") {
+          var groupObj = {id: obj.object+' '+obj.last4, text: obj.object+' '+obj.last4, acc_id: obj.id}
+          sourcesLast4Array.push(groupObj);
+        }else if (obj.object == "card" && obj.last4) {
+          var groupObj = {id: obj.object+' '+obj.last4, text: obj.object+' '+obj.last4, acc_id: obj.id}
+          sourcesLast4Array.push(groupObj);
+        }
+        if (obj.id == default_source) {
+          console.log('controller obj default_source::', obj);
+            userDefaultSource = {
+            group: obj.object +' '+ obj.last4,
+            groupName: obj.object +' '+ obj.last4, // original value
+            acc_id: obj.id
+          };
+
+        }
+      });
+      // $scope.user = userDefaultSource;
+      console.log('sourcesLast4Array::', sourcesLast4Array);
+      $scope.groups = sourcesLast4Array;
+      // console.log('customerPaymentSourceObject::', customerPaymentSourceObject);
+
+
+      console.log('default_source on server::', default_source);
+
+
+    });
+  };
+
+  $scope.$watch('user.group', function(newVal, oldVal) {
+    console.log('newVal ::', newVal);
+    console.log('oldVal ::', oldVal);
+    if (newVal !== oldVal) {
+      console.log('newVal !== oldVal');
+      var selected = $filter('filter')($scope.groups, {id: $scope.user.group});
+      $scope.user.groupName = selected.length ? selected[0].text : null;
+      console.log('$scope.user.acc_id::', $scope.user.acc_id);
+      console.log('$scope.user::', $scope.user);
+      console.log('$scope.user.groupName::', $scope.user.groupName);
+      console.log('$scope.groups::', $scope.groups);
+
+      workService.updateCustomerDefaultPaymentSource($scope.user);
+
+    }
+  });
+
+
+}]);
 
 myApp.controller('plaidController', ['$scope', 'PlaidService', function($scope, PlaidService) {
-            console.log('plaidController loaded');
-            var plaidService = PlaidService;
-            $scope.plaidObject = {};
-            $scope.inside = "inside words";
-            $scope.sendDataToBackend = function(plaidSuccessObject){
-              console.log('plaidSuccessObject in controller', plaidSuccessObject);
-              $http.post("/authenticate", plaidSuccessObject).then(function(response){
-                console.log('in controller back from sending Token', response);
-              });
-            };
-            $scope.sendTokens = plaidService.sendToken;
+  console.log('plaidController loaded');
+  var plaidService = PlaidService;
+  $scope.plaidObject = {};
+  $scope.inside = "inside words";
+  $scope.sendDataToBackend = function(plaidSuccessObject){
+    console.log('plaidSuccessObject in controller', plaidSuccessObject);
+    $http.post("/authenticate", plaidSuccessObject).then(function(response){
+      console.log('in controller back from sending Token', response);
+    });
+  };
+  $scope.sendTokens = plaidService.sendToken;
 }]);
 
 
@@ -892,11 +1165,11 @@ myApp.controller('SignModalCtrl', [
       console.log('work_id: inside of SignModalCtrl:', work_id);
       console.log('signature.toDataURL::', signature.toDataURL());
       var workItemSig = {};
-        workItemSig.id = work_id;
-        workItemSig.sig = signature.toDataURL();
-        console.log('workItemSig::', workItemSig);
-        //Send workItemSig to server to be saved in the DB
-        workService.completeWork(workItemSig);
+      workItemSig.id = work_id;
+      workItemSig.sig = signature.toDataURL();
+      console.log('workItemSig::', workItemSig);
+      //Send workItemSig to server to be saved in the DB
+      workService.completeWork(workItemSig);
 
 
       $window.open(signature.toDataURL());
@@ -959,8 +1232,8 @@ myApp.controller('ngSignaturePadController', [
 ]);
 
 myApp.controller('ModalDemoCtrl', ['$scope', '$uibModal', '$log', function($scope, $uibModal, $log) {
-    console.log('ModalDemoCtrl loaded');
-    $scope.items = ['item1', 'item2', 'item3'];
+  console.log('ModalDemoCtrl loaded');
+  $scope.items = ['item1', 'item2', 'item3'];
 
   $scope.animationsEnabled = true;
 
@@ -992,38 +1265,38 @@ myApp.controller('ModalDemoCtrl', ['$scope', '$uibModal', '$log', function($scop
 }]);
 
 myApp.controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'items', function($scope, $uibModalInstance, items) {
-    console.log('ModalInstanceCtrl loaded');
+  console.log('ModalInstanceCtrl loaded');
 
-    $scope.items = items;
- $scope.selected = {
-   item: $scope.items[0]
- };
+  $scope.items = items;
+  $scope.selected = {
+    item: $scope.items[0]
+  };
 
- $scope.ok = function () {
-   $uibModalInstance.close($scope.selected.item);
- };
+  $scope.ok = function () {
+    $uibModalInstance.close($scope.selected.item);
+  };
 
- $scope.cancel = function () {
-   $uibModalInstance.dismiss('cancel');
- };
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
 
 }]);
 
 myApp.controller('exampleController', function ($scope, $log) {
-		$scope.query = "";
-		$scope.paOptions = {
-			updateModel : true
-		};
-		$scope.paTrigger = {};
-		$scope.paDetails = {};
-		$scope.placesCallback = function (error, details) {
-            console.log($scope.query);
-			if (error) {
-				return console.error(error);
-			}
-			$scope.paDetails = details;
-		};
-	});
+  $scope.query = "";
+  $scope.paOptions = {
+    updateModel : true
+  };
+  $scope.paTrigger = {};
+  $scope.paDetails = {};
+  $scope.placesCallback = function (error, details) {
+    console.log($scope.query);
+    if (error) {
+      return console.error(error);
+    }
+    $scope.paDetails = details;
+  };
+});
 
 // http://codepen.io/chrisota/pen/rCGIF
 // WIP
@@ -1052,8 +1325,8 @@ $('.feat td:first-child').each(function(){
 
 $("input[type='checkbox']").click(function() {
   if($(this).prop('checked'))
-    $(this).closest('td').addClass('color');
+  $(this).closest('td').addClass('color');
   else
-    $(this).closest('td').removeClass('color');
+  $(this).closest('td').removeClass('color');
 });
 // http://codepen.io/chrisota/pen/rCGIF

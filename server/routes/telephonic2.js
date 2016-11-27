@@ -162,19 +162,10 @@ router.post('/telephonicUserID', twilio.webhook({validate: false}), function (re
     var telephonicUserID = request.body.Digits;
     if (telephonicUserID.length < 7 ) {
       console.log('telephonicUserID.length::', telephonicUserID.length);
-      // twiml.say('Your User ID must be 7 degits. Please try again.');
+      // twiml.say('You entered an incorrect User ID');
+      // response.send(twiml,redirectWelcome());
       twiml.redirect('/telephonic/welcome');
     }else {
-      twiml.gather({
-          action: "/telephonic/telephonicPassCode?ID=" + telephonicUserID,
-          numDigits: "4",
-          method: "POST"
-      }, function (node) {
-          twiml.say('Please enter your 4 digit pass code');
-      });
-    }
-    /*
-    else {
     console.log('telephonicUserID 1::', telephonicUserID);
     // findUserInDB(telephonicUserID, twiml);
     var promise = User.findOne({telephonicID: telephonicUserID}).exec();
@@ -220,7 +211,7 @@ router.post('/telephonicUserID', twilio.webhook({validate: false}), function (re
       console.log('error:', err);
     });
 
-  }*/
+  }
   console.log("Before response ::");
   response.send(twiml);
 });
@@ -250,10 +241,9 @@ router.post('/telephonicPassCode', twilio.webhook({validate: false}), function (
     })
     .then(function(aUserWithID) {
       // do something with
-      console.log('aUserWithID::', aUserWithID);
-      if (aUserWithID != null && aUserWithID.telephonicPassCode == passCode) {
+      console.log('aUserWithID.passCode::', aUserWithID.telephonicPassCode);
+      if (aUserWithID.telephonicPassCode == passCode) {
         console.log("I'm inside if (aUserWithID) 2::", aUserWithID);
-        console.log('aUserWithID.passCode::', aUserWithID.telephonicPassCode);
         // var twiml = new twilio.TwimlResponse();
         //TODO reconsider sending userID...perhaps base64encode it
         twiml.gather({
@@ -265,8 +255,7 @@ router.post('/telephonicPassCode', twilio.webhook({validate: false}), function (
         });
         response.send(twiml);
       }else {
-        twiml.say('You entered an incorrect username or passcode.')
-        response.send(redirectWelcome(twiml));
+        response.send(redirectWelcome());
       }
 
     })
@@ -820,12 +809,8 @@ var listPlanets = function (twiml) {
     return twiml;
 };
 
-var redirectWelcome = function (twiml) {
-  if (twiml) {
-
-  } else {
+var redirectWelcome = function () {
     var twiml = new twilio.TwimlResponse();
-  }
     twiml.say("Returning to the main menu", {voice: "alice", language: "en-GB"});
     twiml.redirect("/telephonic/welcome");
     return twiml;

@@ -49,13 +49,20 @@ router.get("/name", function(req,res,next){
         var last4 = paymentSourcesArray[i].last4,
         object = paymentSourcesArray[i].object,
         exp_month = paymentSourcesArray[i].exp_month,
-        exp_year = paymentSourcesArray[i].exp_year;
+        exp_year = paymentSourcesArray[i].exp_year,
+        id = paymentSourcesArray[i].id;
+
+        if (paymentSourcesArray[i].status) {
+          var status = paymentSourcesArray[i].status;
+        }
 
         var paymentSourceObject = {
           last4: last4,
           object: object,
           exp_month: exp_month,
-          exp_year: exp_year
+          exp_year: exp_year,
+          id: id,
+          status: status
         };
         paymentSourcesNewArray.push(paymentSourceObject);
       };
@@ -78,7 +85,8 @@ router.get("/name", function(req,res,next){
         telephonicPassCode: req.user.telephonicPassCode,
         sources: {
           total_count: req.user.epirts.customer.sources.total_count,
-          data: paymentSourcesNewArray
+          data: paymentSourcesNewArray,
+          default_source: req.user.epirts.customer.default_source
         }
         // reminderDateTime: reminderDateTime
       }
