@@ -29,6 +29,7 @@ var UserSchema = new Schema({
     switchs: {type: Object, required: false},
     payable: {type: Object, required: false},
     autoRecharge: {},
+    paymentMethod: {},
 
     geo: {
         type: [Number],

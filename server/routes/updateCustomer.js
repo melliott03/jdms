@@ -156,7 +156,9 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
       var work_tels = works.work_tels;
 
       var linegraph_data = [];
-      var bargraph_data = [];
+      var bargraph_data = []; // money spent
+      var minutes_bargraph_data = []; // minutes used
+
 
       var twelveMonth_label = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];;
 
@@ -164,10 +166,14 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
       twelveMonth_label.forEach(function(element) {
         linegraph_data.push(0);
         bargraph_data.push(0);
+        minutes_bargraph_data.push(0);
+
 
       });
       console.log('after pushing a 0 to mach the # of indexes in label array linegraph_data::', linegraph_data);
       console.log('after pushing a 0 to mach the # of indexes in label array linegraph_data::', bargraph_data);
+      console.log('after pushing a 0 to mach the # of indexes in label array linegraph_data::', minutes_bargraph_data);
+
 
       work_tels.map(function(obj){
         if (obj.outboundSummary) {
@@ -191,12 +197,35 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
               // var val = bargraph_data[idx];
               console.log('obj::', obj);
               if (obj.money && obj.money.customerCost) {
-                console.log('obj.money.customerCost is defined::', obj.money.customerCost);
-                var val = bargraph_data[idx];
-                val += obj.money.customerCost;
-                bargraph_data[idx] = val;
+                console.log('at the top obj.money.customerCost is defined::', obj.money.customerCost);
+                console.log('at the top bargraph_data[idx] ::', bargraph_data[idx]);
+
+                var valp = bargraph_data[idx];
+                var money = obj.money.customerCost/100;
+                // console.log('var money = parseInt(obj.money.customerCost):', money);
+                // money = money/100;
+                console.log('money/100::', money);
+                valp += parseFloat(money.toFixed(2));
+                console.log('valp += money', valp);
+                console.log('before setting equal to valp bargraph_data[idx]', bargraph_data[idx]);
+                bargraph_data[idx] = parseFloat(valp.toFixed(2)); //.toFixed( 2 ); Note that toFixed() returns a string.
+
+                console.log('bargraph_data[idx] = valp', bargraph_data[idx]);
               }
               console.log('new value of bargraph_data[idx]::', bargraph_data[idx]);
+
+              if (obj.outboundSummary && obj.outboundSummary.CallDuration) {
+                console.log('obj.outboundSummary.CallDuration is defined::', obj.outboundSummary.CallDuration);
+                var val = minutes_bargraph_data[idx];
+
+                if (obj.outboundSummary.durationObj.seconds > 0) {
+                  val += parseInt(obj.outboundSummary.durationObj.minutes);
+                  val += 1;
+                } else {
+                  val += parseInt(obj.outboundSummary.durationObj.minutes);
+                }
+                minutes_bargraph_data[idx] = val;
+              }
 
             }
           })
@@ -208,38 +237,22 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
 
       console.log('twelveMonth_label after totaling values for work_tels per month::',twelveMonth_label);
       console.log('bargraph_data::', bargraph_data);
+      console.log('minutes_bargraph_data::', minutes_bargraph_data);
+
 
       var workitems = works.work;
       var work_tels = works.work_tels;
       console.log('works at top before map:: ', works);
 
-      // return works.work_tels
-      // .filter(function(obj){
-      //   return (obj.outboundSummary); //returns all objects which has an outboundSummary (if the return statement is true)
-      // })
-      // .map(function(obj){
-      //   console.log('in .map work obj:: ', obj);
-      //
-      //   if (obj.outboundSummary) { // filter above takes out !obj.outboundSummary cases so this if statement is not really needed
-      //     console.log('obj.outboundSummary is tru for ::', obj);
-      //     obj.date = {};
-      //     obj.date.year = moment.unix(obj.outboundSummary.Timestamp).format("YYYY"); //format("dd, MMM Do YYYY, h:mm:ss a");
-      //     obj.date.month = moment.unix(obj.outboundSummary.Timestamp).format("M"); //format("dd, MMM Do YYYY, h:mm:ss a");
-      //     obj.date.day = moment.unix(obj.outboundSummary.Timestamp).format("Do"); //format("dd, MMM Do YYYY, h:mm:ss a");
-      //     obj.date.weekday = moment.unix(obj.outboundSummary.Timestamp).format("dd"); //format("dd, MMM Do YYYY, h:mm:ss a");
-      //     obj.date.full = moment.unix(obj.outboundSummary.Timestamp).format("dd, MMM Do YYYY"); //format("dd, MMM Do YYYY, h:mm:ss a");
-      //     obj.date.fuller = moment.unix(obj.outboundSummary.Timestamp).format("dd, MMM Do YYYY, h:mm:ss a"); //format("dd, MMM Do YYYY, h:mm:ss a");
-      //     console.log('work obj.created:: ', obj);
-      //   }
-      // });
       console.log('just before visualData formation::');
 
       visualData.doughnut_label = doughnut_label;
-      visualData.doughnut_data = doughnut_data;
+      visualData.doughnut_data = doughnut_data; //languages used
       visualData.twelveMonth_label = twelveMonth_label;
-      visualData.bargraph_data = bargraph_data;
+      visualData.bargraph_data = bargraph_data;//money spent
+      visualData.minutes_bargraph_data = minutes_bargraph_data;//minutes used
       // visualData.linegraph_label = linegraph_label;
-      visualData.linegraph_data = linegraph_data;
+      visualData.linegraph_data = linegraph_data; // calls made
       console.log('before res.send(visualData) visualData::', visualData);
       return visualData;
     })
@@ -376,21 +389,38 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
   });
 
 
-  router.post("/autoRechargeCustomerAccount", function(req, res, next){
-    console.log('autoRechargeCustomerAccount, req.body::::',req.body);
-    console.log('autoRechargeCustomerAccount, req.user::::',req.user);
-    var autoRecharge = req.body;
-    var source = autoRecharge.source;
-    source = JSON.parse(source);
-    console.log('source::', source);
-    autoRecharge.source = source;
+  router.post("/customerChargeMethodChoice", function(req, res, next){
+    console.log('customerChargeMethodChoice, req.body::::',req.body);
+    console.log('customerChargeMethodChoice, req.user::::',req.user);
 
-    //SAVE RECHARGE INFO TO THE DB
+    if (req.body.autoRecharge == 'true') {
+      console.log("inside if (req.body.autoRecharge == 'true')");
+      var autoRecharge = req.body;
+      var source = autoRecharge.source;
+      source = JSON.parse(source);
+      console.log('source::', source);
+      autoRecharge.source = source;
 
-    User.findOneAndUpdate({ _id: req.user._id }, { autoRecharge: autoRecharge }, function(err, user) {
-        if (err) throw err;
-        console.log('after saving user"s autoRecharge::',user);
-      });
+      //SAVE RECHARGE INFO TO THE DB
+      User.findOneAndUpdate({ _id: req.user._id }, { autoRecharge: autoRecharge }, function(err, user) {
+          if (err) throw err;
+          console.log('after saving user"s autoRecharge::',user);
+        });
+    }else if(req.body.payAsYouGoCharge == 'true'){
+      console.log("inside elseif (req.body.payAsYouGoCharge == 'true')");
+      var payAsYouGoCharge = req.body;
+      var source = payAsYouGoCharge.source;
+      source = JSON.parse(source);
+      console.log('source::', source);
+      payAsYouGoCharge.source = source;
+
+      //SAVE RECHARGE INFO TO THE DB   { autoRecharge: autoRecharge }
+      User.findOneAndUpdate({ _id: req.user._id }, { paymentMethod: {choice: 'payAsYouGoCharge', payAsYouGoCharge: payAsYouGoCharge, autoRecharge: autoRecharge } }, function(err, user) {
+          if (err) throw err;
+          console.log('after saving user"s autoRecharge::',user);
+        });
+    }
+
     res.send({customerAutoRecharegeSet:'yes'})
   });
 
@@ -765,7 +795,7 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
         data.stripeCustomer = customer;
         data.balance = balance;
         data.customer_id = customer_id;
-        console.log('found customer in customerMoneyBalance ::');
+        console.log('found customer in customerMoneyBalance   ');
         return data;
       }
     }).then(function(data){

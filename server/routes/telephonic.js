@@ -386,10 +386,16 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       //convert duration seconds to minutes and seconds
       console.log('callSummaryBody::', callSummaryBody);
       var durationSeconds = callSummaryBody.CallDuration;
-      var secsremain = durationSeconds % 60;
+      var secsremain = durationSeconds % 60 || 0;
       var minutes = Math.floor(durationSeconds/60);
+      if (secsremain > 0) {
+        roundedDurationUpInMins = minutes + 1;
+      }else {
+        roundedDurationUpInMins = minutes;
+      }
+      var roundedDurationInMins =
       console.log('Duration:: '+minutes+' min '+secsremain+'sec');
-      callSummaryBody.durationObj = {minutes: minutes, seconds: secsremain}
+      callSummaryBody.durationObj = {minutes: minutes, seconds: secsremain, roundedDurationUpInMins: roundedDurationUpInMins}
       theTeleWorkWithcall_sid.outboundSummary = callSummaryBody;
       // theTeleWorkWithcall_sid.outboundSummary.createdAt = Date.now(); //moment().unix().toDate()
       // theTeleWorkWithcall_sid.outboundSummary.createdAt = new Date(Date.now()).toISOString(); //moment().unix().toDate()

@@ -1,0 +1,56 @@
+<div ng-controller="XAccountCtrl4">
+
+  <div layout="column" style="width : 600px;">
+    <div ng-controller="XAccountCtrl4">
+    <form name="userForm">
+    <div flex>
+      <div layout="row"  class="leftmarginmodal centeralign">
+        <h4 class="centeralign">Configure Pay-As-You-Go</h4>
+      </div>
+      <hr>
+    </div>
+    <div class="leftmarginmodal" flex>
+      <p>Your primary method of payment on file will be charged automatically each time you use the service.</p>
+
+        <p>Selected Value: <span class="radioValue">{{ payPerUseCharge.offOrOn }}</span> </p>
+
+        <md-radio-group layout="row" ng-model="payPerUseCharge.offOrOn">
+          <span class="rechargemodal-text">PAY PER USE CHARGE   </span>
+          <md-radio-button value="enabled" class="md-primary">enabled</md-radio-button>
+          <md-radio-button value="disabled"> disabled </md-radio-button>
+        </md-radio-group>
+        <br>
+
+          <span class="rechargemodal-text">PAYMENT METHOD </span>
+          <md-input-container>
+          <md-select ng-model="payPerUseCharge.source" required="required">
+            <md-option value="{{paymentSource}}" ng-repeat="paymentSource in varifiedPaymentSource" >
+              {{paymentSource.object}} {{paymentSource.last4}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+
+        <md-input-container>
+          <!-- <label>Email</label> -->
+          <!-- <input ng-model="recharge.amount" type="number"> -->
+          <div class="input-group">
+            <input class="moneyinput" ng-model="payPerUseCharge.payAsYouGoCharge" type="text" value='true' hidden="">
+          </div>
+          <!-- autoRecharge false-->
+        </md-input-container><br>
+
+
+        <!-- <input type="submit" ngClick="submitRecharge(recharge)"> -->
+
+    </div>
+    <div class="rechargemodal-footer" flex>
+      <div layout="row"  class="leftmarginmodal">
+        <md-button ng-click="cancel($event)">Cancel</md-button>
+        <md-button class="md-warn md-raised md-hue-2" ng-click="submitCustomerChargeMethodChoice(payPerUseCharge)">Save</md-button>
+      </div>
+    </div>
+  </form>
+  </div>
+  </div>
+
+</div>

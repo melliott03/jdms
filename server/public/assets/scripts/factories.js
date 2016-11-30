@@ -53,6 +53,7 @@ myApp.factory("WorkService", ["$http", function($http){
     var customerGraphDataObject = {};
     var customerPaymentSourceObject = {};
     var customerDefaultPaymentSourceObject = {};
+    var customerChargeMethodChoiceObject = {};
     // var customerInvoicesObject = {};
 
 
@@ -368,14 +369,17 @@ myApp.factory("WorkService", ["$http", function($http){
             getUser();
         });
     };
-    var submitAutoRecharge = function(data){
-        $http.post("/updateCustomer/autoRechargeCustomerAccount", data).then(function(response){
+    var submitCustomerChargeMethodChoice = function(data){
+        $http.post("/updateCustomer/customerChargeMethodChoice", data).then(function(response){
             // customerDefaultPaymentSourceObject.data = response.data;
-            console.log('return of customerDefaultPaymentSourceObject ::  ', response.data);
+            console.log('return of customerChargeMethodChoiceObject ::  ', response.data);
             getCustomerBalance();
             getUser();
         });
     };
+
+
+
 
 
     getUser();
@@ -416,10 +420,9 @@ myApp.factory("WorkService", ["$http", function($http){
         updateCustomerDefaultPaymentSource :updateCustomerDefaultPaymentSource,
         customerPaymentSourceObject : customerPaymentSourceObject,
         customerDefaultPaymentSourceObject : customerDefaultPaymentSourceObject,
-        // getCustomerInvoices : getCustomerInvoices,
-        // customerInvoicesObject : customerInvoicesObject
         submitRecharge: submitRecharge,
-        submitAutoRecharge: submitAutoRecharge
+        submitCustomerChargeMethodChoice: submitCustomerChargeMethodChoice,
+        customerChargeMethodChoiceObject: customerChargeMethodChoiceObject
     };
 }]);
 

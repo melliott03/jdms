@@ -12,11 +12,16 @@
     <div class="leftmarginmodal" flex>
       <p>Specify how much to add to your balance.</p>
 
-        <span class="rechargemodal-text">AMOUNT TO ADD </span>
+        <span class="rechargemodal-text">AMOUNT TO ADD $</span>
 
           <md-input-container>
             <!-- <label>Email</label> -->
-            <input ng-model="recharge.amount" type="number">
+            <!-- <input ng-model="recharge.amount" type="number"> -->
+            <div class="input-group">
+              <div class="input-group-addon">$</div>
+              <input class="moneyinput" ng-model="recharge.amount" type="number" min="0.01" step="0.01">
+            </div>
+
           </md-input-container><br>
 
           <span class="rechargemodal-text">PAYMENT METHOD </span>

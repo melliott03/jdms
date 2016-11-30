@@ -724,4 +724,32 @@ p,a,h1,h2,h3,h4,h5,h6,div,br,li,td,article{
     margin-left: 15px; }
 /*https://material.angularjs.org/latest/demo/datepicker*/
 
+span.moneyinput {
+  position:relative;
+  margin-right:-20px
+}
+input[type='number'].moneyinput{
+  padding-left:20px;
+  text-align:left;
+}
+.input-group-addon {
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    color: #222;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 0;
+}
+.input-group {
+    width: 100%;
+}
+.input-group {
+    position: relative;
+    display: table;
+    border-collapse: separate;
+}
+
 </style>

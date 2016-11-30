@@ -15,26 +15,45 @@
       md-min-date="minEndDate" md-max-date="maxEndDate"></md-datepicker>
     </div>
   </div>
-  
+
   <div layout-gt-xs="row">
     <div flex-gt-xs>
+      <h5>Money Spent</h5>
       <canvas id="bar" class="chart chart-bar"
-      chart-data="GraphData.data.bargraph_data" chart-labels="GraphData.data.twelveMonth_label"> chart-series="series"
-    </canvas>
+        chart-data="GraphData.data.bargraph_data" chart-labels="GraphData.data.twelveMonth_label"> chart-series="series"
+      </canvas>
     </div>
 
   <div flex-gt-xs>
+    <h5>Calls Made</h5>
     <div class="" ng-controller="LineCtrl">
       <canvas class="chart chart-line" chart-data="GraphData.data.linegraph_data" chart-labels="GraphData.data.twelveMonth_label"
-      chart-series="series" chart-click="onClick"></canvas>
-    </div>
+        chart-series="series" chart-click="onClick"></canvas>
+      </div>
   </div>
 
+
+
+  </div>
+
+
+  <div layout-gt-xs="row">
+
+    <div flex-gt-xs>
+      <h5>Languages Accessed</h5>
+      <div class="" ng-controller="DoughnutCtrl">
+        <canvas id="doughnut" class="chart chart-doughnut"
+          chart-data="GraphData.data.doughnut_data" chart-labels="GraphData.data.doughnut_label">
+        </canvas>
+      </div>
+    </div>
+
   <div flex-gt-xs>
-    <div class="" ng-controller="DoughnutCtrl">
-      <canvas id="doughnut" class="chart chart-doughnut"
-      chart-data="GraphData.data.doughnut_data" chart-labels="GraphData.data.doughnut_label">
-    </canvas>
+    <h5>Minutes Used</h5>
+    <div class="" ng-controller="BarCtrl">
+      <canvas id="bar" class="chart chart-bar"
+        chart-data="GraphData.data.minutes_bargraph_data" chart-labels="GraphData.data.twelveMonth_label"> chart-series="series"
+      </canvas>
     </div>
   </div>
 

@@ -23,13 +23,18 @@
     <div flex>
       <h4>Auto Recharge</h4>
       <strong>DISABLED</strong>
-      <p>Enable to have yur acc autmtcaly funded.</p>
+      <p>Enable to have your account automatically funded.</p>
       <div ng-controller="XAccountCtrl4" ng-cloak>
-        <md-button ng-click="showAutoChargeDialog($event)">Enable Auto-Recharge</md-button>
+        <md-button ng-click="showChoiceChargeDialog($event, 'autoRecharge')">Enable Auto-Recharge</md-button>
       </div>
     </div>
     <div flex>
-      <!-- <md-button>Enable Auto-Recharge</md-button> -->
+      <h4>Pay As You Go</h4>
+      <strong>DISABLED</strong>
+      <p>Enable to have your account automatically charged after each appointment.</p>
+      <div ng-controller="XAccountCtrl4" ng-cloak>
+        <md-button ng-click="showChoiceChargeDialog($event, 'payPerUse')">Charge Per Appointment</md-button>
+      </div>
     </div>
   </div>
 

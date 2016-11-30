@@ -50,13 +50,22 @@
           </md-select>
         </md-input-container>
 
+        <md-input-container>
+          <!-- <label>Email</label> -->
+          <!-- <input ng-model="recharge.amount" type="number"> -->
+          <div class="input-group">
+            <input class="moneyinput" ng-model="autoRecharge.autoRecharge" type="text" value='true' hidden="">
+          </div>
+          <!-- autoRecharge false-->
+        </md-input-container><br>
+
         <!-- <input type="submit" ngClick="submitRecharge(recharge)"> -->
 
     </div>
     <div class="rechargemodal-footer" flex>
       <div layout="row"  class="leftmarginmodal">
         <md-button ng-click="cancel($event)">Cancel</md-button>
-        <md-button class="md-warn md-raised md-hue-2" ng-click="submitAutoRecharge(autoRecharge)">Save</md-button>
+        <md-button class="md-warn md-raised md-hue-2" ng-click="submitCustomerChargeMethodChoice(autoRecharge)">Save</md-button>
       </div>
     </div>
   </form>
