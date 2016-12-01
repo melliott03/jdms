@@ -48,12 +48,13 @@ var mongoose = require("mongoose");
 // set Promise provider to bluebird
 mongoose.Promise = require('bluebird');
 
+/*
 // MONGOOSE-REDIS
 var MongooseCache = require('mongoose-redis');
 var cache = MongooseCache(mongoose, {port: config.redisport, host: config.redishost});
 //Config with compress, with this configuration, the data will be compressed before saving on Redis
 // var cache = MongooseCache(mongoose, {port: 6379, host: 'localhost', compress: true});
-
+*/
 var nev = require('email-verification')(mongoose); //this might need to be placed after the user model
 
 var updateUser = require('./routes/updateUser');
