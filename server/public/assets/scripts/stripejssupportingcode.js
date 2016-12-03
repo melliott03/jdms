@@ -1,4 +1,6 @@
-Stripe.setPublishableKey(process.env.STRIPE_TEST_PK);
+var configsty = require('config-node');
+
+Stripe.setPublishableKey(configsty.STRIPE_TEST_PK);
 
 $(function() {
   var $form = $('#payment-form');

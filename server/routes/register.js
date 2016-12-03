@@ -1,5 +1,7 @@
 var express = require("express");
 var router = express.Router();
+var configsty = require('config-node');
+
 var passport = require("passport");
 var path = require("path");
 var User = require("../models/user");
@@ -21,9 +23,9 @@ var chance = new Chance();
 // These vars are your accountSid and authToken from twilio.com/user/account
 var twilio = require('twilio');
 
-var accountSid = process.env.TWILIO_ACCOUNT_SID;
-var authToken = process.env.TWILIO_AUTH_TOKEN;
-var workspaceSid = process.env.TWILIO_WORKSPACE_SID;
+var accountSid = configsty.TWILIO_ACCOUNT_SID;
+var authToken = configsty.TWILIO_AUTH_TOKEN;
+var workspaceSid = configsty.TWILIO_WORKSPACE_SID;
 var payable = require('../modules/payable');
 var waveapps = require('../modules/waveapps');
 
@@ -228,7 +230,7 @@ var rerunCreateTelephonicIDnPassCode = function(user, req){
 
 //EMAIL VARIFICATION
 nev.configure({
-   verificationURL: process.env.APP_URL+'/register/email-verification/${URL}',
+   verificationURL: configsty.APP_URL+'/register/email-verification/${URL}',
    persistentUserModel: User,
    tempUserCollection: 'work_tempusers',
 
@@ -482,7 +484,7 @@ if (req.body.action === 'signup') {
 }else if(req.body.action === 'invite') {
   //EMAIL VARIFICATION
   nev2nd.configure({
-     verificationURL: process.env.APP_URL+'/register/invite-verification/${URL}',
+     verificationURL: configsty.APP_URL+'/register/invite-verification/${URL}',
      persistentUserModel: User,
      tempUserCollection: 'user_tempinvites',
       tempUserModel: User_TempInvited,

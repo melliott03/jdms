@@ -1,5 +1,7 @@
 var express = require("express");
 var router = express.Router();
+var configsty = require('config-node');
+
 var db = require("../modules/db");
 // var mongoURI = require("../modules/mongoURI");
 var path = require("path");
@@ -16,7 +18,7 @@ var restler = require('restler');
 var Agenda = require('agenda');//#AGENDA
 var getForecast = require('../modules/forecast');
 var stripeChargePay = require('../modules/stripeTransactions');
-var stripe = require("stripe")(process.env.STRIPE_TEST);
+var stripe = require("stripe")(configsty.STRIPE_TEST);
 var workRatesTotal = require('../modules/workRatesTotal');
 var workPayTotal = require('../modules/workPayTotal');
 var moment = require('moment');

@@ -1,6 +1,7 @@
 var express = require("express");
 var multiparty = require('connect-multiparty');
 var multipartyMiddleware = multiparty();
+var configsty = require('config-node');
 
 var router = express.Router();
 var passport = require("passport");
@@ -15,8 +16,8 @@ var twilio = require('twilio');
 
 var plaid = require('plaid');
 
-var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
-                                   process.env.PLAID_SECRET,
+var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
+                                   configsty.PLAID_SECRET,
                                    plaid.environments.tartan);
 
 
@@ -448,9 +449,9 @@ router.post('/saveUserIdentityDocument', passport.authenticate('jwt', { session:
 
 router.post('/switch/tel', twilio.webhook({validate: false}), function (req, res) {
   console.log('inside /switch/tel req.body::', req.body);
-  var accountSid = process.env.TWILIO_ACCOUNT_SID;
-  var authToken = process.env.TWILIO_AUTH_TOKEN;
-  var workspaceSid = process.env.TWILIO_WORKSPACE_SID;
+  var accountSid = configsty.TWILIO_ACCOUNT_SID;
+  var authToken = configsty.TWILIO_AUTH_TOKEN;
+  var workspaceSid = configsty.TWILIO_WORKSPACE_SID;
   var post_work_activity_sid = '';
   if (req.body.TelStatus == true) {
     post_work_activity_sid = 'WAbaf024ac1c7fc5d4b9f138173ac3ca12';

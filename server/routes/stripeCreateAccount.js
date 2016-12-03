@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+var configsty = require('config-node');
 var db = require("../modules/db");
 // var mongoURI = require("../modules/mongoURI");
 var path = require("path");
@@ -10,16 +11,16 @@ var Schema = mongoose.Schema;
 // var Contractor = require('../models/contractor');
 var User = require('../models/user');
 var User = require('../models/user');
-var stripe = require("stripe")(process.env.STRIPE_TEST);
+var stripe = require("stripe")(configsty.STRIPE_TEST);
 var plaid = require('plaid');
 
-var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
-                                   process.env.PLAID_SECRET,
+var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
+                                   configsty.PLAID_SECRET,
                                    plaid.environments.tartan);
 
-console.log('process.env.PLAID_CLIENT_ID::', process.env.PLAID_CLIENT_ID);
-console.log('process.env.PLAID_SECRET::', process.env.PLAID_SECRET);
-console.log('process.env.STRIPE_TEST::', process.env.STRIPE_TEST);
+console.log('configsty.PLAID_CLIENT_ID::', configsty.PLAID_CLIENT_ID);
+console.log('configsty.PLAID_SECRET::', configsty.PLAID_SECRET);
+console.log('configsty.STRIPE_TEST::', configsty.STRIPE_TEST);
 
 
 router.route("/create/")

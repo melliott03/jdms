@@ -1,6 +1,7 @@
 var express = require("express");
 var multiparty = require('connect-multiparty');
 var multipartyMiddleware = multiparty();
+var configsty = require('config-node');
 
 var router = express.Router();
 var passport = require("passport");
@@ -14,8 +15,8 @@ var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
 
 var plaid = require('plaid');
 
-var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
-  process.env.PLAID_SECRET,
+var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
+  configsty.PLAID_SECRET,
   plaid.environments.tartan);
 
 

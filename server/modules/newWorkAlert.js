@@ -1,3 +1,4 @@
+var configsty = require('config-node');
 var mongoose = require("mongoose");
 var Promise = require('bluebird');
 // set Promise provider to bluebird
@@ -26,9 +27,9 @@ var newWorkAlert = function(addedWork){
         to: contractorEmail, // list of receivers
         subject: 'Hello ✔', // Subject line
         text: 'Hello '+ contractorFname +'  '+ contractorLname +'🐴 New work availible. TYPE: '
-        +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+" Click here to accept: "+process.env.APP_URL+'/work/work-accept/'+addedWork.shortid, // plaintext body
+        +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+" Click here to accept: "+configsty.APP_URL+'/work/work-accept/'+addedWork.shortid, // plaintext body
         html: '<b>Hello '+ contractorFname +'  '+ contractorLname +' 🐴 New work availible. TYPE: '
-        +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+" Click here to accept: "+process.env.APP_URL+'/work/work-accept/'+addedWork.shortid+"</b>" // html body
+        +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+" Click here to accept: "+configsty.APP_URL+'/work/work-accept/'+addedWork.shortid+"</b>" // html body
       };
       // send mail with defined transport object
       transporter.sendMail(mailOptions, function(error, info){
@@ -54,9 +55,9 @@ var newWorkAlert = function(addedWork){
         // console.log('addedWork.shrtid', addedWork.shortid);
       client.messages.create({
           body: 'Hello '+ contractorFname +'  '+ contractorLname +'🐴 New work availible. TYPE: '
-          +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+" Click here to accept: "+process.env.APP_URL+'/work/work-accept/'+addedWork.shortid, // plaintext body
+          +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+" Click here to accept: "+configsty.APP_URL+'/work/work-accept/'+addedWork.shortid, // plaintext body
           html: '<b>Hello '+ contractorFname +'  '+ contractorLname +' 🐴 New work availible. TYPE: '
-          +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+" Click here to accept: "+process.env.APP_URL+'/work/work-accept/'+addedWork.shortid+"</b>", // html body
+          +addedWork.type +' ADDRESS: '+ addedWork.address +' DATE & START TIME: '+addedWork.datetime +' ENDTIME: '+addedWork.endTime+" Click here to accept: "+configsty.APP_URL+'/work/work-accept/'+addedWork.shortid+"</b>", // html body
           to: "+16128121238",
           from: "+16122844292"
       }, function(err, message) {

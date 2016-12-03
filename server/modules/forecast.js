@@ -1,6 +1,8 @@
 // var Forecast = require('forecast.io');
+// var configsty = require('config-node');
+
 // var options = {
-//   APIKey: 'a7477969f3764bd6cd2bf01efa7a7365', //process.env.FORECAST_API_KEY
+//   APIKey: 'a7477969f3764bd6cd2bf01efa7a7365', //configsty.FORECAST_API_KEY
 //   timeout: 1000
 // },
 // forecast = new Forecast(options);

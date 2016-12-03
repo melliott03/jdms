@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var configsty = require('config-node');
+
 var twilio = require('twilio');
 var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
 
@@ -20,8 +22,8 @@ var stripeCharge = require('../modules/stripeCharge');
 
 router.post('/new', function(req, res) {
   console.log('inside video/new');
-  var accountSid = process.env.TWILIO_ACCOUNT_SID;
-  var authToken = process.env.TWILIO_AUTH_TOKEN;
+  var accountSid = configsty.TWILIO_ACCOUNT_SID;
+  var authToken = configsty.TWILIO_AUTH_TOKEN;
   var workspaceSid = 'WS74baf6dd30ead8306f310450b290cbb2';
   var workflowSid = "WW4641b95360367b10cec28753644d043c";
   var videoChannelSid = 'TC2eae701e12864f7382abbe99d53ecacf';
@@ -92,8 +94,8 @@ router.use('/VideoAssignmentCallbackUrl', twilio.webhook({validate: false}), (re
   // console.log("req.query in app.post AssignmentCallbackUrl::", req.query);
   // console.log("req.body in app.post AssignmentCallbackUrl::", req.body);
   // var callbody = req.body;
-  // var accountSid = process.env.TWILIO_ACCOUNT_SID;
-  // var authToken = process.env.TWILIO_AUTH_TOKEN;
+  // var accountSid = configsty.TWILIO_ACCOUNT_SID;
+  // var authToken = configsty.TWILIO_AUTH_TOKEN;
   // var workspaceSid = callbody.WorkspaceSid;
   // var taskSid = callbody.TaskSid;
   // var reservationSid = callbody.ReservationSid;
@@ -109,8 +111,8 @@ router.use('/VideoAssignmentCallbackUrl', twilio.webhook({validate: false}), (re
   // var assignmentInstruction = {
   //   instruction: 'call',
   //   // post_work_activity_sid: 'WA442ed2a8dcf0fa1b169207b8cd80dbab',
-  //   url: process.env.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid,
-  //   status_callback_url: process.env.APP_URL+'/telephonic/callSummary?callSid='+call_sid+'&workerSid='+callbody.WorkerSid+'&TaskSid='+callbody.TaskSid,
+  //   url: configsty.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid,
+  //   status_callback_url: configsty.APP_URL+'/telephonic/callSummary?callSid='+call_sid+'&workerSid='+callbody.WorkerSid+'&TaskSid='+callbody.TaskSid,
   //   from: '+16122172551' // a verified phone number from your twilio account
   // };
   // res.header('Content-Type', 'application/json');
@@ -365,8 +367,8 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       // return theTeleWorkWithcall_sid;
       //reset worker to idle
       var callbody = req.body;
-      var accountSid = process.env.TWILIO_ACCOUNT_SID;
-      var authToken = process.env.TWILIO_AUTH_TOKEN;
+      var accountSid = configsty.TWILIO_ACCOUNT_SID;
+      var authToken = configsty.TWILIO_AUTH_TOKEN;
       var workspaceSid = callbody.WorkspaceSid;
       var taskSid = callbody.TaskSid;
       var reservationSid = callbody.ReservationSid;
@@ -401,13 +403,13 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       theTeleWorkWithShortID.inboundSummary = callSummaryBody;
       //update the running call with a new callback url with shortid addedWork
       var callbody = req.body;
-      var accountSid = process.env.TWILIO_ACCOUNT_SID;
-      var authToken = process.env.TWILIO_AUTH_TOKEN;
+      var accountSid = configsty.TWILIO_ACCOUNT_SID;
+      var authToken = configsty.TWILIO_AUTH_TOKEN;
 
       console.log('callbody.CallSid::', callbody.CallSid);
       var client = new twilio(accountSid, authToken);
       client.calls(callbody.CallSid).update({
-          StatusCallback: process.env.APP_URL+'/telephonic/callSummary?callShortID='+callShortID
+          StatusCallback: configsty.APP_URL+'/telephonic/callSummary?callShortID='+callShortID
       }, function(err, call) {
         if (err) {
           console.log('err in client.calls.update::',err);
@@ -524,8 +526,8 @@ router.post('/getSpanishInterpreter', function(request, response) {
 router.use('/CallCenterCallback', (req, res) => {
   console.log("req.body::", req.body);
   var callbody = req.body;
-  var accountSid = process.env.TWILIO_ACCOUNT_SID;
-  var authToken = process.env.TWILIO_AUTH_TOKEN;
+  var accountSid = configsty.TWILIO_ACCOUNT_SID;
+  var authToken = configsty.TWILIO_AUTH_TOKEN;
   var workspaceSid = callbody.WorkspaceSid;
   var taskSid = callbody.TaskSid;
   var reservationSid = callbody.ReservationSid;
