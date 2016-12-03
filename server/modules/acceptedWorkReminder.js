@@ -1,3 +1,4 @@
+// var configsty = require('config-node');
 // var db = require('../modules/db');//#AGENDA
 // var Agenda = require('agenda');//#AGENDA
 // var mongoose = require("mongoose");
@@ -7,8 +8,8 @@
 //
 //
 // var mongoURI =
-//   process.env.MONGOLAB_URI ||
-//   process.env.MONGOHQ_URL ||
+//   configsty.MONGOLAB_URI ||
+//   configsty.MONGOHQ_URL ||
 //   'mongodb://localhost/work';
 // var Work = mongoose.model("Works");
 //

@@ -366,7 +366,9 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       console.log('error:', err);
     });
 
-  } else if (callSummaryBody.CallStatus == 'completed'){
+  } else if (callSummaryBody.CallStatus == 'canceled'){
+    //save into the db as canceled
+  }else if (callSummaryBody.CallStatus == 'completed'){
     console.log('im inside else if (callSummaryBody.CallStatus == completed::');
     console.log('im inside else if (callSummaryBody.CallStatus == completed callSummaryBody::', callSummaryBody);
     var call_sid = req.query.callSid;

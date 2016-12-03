@@ -64,10 +64,11 @@
                 <!-- <input type="text" ng-intl-tel-input name="phone" id="phone" class="md-block" placeholder="-XXXX" flex-gt-sm required/> -->
                 <!-- <input type="text" ng-model="model.tel" ng-intl-tel-input> -->
                 <div class="wrapper" ng-controller="PhoneInputCtlr">
-                    <div class="info">Raw Value: {{phoneVal}}</div>
-                    <div class="info">Filtered Value: {{phoneVal | tel}}</div>
+                    <!-- <div class="info">Raw Value: {{phoneVal}}</div>
+                    <div class="info">Filtered Value: {{phoneVal | tel}}</div> -->
+                    <input class="input-phone" type='text' name="phoneRaw" phone-input ng-model="phoneVal"/>
+                    <!-- <input class="input-phone" type='text' name="phone" phone-input ng-model="phoneVal"/ hidden> -->
 
-                    <input class="input-phone" type='text' name="phone" phone-input ng-model="phoneVal"/>
                 </div>
                   </md-input-container>
                   <md-input-container>

@@ -28,6 +28,8 @@ var authToken = configsty.TWILIO_AUTH_TOKEN;
 var workspaceSid = configsty.TWILIO_WORKSPACE_SID;
 var payable = require('../modules/payable');
 var waveapps = require('../modules/waveapps');
+var PhoneNumber = require( 'awesome-phonenumber' );
+
 
 var createStripeCustomer = function(user, req){
   stripe.customers.create({
@@ -110,13 +112,21 @@ var createStripeAccount = function(user, req){
 var createTwilioWorker = function(user, telephonicUser){
   console.log('in createTwilioWorker user::', user);
   console.log('in createTwilioWorker user::', telephonicUser);
+  var pn = new PhoneNumber( user.phone, 'US' );
+  console.log('var pn = new PhoneNumber( user.phone, US )::', pn);
+
+   twilioPhone = pn.getNumber( 'international' );
+   console.log('pn.getNumber( international );::', pn);
+
 
 
   var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
   // Create a worker using promises
   var promise = client.workspace.workers.create({
     friendlyName: user.firstname+'  '+user.lastname+' '+telephonicUser,
-    attributes: '{"languages":["Spanish"]}'
+    //attributes: '{"languages":' + user.languages + '}' //{"mediums":["Voice", "OnSite", "Video"],"languages":["Spanish"], "contact_uri": "+16128121238"}
+    attributes: '{"mediums":["Voice", "OnSite", "Video"],"languages":'+user.languages+', "contact_uri": ' + twilioPhone +'}'
+
   });
   promise.then(function(worker) {
     console.log('Worker created! is: ', worker);
