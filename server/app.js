@@ -33,8 +33,14 @@ var User = require('./models/user');
 var Work = require('./models/work');
 // var sugar = require('sugar');
 var config = require('./config/main'); // Tokens http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
+var configsty = require('config-node')({
+    dir: 'configsty', // where to look for files
+    ext: null, // spoil the fun, tell me which one it is ('' for directory). Improves performance.
+    env: process.env.NODE_ENV || 'development' // set which one instead of smart defaults
+});
+console.log('configsty.APP_URL::', configsty.APP_URL);
 var account = require('./routes/stripeCreateAccount');
-var stripe = require("stripe")(process.env.STRIPE_TEST);
+var stripe = require("stripe")(configsty.STRIPE_TEST);
 
 app.use(function(req, res, next){ //https://onedesigncompany.com/news/express-generator-and-socket-io
   res.io = io;
@@ -113,8 +119,8 @@ var Agenda = require('agenda');//#AGENDA
 
 var plaid = require('plaid');
 
-var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
-  process.env.PLAID_SECRET,
+var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
+  configsty.PLAID_SECRET,
   plaid.environments.tartan);
 
 
@@ -216,7 +222,7 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
   });
 
   // socketioJwt.authorize({
-  //    secret: config.secret, //Buffer(JSON.stringify(process.env.AUTH0_CLIENT_SECRET), 'base64'),
+  //    secret: config.secret, //Buffer(JSON.stringify(configsty.AUTH0_CLIENT_SECRET), 'base64'),
   //    timeout: 15000 // 15 seconds to send the authentication message
   //  })
   io.on('connection', function(socket){
@@ -234,7 +240,7 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
     //   console.log("A User has sent an authToken to server after connetion, token::!", token);
     //
     //   // socketioJwt.authorize({
-    //   //     secret: config.secret, //Buffer(JSON.stringify(process.env.AUTH0_CLIENT_SECRET), 'base64'),
+    //   //     secret: config.secret, //Buffer(JSON.stringify(configsty.AUTH0_CLIENT_SECRET), 'base64'),
     //   //     timeout: 15000 // 15 seconds to send the authentication message
     //   //   });
     //   io.emit('authenticated', {"authenticated": "from server: authenticated complete "});
@@ -251,7 +257,7 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
 
   // io
   // 	.on('connection', socketioJwt.authorize({
-  // 		secret: Buffer(JSON.stringify(process.env.AUTH0_CLIENT_SECRET), 'base64'),
+  // 		secret: Buffer(JSON.stringify(configsty.AUTH0_CLIENT_SECRET), 'base64'),
   // 		timeout: 15000 // 15 seconds to send the authentication message
   // 	}))
   // 	.on('authenticated', function(socket){
@@ -514,8 +520,8 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
 
     // //MONGO SETUP for Heroku mLab
     // var mongoURI =
-    //   process.env.MONGOLAB_URI ||
-    //   process.env.MONGOHQ_URL ||
+    //   configsty.MONGOLAB_URI ||
+    //   configsty.MONGOHQ_URL ||
     //   'mongodb://localhost/work';
     //
     // var MongoDB = mongoose.connect(mongoURI).connection;
@@ -814,9 +820,9 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
     // Create an access token which we will sign and return to the client,
     // containing the grant we just created
     var token = new AccessToken(
-      process.env.TWILIO_ACCOUNT_SID,
-      process.env.TWILIO_API_KEY,
-      process.env.TWILIO_API_SECRET
+      configsty.TWILIO_ACCOUNT_SID,
+      configsty.TWILIO_API_KEY,
+      configsty.TWILIO_API_SECRET
     );
 
     // Assign the generated identity to the token
@@ -824,7 +830,7 @@ var plaidClient = new plaid.Client(process.env.PLAID_CLIENT_ID,
 
     //grant the access token Twilio Video capabilities
     var grant = new ConversationsGrant();
-    grant.configurationProfileSid = process.env.TWILIO_CONFIGURATION_SID;
+    grant.configurationProfileSid = configsty.TWILIO_CONFIGURATION_SID;
     token.addGrant(grant);
 
     // Serialize the token to a JWT string and include it in a JSON response
