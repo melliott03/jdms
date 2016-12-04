@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var configsty = require('config-node');
+var PhoneNumber = require( 'awesome-phonenumber' );
 
 var passport = require("passport");
 var path = require("path");
@@ -28,8 +29,7 @@ var authToken = configsty.TWILIO_AUTH_TOKEN;
 var workspaceSid = configsty.TWILIO_WORKSPACE_SID;
 var payable = require('../modules/payable');
 var waveapps = require('../modules/waveapps');
-var PhoneNumber = require( 'awesome-phonenumber' );
-
+console.log('configsty.TWILIO_ACCOUNT_SID in register.js::', configsty.TWILIO_ACCOUNT_SID);
 
 var createStripeCustomer = function(user, req){
   stripe.customers.create({
@@ -112,21 +112,27 @@ var createStripeAccount = function(user, req){
 var createTwilioWorker = function(user, telephonicUser){
   console.log('in createTwilioWorker user::', user);
   console.log('in createTwilioWorker user::', telephonicUser);
+
   var pn = new PhoneNumber( user.phone, 'US' );
-  console.log('var pn = new PhoneNumber( user.phone, US )::', pn);
+  console.log("new PhoneNumber( user.phone, 'US' )::", pn);
+  twilPnNumber = pn.getNumber( 'e164' );
+  console.log('twilPnNumber::', twilPnNumber);
 
-   twilioPhone = pn.getNumber( 'international' );
-   console.log('pn.getNumber( international );::', pn);
 
-
+  console.log('user.languages inside createTwilioWorker::', user.languages);
+  // var user_attributes = {"languages": user.languages };
+  var user_attributes = {"mediums":["Voice", "OnSite", "Video"],"languages":user.languages, "contact_uri": twilPnNumber};
+  console.log('user_attributes::', user_attributes);
+      user_attributes = JSON.stringify(user_attributes);
+  console.log('JSON.stringify(user_attributes)::', user_attributes);
 
   var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
   // Create a worker using promises
   var promise = client.workspace.workers.create({
     friendlyName: user.firstname+'  '+user.lastname+' '+telephonicUser,
-    //attributes: '{"languages":' + user.languages + '}' //{"mediums":["Voice", "OnSite", "Video"],"languages":["Spanish"], "contact_uri": "+16128121238"}
-    attributes: '{"mediums":["Voice", "OnSite", "Video"],"languages":'+user.languages+', "contact_uri": ' + twilioPhone +'}'
-
+    // attributes: '{"languages":["Spanish"]}'
+    attributes: user_attributes
+    // {"mediums":["Voice", "OnSite", "Video"],"languages":["Spanish"], "contact_uri": "+16128121238"}
   });
   promise.then(function(worker) {
     console.log('Worker created! is: ', worker);
@@ -383,6 +389,7 @@ if (req.body.action === 'signup') {
     //     var reqbody =req.body;
     var languages = [];
     if (req.body.role == 'contractor') {
+      console.log('req.body before push::', req.body);
       console.log('req.body.languages before push::', req.body.languages);
       languages.push(req.body.languages);
       console.log('languages after push::', languages);
