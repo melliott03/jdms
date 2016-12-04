@@ -292,7 +292,7 @@ var prePaid = function(data){
 
   })
   .then(function(data){
-    console.log('just before data.balance - data.upcomingInvoice data::',data);
+    console.log('just before data.balance - data.upcomingInvoice data 2::',data);
     if (data.charge) {
       return stripe.customers.update(data.customer_id, {
         account_balance: data.stripeCustomer.account_balance - data.charge.amount
