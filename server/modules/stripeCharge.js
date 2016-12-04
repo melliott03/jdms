@@ -244,45 +244,48 @@ var prePaid = function(data){
 
   .then(function(data){
     console.log('just before data.balance - data.upcomingInvoice data::',data);
-    var rechargeTo = parseInt(data.aUserWithCustomer_ID.autoRecharge.rechargeTo);
-        rechargeTo = rechargeTo * -100;
-        console.log('rechargeTo -40000 after parseInt::', rechargeTo);
-    var account_balance = data.stripeCustomer.account_balance;
-    console.log('account_balance 1 ::', account_balance);
 
+    if (data.aUserWithCustomer_ID.autoRecharge && data.aUserWithCustomer_ID.autoRecharge.rechargeTo) {
+          var rechargeTo = parseInt(data.aUserWithCustomer_ID.autoRecharge.rechargeTo);
+              rechargeTo = rechargeTo * -100;
+              console.log('rechargeTo -40000 after parseInt::', rechargeTo);
+          var account_balance = data.stripeCustomer.account_balance;
+          console.log('account_balance 1 ::', account_balance);
 
+          console.log('data.stripeCustomer.account_balance:: ', data.stripeCustomer.account_balance);
+          console.log('data.upcomingInvoice.total:: ', data.upcomingInvoice.total);
+          var abalanceMinusAmountDue = data.stripeCustomer.account_balance + data.upcomingInvoice.total;
+          console.log('data.stripeCustomer.account_balance + data.upcomingInvoice.total:: ', abalanceMinusAmountDue);
+          var fallsbelow = parseInt(data.aUserWithCustomer_ID.autoRecharge.fallsBelow);
+              fallsbelow =  fallsbelow * -100;
+              console.log('fallsbelow -39000::', fallsbelow);
+          if ( abalanceMinusAmountDue > fallsbelow) { //1000 equals $10.00
+          //         negative number (credit)         positive number (debit) -9000 > 10000
+              console.log('abalanceMinusAmountDue -38275::', abalanceMinusAmountDue); // abalanceMinusAmountDue = -38275
+              console.log('fallsbelow -39000::', fallsbelow);
 
-    console.log('data.stripeCustomer.account_balance:: ', data.stripeCustomer.account_balance);
-    console.log('data.upcomingInvoice.total:: ', data.upcomingInvoice.total);
-    var abalanceMinusAmountDue = data.stripeCustomer.account_balance + data.upcomingInvoice.total;
-    console.log('data.stripeCustomer.account_balance + data.upcomingInvoice.total:: ', abalanceMinusAmountDue);
-    var fallsbelow = parseInt(data.aUserWithCustomer_ID.autoRecharge.fallsBelow);
-        fallsbelow =  fallsbelow * -100;
-        console.log('fallsbelow -39000::', fallsbelow);
-    if ( abalanceMinusAmountDue > fallsbelow) { //1000 equals $10.00
-    //         negative number (credit)         positive number (debit) -9000 > 10000
-        console.log('abalanceMinusAmountDue -38275::', abalanceMinusAmountDue); // abalanceMinusAmountDue = -38275
-        console.log('fallsbelow -39000::', fallsbelow);
+              var reupChargeAmount = rechargeTo - abalanceMinusAmountDue;
+              console.log('after fallsbelow - abalanceMinusAmountDue reupChargeAmount::', reupChargeAmount);
+              reupChargeAmount = Math.abs(reupChargeAmount);
+              console.log('after Math.abs(reupChargeAmount)::', reupChargeAmount);
 
-        var reupChargeAmount = rechargeTo - abalanceMinusAmountDue;
-        console.log('after fallsbelow - abalanceMinusAmountDue reupChargeAmount::', reupChargeAmount);
-        reupChargeAmount = Math.abs(reupChargeAmount);
-        console.log('after Math.abs(reupChargeAmount)::', reupChargeAmount);
-
-        console.log('inside if data.stripeCustomer.account_balance - data.upcomingInvoice.total < '+fallsbelow+' ::');
-        var chargeObj = {
-            amount: reupChargeAmount, // amount in cents, again
-            currency: "usd",
-            description: "Account recharge balance fell below $10 : "+reupChargeAmount,
-            customer: data.customer_id, // Previously stored, then retrieved customer
-            metadata: {'telephonic_id ': ''+data.telwork._id}
-        };
-        console.log('chargeObj before stripe.charges.create::', chargeObj);
-      return stripe.charges.create(chargeObj).then(function(charge){
-        console.log('recharge stripeCustomer balance with :: ', charge);
-        data.charge = charge;
-        return data;
-      })
+              console.log('inside if data.stripeCustomer.account_balance - data.upcomingInvoice.total < '+fallsbelow+' ::');
+              var chargeObj = {
+                  amount: reupChargeAmount, // amount in cents, again
+                  currency: "usd",
+                  description: "Account recharge balance fell below $10 : "+reupChargeAmount,
+                  customer: data.customer_id, // Previously stored, then retrieved customer
+                  metadata: {'telephonic_id ': ''+data.telwork._id}
+              };
+              console.log('chargeObj before stripe.charges.create::', chargeObj);
+            return stripe.charges.create(chargeObj).then(function(charge){
+              console.log('recharge stripeCustomer balance with :: ', charge);
+              data.charge = charge;
+              return data;
+            })
+          } else {
+            return data;
+          }
     } else {
       return data;
     }
