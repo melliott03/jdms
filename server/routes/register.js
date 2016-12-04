@@ -121,7 +121,10 @@ var createTwilioWorker = function(user, telephonicUser){
 
   console.log('user.languages inside createTwilioWorker::', user.languages);
   // var user_attributes = {"languages": user.languages };
-  var user_attributes = {"mediums":["Voice", "OnSite", "Video"],"languages":user.languages, "contact_uri": twilPnNumber};
+  var user_attributes = {"mediums":["Voice","OnSite","Video"],"languages":user.languages,"contact_uri":twilPnNumber};
+                        // {"languages":["Spanish"],"contact_uri":"+16128121238","mediums":["Voice","OnSite","Video"]}
+                        // {"mediums":["Voice","OnSite","Video"],"languages":["Spanish"],"contact_uri":"+16128121238"}
+
   console.log('user_attributes::', user_attributes);
       user_attributes = JSON.stringify(user_attributes);
   console.log('JSON.stringify(user_attributes)::', user_attributes);
