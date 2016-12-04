@@ -196,7 +196,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           window.location.href = "/";
         }
 
-        $scope.user = {email: 'ki.workappdemo@gmail.com', password: '123'};
+        $scope.user = {email: '', password: ''};
         $scope.message = '';
         $scope.submit = function () {
           $http
