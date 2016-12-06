@@ -287,6 +287,12 @@ thead {
     flex-direction: column;
     align-items: stretch;
 }
+th {
+    background: #00cccc;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
 
 tbody {
     overflow-y: scroll;
