@@ -6,7 +6,7 @@
     <tr>
         <th class="thfirst"><md-button class="" st-export>Export</md-button></th>
         <th class="thfirst" st-sort="inboundSummary.From2">From</th>
-        <th class="thfirst" st-sort="inboundSummary.createdAt">DateTime</th>
+        <th class="thfirst" st-sort="inboundSummary.creationDateObj.humanDate">DateTime</th>
         <th class="thfirst" st-sort="outboundSummary.CallDuration">Duration</th>
         <th class="thfirst" st-sort="customer_rate">Cost</th>
 
@@ -17,7 +17,7 @@
             <input placeholder="search Phone" st-search="inboundSummary.From2" />
         </th>
         <th class="thsecond">
-            <st-date-range predicate="inboundSummary.createdAt" before="query.before" after="query.after"></st-date-range>
+            <st-date-range predicate="inboundSummary.creationDateObj.humanDate" before="query.before" after="query.after"></st-date-range>
         </th>
         <th class="thsecond">
         <!-- <input placeholder="search address" st-search="address" /> -->

@@ -401,14 +401,15 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       // var roundedDurationInMins =
       console.log('Duration:: '+minutes+' min '+secsremain+'sec');
       callSummaryBody.durationObj = {minutes: minutes, seconds: secsremain, roundedDurationUpInMins: roundedDurationUpInMins}
-      var humanDate = moment().format('ll');   // Dec 6, 2016
-      var humanTime = moment().format('LT');   // 8:19 PM
-      callSummaryBody.creationDateObj = {humanDate:humanDate, humanTime:humanTime}
-
       theTeleWorkWithcall_sid.outboundSummary = callSummaryBody;
       // theTeleWorkWithcall_sid.outboundSummary.createdAt = Date.now(); //moment().unix().toDate()
       // theTeleWorkWithcall_sid.outboundSummary.createdAt = new Date(Date.now()).toISOString(); //moment().unix().toDate()
       theTeleWorkWithcall_sid.outboundSummary.createdAt = new Date(); //moment().unix().toDate()
+      // var humanDate = moment(theTeleWorkWithcall_sid.outboundSummary.createdAt).format("MMM DD, YYYY");
+      // var humanTime = moment(theTeleWorkWithcall_sid.outboundSummary.createdAt).format("h:mm a");
+      var humanDate = moment(callSummaryBody.Timestamp).format("MMM DD, YYYY");
+      var humanTime = moment(callSummaryBody.Timestamp).format("h:mm a");
+      callSummaryBody.creationDateObj = {humanDate:humanDate, humanTime:humanTime}
 
       theTeleWorkWithcall_sid.workerSid = workerSid;
       // theTeleWorkWithcall_sid.taskSid = req.query.TaskSid;
