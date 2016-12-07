@@ -39,7 +39,8 @@
         <!-- <td inline-edit="work.inboundSummary.From" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)">{{work.inboundSummary.From.replace('+', '')}}</td> -->
         <td ><strong>{{work.inboundSummary.From2}}</strong></td>
         <td > <strong>{{work.outboundSummary.creationDateObj.humanDate}}</strong></td>
-        <td > <strong>{{work.outboundSummary.durationObj.minutes}} min {{work.outboundSummary.durationObj.seconds}} sec {{work.outboundSummary.CallDuration}}</strong></td>
+        <td > <strong>{{work.outboundSummary.CallDuration}}</strong></td>
+        <!-- {{work.outboundSummary.durationObj.minutes}} min {{work.outboundSummary.durationObj.seconds}} sec  -->
         <!-- <td >{{work.money.cost.costDollars | currency}}.{{work.money.cost.costPennies}}</td> -->
         <td >{{work.money.customerCost/100 | currency}}</td>
 
