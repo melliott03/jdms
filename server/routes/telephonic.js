@@ -401,8 +401,8 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       // var roundedDurationInMins =
       console.log('Duration:: '+minutes+' min '+secsremain+'sec');
       callSummaryBody.durationObj = {minutes: minutes, seconds: secsremain, roundedDurationUpInMins: roundedDurationUpInMins}
-      var humanDate = moment().format("MMM DD, YYYY");
-      var humanTime = moment().format("h:mm:ss a");
+      var humanDate = moment().format('ll');   // Dec 6, 2016
+      var humanTime = moment().format('LT');   // 8:19 PM
       callSummaryBody.creationDateObj = {humanDate:humanDate, humanTime:humanTime}
 
       theTeleWorkWithcall_sid.outboundSummary = callSummaryBody;
