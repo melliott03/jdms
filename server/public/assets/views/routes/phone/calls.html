@@ -38,7 +38,7 @@
         <!-- <td cs-select="row"></td> -->
         <!-- <td inline-edit="work.inboundSummary.From" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)">{{work.inboundSummary.From.replace('+', '')}}</td> -->
         <td >{{work.inboundSummary.From2}}</td>
-        <td inline-edit="work.outboundSummary.Timestamp | date " inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+        <td inline-edit="outboundSummary.creationDateObj.humanDate" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
         <td > <strong>{{work.outboundSummary.durationObj.minutes}} min {{work.outboundSummary.durationObj.seconds}} sec</strong></td>
         <!-- <td >{{work.money.cost.costDollars | currency}}.{{work.money.cost.costPennies}}</td> -->
         <td >{{work.money.customerCost/100 | currency}}</td>
