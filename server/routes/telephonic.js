@@ -409,6 +409,9 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       // var humanTime = moment(theTeleWorkWithcall_sid.outboundSummary.createdAt).format("h:mm a");
       var humanDate = moment(callSummaryBody.Timestamp).format("MMM DD, YYYY");
       var humanTime = moment(callSummaryBody.Timestamp).format("h:mm a");
+      console.log('humanDate'::, humanDate);
+      console.log('humanTime'::, humanTime);
+
       callSummaryBody.creationDateObj = {humanDate:humanDate, humanTime:humanTime}
 
       theTeleWorkWithcall_sid.workerSid = workerSid;
