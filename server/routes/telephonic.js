@@ -398,7 +398,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       }else {
         roundedDurationUpInMins = minutes;
       }
-      var roundedDurationInMins =
+      // var roundedDurationInMins =
       console.log('Duration:: '+minutes+' min '+secsremain+'sec');
       callSummaryBody.durationObj = {minutes: minutes, seconds: secsremain, roundedDurationUpInMins: roundedDurationUpInMins}
       var humanDate = moment().format("MMM DD, YYYY");
