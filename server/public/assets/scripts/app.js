@@ -464,6 +464,9 @@ myApp.controller('XAccountCtrl', function($scope, $timeout) {
 myApp.controller('XAccountCtrl2', ["$scope", "$location", '$anchorScroll','$filter', '$http', '$timeout', '$document', '$mdDialog', "WorkService", 'stripe', 'Upload', function($scope, $location, $anchorScroll, $filter, $http, $timeout, $document, $mdDialog, WorkService, stripe, Upload) {
   var workService = WorkService;
 
+  $scope.localPhoneNumber = '(612) 284-4292';
+  $scope.tollfreePhoneNumber = '1-844-669-5264';
+
   $scope.accountsToVarify = workService.customerPaymentSourceObject.verify;
   // $scope.work.microDepositsExpanded = workService.customerPaymentSourceObject.showMicrodepositDiv;
   $scope.varifiedPaymentSource = workService.customerPaymentSourceObject.varifiedSource;

@@ -2,11 +2,12 @@
 <div ng-controller="XAccountCtrl2" ng-cloak>
   <div class="leftmargin">
     <p>
-      <strong>Tele-Interpret</strong> | UserID: {{logedinUser.response.telephonicID}}    PassCode: {{logedinUser.response.telephonicPassCode}}
+      <strong>For telephonic interpreters call</strong> | Local: {{localPhoneNumber}}  -or-  Tollfree: {{tollfreePhoneNumber}}
     </p>
     <p>
-      <strong>Balance: </strong>{{customerBalance.response.availabel_balance | currency : $}}
+      <strong></strong>UserID: {{logedinUser.response.telephonicID}}    PassCode: {{logedinUser.response.telephonicPassCode}}
     </p>
+
 
   </div>
 

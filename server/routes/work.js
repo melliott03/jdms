@@ -68,12 +68,20 @@ if (requser.role == 'customer') {
 }
 promised.then(function(work_Tels) {
   console.log('Work_Tels documents found for '+requser.role+' are ::', work_Tels);
+  var newWork_tels = [];
+  work_Tels.map(function(obj){
+    if (obj.inboundSummary && obj.outboundSummary && obj.money && obj.money.customerCost) {
+      console.log('inside if (obj.inboundSummary && obj.outboundSummary && obj.money && obj.money.customerCost)::');
+      newWork_tels.push(obj);
+    }
+  });
 
-  return work_Tels;
+  return newWork_tels;
 })
-.then(function(work_Tels) {
-  // console.log('inside the then work_Tels::', work_Tels);
-  res.send(work_Tels);
+.then(function(work_tels) {
+  // console.log('inside the then work_tels::', work_tels);
+
+  res.send(work_tels);
 })
 .catch(function(err){
   // just need one of these

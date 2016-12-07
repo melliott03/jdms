@@ -4,26 +4,26 @@
   <table st-set-filter="customFilter" st-safe-src="works_tel.response" st-table="displayWorkTelCollection" class="table-striped" wt-responsive-table>
     <thead>
     <tr>
-        <th><a class="btn btn-default" st-export>Export</a></th>
-        <th  st-sort="inboundSummary.From">From</th>
-        <th  st-sort="inboundSummary.Timestamp">DateTime</th>
-        <th  st-sort="outboundSummary.CallDuration">Duration (seconds)</th>
-        <th  st-sort="customer_rate">Cost</th>
+        <th class="thfirst"><md-button class="" st-export>Export</md-button></th>
+        <th class="thfirst" st-sort="inboundSummary.From2">From</th>
+        <th class="thfirst" st-sort="inboundSummary.Timestamp">DateTime</th>
+        <th class="thfirst" st-sort="outboundSummary.CallDuration">Duration</th>
+        <th class="thfirst" st-sort="customer_rate">Cost</th>
 
     </tr>
     <tr>
-        <th></th>
-        <th>
-            <input placeholder="search From" st-search="From" />
+        <th class="thsecond"></th>
+        <th class="thsecond">
+            <input placeholder="search Phone" st-search="inboundSummary.From2" />
         </th>
-        <th>
+        <th class="thsecond">
             <st-date-range predicate="datetime" before="query.before" after="query.after"></st-date-range>
         </th>
-        <th>
-        <input placeholder="search address" st-search="address" />
+        <th class="thsecond">
+        <!-- <input placeholder="search address" st-search="address" /> -->
         </th>
-        <th>
-            <st-number-range predicate="customer_rate" lower="query.lower" higher="query.higher"></st-number-range>
+        <th class="thsecond">
+            <!-- <st-number-range predicate="customer_rate" lower="query.lower" higher="query.higher"></st-number-range> -->
         </th>
 
 
@@ -36,11 +36,13 @@
               <md-button ng-if="!work.expanded" ng-click="work.expanded = true"><md-icon class="mdicon-more svg" md-svg-src="../img/icons/ic_expand_more_black_24px.svg"></md-icon></md-button>
         </td>
         <!-- <td cs-select="row"></td> -->
-
-        <td inline-edit="work.inboundSummary.From" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
+        <!-- <td inline-edit="work.inboundSummary.From" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)">{{work.inboundSummary.From.replace('+', '')}}</td> -->
+        <td >{{work.inboundSummary.From2}}</td>
         <td inline-edit="work.outboundSummary.Timestamp | date " inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)"></td>
         <td > <strong>{{work.outboundSummary.durationObj.minutes}} min {{work.outboundSummary.durationObj.seconds}} sec</strong></td>
-        <td >${{work.money.cost.costDollars}}.{{work.money.cost.costPennies}}</td>
+        <!-- <td >{{work.money.cost.costDollars | currency}}.{{work.money.cost.costPennies}}</td> -->
+        <td >{{work.money.customerCost/100 | currency}}</td>
+
 
 
 

@@ -353,6 +353,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
     promised.then(function(theTeleWorkWithShortID) {
       console.log('theTeleWorkWithShortID ::', theTeleWorkWithShortID);
       theTeleWorkWithShortID.inboundSummary = callSummaryBody;
+      theTeleWorkWithShortID.inboundSummary.From2 = callSummaryBody.From.replace('+', '');
       theTeleWorkWithShortID.inboundCallSidSecond = callSummaryBody.CallSid;
       // theTeleWorkWithShortID.taskSid = req.query.TaskSid;
       theTeleWorkWithShortID.save();

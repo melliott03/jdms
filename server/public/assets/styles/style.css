@@ -287,8 +287,14 @@ thead {
     flex-direction: column;
     align-items: stretch;
 }
-th {
-    background: #00cccc;
+th.thfirst{
+    background: rgb(192,192,192);
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+th.thsecond{
+    background: 	rgb(208,208,208) ;
     color: #fff;
     text-transform: uppercase;
     font-size: 12px;
@@ -298,6 +304,35 @@ tbody {
     overflow-y: scroll;
     display: inline-block;
 }
+
+/*https://github.com/lorenzofox3/Smart-Table/issues/259*/
+th[st-sort] {
+  cursor: pointer;
+}
+th[st-sort]:not(.text-right):after,
+th[st-sort].text-right:before {
+    content: '\25B2'; /*content: '\25B2';*/
+  transition: all ease .2s;
+}
+th[st-sort].st-sort-descent:not(.text-right):after,
+th[st-sort].st-sort-descent.text-right:before {
+  transform: rotateZ(-135deg);
+  -ms-transform: rotateZ(0deg); }
+th[st-sort]:hover:not(.st-sort-descent):not(.st-sort-ascent):not(.text-right):after,
+th[st-sort]:hover:not(.st-sort-descent):not(.st-sort-ascent).text-right:before {
+  opacity: .75;
+}
+th[st-sort]:hover:not(.text-right):after,
+th[st-sort]:hover.text-right:before,
+th[st-sort].st-sort-ascent:not(.text-right):after,
+th[st-sort].st-sort-ascent.text-right:before {
+    content: '\25B2';
+}
+th[st-sort].st-sort-descent:not(.text-right):after,
+th[st-sort].st-sort-descent.text-right:before {
+    content: '\25BC';
+}
+
 
 thead > tr, tbody > tr, tfoot > tr {
     display: -webkit-box;
