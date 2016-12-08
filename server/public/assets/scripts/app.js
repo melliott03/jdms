@@ -1342,3 +1342,8 @@ $("input[type='checkbox']").click(function() {
   $(this).closest('td').removeClass('color');
 });
 // http://codepen.io/chrisota/pen/rCGIF
+
+
+// BEGIN SMART-TABLE STUFF
+
+// END SMART-TABLE STUFF
