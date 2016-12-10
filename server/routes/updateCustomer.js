@@ -859,7 +859,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   newdata.availabel_balance = money_availabel;
   console.log('newdata::', newdata);
   //FIND
-  if (money_availabel < 0){
+  if (money_availabel > 0){
     var promise = User.findOne({ _id: data.customer_id }, { 'accountSuspension.suspended': false }).exec();
     return promise.then(function(aUserWithID) {
       console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
@@ -874,7 +874,6 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     });
   }else {
     res.send(newdata);
-
   }
 
 
