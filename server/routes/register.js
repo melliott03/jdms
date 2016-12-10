@@ -436,8 +436,9 @@ if (req.body.action === 'signup') {
         geo: geo || '',
         telephonicPassCode: 0,
         telephonicID: 0,
-        payable: {}
-
+        payable: {},
+        autoRecharge: {},
+        accountSuspension: {suspended:true,suspensionDates:[new Date()]}
     });
 
     }
@@ -467,10 +468,11 @@ if (req.body.action === 'signup') {
               if (err) {
                 return res.status(404).send('ERROR: sending verification email FAILED: '+ err);
               }
-              res.json({
-                msg: 'An email has been sent to you. Please check it to verify your account.',
-                info: info
-              });
+              res.redirect("/assets/views/users.html#/userRegisterSuccess");
+              // res.json({
+              //   msg: 'An email has been sent to you. Please check it to verify your account.',
+              //   info: info
+              // });
             });
 
           // user already exists in temporary collection!

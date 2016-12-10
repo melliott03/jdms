@@ -16,7 +16,9 @@ myApp.config(['$mdThemingProvider', function($mdThemingProvider){
 
 myApp.config(function($mdDateLocaleProvider) {
   $mdDateLocaleProvider.formatDate = function(date) {
-    return moment(date).format('YYYY-MM-DD');
+    console.log('inside moment(date).format("YYYY/MM/DD")');
+    console.log('inside moment().format("YYYY/MM/DD")', moment(date).format('YYYY/MM/DD'));
+    return moment(date).format('YYYY/MM/DD');
   };
 });
 
@@ -113,6 +115,10 @@ myApp.config(["$routeProvider", function($routeProvider){
     controller: "ShowController"
   }).
   when("/translateCust", {
+    templateUrl: "/assets/views/routes/translate/documentTranslate.html",
+    controller: "ShowController"
+  }).
+  when("/userRegisterSuccess", {
     templateUrl: "/assets/views/routes/translate/documentTranslate.html",
     controller: "ShowController"
   }).
@@ -1024,12 +1030,12 @@ myApp.controller('XAccountCtrl4', ["$scope", "$location", '$anchorScroll','$filt
 
 // START showAutoChargeDialog
 $scope.showChoiceChargeDialog = function(ev, chargeFormType) {
-  console.log("Inside showChoiceChargeDialog function");
+  console.log("Inside showChoiceChargeDialog function chargeFormType::",chargeFormType);
   var templateUrl = '';
-  if (chargeFormType = 'autoRecharge') {
+  if (chargeFormType == 'autoRecharge') {
     templateUrl = 'routes/account/autoRechargeDialog.tmpl.html';
-  }else if(chargeFormType = 'payPerUse'){
-    templateUrl = 'routes/account/autoRechargeDialog.tmpl.html';
+  }else if(chargeFormType == 'payPerUse'){
+    templateUrl = 'routes/account/payAsGochargeDialog.tmpl.html';
   }
   $mdDialog.show({
     controller: AutoRechargeDialogController,

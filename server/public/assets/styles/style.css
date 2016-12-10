@@ -371,6 +371,29 @@ tfoot td {
 }
 /*END table fixed header code*/
 
+/*START Alert*/
+.alert {
+  box-shadow: 0 4px 6px rgba(153,153,153,.3);
+  padding: 5px 5px;
+}
+.alert-danger {
+    background-color: #f2dede;
+    border-color: #ebccd1;
+    color: #c9302c;
+    weight: bold;
+}
+.alert {
+    border: 1px solid transparent;
+    border-radius: 0;
+}
+.alert, .thumbnail {
+    margin-bottom: 10px;
+}
+.alert-linktext {
+    color: rgb(101,67,33);
+    text-decoration: underline;
+}
+/*END Alert*/
 
 /*start plaid modal*/
 

@@ -12,9 +12,9 @@
     <div class="leftmarginmodal" flex>
       <p>Your primary method of payment on file will be charged automatically each time you use the service.</p>
 
-        <p>Selected Value: <span class="radioValue">{{ payPerUseCharge.offOrOn }}</span> </p>
+        <p>Selected Value: <span class="radioValue">{{ payPerUseCharge.payPerUseCharge }}</span> </p>
 
-        <md-radio-group layout="row" ng-model="payPerUseCharge.offOrOn">
+        <md-radio-group layout="row" ng-model="payPerUseCharge.payPerUseCharge">
           <span class="rechargemodal-text">PAY PER USE CHARGE   </span>
           <md-radio-button value="enabled" class="md-primary">enabled</md-radio-button>
           <md-radio-button value="disabled"> disabled </md-radio-button>

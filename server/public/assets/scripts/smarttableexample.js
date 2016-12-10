@@ -9,18 +9,28 @@
             },
             templateUrl: 'routes/stDateRange.html',
             link: function (scope, element, attr, table) {
-                var inputs = element.find('input');
+                        //Check this out later https://stackoverflow.com/questions/33646049/how-to-customise-the-angular-material-date-picker
+                        console.log('top scope.before::',scope.before);
+                        console.log('top scope.after::',scope.after);
+
+                var inputs = element.find('input'); //I changed 'input' to 'md-datepicker'
                 var inputBefore = angular.element(inputs[0]);
                 var inputAfter = angular.element(inputs[1]);
                 var predicateName = attr.predicate;
                 [inputBefore, inputAfter].forEach(function (input) {
+                    // input.bind('blur', function () {  //this is the original line
+                    //check this out https://codepen.io/camden-kid/pen/wWxbok
                     input.bind('blur', function () {
+                      console.log("in input.bind('blur', function () {::",scope.before);
+
                         var query = {};
                         if (!scope.isBeforeOpen && !scope.isAfterOpen) {
                             if (scope.before) {
+                              console.log('scope.before::',scope.before);
                                 query.before = scope.before;
                             }
                             if (scope.after) {
+                              console.log('scope.after::',scope.after);
                                 query.after = scope.after;
                             }
                             scope.$apply(function () {
@@ -79,6 +89,7 @@
         };
     }])
     .filter('customFilter', ['$filter', function ($filter) {
+      console.log("inside .filter('customFilter'");
         var filterFilter = $filter('filter');
         var standardComparator = function standardComparator(obj, text) {
             text = ('' + text).toLowerCase();

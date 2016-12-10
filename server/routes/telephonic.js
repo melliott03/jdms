@@ -254,18 +254,26 @@ router.post('/telephonicPassCode', twilio.webhook({validate: false}), function (
       // do something with
       console.log('aUserWithID::', aUserWithID);
       if (aUserWithID != null && aUserWithID.telephonicPassCode == passCode) {
-        console.log("I'm inside if (aUserWithID) 2::", aUserWithID);
-        console.log('aUserWithID.passCode::', aUserWithID.telephonicPassCode);
-        // var twiml = new twilio.TwimlResponse();
-        //TODO reconsider sending userID...perhaps base64encode it
-        twiml.gather({
-            action: "/telephonic/menu?userID="+aUserWithID._id,
-            numDigits: "1",
-            method: "POST"
-        }, function (node) {
-          twiml.say('Please choose the language of interpretation. Spanish, 1. Hmong, 2. ');
-        });
-        response.send(twiml);
+        console.log('inside if (aUserWithID != null && aUserWithID.telephonicPassCode == passCode)::', aUserWithID);
+
+        if (aUserWithID.accountSuspension.suspended == true) {
+          twiml.say('Your account is currently suspended. Please add funds to get back to making interpretation calls.')
+          response.send(redirectWelcome(twiml));
+        }else {
+          console.log("I'm inside if (aUserWithID) 2::", aUserWithID);
+          console.log('aUserWithID.passCode::', aUserWithID.telephonicPassCode);
+          // var twiml = new twilio.TwimlResponse();
+          //TODO reconsider sending userID...perhaps base64encode it
+          twiml.gather({
+              action: "/telephonic/menu?userID="+aUserWithID._id,
+              numDigits: "1",
+              method: "POST"
+          }, function (node) {
+            twiml.say('Please choose the language of interpretation. Spanish, 1. Hmong, 2. ');
+          });
+          response.send(twiml);
+        }
+
       }else {
         twiml.say('You entered an incorrect username or passcode.')
         response.send(redirectWelcome(twiml));

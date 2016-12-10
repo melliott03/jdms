@@ -393,36 +393,49 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   router.post("/customerChargeMethodChoice", function(req, res, next){
     console.log('customerChargeMethodChoice, req.body::::',req.body);
     console.log('customerChargeMethodChoice, req.user::::',req.user);
+    var reqBody = req.body;
+    var userId = req.user._id;
+    var autoRechargeValue = '';
+    var paymentChoice = '';
 
-    if (req.body.autoRecharge == 'true') {
-      console.log("inside if (req.body.autoRecharge == 'true')");
-      var autoRecharge = req.body;
-      var source = autoRecharge.source;
-      source = JSON.parse(source);
-      console.log('source::', source);
-      autoRecharge.source = source;
+    if (reqBody.autoRecharge) {
+      if (reqBody.autoRecharge == 'enabled' ) {
+         autoRechargeValue = 'enabled';
+         paymentChoice = 'autoRecharge'; //this option has been disabled in the html
+      }
+      if (reqBody.autoRecharge == 'disabled' ) {
+         autoRechargeValue = 'disabled';
+         paymentChoice = 'none'; //this option has been disabled in the html
+      }
 
-      //SAVE RECHARGE INFO TO THE DB
-      User.findOneAndUpdate({ _id: req.user._id }, { autoRecharge: autoRecharge }, function(err, user) {
-          if (err) throw err;
-          console.log('after saving user"s autoRecharge::',user);
-        });
-    }else if(req.body.payAsYouGoCharge == 'true'){
-      console.log("inside elseif (req.body.payAsYouGoCharge == 'true')");
-      var payAsYouGoCharge = req.body;
-      var source = payAsYouGoCharge.source;
-      source = JSON.parse(source);
-      console.log('source::', source);
-      payAsYouGoCharge.source = source;
+    }else if(reqBody.payPerUseCharge){ //this option has been disabled in the html
+      console.log("inside elseif (req.body.payPerUseCharge)");
+      if (reqBody.payPerUseCharge == 'enabled' ) {
+         paymentChoice = 'payPerUseCharge';
+      }
+      if (reqBody.payPerUseCharge == 'disabled' ) {
+         paymentChoice = 'none';
+      }
 
-      //SAVE RECHARGE INFO TO THE DB   { autoRecharge: autoRecharge }
-      User.findOneAndUpdate({ _id: req.user._id }, { paymentMethod: {choice: 'payAsYouGoCharge', payAsYouGoCharge: payAsYouGoCharge, autoRecharge: autoRecharge } }, function(err, user) {
-          if (err) throw err;
-          console.log('after saving user"s autoRecharge::',user);
-        });
     }
+    //SAVE RECHARGE INFO TO THE DB
+    // User.findOneAndUpdate({ _id: userId }, { autoPaymentsChoice: paymentChoice }, function(err, user) {
+    // User.findOneAndUpdate({ _id: userId }, { autoRecharge: autoRechargeValue }, function(err, user) {
+    //     if (err) throw err;
+    //     console.log('after saving user"s autoRecharge::',user);
+    //   });
 
-    res.send({customerAutoRecharegeSet:'yes'})
+    var promise = User.findOne({ _id: userId }, { autoRecharge: autoRechargeValue }).exec();
+    promise.then(function(aUserWithID) {
+      console.log('aUserWithID updated autoRecharge field::', aUserWithID);
+      return aUserWithID;
+    }).then(function(aUserWithID) {
+      res.send({customerAutoRecharegeSet:'yes'})
+    })
+    .catch(function(err){
+      console.log('error:', err);
+    });
+
   });
 
   router.post("/customerDefaultPaymentSource", function(req, res, next){

@@ -1,5 +1,8 @@
 <!-- BEGIN ACCOUNT SETTING  -->
 <div ng-controller="XAccountCtrl2" ng-cloak>
+  <!-- <div class="leftmargin alert alert-danger" ng-if="customerBalance.response.availabel_balance <= 0">
+    Your NowLanguage Account is currently suspended due to a lack of funds. Recharge your account and get back to making calls.
+  </div> -->
   <div class="leftmargin">
     <p>
       <strong>For telephonic interpreters call</strong> | Local: {{localPhoneNumber}}  -or-  Tollfree: {{tollfreePhoneNumber}}
@@ -30,12 +33,12 @@
       </div>
     </div>
     <div flex>
-      <h4>Pay As You Go</h4>
+      <!-- <h4>Pay As You Go</h4>
       <strong>DISABLED</strong>
       <p>Enable to have your account automatically charged after each appointment.</p>
       <div ng-controller="XAccountCtrl4" ng-cloak>
         <md-button ng-click="showChoiceChargeDialog($event, 'payPerUse')">Charge Per Appointment</md-button>
-      </div>
+      </div> -->
     </div>
   </div>
 

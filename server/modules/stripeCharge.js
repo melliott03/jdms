@@ -284,6 +284,19 @@ var prePaid = function(data){
               return data;
             })
           } else {
+            if (abalanceMinusAmountDue <= 0) {
+              //suspend the account
+              var promise = User.findOne({ _id: userId }, { 'accountSuspension.suspended': true }).exec();
+              promise.then(function(aUserWithID) {
+                console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
+                return aUserWithID;
+              }).then(function(aUserWithID) {
+                // res.send({customerAutoRecharegeSet:'yes'})
+              })
+              .catch(function(err){
+                console.log('error:', err);
+              });
+            }
             return data;
           }
     } else {
