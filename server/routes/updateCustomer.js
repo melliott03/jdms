@@ -371,52 +371,17 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
           data.customer_id = customer_id;
 
           return data;
-        }else {
-          return data;
         }
       })
 
     }).then(function(data){
-      console.log('data at top of stripe.customers.update::',data);
-      stripe.customers.update(data.customer_id, {
+      return stripe.customers.update(data.customer_id, {
         account_balance: data.stripeCustomer.account_balance - data.charge.amount
       }).then(function(stripeCustomer){
         console.log('stripeCustomer account_balance updated with recharge amount:: ', stripeCustomer);
-
         data.rechargedCustomer = stripeCustomer;
         return data;
-      }).then(function(data){
-        if (data.stripeCustomer.account_balance - data.charge.amount < 0){
-          var promise = User.findOne({ _id: data.customer_id }, { 'accountSuspension.suspended': false }).exec();
-          return promise.then(function(aUserWithID) {
-            console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
-            return aUserWithID;
-          }).then(function(aUserWithID) {
-            // never reaches here
-          })
-          .catch(function(err){
-            console.log('error:', err);
-          });
-        }
       })
-    }).then(function(data){
-      console.log('data before accountSuspension.suspended: false::',data);
-      /*
-      console.log('data.stripeCustomer.account_balance - data.charge.amount:: ', data.stripeCustomer.account_balance - data.charge.amount);
-      if (data.stripeCustomer.account_balance - data.charge.amount < 0){
-        var promise = User.findOne({ _id: data.customer_id }, { 'accountSuspension.suspended': false }).exec();
-        return promise.then(function(aUserWithID) {
-          console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
-          return aUserWithID;
-        }).then(function(aUserWithID) {
-          // never reaches here
-        })
-        .catch(function(err){
-          console.log('error:', err);
-        });
-      }
-      */
-      return data;
     }).then(function(data){
       console.log('after customer manual recharge data::',data);
       res.send({customerUpdated:'yes'})
@@ -893,7 +858,26 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   money_availabel = money_availabel/100;
   newdata.availabel_balance = money_availabel;
   console.log('newdata::', newdata);
-  res.send(newdata);
+  //FIND
+  if (money_availabel < 0){
+    var promise = User.findOne({ _id: data.customer_id }, { 'accountSuspension.suspended': false }).exec();
+    return promise.then(function(aUserWithID) {
+      console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
+      res.send(newdata);
+
+      // return aUserWithID;
+    }).then(function(aUserWithID) {
+      // never reaches here
+    })
+    .catch(function(err){
+      console.log('error:', err);
+    });
+  }else {
+    res.send(newdata);
+
+  }
+
+
 
 }).catch(function(error){
   console.log('catch error top :', error);
