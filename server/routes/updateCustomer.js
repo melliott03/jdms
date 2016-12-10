@@ -379,11 +379,16 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
         account_balance: data.stripeCustomer.account_balance - data.charge.amount
       }).then(function(stripeCustomer){
         console.log('stripeCustomer account_balance updated with recharge amount:: ', stripeCustomer);
+        if (data.stripeCustomer.account_balance - data.charge.amount < 0){
+          stripeCustomer.accountSuspension.suspended = false;
+          stripeCustomer.save();
+        }
         data.rechargedCustomer = stripeCustomer;
         return data;
       })
     }).then(function(data){
       console.log('data before accountSuspension.suspended: false::',data);
+      /*
       console.log('data.stripeCustomer.account_balance - data.charge.amount:: ', data.stripeCustomer.account_balance - data.charge.amount);
       if (data.stripeCustomer.account_balance - data.charge.amount < 0){
         var promise = User.findOne({ _id: data.customer_id }, { 'accountSuspension.suspended': false }).exec();
@@ -397,6 +402,8 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
           console.log('error:', err);
         });
       }
+      */
+      return data;
     }).then(function(data){
       console.log('after customer manual recharge data::',data);
       res.send({customerUpdated:'yes'})
