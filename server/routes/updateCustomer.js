@@ -375,7 +375,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
       })
 
     }).then(function(data){
-      return stripe.customers.update(data.customer_id, {
+      stripe.customers.update(data.customer_id, {
         account_balance: data.stripeCustomer.account_balance - data.charge.amount
       }).then(function(stripeCustomer){
         console.log('stripeCustomer account_balance updated with recharge amount:: ', stripeCustomer);
