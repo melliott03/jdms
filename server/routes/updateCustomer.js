@@ -371,10 +371,13 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
           data.customer_id = customer_id;
 
           return data;
+        }else {
+          return data;
         }
       })
 
     }).then(function(data){
+      console.log('data at top of stripe.customers.update::');
       stripe.customers.update(data.customer_id, {
         account_balance: data.stripeCustomer.account_balance - data.charge.amount
       }).then(function(stripeCustomer){
