@@ -861,7 +861,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   console.log('newdata::', newdata);
   //FIND
   if (money_availabel > 0){
-    console.log('if (money_availabel > 0)::');
+    console.log('if (money_availabel > 0)::', money_availabel);
     var promise = User.findOneAndUpdate({ _id: req.user._id }, { 'accountSuspension.suspended': false }).exec();
     return promise.then(function(aUserWithID) {
       console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
@@ -872,12 +872,27 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     .catch(function(err){
       console.log('error:', err);
     });
+  }else if (money_availabel < 0) {
+    console.log('if (money_availabel < 0)::', money_availabel);
+    var promise = User.findOneAndUpdate({ _id: req.user._id }, { 'accountSuspension.suspended': true }).exec();
+    return promise.then(function(aUserWithID) {
+      console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
+     return aUserWithID;
+    }).then(function(aUserWithID) {
+      // never reaches here
+      console.log('should never reach here', aUserWithID);
+    })
+    .catch(function(err){
+      console.log('error:', err);
+    });
   }else {
-    res.send(newdata);
+    console.log('newdata just before res.send(newdata) in else of money_availabel < 0::',newdata);
+    return newdata;
   }
 
-
-
+}).then(function(newdata) {
+  console.log('newdata just before res.send(newdata) .then after in else of money_availabel < 0::',newdata);
+  res.send(newdata);
 }).catch(function(error){
   console.log('catch error top :', error);
 
