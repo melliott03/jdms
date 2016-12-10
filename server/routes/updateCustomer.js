@@ -860,7 +860,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
 
   console.log('newdata::', newdata);
   //FIND
-  if (money_availabel > 0){
+  if (money_availabel > 0 && req.user.accountSuspension && req.user.accountSuspension.suspended == true){
     console.log('if (money_availabel > 0)::', money_availabel);
     var promise = User.findOneAndUpdate({ _id: req.user._id }, { 'accountSuspension.suspended': false }).exec();
     return promise.then(function(aUserWithID) {
@@ -880,7 +880,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
      return aUserWithID;
     }).then(function(aUserWithID) {
       // never reaches here
-      console.log('should never reach here', aUserWithID);
+      console.log('should never reach here::', aUserWithID);
     })
     .catch(function(err){
       console.log('error:', err);
