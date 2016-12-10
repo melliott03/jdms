@@ -383,6 +383,8 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
         return data;
       })
     }).then(function(data){
+      console.log('data before accountSuspension.suspended: false::',data);
+      console.log('data.stripeCustomer.account_balance - data.charge.amount:: ', data.stripeCustomer.account_balance - data.charge.amount);
       if (data.stripeCustomer.account_balance - data.charge.amount < 0){
         var promise = User.findOne({ _id: data.customer_id }, { 'accountSuspension.suspended': false }).exec();
         return promise.then(function(aUserWithID) {
