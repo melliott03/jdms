@@ -9,6 +9,7 @@
         <th class="thfirst" st-sort="outboundSummary.createdAt">Date</th>
         <th class="thfirst" st-sort="outboundSummary.createdAt">Time</th>
         <th class="thfirst" st-sort="(outboundSummary.CallDuration * 1)">Duration</th><!-- putting in () and * 1 converst string into Integer -->
+        <th class="thfirst" st-sort="language">Language</th><!-- putting in () and * 1 converst string into Integer -->
         <th class="thfirst" st-sort="customer_rate">Cost</th>
 
     </tr>
@@ -30,6 +31,9 @@
         <th class="thsecond">
             <!-- <st-number-range predicate="customer_rate" lower="query.lower" higher="query.higher"></st-number-range> -->
         </th>
+        <th class="thsecond">
+            <!-- <st-number-range predicate="customer_rate" lower="query.lower" higher="query.higher"></st-number-range> -->
+        </th>
 
 
     </tr>
@@ -46,8 +50,7 @@
         <td > <strong>{{work.outboundSummary.createdAt | date}}</strong></td>
         <td > <strong>{{work.outboundSummary.createdAt | date:'h:mm a'}}</strong></td>
         <td > <strong>{{work.outboundSummary.durationObj.minutes}} min {{work.outboundSummary.durationObj.seconds}} sec</strong></td>
-        <!-- {{work.outboundSummary.durationObj.minutes}} min {{work.outboundSummary.durationObj.seconds}} sec  -->
-        <!-- <td >{{work.money.cost.costDollars | currency}}.{{work.money.cost.costPennies}}</td> -->
+        <td > <strong>{{work.language}}</strong></td>
         <td >{{work.money.customerCost/100 | currency}}</td>
 
 
