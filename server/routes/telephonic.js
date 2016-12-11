@@ -497,6 +497,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       var workerSid = data.theTeleWorkWithcall_sid.workerSid;
       // console.log('worker_activity_sid before updating post_work_activity_sid::', );
 
+      console.log('accountSid, authToken, workspaceSid::',accountSid, authToken, workspaceSid);
       var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
 
       console.log('just before client.workspace.workers(workerSid).update');
