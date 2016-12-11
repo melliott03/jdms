@@ -1,7 +1,7 @@
 
 <div>
   <div >
-  <table st-set-filter="customFilter" st-safe-src="works_tel.response" st-table="displayWorkTelCollection" class="table-striped" wt-responsive-table>
+  <table st-set-filter="customFilter" st-safe-src="works_tel.response" st-table="displayWorkTelCollection" class="table-striped tablestyle" wt-responsive-table>
     <thead>
     <tr>
         <th class="thfirst"><md-button class="" st-export>Export</md-button></th>
@@ -18,7 +18,7 @@
         <th class="thsecond">
             <input placeholder="search Phone" st-search="inboundSummary.From2" />
         </th>
-        <th class="thsecond">
+        <th class="thsecond date-range-popup-parent">
             <st-date-range predicate="outboundSummary.createdAt" before="query.before" after="query.after"></st-date-range>
         </th>
         <th class="thsecond">
@@ -64,24 +64,10 @@
                 <span class="">
               </span>
 
-
-                <strong>Call Details</strong>
-                                <!-- <p>Language: {{work.language | uppercase}}</p> -->
                                 <p>Call ID: {{work._id}}</p>
 
 
-               <input class="inputs" style="border-style: none;
-              border-width: 0px;
-              border-color: none;"
-                ng-model="work.details"
-                inline-edit="work.details"
-                ng-model="work"
-                inline-edit-placeholder="Type your value here"
-                inline-edit-btn-edit=""
-                inline-edit-on-blur="save"
-                ng-blur="updateWorkEntered(work)"
-                inline-edit-on-click
-                inline-edit-callback="updateWorkEntered(work)" />
+               
               </div>
 
 

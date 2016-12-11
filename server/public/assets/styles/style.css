@@ -788,6 +788,15 @@ p,a,h1,h2,h3,h4,h5,h6,div,br,li,td,article{
     margin-left: 15px; }
 /*https://material.angularjs.org/latest/demo/datepicker*/
 
+md-datepicker.mddatepicker{
+padding: 8px;
+background-color: #fff;
+width: 100%;
+height: 100px;
+margin-bottom: 5px;
+
+}
+
 span.moneyinput {
   position:relative;
   margin-right:-20px

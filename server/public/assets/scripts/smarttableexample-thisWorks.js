@@ -9,43 +9,6 @@
             },
             templateUrl: 'routes/stDateRange.html',
             link: function (scope, element, attr, table) {
-              //
-              var input = element.find('input');
-
-scope.$watchGroup(['before', 'after'], function(newValues, oldValues, scope) {
-    var query = {};
-
-    // if (scope.ngModel) {
-    //     query.date = scope.ngModel;
-    //     query.beforeOrNow = true;
-    // }
-
-    console.log('inside if (before), scope.isAfterOpen 1.2::', scope.isAfterOpen);
-    console.log('inside if (before), scope.isBeforeOpen 1.3::', scope.isBeforeOpen);
-
-        if (scope.before) {
-          console.log("inside if (scope.before)::", scope.before);
-            query.before = scope.before;
-        }
-        if (scope.after) {
-          console.log("inside if (scope.after)::", scope.after);
-            query.after = scope.after;
-        }
-
-        $timeout(function () {
-          scope.$apply(function () {
-            table.search(query, attr.predicate);
-            // ngModel.$setViewValue(newValue);
-          });
-        }, 0);
-
-    // }
-}, true);
-
-// });
-              //
-
-/*
                 var inputs = element.find('input');
                 var inputBefore = angular.element(inputs[0]);
                 var inputAfter = angular.element(inputs[1]);
@@ -82,7 +45,6 @@ scope.$watchGroup(['before', 'after'], function(newValues, oldValues, scope) {
                         }
                     });
                 });
-                */
                 function open(before) {
                   console.log('before::', before);
                     return function ($event) {
