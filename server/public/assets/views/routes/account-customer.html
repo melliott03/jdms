@@ -26,7 +26,7 @@
     </div>
     <div flex>
       <h4>Auto Recharge</h4>
-      <strong>DISABLED</strong>
+      <strong>{{logedinUser.response.autoRecharge | uppercase}}</strong>
       <p>Enable to have your account automatically funded.</p>
       <div ng-controller="XAccountCtrl4" ng-cloak>
         <md-button ng-click="showChoiceChargeDialog($event, 'autoRecharge')">Enable Auto-Recharge</md-button>

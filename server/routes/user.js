@@ -83,6 +83,7 @@ router.get("/name", function(req,res,next){
         display_name: req.user.epirts.customer_display_name,
         telephonicID: req.user.telephonicID,
         telephonicPassCode: req.user.telephonicPassCode,
+        autoRecharge: req.user.autoRecharge,
         sources: {
           total_count: req.user.epirts.customer.sources.total_count,
           data: paymentSourcesNewArray,
