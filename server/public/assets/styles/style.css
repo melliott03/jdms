@@ -222,11 +222,6 @@ section > div:focus, section > div:focus:hover  {
   font-style: italic;
 }
 
-<input type="text"class="inputs" placeholder="e-mail">
-<br> <br>
-<input type="password" class="inputs"placeholder="Password">
-
-
 <style>
 
  .inputs {
@@ -299,7 +294,9 @@ th.thsecond{
     text-transform: uppercase;
     font-size: 12px;
   }
-
+th.searchfont{
+    color: #000000;
+  }
 tbody {
     overflow-y: scroll;
     display: inline-block;
