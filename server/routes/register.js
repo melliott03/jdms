@@ -437,7 +437,7 @@ if (req.body.action === 'signup') {
         telephonicPassCode: 0,
         telephonicID: 0,
         payable: {},
-        autoRecharge: 'disabled',
+        autoPaymentsChoice: {},
         accountSuspension: {suspended:true,suspensionDates:[new Date()]}
     });
 

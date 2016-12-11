@@ -28,8 +28,8 @@ var UserSchema = new Schema({
     twilioSids: {type: Object, required: false},
     switchs: {type: Object, required: false},
     payable: {type: Object, required: false},
-    autoRecharge: {type: String, required: false},
-    autoPaymentsChoice: {type: String, required: false},
+    autoRecharge: {},
+    autoPaymentsChoice: {},
     accountSuspension: {},
 
 

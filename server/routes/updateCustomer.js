@@ -396,19 +396,25 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     var reqBody = req.body;
     var userId = req.user._id;
     var autoRechargeValue = '';
+    var autoRechargeObj = {};
     var paymentChoice = '';
 
     if (reqBody.autoRecharge) {
-      if (reqBody.autoRecharge == 'enabled' ) {
-         autoRechargeValue = 'enabled';
-         paymentChoice = 'autoRecharge'; //this option has been disabled in the html
-      }
-      if (reqBody.autoRecharge == 'disabled' ) {
-         autoRechargeValue = 'disabled';
-         paymentChoice = 'none'; //this option has been disabled in the html
-      }
+      autoRechargeObj = reqBody;
+      console.log('autoRechargeObj::',autoRechargeObj);
+      // if (reqBody.autoRecharge == 'enabled' ) {
+      //
+      //    autoRechargeObj = 'enabled';
+      //    paymentChoice = 'autoRecharge'; //this option has been disabled in the html
+      // }
+      // if (reqBody.autoRecharge == 'disabled' ) {
+      //    autoRechargeValue = 'disabled';
+      //    paymentChoice = 'none'; //this option has been disabled in the html
+      // }
 
-    }else if(reqBody.payPerUseCharge){ //this option has been disabled in the html
+    }
+    /*
+    else if(reqBody.payPerUseCharge){ //this option has been disabled in the html
       console.log("inside elseif (req.body.payPerUseCharge)");
       if (reqBody.payPerUseCharge == 'enabled' ) {
          paymentChoice = 'payPerUseCharge';
@@ -418,6 +424,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
       }
 
     }
+    */
     //SAVE RECHARGE INFO TO THE DB
     // User.findOneAndUpdate({ _id: userId }, { autoPaymentsChoice: paymentChoice }, function(err, user) {
     // User.findOneAndUpdate({ _id: userId }, { autoRecharge: autoRechargeValue }, function(err, user) {
@@ -425,7 +432,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     //     console.log('after saving user"s autoRecharge::',user);
     //   });
 
-    var promise = User.findOneAndUpdate({ _id: userId }, { autoRecharge: autoRechargeValue }).exec();
+    var promise = User.findOneAndUpdate({ _id: userId }, { 'autoPaymentsChoice.autoRecharge': autoRechargeObj }).exec();
     promise.then(function(aUserWithID) {
       console.log('aUserWithID updated autoRecharge field::', aUserWithID);
       return aUserWithID;
