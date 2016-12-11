@@ -10,7 +10,7 @@
         <th class="thfirst" st-sort="outboundSummary.createdAt">Date</th>
         <th class="thfirst" st-sort="outboundSummary.createdAt | date:'h:mm a'">Time</th>
         <th class="thfirst" st-sort="(outboundSummary.CallDuration * 1)">Duration</th><!-- putting in () and * 1 converst string into Integer -->
-        <th class="thfirst" st-sort="(customer_rate * 1)">Cost</th>
+        <th class="thfirst" st-sort="(money.customerCost * 1)">Cost</th>
 
     </tr>
     <tr>
