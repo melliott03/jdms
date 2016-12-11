@@ -1,4 +1,4 @@
-<label>after [yyyy/MM/dd]</label>
+<label>after</label>
 <div class="input-group">
 	<input type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="after" is-open="isAfterOpen"
 				 close-text="Close"/>
@@ -7,21 +7,12 @@
 									class="glyphicon glyphicon-calendar"></i></button>
                 </span>
 </div>
-
-<label>before [yyyy/MM/dd]</label>
+<label>before</label>
 <div class="input-group">
-  <span class="input-group-btn">
-  <md-datepicker class="form-control" ng-model="before" md-placeholder="Enter date" ng-blur="{is-open='isBeforeOpen'}"  >
-
-  </md-datepicker>
-  <!-- <input type="text" class="form-control" ng-model="before" md-placeholder="Enter date" is-open="isBeforeOpen" /> -->
-
-  <!-- <input type="text" value="{{myBeforeDate}}" ng-model="before" hidden/> -->
-	<!-- <input type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="before" is-open="isBeforeOpen"
-				 close-text="Close"/> -->
-	<!-- <span class="input-group-btn"> -->
-                <!-- <button type="button" class="btn btn-default" ng-click="openBefore($event)"><i
-									class="glyphicon glyphicon-calendar"></i></button> -->
+	<input type="text" class="form-control" uib-datepicker-popup="yyyy/MM/dd" ng-model="before" is-open="isBeforeOpen"
+				 close-text="Close"/>
+	<span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openBefore($event)"><i
+									class="glyphicon glyphicon-calendar"></i></button>
                 </span>
-                <span>{{before}}</span>
 </div>

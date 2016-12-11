@@ -9,46 +9,65 @@
             },
             templateUrl: 'routes/stDateRange.html',
             link: function (scope, element, attr, table) {
-                        //Check this out later https://stackoverflow.com/questions/33646049/how-to-customise-the-angular-material-date-picker
-                        console.log('top scope.before::',scope.before);
-                        console.log('top scope.after::',scope.after);
-
-                var inputs = element.find('input'); //I changed 'input' to 'md-datepicker'
+                var inputs = element.find('input');
                 var inputBefore = angular.element(inputs[0]);
                 var inputAfter = angular.element(inputs[1]);
                 var predicateName = attr.predicate;
                 [inputBefore, inputAfter].forEach(function (input) {
-                    // input.bind('blur', function () {  //this is the original line
-                    //check this out https://codepen.io/camden-kid/pen/wWxbok
                     input.bind('blur', function () {
-                      console.log("in input.bind('blur', function () {::",scope.before);
+                      console.log('scope.isBeforeOpen 0 ::',scope.isBeforeOpen);
+                      if (scope.isBeforeOpen == true) {
+                        scope.isBeforeOpen = false;
+                      }
+                      if (scope.isAfterOpen == true) {
+                        scope.isAfterOpen = false;
+                      }
+                      console.log("inside input.bind('blur', function () 1::");
+                      console.log('scope.isBeforeOpen 2 ::',scope.isBeforeOpen);
+                      console.log('scope.isAfterOpen 3 ::',scope.isAfterOpen);
+                      console.log('scope.before 4 ::',scope.before);
+                      console.log('scope.after 5 ::',scope.after);
 
                         var query = {};
                         if (!scope.isBeforeOpen && !scope.isAfterOpen) {
+                          console.log("inside if (!scope.isBeforeOpen && !scope.isAfterOpen)::");
                             if (scope.before) {
-                              console.log('scope.before::',scope.before);
+                              console.log("inside if (scope.before)::", scope.before);
                                 query.before = scope.before;
                             }
                             if (scope.after) {
-                              console.log('scope.after::',scope.after);
+                              console.log("inside if (scope.after)::", scope.after);
                                 query.after = scope.after;
                             }
-                            scope.$apply(function () {
+                            $timeout(function () {
+                              scope.$apply(function () {
                                 table.search(query, predicateName);
-                            })
+                                // ngModel.$setViewValue(newValue);
+                              });
+                            }, 0);
+                            // scope.$apply(function () {
+                            //     table.search(query, predicateName);
+                            // })
                         }
                     });
                 });
                 function open(before) {
+                  console.log('before::', before);
                     return function ($event) {
                         $event.preventDefault();
                         $event.stopPropagation();
                         if (before) {
-                          console.log('scope.isBeforeOpen = true::');
+                          console.log('inside if (before), before 1::', before);
+                          console.log('inside if (before), scope.isAfterOpen 2::', scope.isAfterOpen);
+                          console.log('inside if (before), scope.isBeforeOpen 3::', scope.isBeforeOpen);
                             scope.isBeforeOpen = true;
+                          console.log('inside if (before), scope.isBeforeOpen 3::', scope.isBeforeOpen);
                         } else {
-                          console.log('scope.isAfterOpen = true::');
+                          console.log('inside else 2, before 4::', before);
+                          console.log('inside else 2, scope.isBeforeOpen 5::', scope.isBeforeOpen);
+                          console.log('inside else 2, scope.isAfterOpen before 6::', scope.isAfterOpen);
                             scope.isAfterOpen = true;
+                          console.log('inside else 2, scope.isAfterOpen after 7::', scope.isAfterOpen);
                         }
                     }
                 }
@@ -89,7 +108,6 @@
         };
     }])
     .filter('customFilter', ['$filter', function ($filter) {
-      console.log("inside .filter('customFilter'");
         var filterFilter = $filter('filter');
         var standardComparator = function standardComparator(obj, text) {
             text = ('' + text).toLowerCase();
