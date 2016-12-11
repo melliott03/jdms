@@ -420,7 +420,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       console.log('humanDate::', humanDate);
       console.log('humanTime::', humanTime);
 
-      callSummaryBody.creationDateObj = {humanDate:humanDate, humanTime:humanTime}
+      callSummaryBody.creationDateObj = {humanDate:humanDate, humanTime:humanTime};
 
       theTeleWorkWithcall_sid.workerSid = workerSid;
       // theTeleWorkWithcall_sid.taskSid = req.query.TaskSid;
@@ -517,7 +517,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       });
 
       stripeCharge.prePaid(data);
-      payable.postWork(data) // add this work item to the worker's Payable.com account
+      payable.postWork(data); // add this work item to the worker's Payable.com account
 
 
       return data;
