@@ -22,12 +22,6 @@
                       if (scope.isAfterOpen == true) {
                         scope.isAfterOpen = false;
                       }
-                      console.log("inside input.bind('blur', function () 1::");
-                      console.log('scope.isBeforeOpen 2 ::',scope.isBeforeOpen);
-                      console.log('scope.isAfterOpen 3 ::',scope.isAfterOpen);
-                      console.log('scope.before 4 ::',scope.before);
-                      console.log('scope.after 5 ::',scope.after);
-
                         var query = {};
                         if (!scope.isBeforeOpen && !scope.isAfterOpen) {
                           console.log("inside if (!scope.isBeforeOpen && !scope.isAfterOpen)::");
