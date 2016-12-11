@@ -6,11 +6,11 @@
     <tr>
         <th class="thfirst"><md-button class="" st-export>Export</md-button></th>
         <th class="thfirst" st-sort="inboundSummary.From2">From</th>
+        <th class="thfirst" st-sort="language">Language</th><!-- putting in () and * 1 converst string into Integer -->
         <th class="thfirst" st-sort="outboundSummary.createdAt">Date</th>
         <th class="thfirst" st-sort="outboundSummary.createdAt">Time</th>
         <th class="thfirst" st-sort="(outboundSummary.CallDuration * 1)">Duration</th><!-- putting in () and * 1 converst string into Integer -->
-        <th class="thfirst" st-sort="language">Language</th><!-- putting in () and * 1 converst string into Integer -->
-        <th class="thfirst" st-sort="customer_rate">Cost</th>
+        <th class="thfirst" st-sort="(customer_rate * 1)">Cost</th>
 
     </tr>
     <tr>
@@ -18,21 +18,21 @@
         <th class="thsecond">
             <input placeholder="search Phone" st-search="inboundSummary.From2" />
         </th>
+        <th class="thsecond">
+          <input placeholder="search Language" st-search="language" />
+        </th>
         <th class="thsecond date-range-popup-parent">
             <st-date-range predicate="outboundSummary.createdAt" before="query.before" after="query.after"></st-date-range>
         </th>
         <th class="thsecond">
-            <!-- <st-date-range predicate="outboundSummary.createdAt" before="query.before" after="query.after"></st-date-range> -->
+          <!-- <input placeholder="search Time" st-search="outboundSummary.createdAt | date:'h:mm a'" /> -->
         </th>
 
         <th class="thsecond">
-        <!-- <input placeholder="search address" st-search="address" /> -->
+          <!-- <input placeholder="search Duration" st-search="(outboundSummary.CallDuration * 1)" /> -->
         </th>
         <th class="thsecond">
-            <!-- <st-number-range predicate="customer_rate" lower="query.lower" higher="query.higher"></st-number-range> -->
-        </th>
-        <th class="thsecond">
-            <!-- <st-number-range predicate="customer_rate" lower="query.lower" higher="query.higher"></st-number-range> -->
+          <!-- <input placeholder="search Cost" st-search="customer_rate" /> -->
         </th>
 
 
@@ -47,10 +47,10 @@
         <!-- <td cs-select="row"></td> -->
         <!-- <td inline-edit="work.inboundSummary.From" inline-edit-on-click inline-edit-btn-edit="" inline-edit-on-blur="save" inline-edit-callback="updateWorkEntered(work)">{{work.inboundSummary.From.replace('+', '')}}</td> -->
         <td ><strong>{{work.inboundSummary.From2}}</strong></td>
+        <td > <strong>{{work.language | capitalize}}</strong></td>
         <td > <strong>{{work.outboundSummary.createdAt | date}}</strong></td>
         <td > <strong>{{work.outboundSummary.createdAt | date:'h:mm a'}}</strong></td>
         <td > <strong>{{work.outboundSummary.durationObj.minutes}} min {{work.outboundSummary.durationObj.seconds}} sec</strong></td>
-        <td > <strong>{{work.language | capitalize}}</strong></td>
         <td > <strong>{{work.money.customerCost/100 | currency}}</strong></td>
 
 
@@ -67,7 +67,7 @@
                                 <p>Call ID: {{work._id}}</p>
 
 
-               
+
               </div>
 
 
