@@ -311,7 +311,7 @@ th[st-sort] {
 }
 th[st-sort]:not(.text-right):after,
 th[st-sort].text-right:before {
-    content: '\25B2'; /*content: '\25B2';*/
+    content: '\25c8'; /*content: '\25B2';*/
   transition: all ease .2s;
 }
 th[st-sort].st-sort-descent:not(.text-right):after,
