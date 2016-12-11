@@ -470,7 +470,6 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
              // *stripeCharge.perEvent();
            // subtract from customer's stripe balance
                //check if  balance is below limit, recharge to amount, then add invoiceitem
-            stripeCharge.prePaid(data);
       //INVOICE CUSTOMER
            //Send to waveapps, or
            //Send to Payable, or
@@ -478,7 +477,6 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
 
       //PAY WORKER
         //WITH PAYABLE
-        payable.postWork(data) // add this work item to the worker's Payable.com account
         //WITH STRIPE
         //(Do here)
 
@@ -517,11 +515,20 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
           console.log('task after updating task to completed::', task);
       });
 
-      return taskSid;;
+      stripeCharge.prePaid(data);
+      payable.postWork(data) // add this work item to the worker's Payable.com account
+
+
+      return data;;
 
 
     })
-    .then(function(taskSid){
+    .then(function(data){
+      console.log('inside the then theTeleWorkWithcall_sid |  2nd::', data.theTeleWorkWithcall_sid);
+      console.log('inside the then aUserWithWorkerSid 2nd::', data.aUserWithWorkerSid);
+      console.log('inside the then aUserWithCustomer_ID 2nd::', data.aUserWithCustomer_ID);
+      console.log('inside the then just before stripeCharge.createStripeInvoiceItem  2nd::');
+
       //update task status at completed
       // var taskSid =
       /*
