@@ -425,7 +425,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     //     console.log('after saving user"s autoRecharge::',user);
     //   });
 
-    var promise = User.findOne({ _id: userId }, { autoRecharge: autoRechargeValue }).exec();
+    var promise = User.findOneAndUpdate({ _id: userId }, { autoRecharge: autoRechargeValue }).exec();
     promise.then(function(aUserWithID) {
       console.log('aUserWithID updated autoRecharge field::', aUserWithID);
       return aUserWithID;
