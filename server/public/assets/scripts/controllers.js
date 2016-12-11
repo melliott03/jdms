@@ -116,9 +116,9 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         $scope.collection = [
           {number:'1', path: 'home', name: '../img/icons/ic_home_black_24px.svg'},
           {number:'2', path: 'phone', name: '../img/icons/ic_call_black_24px.svg'},
-          {number:'3', path: 'onsite', name: '../img/icons/ic_business_black_24px.svg'},
-          {number:'4', path: 'videoCust', name: '../img/icons/ic_videocam_black_24px.svg'},
-          {number:'5', path: 'translateCust', name: '../img/icons/ic_translate_black_24px.svg'},
+          // {number:'3', path: 'onsite', name: '../img/icons/ic_business_black_24px.svg'},
+          // {number:'4', path: 'videoCust', name: '../img/icons/ic_videocam_black_24px.svg'},
+          // {number:'5', path: 'translateCust', name: '../img/icons/ic_translate_black_24px.svg'},
           {number:'6', path: 'accountCust', name: '../img/icons/ic_settings_black_24px.svg'}
         ];
         // $scope.selectedIndex = 0;
