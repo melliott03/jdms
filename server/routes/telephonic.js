@@ -499,14 +499,15 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
 
       var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
 
+      console.log('just before client.workspace.workers(workerSid).update');
       client.workspace.workers(workerSid).update({
-          // attributes: '{"type":"support"}'
           activitySid: post_work_activity_sid
       }, function(err, worker) {
         if (err) console.log('err updating post_work_activity_sid::', err);
           console.log('worker after updating post_work_activity_sid::', worker);
       });
 
+      console.log('just before client.workspace.tasks(taskSid).update');
       client.workspace.tasks(taskSid).update({
         assignmentStatus: 'completed',
         reason: 'call completed'
@@ -519,7 +520,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       payable.postWork(data) // add this work item to the worker's Payable.com account
 
 
-      return data;;
+      return data;
 
 
     })
