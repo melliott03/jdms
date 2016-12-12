@@ -430,6 +430,9 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       var timeZoneForSaving = createdAt.tz(timeZone).format('z');
       console.log('timeZoneForSaving 2::',timeZoneForSaving);
 
+      createdAt = createdAt.toDate();
+      console.log('createdAt 3::',createdAt);
+
       theTeleWorkWithcall_sid.outboundSummary.createdAt = createdAt;  //moment().unix().toDate()
       theTeleWorkWithcall_sid.outboundSummary.createdAtTZ = timeZoneForSaving;  //moment().unix().toDate()
 
