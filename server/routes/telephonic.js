@@ -12,6 +12,9 @@ mongoose.Promise = require('bluebird');
 var User = require('../models/user');
 var Work = require('../models/work');
 var Work_Tel = require('../models/work_tel');
+
+var zipcode_to_timezone = require( 'zipcode-to-timezone' );
+
 // var Work_Tel = mongoose.model('Work_Tel');
 Promise.promisifyAll(Work_Tel);
 Promise.promisifyAll(Work_Tel.prototype);
@@ -412,7 +415,24 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       theTeleWorkWithcall_sid.outboundSummary = callSummaryBody;
       // theTeleWorkWithcall_sid.outboundSummary.createdAt = Date.now(); //moment().unix().toDate()
       // theTeleWorkWithcall_sid.outboundSummary.createdAt = new Date(Date.now()).toISOString(); //moment().unix().toDate()
-      theTeleWorkWithcall_sid.outboundSummary.createdAt = new Date(); //moment().unix().toDate()
+      var timeZone = zipcode_to_timezone.lookup(theTeleWorkWithcall_sid.outboundSummary.CalledZip);
+      console.log('timeZone::',timeZone);
+
+      var timeNow = new Date();
+      console.log('timeNow::',timeNow);
+
+      var createdAt = moment(timeNow);
+      console.log('createdAt 1::',createdAt);
+
+      createdAt = createdAt.tz(timeZone);
+      console.log('createdAt 2::',createdAt);
+
+      var timeZoneForSaving = createdAt.tz(timeZone).format('z');
+      console.log('timeZoneForSaving 2::',timeZoneForSaving);
+
+      theTeleWorkWithcall_sid.outboundSummary.createdAt = createdAt;  //moment().unix().toDate()
+      theTeleWorkWithcall_sid.outboundSummary.createdAtTZ = timeZoneForSaving;  //moment().unix().toDate()
+
       // var humanDate = moment(theTeleWorkWithcall_sid.outboundSummary.createdAt).format("MMM DD, YYYY");
       // var humanTime = moment(theTeleWorkWithcall_sid.outboundSummary.createdAt).format("h:mm a");
       var humanDate = moment(callSummaryBody.Timestamp).format("MMM DD, YYYY");

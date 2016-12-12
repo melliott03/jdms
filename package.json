@@ -71,6 +71,7 @@
     "lr-sticky-header": "^1.1.0",
     "moment": "^2.13.0",
     "moment-strftime": "^0.1.5",
+    "moment-timezone": "^0.5.10",
     "mongoose": "^4.4.10",
     "mongoose-redis": "^1.0.8",
     "morgan": "^1.7.0",
@@ -102,6 +103,7 @@
     "twilio-heroku": "^0.3.2",
     "waze-travel-time": "0.0.3",
     "xml2js": "^0.4.16",
-    "xmlbuilder": "^8.2.0"
+    "xmlbuilder": "^8.2.0",
+    "zipcode-to-timezone": "0.0.6"
   }
 }
