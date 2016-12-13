@@ -19,6 +19,8 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   configsty.PLAID_SECRET,
   plaid.environments.tartan);
 
+var zipcode_to_timezone = require( 'zipcode-to-timezone' );
+
 
 
   //  // Not recommended: setting global API key state

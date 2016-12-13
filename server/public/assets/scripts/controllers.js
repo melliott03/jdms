@@ -206,8 +206,15 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             $window.localStorage.token = data.token;
             // console.log('in controller $window.localStorage.token::::::',$window.localStorage.token);
 
-            $scope.message = 'Welcome';
-            $window.location.href = '/assets/views/users.html';
+
+            if (data.token) {
+              $scope.message_fail = '';
+              $scope.message_success = 'Success!';
+              $window.location.href = '/assets/views/users.html';
+            }else {
+              $scope.message_success = '';
+              $scope.message_fail = 'You entered an incorrect username or password';
+            }
           })
           .error(function (data, status, headers, config) {
             // Erase the token if the user fails to log in
