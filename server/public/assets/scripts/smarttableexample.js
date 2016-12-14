@@ -13,9 +13,9 @@ myApp.directive('stDateRange', ['$timeout','WorkService', function ($timeout, Wo
     templateUrl: 'routes/stDateRange.html',
     controller  : ['$scope','$element', '$http', '$attrs', '$transclude','WorkService', function($scope, $element, $http, $attrs, $transclude, WorkService) {
       var workService = WorkService;
-      console.log('arrayOfObjDates[0].toDate()::', workService.customerGraphDataObject);
-      console.log('arrayOfObjDates[0].toDate()::', workService.customerGraphDataObject).data.arrayOfObjDates[0].toDate();
-      $scope.after = workService.customerGraphDataObject.data.arrayOfObjDates[0].toDate();
+      // console.log('arrayOfObjDates[0].toDate()::', workService.customerGraphDataObject);
+      // console.log('arrayOfObjDates[0].toDate()::', workService.customerGraphDataObject).data.arrayOfObjDates[0].toDate();
+      // $scope.after = workService.customerGraphDataObject.data.arrayOfObjDates[0].toDate();
       console.log('scope.after .01::', $scope.after);
     }]
      ,
