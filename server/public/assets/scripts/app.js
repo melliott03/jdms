@@ -366,7 +366,7 @@ myApp.directive('onEnter', function() {
 });
 
 // Inline edit directive
-myApp.directive('inlineEditTwo', function($timeout) {
+myApp.directive('inlineEditTwo', function($timeout,$mdDialog) {
   return {
     scope: {
       model: '=inlineEditTwo',
@@ -930,6 +930,7 @@ myApp.controller('XAccountCtrl3', ["$scope", "$location", '$anchorScroll','$filt
   $scope.submitRecharge = function(recharge){
     console.log('in controller recharge:::', recharge);
     workService.submitRecharge(recharge);
+    $mdDialog.hide();
   }
 
 // START showRechargeDialog

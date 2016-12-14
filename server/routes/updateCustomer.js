@@ -19,7 +19,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   configsty.PLAID_SECRET,
   plaid.environments.tartan);
 
-var zipcode_to_timezone = require( 'zipcode-to-timezone' );
+  var zipcode_to_timezone = require( 'zipcode-to-timezone' );
 
 
 
@@ -130,6 +130,8 @@ var zipcode_to_timezone = require( 'zipcode-to-timezone' );
 
       var doughnut_label = [...new Set(work_telsLanguageList)]; //returns a  list of unique languages array
       var doughnut_data = [];
+      var arrayOfObjDates = [];
+
       // var  = work_telsUniqueLanguageList; //["Download Sales", "In-Store Sales", "Mail-Order Sales"];
 
       // create doughnut_data Array to have same number of indexes as doughnut_label Array
@@ -184,6 +186,7 @@ var zipcode_to_timezone = require( 'zipcode-to-timezone' );
           createdAt = new Date(createdAt);
           var month = createdAt.getMonth();
           console.log('month::', month);
+          arrayOfObjDates.push(createdAt);
 
           twelveMonth_label.find(x => {
             var idx = twelveMonth_label.indexOf(x);
@@ -256,6 +259,7 @@ var zipcode_to_timezone = require( 'zipcode-to-timezone' );
       visualData.minutes_bargraph_data = minutes_bargraph_data;//minutes used
       // visualData.linegraph_label = linegraph_label;
       visualData.linegraph_data = linegraph_data; // calls made
+      visualData.arrayOfObjDates = arrayOfObjDates;
       console.log('before res.send(visualData) visualData::', visualData);
       return visualData;
     })
@@ -344,50 +348,55 @@ var zipcode_to_timezone = require( 'zipcode-to-timezone' );
   router.post("/rechargeCustomerAccount", function(req, res, next){
     console.log('rechargeCustomerAccount, req.body::::',req.body);
     console.log('rechargeCustomerAccount, req.user::::',req.user);
-    var amount = req.body.amount
-    var source = req.body.source.id
+    if (req.body.amount && req.body.source) {
 
-    var  customer_id = req.user.epirts.customer.id;
-    var chargeObj = {
+      var amount = req.body.amount
+      var source = req.body.source.id
+
+      var  customer_id = req.user.epirts.customer.id;
+      var chargeObj = {
         amount: amount, // amount in cents, again
         currency: "usd",
         description: "Manual account recharge",
         customer: customer_id, // Previously stored, then retrieved customer
         metadata: {'recharge': 'manual'},
         source: source
-    };
+      };
 
-    stripe.charges.create(chargeObj).then(function(charge){
-      console.log('recharge stripeCustomer balance with :: '+amount+'', charge);
-      var data = {};
-      data.charge = charge;
-      return data;
-
-    }).then(function(data){
-      return stripe.customers.retrieve(customer_id)
-      .then(function(customer){
-        var balance = customer.account_balance;
-        if (customer){
-          data.stripeCustomer = customer;
-          data.balance = balance;
-          data.customer_id = customer_id;
-
-          return data;
-        }
-      })
-
-    }).then(function(data){
-      return stripe.customers.update(data.customer_id, {
-        account_balance: data.stripeCustomer.account_balance - data.charge.amount
-      }).then(function(stripeCustomer){
-        console.log('stripeCustomer account_balance updated with recharge amount:: ', stripeCustomer);
-        data.rechargedCustomer = stripeCustomer;
+      stripe.charges.create(chargeObj).then(function(charge){
+        console.log('recharge stripeCustomer balance with :: '+amount+'', charge);
+        var data = {};
+        data.charge = charge;
         return data;
+
+      }).then(function(data){
+        return stripe.customers.retrieve(customer_id)
+        .then(function(customer){
+          var balance = customer.account_balance;
+          if (customer){
+            data.stripeCustomer = customer;
+            data.balance = balance;
+            data.customer_id = customer_id;
+
+            return data;
+          }
+        })
+
+      }).then(function(data){
+        return stripe.customers.update(data.customer_id, {
+          account_balance: data.stripeCustomer.account_balance - data.charge.amount
+        }).then(function(stripeCustomer){
+          console.log('stripeCustomer account_balance updated with recharge amount:: ', stripeCustomer);
+          data.rechargedCustomer = stripeCustomer;
+          return data;
+        })
+      }).then(function(data){
+        console.log('after customer manual recharge data::',data);
+        res.send({customerUpdated:'yes'})
       })
-    }).then(function(data){
-      console.log('after customer manual recharge data::',data);
-      res.send({customerUpdated:'yes'})
-    })
+    } else {
+      res.send({customerUpdated:'no'})
+    }
 
   });
 
@@ -417,428 +426,428 @@ var zipcode_to_timezone = require( 'zipcode-to-timezone' );
     }
     /*
     else if(reqBody.payPerUseCharge){ //this option has been disabled in the html
-      console.log("inside elseif (req.body.payPerUseCharge)");
-      if (reqBody.payPerUseCharge == 'enabled' ) {
-         paymentChoice = 'payPerUseCharge';
-      }
-      if (reqBody.payPerUseCharge == 'disabled' ) {
-         paymentChoice = 'none';
-      }
+    console.log("inside elseif (req.body.payPerUseCharge)");
+    if (reqBody.payPerUseCharge == 'enabled' ) {
+    paymentChoice = 'payPerUseCharge';
+  }
+  if (reqBody.payPerUseCharge == 'disabled' ) {
+  paymentChoice = 'none';
+}
 
+}
+*/
+//SAVE RECHARGE INFO TO THE DB
+// User.findOneAndUpdate({ _id: userId }, { autoPaymentsChoice: paymentChoice }, function(err, user) {
+// User.findOneAndUpdate({ _id: userId }, { autoRecharge: autoRechargeValue }, function(err, user) {
+//     if (err) throw err;
+//     console.log('after saving user"s autoRecharge::',user);
+//   });
+
+var promise = User.findOneAndUpdate({ _id: userId }, { 'autoPaymentsChoice.autoRecharge': autoRechargeObj }).exec();
+promise.then(function(aUserWithID) {
+  console.log('aUserWithID updated autoRecharge field::', aUserWithID);
+  return aUserWithID;
+}).then(function(aUserWithID) {
+  res.send({customerAutoRecharegeSet:'yes'})
+})
+.catch(function(err){
+  console.log('error:', err);
+});
+
+});
+
+router.post("/customerDefaultPaymentSource", function(req, res, next){
+  console.log('saveUserPii, req.body::::',req.body);
+  console.log('saveUserPii, req.user::::',req.user);
+
+  var  customer_id = req.user.epirts.customer.id;
+  var acc_id = req.body.acc_id;
+
+  return stripe.customers.update(customer_id, {
+    default_source: acc_id
+  }).then(function(stripeCustomer){
+    console.log('stripeCustomer default_source updated with acc_id:: '+acc_id+'::', stripeCustomer);
+  })
+
+  res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
+});
+
+
+router.post("/saveUserPii", function(req, res, next){
+  console.log('saveUserPii, req.body::::',req.body);
+  console.log('saveUserPii, req.body.id::::',req.body.piiTokenID);
+
+  var Connected_stripe_ID = req.user.epirts.id;
+  console.log('req.user::::',req.user);
+  console.log('req.user.epirts.id::::',req.user.epirts.id);
+  console.log('Connected_stripe_ID::::',Connected_stripe_ID);
+
+
+
+  stripe.accounts.update(Connected_stripe_ID, {
+    legal_entity: {
+      personal_id_number: req.body.piiTokenID
     }
-    */
-    //SAVE RECHARGE INFO TO THE DB
-    // User.findOneAndUpdate({ _id: userId }, { autoPaymentsChoice: paymentChoice }, function(err, user) {
-    // User.findOneAndUpdate({ _id: userId }, { autoRecharge: autoRechargeValue }, function(err, user) {
-    //     if (err) throw err;
-    //     console.log('after saving user"s autoRecharge::',user);
-    //   });
-
-    var promise = User.findOneAndUpdate({ _id: userId }, { 'autoPaymentsChoice.autoRecharge': autoRechargeObj }).exec();
-    promise.then(function(aUserWithID) {
-      console.log('aUserWithID updated autoRecharge field::', aUserWithID);
-      return aUserWithID;
-    }).then(function(aUserWithID) {
-      res.send({customerAutoRecharegeSet:'yes'})
-    })
-    .catch(function(err){
-      console.log('error:', err);
+  }).then(function (response) {
+    console.log(' stripe personal_id_number response:::: ', response);
+    // console.log('token created for card ending in ', response.card.last4);
+    User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: response} }, function(err, user) {
+      if (err) throw err;
+      // we have the updated user returned to us
+      console.log('after saving user"s stripe info oooo',user);
     });
-
   });
-
-  router.post("/customerDefaultPaymentSource", function(req, res, next){
-    console.log('saveUserPii, req.body::::',req.body);
-    console.log('saveUserPii, req.user::::',req.user);
-
-    var  customer_id = req.user.epirts.customer.id;
-    var acc_id = req.body.acc_id;
-
-    return stripe.customers.update(customer_id, {
-      default_source: acc_id
-    }).then(function(stripeCustomer){
-      console.log('stripeCustomer default_source updated with acc_id:: '+acc_id+'::', stripeCustomer);
-    })
-
-    res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
-  });
+  res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
+});
 
 
-  router.post("/saveUserPii", function(req, res, next){
-    console.log('saveUserPii, req.body::::',req.body);
-    console.log('saveUserPii, req.body.id::::',req.body.piiTokenID);
+router.post("/saveUserPlaidToken", function(req, res, next){
+  console.log('saveUserPlaidToken, req.body::::',req.body);
+  console.log('saveUserPlaidToken, req.body::::',req.body.token);
+  // console.log('saveUserPii, req.body.id::::',req.body.token.id);
 
-    var Connected_stripe_ID = req.user.epirts.id;
-    console.log('req.user::::',req.user);
-    console.log('req.user.epirts.id::::',req.user.epirts.id);
-    console.log('Connected_stripe_ID::::',Connected_stripe_ID);
+  var public_token = req.body.token;
+  var account_id = req.body.account_id;
 
+  // Exchange a public_token and account_id for a Plaid access_token
+  // and a Stripe bank account token
+  plaidClient.exchangeToken(public_token, account_id, function(err, res) {
+    if (err != null) {
+      // Handle error!
+    } else {
+      // This is your Plaid access token - store somewhere persistent
+      // The access_token can be used to make Plaid API calls to
+      // retrieve accounts and transactions
+      var access_token = res.access_token;
+      console.log('access_token::', access_token);
 
+      // This is your Stripe bank account token - store somewhere
+      // persistent. The token can be used to move money via
+      // Stripe's ACH API.
+      var bank_account_token = res.stripe_bank_account_token;
 
-    stripe.accounts.update(Connected_stripe_ID, {
-      legal_entity: {
-        personal_id_number: req.body.piiTokenID
-      }
-    }).then(function (response) {
-      console.log(' stripe personal_id_number response:::: ', response);
-      // console.log('token created for card ending in ', response.card.last4);
-      User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: response} }, function(err, user) {
-        if (err) throw err;
-        // we have the updated user returned to us
-        console.log('after saving user"s stripe info oooo',user);
-      });
-    });
-    res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
-  });
-
-
-  router.post("/saveUserPlaidToken", function(req, res, next){
-    console.log('saveUserPlaidToken, req.body::::',req.body);
-    console.log('saveUserPlaidToken, req.body::::',req.body.token);
-    // console.log('saveUserPii, req.body.id::::',req.body.token.id);
-
-    var public_token = req.body.token;
-    var account_id = req.body.account_id;
-
-    // Exchange a public_token and account_id for a Plaid access_token
-    // and a Stripe bank account token
-    plaidClient.exchangeToken(public_token, account_id, function(err, res) {
-      if (err != null) {
-        // Handle error!
-      } else {
-        // This is your Plaid access token - store somewhere persistent
-        // The access_token can be used to make Plaid API calls to
-        // retrieve accounts and transactions
-        var access_token = res.access_token;
-        console.log('access_token::', access_token);
-
-        // This is your Stripe bank account token - store somewhere
-        // persistent. The token can be used to move money via
-        // Stripe's ACH API.
-        var bank_account_token = res.stripe_bank_account_token;
-
-        console.log('bank_account_token::', bank_account_token);
-        //tell stripe to create a customer object on the stripe account id that is req.user.epirts.id
-        //save the stripe_bank_account_token to the newly created customer object
-        stripe.customers.create({
-          description: 'Customer for test@example.com',
-          source:  bank_account_token, // obtained with plaid
-          email: req.user.email
-        }, function(err, customer) {
-          console.log('customer::',customer);
-          // asynchronously called
-          User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: customer.id} }, function(err, user) {
-            if (err) throw err;
-
-            // we have the updated user returned to us
-            console.log('after saving user oooo',user);
-          });
-        });
-      }
-    });
-
-    var Connected_stripe_ID = req.user.epirts.id;
-    console.log('req.user::::',req.user);
-    console.log('req.user.epirts.id::::',req.user.epirts.id);
-    console.log('Connected_stripe_ID::::',Connected_stripe_ID);
-
-    var stripe = require("stripe")(
-      req.user.epirts.keys.secret
-    );
-
-    stripe.accounts.createExternalAccount(
-      Connected_stripe_ID,
-      {external_account: public_token},
-      function(err, bank_account) {
+      console.log('bank_account_token::', bank_account_token);
+      //tell stripe to create a customer object on the stripe account id that is req.user.epirts.id
+      //save the stripe_bank_account_token to the newly created customer object
+      stripe.customers.create({
+        description: 'Customer for test@example.com',
+        source:  bank_account_token, // obtained with plaid
+        email: req.user.email
+      }, function(err, customer) {
+        console.log('customer::',customer);
         // asynchronously called
-        console.log('bank_account::', bank_account);
-      }
-    ).then(function (response) {
-      console.log(' stripe plaidPublic_token response:::: ', response);
-      // console.log('token created for card ending in ', response.card.last4);
-      User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.response, account: req.user.epirts.account} }, function(err, user) {
-        if (err) throw err;
-        // we have the updated user returned to us
-        console.log('after saving user"s stripe info oooo',user);
+        User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: customer.id} }, function(err, user) {
+          if (err) throw err;
+
+          // we have the updated user returned to us
+          console.log('after saving user oooo',user);
+        });
       });
-    });
-    res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
+    }
   });
 
+  var Connected_stripe_ID = req.user.epirts.id;
+  console.log('req.user::::',req.user);
+  console.log('req.user.epirts.id::::',req.user.epirts.id);
+  console.log('Connected_stripe_ID::::',Connected_stripe_ID);
 
-  router.post('/stripecc', passport.authenticate('jwt', { session: false }), function(req, res) {
-    console.log('req.user:', req.user);
-    // console.log('req.body:', req.body);
-    console.log('req.body:', req.body);
-    console.log('source: req.body.id::', req.body.token);
+  var stripe = require("stripe")(
+    req.user.epirts.keys.secret
+  );
 
-    var stripe = require("stripe")(
-      "sk_test_SfT5Rf2DMVfT0unJf7aIIskQ"
-    );
-
-    stripe.customers.createSource(req.user.epirts.customerID, {
-      source: req.body.token
-    }, function(err, card) {
-      console.log('customer after update::', card);
+  stripe.accounts.createExternalAccount(
+    Connected_stripe_ID,
+    {external_account: public_token},
+    function(err, bank_account) {
       // asynchronously called
-      if (err) {
-        console.log(' stripe err::', err);
-        console.error('console.error::', err);
-      }
-      console.log(' stripe customer ', card);
-
-      stripe.customers.retrieve(
-        req.user.epirts.customerID,
-        function(err, customer) {
-          // asynchronously called
-          User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
-            if (err) throw err;
-            // we have the updated user returned to us
-            console.log('after saving user"s stripe info oooo',user);
-          });
-        }
-      );
-
-
-    }).then(function (response) {
-      console.log(' stripe card add to customer response:::: ', response);
-      // console.log('token created for card ending in ', response.card.last4);
-      // User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.response, account: req.user.epirts.account} }, function(err, user) {
-      //   if (err) throw err;
-      //   // we have the updated user returned to us
-      //   console.log('after saving user"s stripe info oooo',user);
-      // });
+      console.log('bank_account::', bank_account);
+    }
+  ).then(function (response) {
+    console.log(' stripe plaidPublic_token response:::: ', response);
+    // console.log('token created for card ending in ', response.card.last4);
+    User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.response, account: req.user.epirts.account} }, function(err, user) {
+      if (err) throw err;
+      // we have the updated user returned to us
+      console.log('after saving user"s stripe info oooo',user);
     });
-
-    // stripe.accounts.createSource(Connected_stripe_ID,
-    //   //"cus_8aZsCveeEh7TX8",
-    //   {source: req.body.token/*"tok_18GtiTDfqZ6t9CGDQUYAYBpH"*/},
-    //   function(err, card) {
-    //     if (err) {
-    //       console.log('err::', err);
-    //     }
-    //     console.log('card::', card);
-    //     // asynchronously called
-    //   }
-    // );
-
-
-    // stripe.customers.createSource(req.user.epirts.customerID,
-    //   //"cus_8aZsCveeEh7TX8",
-    //   {source: req.body.token/*"tok_18GtiTDfqZ6t9CGDQUYAYBpH"*/},
-    //   function(err, card) {
-    //     console.log('card::', card);
-    //     // asynchronously called
-    //   }
-    // );
-
-    // Work.find({$or : [{'customer_id': req.user._id}, {'contractor_id': req.user._id}]}, function(err, messages) {
-    //   if (err)
-    //     res.send(err);
-    //
-    //   res.json(messages);
-    // });
-    res.json({message: "hi from server"});
-
   });
+  res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
+});
 
 
-  router.post("/saveCustomerPlaidToken", function(req, res, next){
-    console.log('/saveCustomerPlaidToken wakawaka, req.body::::',req.body);
-    console.log('/saveCustomerPlaidToken, req.body.public_token::::',req.body.public_token);
-    // console.log('saveUserPii, req.body.id::::',req.body.public_token.id);
+router.post('/stripecc', passport.authenticate('jwt', { session: false }), function(req, res) {
+  console.log('req.user:', req.user);
+  // console.log('req.body:', req.body);
+  console.log('req.body:', req.body);
+  console.log('source: req.body.id::', req.body.token);
 
-    var public_token = req.body.public_token;
-    var account_id = req.body.account_id;
+  var stripe = require("stripe")(
+    "sk_test_SfT5Rf2DMVfT0unJf7aIIskQ"
+  );
 
-    // Exchange a public_token and account_id for a Plaid access_token
-    // and a Stripe bank account token
-    plaidClient.exchangeToken(public_token, account_id, function(err, res) {
-      if (err != null) {
-        // Handle error!
-      } else {
-        // This is your Plaid access token - store somewhere persistent
-        // The access_token can be used to make Plaid API calls to
-        // retrieve accounts and transactions
-        var access_token = res.access_token;
-        console.log('access_token::', access_token);
+  stripe.customers.createSource(req.user.epirts.customerID, {
+    source: req.body.token
+  }, function(err, card) {
+    console.log('customer after update::', card);
+    // asynchronously called
+    if (err) {
+      console.log(' stripe err::', err);
+      console.error('console.error::', err);
+    }
+    console.log(' stripe customer ', card);
 
-        // This is your Stripe bank account token - store somewhere
-        // persistent. The token can be used to move money via
-        // Stripe's ACH API.
-        var bank_account_token = res.stripe_bank_account_token;
-
-        console.log('bank_account_token::', bank_account_token);
-        //tell stripe to create a customer object on the stripe account id that is req.user.epirts.id
-        //save the stripe_bank_account_token to the newly created customer object
-        var stripe = require("stripe")(
-          "sk_test_SfT5Rf2DMVfT0unJf7aIIskQ"
-        );
-
-        stripe.customers.createSource(req.user.epirts.customerID, {
-          source: bank_account_token
-        }, function(err, card) {
-          console.log('customer after update::', card);
-          // asynchronously called
-          if (err) {
-            console.log(' stripe err::', err);
-            console.error('console.error::', err);
-          }
-          console.log(' stripe customer ', card);
-
-          stripe.customers.retrieve(
-            req.user.epirts.customerID,
-            function(err, customer) {
-              // asynchronously called
-              User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
-                if (err) throw err;
-                // we have the updated user returned to us
-                console.log('after saving user"s stripe info oooo',user);
-              });
-            }
-          );
-        }).then(function (response) {
-          console.log(' stripe card add to customer response:::: ', response);
+    stripe.customers.retrieve(
+      req.user.epirts.customerID,
+      function(err, customer) {
+        // asynchronously called
+        User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
+          if (err) throw err;
+          // we have the updated user returned to us
+          console.log('after saving user"s stripe info oooo',user);
         });
       }
-    });
-    res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
-  });
-
-  router.post("/saveCustCheck", function(req, res, next){
-    console.log('/saveCustomerPlaidToken wowowo, req.body::::',req.body);
-    // console.log('/saveCustomerPlaidToken, req.body.public_token::::',req.body.public_token);
-    // console.log('saveUserPii, req.body.id::::',req.body.public_token.id);
-
-    // var public_token = req.body.public_token;
-    var token = req.body.token;
-
-    var stripe = require("stripe")(
-      "sk_test_SfT5Rf2DMVfT0unJf7aIIskQ"
     );
 
-    stripe.customers.createSource(req.user.epirts.customerID, {
-      source: token
-    }, function(err, check) {
-      console.log('customer after update::', check);
-      // asynchronously called
-      if (err) {
-        console.log(' stripe err::', err);
-        console.error('console.error::', err);
-      }
-      console.log(' stripe customer ', check);
 
-      stripe.customers.retrieve(
-        req.user.epirts.customerID,
-        function(err, customer) {
-          // asynchronously called
-          User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
-            if (err) throw err;
-            // we have the updated user returned to us
-            console.log('after saving user"s stripe info oooo',user);
-          });
-        }
-      );
-    }).then(function (response) {
-      console.log(' stripe check add to customer response:::: ', response);
-    });
-
-    res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
+  }).then(function (response) {
+    console.log(' stripe card add to customer response:::: ', response);
+    // console.log('token created for card ending in ', response.card.last4);
+    // User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.response, account: req.user.epirts.account} }, function(err, user) {
+    //   if (err) throw err;
+    //   // we have the updated user returned to us
+    //   console.log('after saving user"s stripe info oooo',user);
+    // });
   });
 
-  router.post('/saveUserIdentityDocument', passport.authenticate('jwt', { session: false }), multipartyMiddleware, function(req, res) {
-    console.log('inside updateUser/saveUserIdentityDocument::');
+  // stripe.accounts.createSource(Connected_stripe_ID,
+  //   //"cus_8aZsCveeEh7TX8",
+  //   {source: req.body.token/*"tok_18GtiTDfqZ6t9CGDQUYAYBpH"*/},
+  //   function(err, card) {
+  //     if (err) {
+  //       console.log('err::', err);
+  //     }
+  //     console.log('card::', card);
+  //     // asynchronously called
+  //   }
+  // );
 
-    //https://github.com/danialfarid/ng-file-upload/wiki/Node-example
 
-    // We are able to access req.files.file thanks to
-    // the multiparty middleware
-    var file = req.files.file;
-    console.log('file.name',file.name);
-    console.log('file.type', file.type);
-    console.log('file', file);
+  // stripe.customers.createSource(req.user.epirts.customerID,
+  //   //"cus_8aZsCveeEh7TX8",
+  //   {source: req.body.token/*"tok_18GtiTDfqZ6t9CGDQUYAYBpH"*/},
+  //   function(err, card) {
+  //     console.log('card::', card);
+  //     // asynchronously called
+  //   }
+  // );
 
-    console.log('saveUserIdentityDocument, req.body::::',req.body);
+  // Work.find({$or : [{'customer_id': req.user._id}, {'contractor_id': req.user._id}]}, function(err, messages) {
+  //   if (err)
+  //     res.send(err);
+  //
+  //   res.json(messages);
+  // });
+  res.json({message: "hi from server"});
 
-    var Connected_stripe_ID = req.user.epirts.id;
-    console.log('req.user::::',req.user);
-    console.log('req.user.epirts.id::::',req.user.epirts.id);
-    console.log('Connected_stripe_ID::::',Connected_stripe_ID);
+});
 
-    const fs = require('fs');
-    var fp = fs.readFileSync(file.path);
-    var stripe = require('stripe')('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ'); // 'sk_test_SfT5Rf2DMVfT0unJf7aIIskQ', 'pk_test_C6pNjUH41hCQ87RXmeLBIAa5', PLATFORM_SECRET_KEY
-    stripe.fileUploads.create(
-      {
-        purpose: 'identity_document',
-        file: {
-          data: fp, //fs.readFileSync('/path/to/a/file.jpg'),
-          name: 'drivers_license.jpg',
-          type: 'application/octet-stream'
-        }
-      },
-      {stripe_account: Connected_stripe_ID}
-    ).then(function (response) {
-      console.log(' stripe identity_document response:::: ', response);
-      // console.log('token created for card ending in ', response.card.last4);
 
-      stripe.accounts.retrieve(
-        Connected_stripe_ID,
-        function(err, account) {
-          // asynchronously called
-          User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.keys, account: account} }, function(err, user) {
-            if (err) throw err;
-            // we have the updated user returned to us
-            console.log('after saving user"s stripe info oooo',user);
-          });
-        }
+router.post("/saveCustomerPlaidToken", function(req, res, next){
+  console.log('/saveCustomerPlaidToken wakawaka, req.body::::',req.body);
+  console.log('/saveCustomerPlaidToken, req.body.public_token::::',req.body.public_token);
+  // console.log('saveUserPii, req.body.id::::',req.body.public_token.id);
+
+  var public_token = req.body.public_token;
+  var account_id = req.body.account_id;
+
+  // Exchange a public_token and account_id for a Plaid access_token
+  // and a Stripe bank account token
+  plaidClient.exchangeToken(public_token, account_id, function(err, res) {
+    if (err != null) {
+      // Handle error!
+    } else {
+      // This is your Plaid access token - store somewhere persistent
+      // The access_token can be used to make Plaid API calls to
+      // retrieve accounts and transactions
+      var access_token = res.access_token;
+      console.log('access_token::', access_token);
+
+      // This is your Stripe bank account token - store somewhere
+      // persistent. The token can be used to move money via
+      // Stripe's ACH API.
+      var bank_account_token = res.stripe_bank_account_token;
+
+      console.log('bank_account_token::', bank_account_token);
+      //tell stripe to create a customer object on the stripe account id that is req.user.epirts.id
+      //save the stripe_bank_account_token to the newly created customer object
+      var stripe = require("stripe")(
+        "sk_test_SfT5Rf2DMVfT0unJf7aIIskQ"
       );
 
-    });
-    res.json({file_name: file.name, file_type: file.type});
+      stripe.customers.createSource(req.user.epirts.customerID, {
+        source: bank_account_token
+      }, function(err, card) {
+        console.log('customer after update::', card);
+        // asynchronously called
+        if (err) {
+          console.log(' stripe err::', err);
+          console.error('console.error::', err);
+        }
+        console.log(' stripe customer ', card);
 
+        stripe.customers.retrieve(
+          req.user.epirts.customerID,
+          function(err, customer) {
+            // asynchronously called
+            User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
+              if (err) throw err;
+              // we have the updated user returned to us
+              console.log('after saving user"s stripe info oooo',user);
+            });
+          }
+        );
+      }).then(function (response) {
+        console.log(' stripe card add to customer response:::: ', response);
+      });
+    }
+  });
+  res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
+});
 
+router.post("/saveCustCheck", function(req, res, next){
+  console.log('/saveCustomerPlaidToken wowowo, req.body::::',req.body);
+  // console.log('/saveCustomerPlaidToken, req.body.public_token::::',req.body.public_token);
+  // console.log('saveUserPii, req.body.id::::',req.body.public_token.id);
+
+  // var public_token = req.body.public_token;
+  var token = req.body.token;
+
+  var stripe = require("stripe")(
+    "sk_test_SfT5Rf2DMVfT0unJf7aIIskQ"
+  );
+
+  stripe.customers.createSource(req.user.epirts.customerID, {
+    source: token
+  }, function(err, check) {
+    console.log('customer after update::', check);
+    // asynchronously called
+    if (err) {
+      console.log(' stripe err::', err);
+      console.error('console.error::', err);
+    }
+    console.log(' stripe customer ', check);
+
+    stripe.customers.retrieve(
+      req.user.epirts.customerID,
+      function(err, customer) {
+        // asynchronously called
+        User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
+          if (err) throw err;
+          // we have the updated user returned to us
+          console.log('after saving user"s stripe info oooo',user);
+        });
+      }
+    );
+  }).then(function (response) {
+    console.log(' stripe check add to customer response:::: ', response);
   });
 
+  res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
+});
 
+router.post('/saveUserIdentityDocument', passport.authenticate('jwt', { session: false }), multipartyMiddleware, function(req, res) {
+  console.log('inside updateUser/saveUserIdentityDocument::');
 
-  router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: false }), function(req, res) {
-    console.log('inside updateUser/customerMoneyBalance::');
-    var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
+  //https://github.com/danialfarid/ng-file-upload/wiki/Node-example
 
-    var customer = req.user;
-    var customer_id = customer.epirts.customer.id;
-    var data = {};
+  // We are able to access req.files.file thanks to
+  // the multiparty middleware
+  var file = req.files.file;
+  console.log('file.name',file.name);
+  console.log('file.type', file.type);
+  console.log('file', file);
 
-    //GET CUSTOMER'S BALANCE
-    stripe.customers.retrieve(customer_id)
-    .then(function(customer){
-      var balance = customer.account_balance;
-      if (customer){
-        data.stripeCustomer = customer;
-        data.balance = balance;
-        data.customer_id = customer_id;
-        console.log('found customer in customerMoneyBalance   ');
-        return data;
+  console.log('saveUserIdentityDocument, req.body::::',req.body);
+
+  var Connected_stripe_ID = req.user.epirts.id;
+  console.log('req.user::::',req.user);
+  console.log('req.user.epirts.id::::',req.user.epirts.id);
+  console.log('Connected_stripe_ID::::',Connected_stripe_ID);
+
+  const fs = require('fs');
+  var fp = fs.readFileSync(file.path);
+  var stripe = require('stripe')('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ'); // 'sk_test_SfT5Rf2DMVfT0unJf7aIIskQ', 'pk_test_C6pNjUH41hCQ87RXmeLBIAa5', PLATFORM_SECRET_KEY
+  stripe.fileUploads.create(
+    {
+      purpose: 'identity_document',
+      file: {
+        data: fp, //fs.readFileSync('/path/to/a/file.jpg'),
+        name: 'drivers_license.jpg',
+        type: 'application/octet-stream'
       }
-    }).then(function(data){
-      return stripe.invoices.retrieveUpcoming(data.customer_id).then(function(upcoming){
-        data.upcomingInvoice = upcoming;
-        return data;
-      })
+    },
+    {stripe_account: Connected_stripe_ID}
+  ).then(function (response) {
+    console.log(' stripe identity_document response:::: ', response);
+    // console.log('token created for card ending in ', response.card.last4);
 
-      /*
-      stripe.invoices.list(data.customer_id).then(function(invoices){
-      data.invoices = invoices ;
+    stripe.accounts.retrieve(
+      Connected_stripe_ID,
+      function(err, account) {
+        // asynchronously called
+        User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.keys, account: account} }, function(err, user) {
+          if (err) throw err;
+          // we have the updated user returned to us
+          console.log('after saving user"s stripe info oooo',user);
+        });
+      }
+    );
+
+  });
+  res.json({file_name: file.name, file_type: file.type});
+
+
+});
+
+
+
+router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: false }), function(req, res) {
+  console.log('inside updateUser/customerMoneyBalance::');
+  var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
+
+  var customer = req.user;
+  var customer_id = customer.epirts.customer.id;
+  var data = {};
+
+  //GET CUSTOMER'S BALANCE
+  stripe.customers.retrieve(customer_id)
+  .then(function(customer){
+    var balance = customer.account_balance;
+    if (customer){
+      data.stripeCustomer = customer;
+      data.balance = balance;
+      data.customer_id = customer_id;
+      console.log('found customer in customerMoneyBalance   ');
+      return data;
+    }
+  }).then(function(data){
+    return stripe.invoices.retrieveUpcoming(data.customer_id).then(function(upcoming){
+      data.upcomingInvoice = upcoming;
       return data;
     })
 
+    /*
+    stripe.invoices.list(data.customer_id).then(function(invoices){
+    data.invoices = invoices ;
+    return data;
+  })
 
-    stripe.invoices.list(
-    { limit: 3 },
-    function(err, invoices) {
-    // asynchronously called
-  }
+
+  stripe.invoices.list(
+  { limit: 3 },
+  function(err, invoices) {
+  // asynchronously called
+}
 );
 */
 
@@ -874,7 +883,7 @@ var zipcode_to_timezone = require( 'zipcode-to-timezone' );
     var promise = User.findOneAndUpdate({ _id: req.user._id }, { 'accountSuspension.suspended': false }).exec();
     return promise.then(function(aUserWithID) {
       console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
-     return aUserWithID;
+      return aUserWithID;
     }).then(function(aUserWithID) {
       // never reaches here
     })
@@ -886,7 +895,7 @@ var zipcode_to_timezone = require( 'zipcode-to-timezone' );
     var promise = User.findOneAndUpdate({ _id: req.user._id }, { 'accountSuspension.suspended': true }).exec();
     return promise.then(function(aUserWithID) {
       console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
-     return aUserWithID;
+      return aUserWithID;
     }).then(function(aUserWithID) {
       // never reaches here
       console.log('should never reach here::', aUserWithID);

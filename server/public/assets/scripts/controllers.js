@@ -23,6 +23,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 .controller("BarCtrl", ['$scope', '$timeout', '$window', 'WorkService', function ($scope, $timeout, $window, WorkService) {
   var workService = WorkService;
 
+
   var now = new Date();
   current = new Date(now.getFullYear()-1, now.getMonth() /*-1*/ , now.getDate());
 
@@ -80,6 +81,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         $scope.Doughnut_data = [300, 500, 100];
 
         $scope.GraphData = workService.customerGraphDataObject;
+
 
 
       }])
