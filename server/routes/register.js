@@ -378,7 +378,7 @@ if (req.body.action === 'signup') {
           geo[1]=0;
     //
     //     newUserObject.geo = geo;
-    //     newUserObject.username = req.body.username;
+    //     newUserObject.username = req.body.email;
     //     newUserObject.password = req.body.password;
     //     newUserObject.firstname = req.body.firstname;
     //     newUserObject.lastname = req.body.lastname;
@@ -397,7 +397,7 @@ if (req.body.action === 'signup') {
       languages.push(req.body.languages);
       console.log('languages after push::', languages);
       newUser = new User({
-        username: req.body.username,
+        username: req.body.email,
         email: email,
         password: password,
         firstname: req.body.firstname,
@@ -421,7 +421,7 @@ if (req.body.action === 'signup') {
     } else {
 
       newUser = new User({
-        username: req.body.username,
+        username: req.body.email,
         email: email,
         password: password,
         firstname: req.body.firstname,
@@ -468,6 +468,7 @@ if (req.body.action === 'signup') {
               if (err) {
                 return res.status(404).send('ERROR: sending verification email FAILED: '+ err);
               }
+              console.log('aNewCustomerRegistered! '+email);
               res.redirect("/assets/views/users.html#/userRegisterSuccess");
               // res.json({
               //   msg: 'An email has been sent to you. Please check it to verify your account.',
@@ -564,7 +565,7 @@ if (req.body.action === 'signup') {
           geo[1]=geocodedData.lng;
 
         newUserObject.geo = geo;
-        newUserObject.username = req.body.username;
+        newUserObject.username = req.body.email;
         newUserObject.password = req.body.password;
         newUserObject.firstname = req.body.firstname;
         newUserObject.lastname = req.body.lastname;
