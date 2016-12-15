@@ -265,8 +265,8 @@ nev.configure({
    verifyMailOptions: {
        from: 'Do Not Reply <myawesomeemail_do_not_reply@gmail.com>',
        subject: 'Please confirm account',
-       html: 'Click the following link to confirm your account:</p><p>${URL}</p>',
-       text: 'Please confirm your account by clicking the following link: ${URL}'
+       html: 'Click the following link to confirm your NowLanguage account:</p><p>${URL}</p>',
+       text: 'Please confirm your NowLanguage account by clicking the following link: ${URL}'
    }
 });
 nev.generateTempUserModel(User, function(err, tempUserModel) {
