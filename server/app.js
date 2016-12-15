@@ -11,6 +11,8 @@ var bodyParser = require("body-parser");
 var morgan = require('morgan');//brought in here for passport JWT but might be a dependency for others
 
 var http = require('http').Server(app);  // .createServer(app)
+app.set("port", (process.env.PORT || 5100));
+
 // START https://github.com/Daplie/letsencrypt-express
 // returns an instance of node-letsencrypt with additional helper methods
 var lex = require('letsencrypt-express').create({
@@ -57,7 +59,7 @@ require('http').createServer(lex.middleware(require('redirect-https')())).listen
 
 
 // handles your app
-require('https').createServer(lex.httpsOptions, lex.middleware(app)).listen(app.get("port"), function () {//.listen(443
+require('https').createServer(lex.httpsOptions, lex.middleware(app)).listen(app.get("port"), function () {//.listen(80
   console.log("Listening for ACME tls-sni-01 challenges and serve app on", this.address());
 });
 // END  https://github.com/Daplie/letsencrypt-express
@@ -893,7 +895,6 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   });//End Twilio Video
 
   app.use("/", passport.authenticate('jwt', { session: false }), index);
-  app.set("port", (process.env.PORT || 5100));
 
   http.listen(app.get("port"), function(){
     console.log("Listening on port: ", app.get("port"));
