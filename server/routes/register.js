@@ -468,7 +468,7 @@ if (req.body.action === 'signup') {
               if (err) {
                 return res.status(404).send('ERROR: sending verification email FAILED: '+ err);
               }
-              console.log('aNewCustomerRegistered! '+email);
+              console.log('aNewUserRegistered! '+email+''+newTempUser.role);
               res.redirect("/assets/views/users.html#/userRegisterSuccess");
               // res.json({
               //   msg: 'An email has been sent to you. Please check it to verify your account.',
