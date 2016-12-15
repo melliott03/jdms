@@ -79,9 +79,9 @@ myApp.factory("WorkService", ["$http", function($http){
             userObject.response = response.data;
             console.log('userObject in factory', userObject);
             if (userObject.response == "Unauthorized") {
-              userObject.isAuthenticated == false;
+              userObject.isLogin = function(){return true;};
             } else {
-              userObject.isAuthenticated == true;
+              userObject.isLogin = function(){return false;};
             }
         });
     };

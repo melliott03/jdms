@@ -44,93 +44,172 @@ myApp.config(["$routeProvider", function($routeProvider){
   $routeProvider.
   when("/home", {
     templateUrl: "/assets/views/routes/home/dashboard.html",
-    controller: "HomeController"
+    controller: "HomeController",
+    requireAuth: true
   }).
   when("/home/charges", {
     templateUrl: "/assets/views/routes/home/charges.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/home/dashboard", {
     templateUrl: "/assets/views/routes/home/dashboard.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/availibleView", {
     templateUrl: "/assets/views/routes/availibleView.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/acceptedView", {
     templateUrl: "/assets/views/routes/accepted.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/onsite", {
     templateUrl: "/assets/views/routes/onsite/appointments.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/onsite/dashboard", {
     templateUrl: "/assets/views/routes/onsite/dashboard.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/onsite/appointments", {
     templateUrl: "/assets/views/routes/onsite/appointments.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/onsite/appointments2", {
     templateUrl: "/assets/views/routes/onsite/appointments2.html",
-    controller: "pipeCtrl"
+    controller: "pipeCtrl",
+    requireAuth: true
   }).
   when("/workdetail", {
     templateUrl: "/assets/views/routes/workdetail.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/terms", {
     templateUrl: "/assets/views/routes/terms.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/accountCont", {
     templateUrl: "/assets/views/routes/account-contractor.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/accountCust", {
     templateUrl: "/assets/views/routes/account-customer.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/sign", {
     templateUrl: "/assets/views/routes/sign.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/phone", {
     templateUrl: "/assets/views/routes/phone/calls.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/phone/dashboard", {
     templateUrl: "/assets/views/routes/phone/dashboard.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/phone/calls", {
     templateUrl: "/assets/views/routes/phone/calls.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/admin_addwork", {
     templateUrl: "/assets/views/adminAddDialog.tmpl.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/videoCust", {
     templateUrl: "/assets/views/routes/getvideointerpreter.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/translateCust", {
     templateUrl: "/assets/views/routes/translate/documentTranslate.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   when("/userRegisterSuccess", {
     templateUrl: "/assets/views/routes/translate/documentTranslate.html",
-    controller: "ShowController"
+    controller: "ShowController",
+    requireAuth: true
   }).
   otherwise({
     redirectTo: '/home'
   });
 }]);
 
+myApp.controller('AuthCnt', ['$scope','$location','$window','WorkService', function($scope, $location, $window, WorkService) {
+
+        $scope.$on('$routeChangeStart', function(angularEvent, newUrl) {
+          console.log('route changed state::');
+          var user = {};
+          user.isAuthenticated = false;
+            if (newUrl.requireAuth && !WorkService.userObject.isLogin) {
+              console.log('user is not authenticated::');
+                // User isn’t authenticated
+                // $location.path("login");
+                window.location.href = "/";
+                // $location.absUrl("nowlanguage.com");
+
+            }
+
+        });
+    }]);
+/*
+// end Protecting routes
+myApp.config(function ($stateProvider) {
+
+  $stateProvider
+    .state('home', {
+      url: '/home',
+      // ...
+      data: {
+        requireLogin: false
+      }
+    })
+    .state('/', {
+      url: '/assets',
+      abstract: true,
+      // ...
+      data: {
+        requireLogin: true // this property will apply to all children of 'app'
+      }
+    })
+    .state('app.dashboard', {
+      // child state of `app`
+      // requireLogin === true
+    })
+
+});
+
+myApp.run(function ($rootScope) {
+
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+    var requireLogin = toState.data.requireLogin;
+
+    if (requireLogin && typeof $rootScope.userObject.isAuthenticated === false || $rootScope.userObject.isAuthenticated === 'undefined') {
+      event.preventDefault();
+      // get me a login modal!
+    }
+  });
+
+});
+// end Protecting routes
+*/
 // //START PLAID RE STUFF
 // myApp.config([
 //      'plaidLinkProvider',

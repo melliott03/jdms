@@ -1,0 +1,9 @@
+<div ng-controller="AuthenticationController">
+  <span></span>
+  <form ng-submit="submit()">
+    <input ng-model="user.email" type="text" name="user" placeholder="email" />
+    <input ng-model="user.password" type="password" name="pass" placeholder="Password" />
+    <input type="submit" value="Login" />
+  </form>
+  <span class="text-danger">{{message_fail}}</span> <span class="text-success ">{{message_success}}</span>
+</div>
