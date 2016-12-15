@@ -894,6 +894,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
 
   app.use("/", passport.authenticate('jwt', { session: false }), index);
   app.set("port", (process.env.PORT || 5100));
+  console.log('process.env.PORT::',process.env.PORT);
 
   http.listen(app.get("port"), function(){
     console.log("Listening on port: ", app.get("port"));
