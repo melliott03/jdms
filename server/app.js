@@ -51,13 +51,13 @@ function approveDomains(opts, certs, cb) {
   cb(null, { options: opts, certs: certs });
 }
 // handles acme-challenge and redirects to https
-require('http').createServer(lex.middleware(require('redirect-https')())).listen(80, function () {
+require('http').createServer(lex.middleware(require('redirect-https')())).listen(app.get("port"), function () {//.listen(80
   console.log("Listening for ACME http-01 challenges on", this.address());
 });
 
 
 // handles your app
-require('https').createServer(lex.httpsOptions, lex.middleware(app)).listen(443, function () {
+require('https').createServer(lex.httpsOptions, lex.middleware(app)).listen(app.get("port"), function () {//.listen(443
   console.log("Listening for ACME tls-sni-01 challenges and serve app on", this.address());
 });
 // END  https://github.com/Daplie/letsencrypt-express
