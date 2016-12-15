@@ -1,10 +1,10 @@
 require('dotenv').load();//Twilio Video
-var express = require("express");
+var app = require('express')();
 // Requires multiparty  https://github.com/danialfarid/ng-file-upload/wiki/Node-example
 // var multiparty = require('connect-multiparty');
 // var multipartyMiddleware = multiparty();
 
-var app = express();
+// var app = express();
 var db = require("./modules/db");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
