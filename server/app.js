@@ -39,7 +39,8 @@ function approveDomains(opts, certs, cb) {
     opts.domains = certs.altnames;
   }
   else {
-    opts.email = 'john.doe@example.com';
+    console.log('inside else of if (certs)::');
+    opts.email = configsty.DEV_EMAIL;
     opts.agreeTos = true;
   }
 
