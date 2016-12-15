@@ -4,14 +4,13 @@ var express = require("express");
 // var multiparty = require('connect-multiparty');
 // var multipartyMiddleware = multiparty();
 
-// var app = express();
-var app = require('express')();
+var app = express();
 var db = require("./modules/db");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var morgan = require('morgan');//brought in here for passport JWT but might be a dependency for others
 
-// var http = require('http').Server(app);  // .createServer(app)
+var http = require('http').Server(app);  // .createServer(app)
 // START https://github.com/Daplie/letsencrypt-express
 // returns an instance of node-letsencrypt with additional helper methods
 var lex = require('letsencrypt-express').create({
@@ -52,7 +51,7 @@ function approveDomains(opts, certs, cb) {
   cb(null, { options: opts, certs: certs });
 }
 // handles acme-challenge and redirects to https
-var http = require('http').createServer(lex.middleware(require('redirect-https')())).listen(80, function () {
+require('http').createServer(lex.middleware(require('redirect-https')())).listen(80, function () {
   console.log("Listening for ACME http-01 challenges on", this.address());
 });
 
