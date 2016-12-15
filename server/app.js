@@ -893,7 +893,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   });//End Twilio Video
 
   app.use("/", passport.authenticate('jwt', { session: false }), index);
-  app.set("port", (process.env.PORT || 5100));
+  // app.set("port", (process.env.PORT || 5100));
   console.log('process.env.PORT::',process.env.PORT);
 
   http.listen(app.get("port"), function(){
