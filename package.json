@@ -68,6 +68,7 @@
     "jquery": "^2.2.2",
     "jsonwebtoken": "^5.7.0",
     "kue": "^0.10.5",
+    "letsencrypt-express": "^2.0.5",
     "lr-sticky-header": "^1.1.0",
     "moment": "^2.13.0",
     "moment-strftime": "^0.1.5",
