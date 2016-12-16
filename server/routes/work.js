@@ -80,7 +80,7 @@ promised.then(function(work_Tels) {
 })
 .then(function(work_tels) {
   // console.log('inside the then work_tels::', work_tels);
-
+  work_tels.sort(function(a,b){return b.outboundSummary.createdAt.getTime() - a.outboundSummary.createdAt.getTime()});
   res.send(work_tels);
 })
 .catch(function(err){
