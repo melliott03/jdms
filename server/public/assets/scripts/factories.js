@@ -73,19 +73,6 @@ myApp.factory("WorkService", ["$http", function($http){
         });
     };
 
-    var getUser = function(){
-        $http.get("/user/name").then(function(response){
-            console.log(response.data);
-            userObject.response = response.data;
-            console.log('userObject in factory', userObject);
-            if (userObject.response == "Unauthorized") {
-              userObject.isLogin = function(){return true;};
-            } else {
-              userObject.isLogin = function(){return false;};
-            }
-        });
-    };
-
     var getWorks = function(){
         $http.get("/work").then(function(response){
             customerWorkObject.response = response.data;
@@ -302,6 +289,12 @@ myApp.factory("WorkService", ["$http", function($http){
             console.log(response.data);
             userObject.response = response.data;
             console.log('userObject in factory', userObject);
+            if (userObject.response == "Unauthorized") {
+              userObject.isLogin = function(){return false;;};
+            } else {
+              userObject.isLogin = function(){return true};
+            }
+            console.log('userObject in factory 2', userObject);
             console.log('userObject.response.sources.data in factory', userObject.response.sources.data);
             var sourcesLast4Array = [];
             sourcesArray = userObject.response.sources.data;
