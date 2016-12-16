@@ -9,59 +9,7 @@ var db = require("./modules/db");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var morgan = require('morgan');//brought in here for passport JWT but might be a dependency for others
-
 var http = require('http').Server(app);  // .createServer(app)
-// START https://github.com/Daplie/letsencrypt-express
-// returns an instance of node-letsencrypt with additional helper methods
-var lex = require('letsencrypt-express').create({
-  // set to https://acme-v01.api.letsencrypt.org/directory in production
-  server: 'staging'
-
-// If you wish to replace the default plugins, you may do so here
-//
-, challenges: { 'http-01': require('le-challenge-fs').create({ webrootPath: '/tmp/acme-challenges' }) }
-, store: require('le-store-certbot').create({ webrootPath: '/tmp/acme-challenges' })
-
-// You probably wouldn't need to replace the default sni handler
-// See https://github.com/Daplie/le-sni-auto if you think you do
-//, sni: require('le-sni-auto').create({})
-
-, approveDomains: approveDomains
-});
-function approveDomains(opts, certs, cb) {
-  // This is where you check your database and associated
-  // email addresses with domains and agreements and such
-
-
-  // The domains being approved for the first time are listed in opts.domains
-  // Certs being renewed are listed in certs.altnames
-  if (certs) {
-    opts.domains = certs.altnames;
-  }
-  else {
-    console.log('inside else of if (certs)::');
-    opts.email = configsty.DEV_EMAIL;
-    opts.agreeTos = true;
-  }
-
-  // NOTE: you can also change other options such as `challengeType` and `challenge`
-  // opts.challengeType = 'http-01';
-  // opts.challenge = require('le-challenge-fs').create({});
-
-  cb(null, { options: opts, certs: certs });
-}
-// handles acme-challenge and redirects to https
-require('http').createServer(lex.middleware(require('redirect-https')())).listen(80, function () {
-  console.log("Listening for ACME http-01 challenges on", this.address());
-});
-
-
-// handles your app
-require('https').createServer(lex.httpsOptions, lex.middleware(app)).listen(443, function () {
-  console.log("Listening for ACME tls-sni-01 challenges and serve app on", this.address());
-});
-// END  https://github.com/Daplie/letsencrypt-express
-
 var io = require('socket.io')(http);
 var socketioJwt = require('socketio-jwt');
 // var sio = socketIo.listen(http);
@@ -367,6 +315,14 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
       console.log('after saving user oooo',user);
     });
   });
+//START https://stackoverflow.com/questions/40199580/how-can-i-use-a-letsencrypt-ssl-cert-in-my-heroku-node-express-app
+  // Read the Certbot response from an environment variable; we'll set this later:
+  const letsEncryptReponse = process.env.CERTBOT_RESPONSE;
+  // Return the Let's Encrypt certbot response:
+  app.get('/.well-known/acme-challenge/:content', function(req, res) {
+    res.send(letsEncryptReponse);
+  });
+  //END https://stackoverflow.com/questions/40199580/how-can-i-use-a-letsencrypt-ssl-cert-in-my-heroku-node-express-app
 
   app.get('/detail/:id', function(req, res) {
     var _id = req.params.id;
@@ -894,7 +850,6 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
 
   app.use("/", passport.authenticate('jwt', { session: false }), index);
   app.set("port", (process.env.PORT || 5100));
-  console.log('process.env.PORT::',process.env.PORT);
 
   http.listen(app.get("port"), function(){
     console.log("Listening on port: ", app.get("port"));
