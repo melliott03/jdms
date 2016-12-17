@@ -68,7 +68,7 @@ var updateCustomer = require('./routes/updateCustomer');
 
 //PASSPORT original before jtw strategy
 // var passport = require("passport");
-// var session = require("express-session");
+var session = require("express-session");
 // var localStrategy = require("passport-local");
 
 //START: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
