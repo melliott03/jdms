@@ -484,26 +484,39 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
               // redirectTo: '/';
             };
             $scope.contractor = function(){
-              if(WorkService.userObject.response.role == "contractor" ){
-                return true;
-              }else{
-                return false;
+              if (WorkService.userObject) {
+                if (WorkService.userObject.response) {
+                  if(WorkService.userObject.response.role == "contractor" ){
+                    return true;
+                  }else{
+                    return false;
+                  }
+                }
               }
+
             }
 
             $scope.customer = function(){
-              if(WorkService.userObject.response.role == "customer" ){
-                return true;
-              }else{
-                return false;
+              if (WorkService.userObject) {
+                if (WorkService.userObject.response) {
+                  if(WorkService.userObject.response.role == "customer" ){
+                    return true;
+                  }else{
+                    return false;
+                  }
+                }
               }
             }
 
             $scope.admin = function(){
-              if(WorkService.userObject.response.role == "admin" ){
-                return true;
-              }else{
-                return false;
+              if (WorkService.userObject) {
+                if (WorkService.userObject.response) {
+                  if(WorkService.userObject.response.role == "admin" ){
+                    return true;
+                  }else{
+                    return false;
+                  }
+                }
               }
             }
 
