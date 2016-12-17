@@ -899,7 +899,7 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
     });
   }else if (money_availabel <= 0) {
     console.log('money_availabel <= 0, just before autoRechargeCustomer(data)::');
-    autoRechargeCustomer(data);
+    return autoRechargeCustomer(data);
   }else {
     console.log('newdata just before res.send(newdata) in else of money_availabel < 0::',newdata);
     return newdata;
@@ -978,9 +978,10 @@ var autoRechargeCustomer = function(data){
             return data;
           });
         }else {
+          console.log('//do nothing');
           //do nothing
         }
-      })
+      });
     } else {
       console.log('if (abalanceMinusAmountDue <= 0)::', abalanceMinusAmountDue);
       var promise = User.findOneAndUpdate({ _id: data.user._id }, { 'accountSuspension.suspended': true }).exec();
