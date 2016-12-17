@@ -246,8 +246,8 @@ var prePaid = function(data){
 
     if (data.aUserWithCustomer_ID.autoPaymentsChoice && data.aUserWithCustomer_ID.autoPaymentsChoice.autoRecharge.rechargeTo) {
           var rechargeTo = parseInt(data.aUserWithCustomer_ID.autoPaymentsChoice.autoRecharge.rechargeTo);
-              rechargeTo = rechargeTo * -100;
-              console.log('rechargeTo -40000 after parseInt::', rechargeTo);
+              rechargeTo = rechargeTo * -1;
+              console.log('rechargeTo after parseInt::', rechargeTo);
           var account_balance = data.stripeCustomer.account_balance;
           console.log('account_balance 1 ::', account_balance);
 
@@ -256,12 +256,12 @@ var prePaid = function(data){
           var abalanceMinusAmountDue = data.stripeCustomer.account_balance + data.upcomingInvoice.total;
           console.log('data.stripeCustomer.account_balance + data.upcomingInvoice.total:: ', abalanceMinusAmountDue);
           var fallsbelow = parseInt(data.aUserWithCustomer_ID.autoPaymentsChoice.autoRecharge.fallsBelow);
-              fallsbelow =  fallsbelow * -100;
-              console.log('fallsbelow -39000::', fallsbelow);
+              fallsbelow =  fallsbelow * -1;
+              console.log('fallsbelow ::', fallsbelow);
           if ( abalanceMinusAmountDue > fallsbelow) { //1000 equals $10.00
           //         negative number (credit)         positive number (debit) -9000 > 10000
               console.log('abalanceMinusAmountDue -38275::', abalanceMinusAmountDue); // abalanceMinusAmountDue = -38275
-              console.log('fallsbelow -39000::', fallsbelow);
+              console.log('fallsbelow ::', fallsbelow);
 
               var reupChargeAmount = rechargeTo - abalanceMinusAmountDue;
               console.log('after fallsbelow - abalanceMinusAmountDue reupChargeAmount::', reupChargeAmount);

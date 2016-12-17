@@ -928,10 +928,12 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
 });
 
 var autoRechargeCustomer = function(data){
+  console.log('data at top of autoRechargeCustomer::', data);
     data.stripeCustomer = data.user.epirts.customer.account_balance;
   if (data.user.autoPaymentsChoice && data.user.autoPaymentsChoice.autoRecharge.rechargeTo) {
+    console.log('at top of if (data.user.autoPaymentsChoice && data.user.autoPaymentsChoice.autoRecharge.rechargeTo) {::');
         var rechargeTo = parseInt(data.user.autoPaymentsChoice.autoRecharge.rechargeTo);
-            rechargeTo = rechargeTo * -100;
+            rechargeTo = rechargeTo * -1;
             console.log('rechargeTo -40000 after parseInt::', rechargeTo);
         var account_balance = data.stripeCustomer.account_balance;
         console.log('account_balance 1 ::', account_balance);
