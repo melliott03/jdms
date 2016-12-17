@@ -271,8 +271,8 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
       myApp.controller("ComfirmationController", ["$scope", "$location", "$http", "$window", function($scope, $location, $http, $window){
         console.log("ComfirmationController::");
         $scope.showTheMessage = false;
-        $scope.message_fail = '';
-        $scope.message_success = '';
+        $scope.message_fail = 'fail';
+        $scope.message_success = 'success';
         console.log('$window.sessionStorage::', $window.sessionStorage);
         if ($window.sessionStorage.confirmStatus === 'Account confirmed successfully') {
           $scope.showTheMessage = true;
@@ -285,7 +285,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           // $window.location.href = '/assets/views/users.html';
         } else {
           $scope.message_success = '';
-          $scope.message_fail = data.msg;
+          $scope.message_fail = '';
         }
 
         // $scope.submitRegistration = function () {
