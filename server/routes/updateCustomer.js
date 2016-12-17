@@ -412,6 +412,8 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     var paymentChoice = '';
 
     if (reqBody.autoRecharge) {
+      reqBody.rechargeTo = (reqBody.rechargeTo * 100);
+      reqBody.fallsBelow = (reqBody.fallsBelow * 100);
       autoRechargeObj = reqBody;
       console.log('autoRechargeObj::',autoRechargeObj);
       // if (reqBody.autoRecharge == 'enabled' ) {
