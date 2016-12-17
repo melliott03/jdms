@@ -306,7 +306,7 @@ router.get('/email-verification/:URL', function(req, res) {
         //   info: info
         // });
         // res.sendFile(path.resolve(__dirname, "../public/assets/views/register.html"));
-        res.redirect("/");
+        res.redirect("/confirm");
       });
     } else {
       return res.status(404).send('ERROR: confirming temp user FAILED');

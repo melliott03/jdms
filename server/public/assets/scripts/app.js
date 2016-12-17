@@ -42,6 +42,10 @@ myApp.filter('capitalize', function() {
 
 myApp.config(["$routeProvider", function($routeProvider){
   $routeProvider.
+  when("/confirm", {
+    // templateUrl: "/",
+    controller: "IndexController"
+  }).
   when("/home", {
     requireAuth: true,
     templateUrl: "/assets/views/routes/home/dashboard.html",
