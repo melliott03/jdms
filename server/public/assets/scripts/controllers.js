@@ -268,13 +268,13 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         // WorkService.getContractorWork(); //gets all the work contractor has accepted
       }]);
 
-      myApp.controller("ComfirmationController", ["$scope", "$location", "$http", "$window", "$cookieStore", function($scope, $location, $http, $window, $cookieStore){
+      myApp.controller("ComfirmationController", ["$scope", "$location", "$http", "$window", "$cookies", function($scope, $location, $http, $window, $cookies ){
         console.log("ComfirmationController::");
         $scope.showTheMessage = false;
         $scope.message_fail = 'fail';
         $scope.message_success = 'success';
-        console.log('$cookieStore::', $cookieStore);
-        console.log('$cookieStore.confirmStatus::', $cookieStore.confirmStatus);
+        console.log('$cookies::', $cookies);
+        console.log('$cookies.confirmStatus::', $cookies.confirmStatus);
         if ($cookieStore.confirmStatus === 'Account confirmed successfully') {
           $scope.showTheMessage = true;
           $scope.message_fail = '';
