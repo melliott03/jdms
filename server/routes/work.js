@@ -80,7 +80,7 @@ promised.then(function(work_Tels) {
 })
 .then(function(work_tels) {
   console.log('inside the then work_tels::', work_tels);
-  work_tels.sort(function(aze,bze){return bze.outboundSummary.createdAt.getTime() - aze.outboundSummary.createdAt.getTime()});
+  work_tels.sort(function(aze,bze){return Date.parse(bze.outboundSummary.createdAt) - Date.parse(aze.outboundSummary.createdAt)});
   console.log('after sorting by date work_tels::', work_tels);
   res.send(work_tels);
 })
