@@ -21,7 +21,7 @@
   </thead>
   <tbody>
      <tr ng-repeat="charge in customerCharges.response.data">
-      <td>{{ charge.amount }}</td>
+      <td>{{ charge.amount/100 | currency}}</td>
       <td width="50%">{{ charge.createdDateReadable | date : format : timezone }}</td>
       <!-- <td width="50%">{{ charge.created | date : format : timezone }}</td> -->
       <td>{{ charge.source.brand || charge.source.bank_name }}...{{ charge.source.last4 }}</td>

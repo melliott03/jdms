@@ -351,6 +351,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     if (req.body.amount && req.body.source) {
 
       var amount = req.body.amount
+      amount = (amount * 100);
       var source = req.body.source.id
 
       var  customer_id = req.user.epirts.customer.id;
