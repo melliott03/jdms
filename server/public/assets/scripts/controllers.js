@@ -271,7 +271,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
       myApp.controller("ComfirmationController", ["$scope", "$location", "$http", "$window", function($scope, $location, $http, $window){
         console.log("ComfirmationController::");
         $scope.showTheMessage = false;
-
+        console.log('$window.sessionStorage::', $window.sessionStorage);
         if ($window.sessionStorage.confirmStatus === 'Account confirmed successfully') {
           $scope.showTheMessage = true;
           $scope.message_fail = '';
