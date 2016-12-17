@@ -906,6 +906,7 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
   }
 
 }).then(function(newdata) {
+  console.log('newdata at top s::',newdata);
   var dataToSend;
   if (newdata.availabel_balance) {
     dataToSend = newdata;
@@ -984,8 +985,8 @@ var autoRechargeCustomer = function(data){
           var promise = User.findOneAndUpdate({ _id: data.user._id }, { 'accountSuspension.suspended': false }).exec();
           return promise.then(function(aUserWithID) {
             console.log('aUserWithID updated accountSuspension.suspended to true field 32::', aUserWithID);
-            console.log('newdata updated accountSuspension.suspended to true field 32::', aUserWithID);
-            return aUserWithID;
+            console.log('data updated accountSuspension.suspended to true field 32::', data);
+            return data;
           });
         }else {
           console.log('//do nothing');
@@ -997,8 +998,8 @@ var autoRechargeCustomer = function(data){
       var promise = User.findOneAndUpdate({ _id: data.user._id }, { 'accountSuspension.suspended': true }).exec();
       return promise.then(function(aUserWithID) {
         console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
-        console.log('newdata updated accountSuspension.suspended to true field::', aUserWithID);
-        return aUserWithID;
+        console.log('data updated accountSuspension.suspended to true field::', data);
+        return data;
       })
       // .then(function(newdata) {
       //   // never reaches here
