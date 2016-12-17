@@ -910,7 +910,10 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
   if (newdata.availabel_balance) {
     dataToSend = newdata;
   }else {
-    var money_availabel = newdata.stripeCustomer.account_balance + newdata.upcomingInvoice.total;;
+    console.log('newdata.stripeCustomer.account_balance::',newdata.stripeCustomer.account_balance);
+    console.log('newdata.stripeCustomer.upcomingInvoice.total::',newdata.stripeCustomer.upcomingInvoice.total::);
+
+    var money_availabel = newdata.stripeCustomer.account_balance + newdata.stripeCustomer.upcomingInvoice.total;;
     dataToSend = {availabel_balance:money_availabel};
   }
   console.log('newdata just before res.send(newdata) .then after in else of money_availabel < 0::',newdata);
