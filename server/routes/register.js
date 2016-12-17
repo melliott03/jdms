@@ -299,14 +299,14 @@ router.get('/email-verification/:URL', function(req, res) {
       nev.sendConfirmationEmail(user.email, function(err, info) {
         if (err) {
           console.log('req.session settingsing success & successObject variable BEFORE::', req.session);
-          req.session['confirmStatus'] = 'ERROR: confirmation FAILED';
-          req.session['confirmObject'] = {msg: 'ERROR!', info: info};
+          req.session.confirmStatus = 'ERROR: confirmation FAILED';
+          req.session.confirmObject = {msg: 'ERROR!', info: info};
           console.log('req.session setting success & successObject variable AFTER::', req.session);
           // return res.status(404).send('ERROR: sending confirmation email FAILED');
         }else {
           console.log('req.session settingsing success & successObject variable BEFORE::', req.session);
-          req.session['confirmStatus'] = 'Account confirmed successfully';
-          req.session['confirmObject'] = {msg: 'CONFIRMED!', info: info};
+          req.session.confirmStatus = 'Account confirmed successfully';
+          req.session.confirmObject = {msg: 'CONFIRMED!', info: info};
           console.log('req.session setting success & successObject variable AFTER::', req.session);
         }
 
