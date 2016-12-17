@@ -436,6 +436,18 @@ myApp.factory("AuthenticationService", ["$http", "$location", function($http, $l
     };
 }]);
 
+// myApp.factory("RegistrationService", ["$http", "$location", function($http, $location){
+//     var register = function(data){
+//        $http.post("/register", data).then(function(response){
+//          console.log('in factory back grom loging out');
+//        });
+//     };
+//
+//     return {
+//         register : register
+//     };
+// }]);
+
 myApp.factory("PlaidService", ["$http", "$location", "WorkService", function($http, $location, WorkService){
   var workService = WorkService;
     var sendCustToken = function(plaid, user){

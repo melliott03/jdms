@@ -43,22 +43,27 @@
 <md-tab label="Register">
   <div layout="column" ng-cloak class="md-inline-form">
     <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
-      <form action="/register" method="post">
+
+
+
+      <div ng-controller="RegistrationController">
+        <span></span>
+        <form ng-submit="submitRegistration()">
         <md-input-container>
           <label for="email">EMAIL: </label>
-          <input type="email" name="email" id="email" class="md-block" flex-gt-sm required/>
+          <input ng-model="register.email" type="email" name="email" id="email" class="md-block" flex-gt-sm required/>
         </md-input-container>
         <md-input-container>
           <label for="password">PASSWORD: </label>
-          <input type="text" name="password" id="password" class="md-block" flex-gt-sm required/>
+          <input ng-model="register.password" type="text" name="password" id="password" class="md-block" flex-gt-sm required/>
         </md-input-container>
         <md-input-container>
           <label for="firstname">FIRST NAME: </label>
-          <input type="text" name="firstname" id="firstname" class="md-block" flex-gt-sm required/>
+          <input ng-model="register.firstname" type="text" name="firstname" id="firstname" class="md-block" flex-gt-sm required/>
         </md-input-container>
         <md-input-container>
           <label for="lastname">LAST NAME: </label>
-          <input type="text" name="lastname" id="lastname" class="md-block" flex-gt-sm required/>
+          <input ng-model="register.lastname" type="text" name="lastname" id="lastname" class="md-block" flex-gt-sm required/>
         </md-input-container>
         <md-input-container>
           <label for="phone">PHONE: </label>
@@ -67,7 +72,7 @@
           <div class="wrapper" ng-controller="PhoneInputCtlr">
             <!-- <div class="info">Raw Value: {{phoneVal}}</div>
             <div class="info">Filtered Value: {{phoneVal | tel}}</div> -->
-            <input class="input-phone" type='text' name="phone" phone-input ng-model="phoneVal"/>
+            <input ng-model="register.phone" class="input-phone" type='text' name="phone" phone-input />
             <!-- <input class="input-phone" type='text' name="phone" phone-input ng-model="phoneVal"/ hidden> -->
 
           </div>
@@ -76,10 +81,10 @@
 
 
         <md-input-container>
-          <input type="radio" name="role" value="customer" class="md-block" flex-gt-sm ng-model="content" >Customer<br>
-          <input type="radio" name="role" value="contractor" class="md-block" flex-gt-sm ng-model="content" required>Interpreter<br>
+          <input  type="radio" name="role" value="customer" class="md-block" flex-gt-sm ng-model="register.role" >Customer<br>
+          <input  type="radio" name="role" value="contractor" class="md-block" flex-gt-sm ng-model="register.role" required>Interpreter<br>
         </md-input-container>
-        <div ng-show="content == 'contractor'">
+        <div ng-show="register.role == 'contractor'">
           <!-- <md-input-container> -->
             <!-- <label for="type">FIELD: </label> -->
             <!-- <select type="text" name="type" id="type" class="md-block" flex-gt-sm >
@@ -93,7 +98,7 @@
           <!-- <p>Add a language now and add more later:</p> -->
           <md-input-container>
             <!-- <label for="languages">Language</label> -->
-            <select type="text" name="languages" class="md-block" flex-gt-sm >
+            <select ng-model="register.languages" type="text" name="languages" class="md-block" flex-gt-sm >
               <option>Spanish</option>
               <option>Hmong</option>
               <option>Somali</option>
@@ -110,7 +115,7 @@
             <div ng-controller="GoogleController">
               <div layout-gt-sm="row">
                 <md-input-container class="md-block" flex-gt-sm>
-                  <input type="text" ng-model="work.address" value="{{paDetails.formatted_address}}"
+                  <input type="text" ng-model="languages.address" value="{{paDetails.formatted_address}}"
                   ng-places-autocomplete
                   ng-model="query"
                   pa-options="paOptions"
@@ -118,9 +123,9 @@
                   pa-trigger="paTrigger"
                   />
                   <!-- <label for="geo">geo</label> -->
-                  <input type="text" name="geo" id="geo" class="md-block" value="{{paDetails.geometry.location}}"  flex-gt-sm hidden />
+                  <input ng-model="register.geo" type="text" name="geo" id="geo" class="md-block" value="{{paDetails.geometry.location}}"  flex-gt-sm hidden />
                   <!-- <label for="address">Address</label> -->
-                  <input type="text" name="address" id="address" class="md-block" value="{{paDetails.formatted_address}}"  flex-gt-sm hidden />
+                  <input ng-model="register.address" type="text" name="address" id="address" class="md-block" value="{{paDetails.formatted_address}}"  flex-gt-sm  />
                 </md-input-container>
                 <!-- <md-button ng-click="paTrigger()">Send</md-button> -->
               </div>
@@ -139,11 +144,15 @@
           </md-input-container>
 
         </div>
-        <input type="text" name="action" value="signup" hidden/>
+        <input ng-model="register.action" ng-init="register.action='signup'" type="text" name="action" hidden/>
 
-        <md-button class="md-raised md-primary" type="submit" value="Register">Register</md-button>
+        <!-- <md-button class="md-raised md-primary" type="submit" value="Register">Register</md-button> -->
+        <input type="submit" value="Register" />
+
 
       </form>
+      <span class="text-danger">{{message_fail}}</span> <span class="text-success ">{{message_success}}</span>
+      </div>
     </md-content>
   </div>
 </md-tab>

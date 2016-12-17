@@ -231,6 +231,41 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         // WorkService.getContractorWork(); //gets all the work contractor has accepted
       }]);
 
+      myApp.controller("RegistrationController", ["$scope", "$location", "$http", "$window", function($scope, $location, $http, $window){
+        console.log("RegistrationController Controller");
+
+        $scope.submitRegistration = function () {
+          $http
+          .post('/register', $scope.register)
+          .success(function (data, status, headers, config) {
+            console.log('in controller data::::::', data);
+
+            if (data.code == 'todobien') {
+              $scope.message_fail = '';
+              $scope.message_success = data.msg;
+              // $window.location.href = '/assets/views/users.html';
+            }else if (data.code == 'duplicate') {
+              $scope.message_fail = data.msg;
+              $scope.message_success = '';
+              // $window.location.href = '/assets/views/users.html';
+            } else {
+              $scope.message_success = '';
+              $scope.message_fail = 'You entered an incorrect username or password';
+            }
+          })
+          .error(function (data, status, headers, config) {
+            // Erase the token if the user fails to log in
+            delete $window.localStorage.token;
+
+            // Handle login errors here
+            $scope.message = 'Error: Invalid user or password';
+          });
+        };
+        // WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
+        // WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
+        // WorkService.getContractorWork(); //gets all the work contractor has accepted
+      }]);
+
       myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkService", function($scope, $http, $filter, $log, WorkService){
         // http://ngmodules.org/modules/ngAutocomplete
 

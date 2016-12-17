@@ -406,7 +406,7 @@ if (req.body.action === 'signup') {
         privilege_role: req.body.privilege_role || '',
         address: req.body.address || '',
         role: req.body.role,
-        type: req.body.type,
+        type: req.body.type || '',
         epirts: '',
         socketID: '',
         geo: geo || '',
@@ -430,7 +430,7 @@ if (req.body.action === 'signup') {
         privilege_role: req.body.privilege_role || '',
         address: req.body.address || '',
         role: req.body.role,
-        type: req.body.type,
+        type: req.body.type || '',
         epirts: '',
         socketID: '',
         geo: geo || '',
@@ -469,17 +469,19 @@ if (req.body.action === 'signup') {
                 return res.status(404).send('ERROR: sending verification email FAILED: '+ err);
               }
               console.log('aNewUserRegistered! '+email+''+newTempUser.role);
-              res.redirect("/assets/views/users.html#/userRegisterSuccess");
-              // res.json({
-              //   msg: 'An email has been sent to you. Please check it to verify your account.',
-              //   info: info
-              // });
+              // res.redirect("/assets/views/users.html#/userRegisterSuccess");
+              res.json({
+                msg: 'An email has been sent to you. Please check it to verify your account.',
+                info: info,
+                code: 'todobien'
+              });
             });
 
           // user already exists in temporary collection!
           } else {
             res.json({
-              msg: 'You have already signed up. Please check your email to verify your account.'
+              msg: 'You have already signed up. Please check your email to verify your account.',
+              code: 'duplicate'
             });
           }
         });
