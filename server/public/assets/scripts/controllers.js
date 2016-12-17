@@ -275,12 +275,12 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         $scope.message_success = 'success';
         console.log('$cookies::', $cookies);
         console.log('$cookies.confirmStatus::', $cookies.confirmStatus);
-        if ($cookieStore.confirmStatus === 'Account confirmed successfully') {
+        if ($cookies.confirmStatus === 'Account confirmed successfully') {
           $scope.showTheMessage = true;
           $scope.message_fail = '';
           $scope.message_success = 'Your account was confirmed successfully. Please login.';
           // $window.location.href = '/assets/views/users.html';
-        }else if ($cookieStore.confirmStatus === 'ERROR: confirmation FAILED') {
+        }else if ($cookies.confirmStatus === 'ERROR: confirmation FAILED') {
           $scope.message_fail = 'Confirmation of your account failed. Please click the link in your email again or request a new confirmation email.';
           $scope.message_success = '';
           // $window.location.href = '/assets/views/users.html';
