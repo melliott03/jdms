@@ -912,7 +912,7 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
     dataToSend = newdata;
   }else {
     console.log('newdata.stripeCustomer.account_balance::',newdata.stripeCustomer.account_balance);
-    console.log('newdata.stripeCustomer.upcomingInvoice.total::',newdata.stripeCustomer.upcomingInvoice.total);
+    console.log('newdata.upcomingInvoice.total::',newdata.upcomingInvoice.total);
 
     var money_availabel = newdata.stripeCustomer.account_balance + newdata.stripeCustomer.upcomingInvoice.total;;
     dataToSend = {availabel_balance:money_availabel};
