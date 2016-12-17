@@ -491,20 +491,6 @@ if (req.body.action === 'signup') {
 
           // user already exists in temporary collection!
           } else {
-            nev.resendVerificationEmail(email, function(err, userFound) {
-              if (err) {
-                return res.status(404).send('ERROR: resending verification email FAILED');
-              }
-              if (userFound) {
-                // res.json({
-                //   msg: 'An email has been sent to you, yet again. Please check it to verify your account.'
-                // });
-              } else {
-                // res.json({
-                //   msg: 'Your verification code has expired. Please sign up again.'
-                // });
-              }
-            });
             res.json({
               msg: 'You have already signed up. Please check your email to verify your account.',
               code: 'duplicate'
