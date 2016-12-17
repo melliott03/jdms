@@ -48,6 +48,7 @@
     "connect-ensure-login": "^0.1.1",
     "connect-multiparty": "^2.0.0",
     "cookie-parser": "^1.4.1",
+    "cookie-session": "^2.0.0-alpha.2",
     "cron": "^1.1.0",
     "darksky": "^0.1.2",
     "dotenv": "^1.2.0",

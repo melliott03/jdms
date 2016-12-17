@@ -1,4 +1,5 @@
 require('dotenv').load();//Twilio Video
+var cookieSession = require('cookie-session');
 var express = require("express");
 // Requires multiparty  https://github.com/danialfarid/ng-file-upload/wiki/Node-example
 // var multiparty = require('connect-multiparty');
@@ -181,13 +182,20 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   //     s: false,
   //     cookie: {maxAge: 365 * 24 * 60 * 60 * 1000, secure: false}
   // }));
+  app.use(cookieSession({
+    name: 'session',
+    keys: ['us4eD5&r*1Sfdf34S#<msGtEz'],
 
-  app.use(session({
-  cookieName: 'session',
-  secret: 'us4eD5&r*1Sfdf34S#<msGtEz',
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
+    // Cookie Options
+    maxAge: 5 * 60 * 1000 // 5 minutes
   }));
+
+  // app.use(session({
+  // cookieName: 'session',
+  // secret: 'us4eD5&r*1Sfdf34S#<msGtEz',
+  // duration: 30 * 60 * 1000,
+  // activeDuration: 5 * 60 * 1000,
+  // }));
 
   // app.use(cookieParser());
   app.use(bodyParser.json());
