@@ -929,68 +929,66 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
 
 var autoRechargeCustomer = function(data){
   console.log('data at top of autoRechargeCustomer::', data);
-    data.stripeCustomer = data.user.epirts.customer;
+  data.stripeCustomer = data.user.epirts.customer;
   if (data.user.autoPaymentsChoice && data.user.autoPaymentsChoice.autoRecharge.rechargeTo) {
-    console.log('at top of if (data.user.autoPaymentsChoice && data.user.autoPaymentsChoice.autoRecharge.rechargeTo) {::');
-        var rechargeTo = parseInt(data.user.autoPaymentsChoice.autoRecharge.rechargeTo);
-            rechargeTo = rechargeTo * -1;
-            console.log('rechargeTo -40000 after parseInt::', rechargeTo);
-        var account_balance = data.stripeCustomer.account_balance;
-        console.log('account_balance 1 ::', account_balance);
+    console.log('at top of if (data.user.autoPaymentsChoice && data.user.autoPaymentsChoice.autoRecharge.rechargeTo)::');
+    var rechargeTo = parseInt(data.user.autoPaymentsChoice.autoRecharge.rechargeTo);
+    rechargeTo = rechargeTo * -1;
+    console.log('rechargeTo -40000 after parseInt::', rechargeTo);
+    var account_balance = data.stripeCustomer.account_balance;
+    console.log('account_balance 1 ::', account_balance);
 
-        console.log('account_balance:: ', account_balance);
-        console.log('data.upcomingInvoice.total:: ', data.upcomingInvoice.total);
-        var abalanceMinusAmountDue = account_balance + data.upcomingInvoice.total;
-        console.log('account_balance + data.upcomingInvoice.total:: ', abalanceMinusAmountDue);
-        var fallsbelow = parseInt(data.user.autoPaymentsChoice.autoRecharge.fallsBelow);
-            fallsbelow =  fallsbelow * -100;
-            console.log('fallsbelow -39000::', fallsbelow);
-        if ( abalanceMinusAmountDue > fallsbelow) { //1000 equals $10.00
-        //         negative number (credit)         positive number (debit) -9000 > 10000
-            console.log('abalanceMinusAmountDue -38275::', abalanceMinusAmountDue); // abalanceMinusAmountDue = -38275
-            console.log('fallsbelow -39000::', fallsbelow);
+    console.log('account_balance:: ', account_balance);
+    console.log('data.upcomingInvoice.total:: ', data.upcomingInvoice.total);
+    var abalanceMinusAmountDue = account_balance + data.upcomingInvoice.total;
+    console.log('account_balance + data.upcomingInvoice.total:: ', abalanceMinusAmountDue);
+    var fallsbelow = parseInt(data.user.autoPaymentsChoice.autoRecharge.fallsBelow);
+    fallsbelow =  fallsbelow * -100;
+    console.log('fallsbelow -39000::', fallsbelow);
+    if ( abalanceMinusAmountDue > fallsbelow) { //1000 equals $10.00
+      //         negative number (credit)         positive number (debit) -9000 > 10000
+      console.log('abalanceMinusAmountDue -38275::', abalanceMinusAmountDue); // abalanceMinusAmountDue = -38275
+      console.log('fallsbelow -39000::', fallsbelow);
 
-            var reupChargeAmount = rechargeTo - abalanceMinusAmountDue;
-            console.log('after fallsbelow - abalanceMinusAmountDue reupChargeAmount::', reupChargeAmount);
-            reupChargeAmount = Math.abs(reupChargeAmount);
-            console.log('after Math.abs(reupChargeAmount)::', reupChargeAmount);
+      var reupChargeAmount = rechargeTo - abalanceMinusAmountDue;
+      console.log('after fallsbelow - abalanceMinusAmountDue reupChargeAmount::', reupChargeAmount);
+      reupChargeAmount = Math.abs(reupChargeAmount);
+      console.log('after Math.abs(reupChargeAmount)::', reupChargeAmount);
 
-            console.log('inside if account_balance - data.upcomingInvoice.total < '+fallsbelow+' ::');
-            var chargeObj = {
-                amount: reupChargeAmount, // amount in cents, again
-                currency: "usd",
-                description: "Account recharge balance fell below $10 : "+reupChargeAmount,
-                customer: data.stripeCustomer.id, // Previously stored, then retrieved customer
-                // metadata: {'telephonic_id ': ''+data.telwork._id}
-            };
-            console.log('chargeObj before stripe.charges.create::', chargeObj);
-          return stripe.charges.create(chargeObj).then(function(charge){
-            console.log('recharge stripeCustomer balance with :: ', charge);
-            data.charge = charge;
-            return data;
-          })
-        } else {
-          console.log('if (abalanceMinusAmountDue <= 0)::', abalanceMinusAmountDue);
-          var promise = User.findOneAndUpdate({ _id: data.user._id }, { 'accountSuspension.suspended': true }).exec();
-          return promise.then(function(aUserWithID) {
-            console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
-            console.log('newdata updated accountSuspension.suspended to true field::', data);
-            return data;
-          })
-          // .then(function(newdata) {
-          //   // never reaches here
-          //   return newdata;
-          //   console.log('should never reach here::', aUserWithID);
-          // })
-          .catch(function(err){
-            console.log('error:', err);
-          });
+      console.log('inside if account_balance - data.upcomingInvoice.total < '+fallsbelow+' ::');
+      var chargeObj = {
+        amount: reupChargeAmount, // amount in cents, again
+        currency: "usd",
+        description: "Account recharge balance fell below $10 : "+reupChargeAmount,
+        customer: data.stripeCustomer.id, // Previously stored, then retrieved customer
+        // metadata: {'telephonic_id ': ''+data.telwork._id}
+      };
+      console.log('chargeObj before stripe.charges.create::', chargeObj);
+      return stripe.charges.create(chargeObj).then(function(charge){
+        console.log('recharge stripeCustomer balance with :: ', charge);
+        data.charge = charge;
+        return data;
+      })
+    } else {
+      console.log('if (abalanceMinusAmountDue <= 0)::', abalanceMinusAmountDue);
+      var promise = User.findOneAndUpdate({ _id: data.user._id }, { 'accountSuspension.suspended': true }).exec();
+      return promise.then(function(aUserWithID) {
+        console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
+        console.log('newdata updated accountSuspension.suspended to true field::', data);
+        return data;
+      })
+      // .then(function(newdata) {
+      //   // never reaches here
+      //   return newdata;
+      //   console.log('should never reach here::', aUserWithID);
+      // })
+      .catch(function(err){
+        console.log('error:', err);
+      });
 
-        }
-  } else {
-    return data;
+    }
   }
-  }
+
 };
 
 
