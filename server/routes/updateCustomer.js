@@ -974,8 +974,8 @@ var autoRechargeCustomer = function(data){
           var promise = User.findOneAndUpdate({ _id: data.user._id }, { 'accountSuspension.suspended': false }).exec();
           return promise.then(function(aUserWithID) {
             console.log('aUserWithID updated accountSuspension.suspended to true field 32::', aUserWithID);
-            console.log('newdata updated accountSuspension.suspended to true field 32::', data);
-            return data;
+            console.log('newdata updated accountSuspension.suspended to true field 32::', aUserWithID);
+            return aUserWithID;
           });
         }else {
           console.log('//do nothing');
@@ -987,8 +987,8 @@ var autoRechargeCustomer = function(data){
       var promise = User.findOneAndUpdate({ _id: data.user._id }, { 'accountSuspension.suspended': true }).exec();
       return promise.then(function(aUserWithID) {
         console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
-        console.log('newdata updated accountSuspension.suspended to true field::', data);
-        return data;
+        console.log('newdata updated accountSuspension.suspended to true field::', aUserWithID);
+        return aUserWithID;
       })
       // .then(function(newdata) {
       //   // never reaches here
