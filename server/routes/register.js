@@ -298,7 +298,16 @@ router.get('/email-verification/:URL', function(req, res) {
 
       nev.sendConfirmationEmail(user.email, function(err, info) {
         if (err) {
-          return res.status(404).send('ERROR: sending confirmation email FAILED');
+          console.log('req.session settingsing success & successObject variable BEFORE::', req.session);
+          req.session['confirmStatus'] = 'ERROR: sending confirmation email FAILED';
+          req.session['confirmObject'] = {msg: 'CONFIRMED!', info: info};
+          console.log('req.session setting success & successObject variable AFTER::', req.session);
+          // return res.status(404).send('ERROR: sending confirmation email FAILED');
+        }else {
+          console.log('req.session settingsing success & successObject variable BEFORE::', req.session);
+          req.session['confirmStatus'] = 'Account confirmed successfully';
+          req.session['confirmObject'] = {msg: 'CONFIRMED!', info: info};
+          console.log('req.session setting success & successObject variable AFTER::', req.session);
         }
 
 
@@ -307,10 +316,6 @@ router.get('/email-verification/:URL', function(req, res) {
         //   info: info
         // });
         // res.sendFile(path.resolve(__dirname, "../public/assets/views/register.html"));
-        console.log('req.session settingsing success & successObject variable BEFORE::', req.session);
-        req.session['success'] = 'Account confirmed successfully';
-        req.session['successObject'] = {msg: 'CONFIRMED!', info: info};
-        console.log('req.session setting success & successObject variable AFTER::', req.session);
         res.redirect("/");
       });
     } else {
