@@ -44,7 +44,6 @@ var weekly = function(data){
 
 };
 
-
 var perEvent = function(data){
   console.log('inside weekly function data::', data);
   //find the local customer
@@ -381,10 +380,6 @@ var prePaid = function(data){
       console.log('the user has no upcoming invoice');
     }
   });
-
-
-
-
 
 };
 
