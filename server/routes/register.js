@@ -301,12 +301,17 @@ router.get('/email-verification/:URL', function(req, res) {
           return res.status(404).send('ERROR: sending confirmation email FAILED');
         }
 
+
         // res.json({
         //   msg: 'CONFIRMED!',
         //   info: info
         // });
         // res.sendFile(path.resolve(__dirname, "../public/assets/views/register.html"));
-        res.redirect("/confirm");
+        console.log('req.session settingsing success & successObject variable BEFORE::', req.session);
+        req.session['success'] = 'Account confirmed successfully';
+        req.session['successObject'] = {msg: 'CONFIRMED!', info: info};
+        console.log('req.session setting success & successObject variable AFTER::', req.session);
+        res.redirect("/");
       });
     } else {
       return res.status(404).send('ERROR: confirming temp user FAILED');
