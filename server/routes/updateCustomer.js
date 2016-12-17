@@ -901,12 +901,14 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
     var promise = User.findOneAndUpdate({ _id: req.user._id }, { 'accountSuspension.suspended': true }).exec();
     return promise.then(function(aUserWithID) {
       console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
-      return aUserWithID;
-    }).then(function(aUserWithID) {
-      // never reaches here
-      return aUserWithID;
-      console.log('should never reach here::', aUserWithID);
+      console.log('newdata updated accountSuspension.suspended to true field::', newdata);
+      return newdata;
     })
+    // .then(function(newdata) {
+    //   // never reaches here
+    //   return newdata;
+    //   console.log('should never reach here::', aUserWithID);
+    // })
     .catch(function(err){
       console.log('error:', err);
     });
