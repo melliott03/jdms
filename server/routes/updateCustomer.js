@@ -968,6 +968,19 @@ var autoRechargeCustomer = function(data){
         console.log('recharge stripeCustomer balance with :: ', charge);
         data.charge = charge;
         return data;
+      }).then(function(data) {
+        console.log('data at before update user suspended to false::');
+        var promise = User.findOneAndUpdate({ _id: data.user._id }, { 'accountSuspension.suspended': false }).exec();
+        return promise.then(function(aUserWithID) {
+          console.log('aUserWithID updated accountSuspension.suspended to true field 32::', aUserWithID);
+          console.log('newdata updated accountSuspension.suspended to true field 32::', data);
+          return data;
+        })
+        // .then(function(newdata) {
+        //   // never reaches here
+        //   return newdata;
+        //   console.log('should never reach here::', aUserWithID);
+        // })
       })
     } else {
       console.log('if (abalanceMinusAmountDue <= 0)::', abalanceMinusAmountDue);
