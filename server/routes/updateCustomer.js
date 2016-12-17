@@ -929,7 +929,7 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
 
 var autoRechargeCustomer = function(data){
   console.log('data at top of autoRechargeCustomer::', data);
-    data.stripeCustomer = data.user.epirts.customer.account_balance;
+    data.stripeCustomer = data.user.epirts.customer;
   if (data.user.autoPaymentsChoice && data.user.autoPaymentsChoice.autoRecharge.rechargeTo) {
     console.log('at top of if (data.user.autoPaymentsChoice && data.user.autoPaymentsChoice.autoRecharge.rechargeTo) {::');
         var rechargeTo = parseInt(data.user.autoPaymentsChoice.autoRecharge.rechargeTo);
