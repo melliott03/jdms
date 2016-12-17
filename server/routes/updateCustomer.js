@@ -914,7 +914,7 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
     console.log('newdata.stripeCustomer.account_balance::',newdata.stripeCustomer.account_balance);
     console.log('newdata.upcomingInvoice.total::',newdata.upcomingInvoice.total);
 
-    var money_availabel = newdata.stripeCustomer.account_balance + newdata.stripeCustomer.upcomingInvoice.total;;
+    var money_availabel = newdata.stripeCustomer.account_balance + newdata.upcomingInvoice.total;;
     dataToSend = {availabel_balance:money_availabel};
   }
   console.log('newdata just before res.send(newdata) .then after in else of money_availabel < 0::',newdata);
