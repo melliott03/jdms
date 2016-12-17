@@ -70,7 +70,7 @@ promised.then(function(work_Tels) {
   console.log('Work_Tels documents found for '+requser.role+' are ::', work_Tels);
   var newWork_tels = [];
   work_Tels.map(function(obj){
-    if (obj.inboundSummary && obj.outboundSummary && obj.money && obj.money.customerCost) {
+    if (obj.inboundSummary && obj.outboundSummary && obj.outboundSummary.createdAt && obj.money && obj.money.customerCost) {
       console.log('inside if (obj.inboundSummary && obj.outboundSummary && obj.money && obj.money.customerCost)::');
       newWork_tels.push(obj);
     }
@@ -80,7 +80,7 @@ promised.then(function(work_Tels) {
 })
 .then(function(work_tels) {
   console.log('inside the then work_tels::', work_tels);
-  work_tels.sort(function(a,b){return b.outboundSummary.createdAt.getTime() - a.outboundSummary.createdAt.getTime()});
+  work_tels.sort(function(aze,bze){return bze.outboundSummary.createdAt.getTime() - aze.outboundSummary.createdAt.getTime()});
   console.log('after sorting by date work_tels::', work_tels);
   res.send(work_tels);
 })
