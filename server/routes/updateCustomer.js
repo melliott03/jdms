@@ -899,15 +899,22 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
     });
   }else if (money_availabel <= 0) {
     console.log('money_availabel <= 0, just before autoRechargeCustomer(data)::');
-    return autoRechargeCustomer(data);
+    return autoRechargeCustomer(data); //(newdata)
   }else {
     console.log('newdata just before res.send(newdata) in else of money_availabel < 0::',newdata);
     return newdata;
   }
 
 }).then(function(newdata) {
+  var dataToSend;
+  if (newdata.availabel_balance) {
+    dataToSend = newdata;
+  }else {
+    var money_availabel = newdata.stripeCustomer.account_balance + newdata.upcomingInvoice.total;;
+    dataToSend = {availabel_balance:money_availabel};
+  }
   console.log('newdata just before res.send(newdata) .then after in else of money_availabel < 0::',newdata);
-  res.send(newdata);
+  res.send(dataToSend);
 }).catch(function(error){
   console.log('catch error top :', error);
 
