@@ -175,12 +175,19 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
 
 
   // app.use(session({
-  //     secret: "secret",
-  //     key: "user",
+  //     secret: "session",
+  //     key: "us4eD5&r*1Sfdf34S#<msGtEz",
   //     resave: true,
   //     s: false,
   //     cookie: {maxAge: 365 * 24 * 60 * 60 * 1000, secure: false}
   // }));
+
+  app.use(session({
+  cookieName: 'session',
+  secret: 'us4eD5&r*1Sfdf34S#<msGtEz',
+  duration: 30 * 60 * 1000,
+  activeDuration: 5 * 60 * 1000,
+  }));
 
   // app.use(cookieParser());
   app.use(bodyParser.json());
