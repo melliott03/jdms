@@ -300,7 +300,7 @@ router.get('/email-verification/:URL', function(req, res) {
         if (err) {
           console.log('req.session settingsing success & successObject variable BEFORE::', req.session);
           req.session['confirmStatus'] = 'ERROR: sending confirmation email FAILED';
-          req.session['confirmObject'] = {msg: 'CONFIRMED!', info: info};
+          req.session['confirmObject'] = {msg: 'ERROR!', info: info};
           console.log('req.session setting success & successObject variable AFTER::', req.session);
           // return res.status(404).send('ERROR: sending confirmation email FAILED');
         }else {
@@ -480,7 +480,7 @@ if (req.body.action === 'signup') {
               if (err) {
                 return res.status(404).send('ERROR: sending verification email FAILED: '+ err);
               }
-              console.log('aNewUserRegistered! '+email+''+newTempUser.role);
+              console.log('aNewUserRegistered! '+email+' '+newTempUser.role);
               // res.redirect("/assets/views/users.html#/userRegisterSuccess");
               res.json({
                 msg: 'An email has been sent to you. Please check it to verify your account.',

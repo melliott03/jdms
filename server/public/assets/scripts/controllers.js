@@ -237,7 +237,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
         $scope.submitRegistration = function () {
           $scope.showTheForm = false;
-          $http
+          $httpindow
           .post('/register', $scope.register)
           .success(function (data, status, headers, config) {
             console.log('in controller data::::::', data);
@@ -267,6 +267,47 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         // WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
         // WorkService.getContractorWork(); //gets all the work contractor has accepted
       }]);
+
+      myApp.controller("ComfirmationController", ["$scope", "$location", "$http", "$window", function($scope, $location, $http, $window){
+        console.log("ComfirmationController::");
+        $scope.showTheMessage = false;
+
+        if ($window.sessionStorage.confirmStatus === 'Account confirmed successfully') {
+          $scope.showTheMessage = true;
+          $scope.message_fail = '';
+          $scope.message_success = 'Your account was confirmed successfully. Please login.';
+          // $window.location.href = '/assets/views/users.html';
+        }else if ($window.sessionStorage.confirmStatus === 'ERROR: confirmation FAILED') {
+          $scope.message_fail = 'Confirmation of your account failed. Please click the link in your email again or request a new confirmation email.';
+          $scope.message_success = '';
+          // $window.location.href = '/assets/views/users.html';
+        } else {
+          $scope.message_success = '';
+          $scope.message_fail = data.msg;
+        }
+
+        // $scope.submitRegistration = function () {
+        //   $scope.showTheForm = false;
+        //   $httpindow
+        //   .post('/register', $scope.register)
+        //   .success(function (data, status, headers, config) {
+        //     console.log('in controller data::::::', data);
+        //
+        //
+        //   })
+        //   .error(function (data, status, headers, config) {
+        //     // Erase the token if the user fails to log in
+        //     delete
+        //
+        //     // Handle login errors here
+        //     $scope.message = 'Error: Invalid user or password';
+        //   });
+        // };
+        // WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
+        // WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
+        // WorkService.getContractorWork(); //gets all the work contractor has accepted
+      }]);
+
 
       myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkService", function($scope, $http, $filter, $log, WorkService){
         // http://ngmodules.org/modules/ngAutocomplete
