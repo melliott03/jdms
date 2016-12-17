@@ -990,7 +990,8 @@ var autoRechargeCustomer = function(data){
   } else {
     return data;
   }
-  };
+  }
+};
 
 
 router.get('/customerMoneyCharges', passport.authenticate('jwt', { session: false }), function(req, res) {
