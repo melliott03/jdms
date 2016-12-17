@@ -237,7 +237,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
         $scope.submitRegistration = function () {
           $scope.showTheForm = false;
-          $httpindow
+          $http
           .post('/register', $scope.register)
           .success(function (data, status, headers, config) {
             console.log('in controller data::::::', data);
