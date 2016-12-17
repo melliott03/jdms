@@ -825,8 +825,9 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
   //GET CUSTOMER'S BALANCE
   stripe.customers.retrieve(customer_id)
   .then(function(customer){
-    var balance = customer.account_balance;
+    var balance;
     if (customer){
+      balance = customer.account_balance;
       data.stripeCustomer = customer;
       data.balance = balance;
       data.customer_id = customer_id;
@@ -834,7 +835,9 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
       return data;
     }
   }).then(function(data){
+    console.log('data.customer_id  ::', data.customer_id);
     return stripe.invoices.retrieveUpcoming(data.customer_id).then(function(upcoming){
+      console.log('upcoming found::',upcoming);
       data.upcomingInvoice = upcoming;
       return data;
     })
