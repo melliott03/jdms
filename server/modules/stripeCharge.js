@@ -245,8 +245,8 @@ var prePaid = function(data){
   .then(function(data){
     console.log('just before data.balance - data.upcomingInvoice data::',data);
 
-    if (data.aUserWithCustomer_ID.autoRecharge && data.aUserWithCustomer_ID.autoRecharge.rechargeTo) {
-          var rechargeTo = parseInt(data.aUserWithCustomer_ID.autoRecharge.rechargeTo);
+    if (data.aUserWithCustomer_ID.autoPaymentsChoice && data.aUserWithCustomer_ID.autoPaymentsChoice.autoRecharge.rechargeTo) {
+          var rechargeTo = parseInt(data.aUserWithCustomer_ID.autoPaymentsChoice.autoRecharge.rechargeTo);
               rechargeTo = rechargeTo * -100;
               console.log('rechargeTo -40000 after parseInt::', rechargeTo);
           var account_balance = data.stripeCustomer.account_balance;
@@ -256,7 +256,7 @@ var prePaid = function(data){
           console.log('data.upcomingInvoice.total:: ', data.upcomingInvoice.total);
           var abalanceMinusAmountDue = data.stripeCustomer.account_balance + data.upcomingInvoice.total;
           console.log('data.stripeCustomer.account_balance + data.upcomingInvoice.total:: ', abalanceMinusAmountDue);
-          var fallsbelow = parseInt(data.aUserWithCustomer_ID.autoRecharge.fallsBelow);
+          var fallsbelow = parseInt(data.aUserWithCustomer_ID.autoPaymentsChoice.autoRecharge.fallsBelow);
               fallsbelow =  fallsbelow * -100;
               console.log('fallsbelow -39000::', fallsbelow);
           if ( abalanceMinusAmountDue > fallsbelow) { //1000 equals $10.00
