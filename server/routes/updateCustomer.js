@@ -904,6 +904,7 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
       return aUserWithID;
     }).then(function(aUserWithID) {
       // never reaches here
+      return aUserWithID;
       console.log('should never reach here::', aUserWithID);
     })
     .catch(function(err){
