@@ -233,8 +233,10 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
       myApp.controller("RegistrationController", ["$scope", "$location", "$http", "$window", function($scope, $location, $http, $window){
         console.log("RegistrationController Controller");
+        $scope.showTheForm = true;
 
         $scope.submitRegistration = function () {
+          $scope.showTheForm = false;
           $http
           .post('/register', $scope.register)
           .success(function (data, status, headers, config) {
@@ -250,7 +252,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
               // $window.location.href = '/assets/views/users.html';
             } else {
               $scope.message_success = '';
-              $scope.message_fail = 'You entered an incorrect username or password';
+              $scope.message_fail = data.msg;
             }
           })
           .error(function (data, status, headers, config) {

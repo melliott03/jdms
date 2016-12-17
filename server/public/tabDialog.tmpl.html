@@ -48,7 +48,7 @@
 
       <div ng-controller="RegistrationController">
         <span></span>
-        <form ng-submit="submitRegistration()">
+        <form ng-submit="submitRegistration()" ng-show="showTheForm">
         <md-input-container>
           <label for="email">EMAIL: </label>
           <input ng-model="register.email" type="email" name="email" id="email" class="md-block" flex-gt-sm required/>
