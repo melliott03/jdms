@@ -908,15 +908,19 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
 }).then(function(newdata) {
   console.log('newdata at top s::',newdata);
   var dataToSend;
-  if (newdata && newdata.availabel_balance) {
-    dataToSend = newdata;
-  }else {
-    console.log('newdata.stripeCustomer.account_balance::',newdata.stripeCustomer.account_balance);
-    console.log('newdata.upcomingInvoice.total::',newdata.upcomingInvoice.total);
-
-    var money_availabel = newdata.stripeCustomer.account_balance + newdata.upcomingInvoice.total;;
-    dataToSend = {availabel_balance:money_availabel};
+  if (newdata) {
+    if (newdata && newdata.availabel_balance) {
+      dataToSend = newdata;
+    }else if(newdata && newdata.stripeCustomer && newdata.stripeCustomer.account_balance) {
+      console.log('newdata.stripeCustomer.account_balance::',newdata.stripeCustomer.account_balance);
+      console.log('newdata.upcomingInvoice.total::',newdata.upcomingInvoice.total);
+      var money_availabel = newdata.stripeCustomer.account_balance + newdata.upcomingInvoice.total;;
+      dataToSend = {availabel_balance:money_availabel};
+    }
+  } else {
+    dataToSend = {availabel_balance: '0'};
   }
+
   console.log('newdata just before res.send(newdata) .then after in else of money_availabel < 0::',newdata);
   res.send(dataToSend);
 }).catch(function(error){
