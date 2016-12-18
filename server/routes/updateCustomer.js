@@ -303,7 +303,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customer.id, customer: req.user.epirts.customer, customer_display_name: display_name } }, function(err, user) {
       if (err) throw err;
       // we have the updated user returned to us
-      console.log('after saving user"s stripe info oooo',user);
+      console.log("after updating user's customer_display_name, user::",user);
     });
     res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
   });
@@ -497,7 +497,7 @@ router.post("/saveUserPii", function(req, res, next){
     User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: response} }, function(err, user) {
       if (err) throw err;
       // we have the updated user returned to us
-      console.log('after saving user"s stripe info oooo',user);
+      console.log("after updating user's personal_id_number, user::",user);
     });
   });
   res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
@@ -606,7 +606,7 @@ router.post('/stripecc', passport.authenticate('jwt', { session: false }), funct
         User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
           if (err) throw err;
           // we have the updated user returned to us
-          console.log('after saving user"s stripe info oooo',user);
+          console.log("after updating user's stripe.customers.createSource, user::",user);
         });
       }
     );
@@ -705,7 +705,7 @@ router.post("/saveCustomerPlaidToken", function(req, res, next){
             User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
               if (err) throw err;
               // we have the updated user returned to us
-              console.log('after saving user"s stripe info oooo',user);
+              console.log("after updating user's saveCustomerPlaidToken, user::",user);
             });
           }
         );
@@ -747,7 +747,7 @@ router.post("/saveCustCheck", function(req, res, next){
         User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
           if (err) throw err;
           // we have the updated user returned to us
-          console.log('after saving user"s stripe info oooo',user);
+          console.log("after uploading customer's stripe saveCustomerPlaidToken, user::",user);
         });
       }
     );
@@ -801,7 +801,7 @@ router.post('/saveUserIdentityDocument', passport.authenticate('jwt', { session:
         User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.keys, account: account} }, function(err, user) {
           if (err) throw err;
           // we have the updated user returned to us
-          console.log('after saving user"s stripe info oooo',user);
+          console.log("after uploading customer's stripe identity_document, user::",user);
         });
       }
     );

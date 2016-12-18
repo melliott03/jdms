@@ -46,7 +46,7 @@
 //           User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.keys, account: account} }, function(err, user) {
 //             if (err) throw err;
 //             // we have the updated user returned to us
-//             console.log('after saving user"s stripe info oooo',user);
+//             console.log('after updating user identity_document info::',user);
 //           });
 //         }
 //       );

@@ -49,7 +49,7 @@ router.post("/saveUserAddress", function(req, res, next){
         User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: response} }, function(err, user) {
           if (err) throw err;
           // we have the updated user returned to us
-          console.log('after saving user"s stripe info oooo',user);
+          console.log('after saving user"s stripe info 3241',user);
         });
       });
     var geocodedData = geocodedData.results[0].geometry.location;
@@ -107,7 +107,7 @@ router.post("/saveUserGeneral", function(req, res, next){
         User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: response} }, function(err, user) {
           if (err) throw err;
           // we have the updated user returned to us
-          console.log('after saving user"s stripe info oooo',user);
+          console.log('after saving user"s stripe info 2231',user);
         });
       });
   } //end of if(req.user.role == "contractor")
@@ -146,7 +146,7 @@ router.post("/saveUserSSDOBNAME", function(req, res, next){
       User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: response} }, function(err, user) {
         if (err) throw err;
         // we have the updated user returned to us
-        console.log('after saving user"s stripe info oooo',user);
+        console.log('after stripe saveUserSSDOBNAME, user::',user);
       });
     });
     res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
@@ -176,7 +176,7 @@ router.post("/saveUserPii", function(req, res, next){
       User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: response} }, function(err, user) {
         if (err) throw err;
         // we have the updated user returned to us
-        console.log('after saving user"s stripe info oooo',user);
+        console.log('after saving user"s stripe info 1231::',user);
       });
     });
     res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
@@ -250,7 +250,7 @@ router.post("/saveUserPlaidToken", function(req, res, next){
       User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.response, account: req.user.epirts.account} }, function(err, user) {
         if (err) throw err;
         // we have the updated user returned to us
-        console.log('after saving user"s stripe info oooo',user);
+        console.log('after saving user"s stripe info 5323',user);
       });
     });
     res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
@@ -281,7 +281,7 @@ router.post('/stripecc', passport.authenticate('jwt', { session: false }), funct
       User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.response, account: req.user.epirts.account} }, function(err, user) {
         if (err) throw err;
         // we have the updated user returned to us
-        console.log('after saving user"s stripe info oooo',user);
+        console.log('after saving user"s stripe info 3521::',user);
       });
     });
 
@@ -385,7 +385,7 @@ router.post("/saveUserPlaidToken", function(req, res, next){
       User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.response, account: req.user.epirts.account} }, function(err, user) {
         if (err) throw err;
         // we have the updated user returned to us
-        console.log('after saving user"s stripe info oooo',user);
+        console.log('after saving user"s stripe info 3234',user);
       });
     });
     res.json({display_name: 'display_name', country: 'country', currency: 'currency'});
@@ -435,7 +435,7 @@ router.post('/saveUserIdentityDocument', passport.authenticate('jwt', { session:
             User.findOneAndUpdate({ _id: req.user._id }, { epirts: {id: req.user.epirts.id, keys: req.user.epirts.keys, response: req.user.epirts.keys, account: account} }, function(err, user) {
               if (err) throw err;
               // we have the updated user returned to us
-              console.log('after saving user"s stripe info oooo',user);
+              console.log('after saving user"s stripe info 6342',user);
             });
           }
         );

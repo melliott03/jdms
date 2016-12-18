@@ -33,7 +33,7 @@ router.get("/name", function(req,res,next){
           User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer, customer_display_name: req.user.epirts.customer_display_name} }, function(err, user) {
             if (err) throw err;
             // we have the updated user returned to us
-            console.log('after saving user"s stripe info oooo',user);
+            console.log('after saving user"s stripe info 2343',user);
           });
         }
       );
@@ -109,7 +109,7 @@ router.get("/name", function(req,res,next){
           User.findOneAndUpdate({ _id: req.user._id }, { epirts: {accountID: req.user.epirts.accountID, account: account} }, function(err, user) {
             if (err) throw err;
             // we have the updated user returned to us
-            console.log('after saving user"s stripe info oooo',user);
+            console.log('after saving user"s stripe info 7765',user);
           });
         }
       );
