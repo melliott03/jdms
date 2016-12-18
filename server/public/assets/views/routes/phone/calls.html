@@ -10,7 +10,7 @@
         <th class="thfirst" st-sort="outboundSummary.createdAt">Date</th>
         <th class="thfirst" st-sort="outboundSummary.createdAt | date:'h:mm a'">Time</th>
         <th class="thfirst" st-sort="(outboundSummary.CallDuration * 1)">Duration</th><!-- putting in () and * 1 converst string into Integer -->
-        <th class="thfirst" st-sort="(money.customerCost * 1)">Cost</th>
+        <!-- <th class="thfirst" st-sort="(money.customerCost * 1)">Cost</th> -->
 
     </tr>
     <tr>
@@ -31,9 +31,9 @@
         <th class="thsecond">
           <!-- <input placeholder="search Duration" st-search="(outboundSummary.CallDuration * 1)" /> -->
         </th>
-        <th class="thsecond">
-          <!-- <input placeholder="search Cost" st-search="customer_rate" /> -->
-        </th>
+        <!-- <th class="thsecond">
+          <input placeholder="search Cost" st-search="customer_rate" />
+        </th> -->
 
 
     </tr>
@@ -51,7 +51,7 @@
         <td > <strong>{{work.outboundSummary.createdAt | date}}</strong></td>
         <td > <strong>{{work.outboundSummary.createdAt | date:'h:mm a'}} {{work.outboundSummary.createdAtTZ | lowercase}}</strong></td>
         <td > <strong>{{work.outboundSummary.durationObj.minutes}} min {{work.outboundSummary.durationObj.seconds}} sec</strong></td>
-        <td > <strong>{{work.money.customerCost/100 | currency}}</strong></td>
+        <!-- <td > <strong>{{work.money.customerCost/100 | currency}}</strong></td> -->
 
 
 
