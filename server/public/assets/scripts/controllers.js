@@ -277,18 +277,23 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         var queryParamsObject = $location.search();
         var confirmStatus = $location.search()['confirmStatus'];
         var confirmStatus2 = $location.search().confirmStatus;
+        var absUrl = $location.absUrl();
+        var confirmed = absUrl.includes("confirmStatus=CONFIRMED");
+        console.log('confirmed::',confirmed);
+        var failed = absUrl.includes("confirmStatus=CONFIRMED");
+        console.log('failed::',failed);
 
         console.log('confirmStatus::', confirmStatus);
         var routeParams = $routeParams;
         console.log('routeParams::', routeParams);
 
         console.log('queryParamsObject::', queryParamsObject);
-        if (queryParamsObject.confirmStatus === 'CONFIRMED') {
+        if (absUrl.includes("confirmStatus=CONFIRMED")) {
           $scope.showTheMessage = true;
           $scope.message_fail = '';
           $scope.message_success = 'Your account was confirmed successfully. Please login.';
           // $window.location.href = '/assets/views/users.html';
-        }else if (queryParamsObject.confirmStatus === 'FAILED') {
+        }else if (absUrl.includes("confirmStatus=FAILED")) {
           $scope.message_fail = 'Confirmation of your account failed. Please click the link in your email again or request a new confirmation email.';
           $scope.message_success = '';
           // $window.location.href = '/assets/views/users.html';
