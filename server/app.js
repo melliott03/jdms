@@ -45,6 +45,7 @@ var stripe = require("stripe")(configsty.STRIPE_TEST);
 
 app.use(function(req, res, next){ //https://onedesigncompany.com/news/express-generator-and-socket-io
   res.io = io;
+  req.connection.setNoDelay(true);
   next();
 });
 
