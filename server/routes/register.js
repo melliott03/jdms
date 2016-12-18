@@ -297,17 +297,16 @@ router.get('/email-verification/:URL', function(req, res) {
       }
 
       nev.sendConfirmationEmail(user.email, function(err, info) {
+        var confirmStatus;
+        var confirmObject;
         if (err) {
-          console.log('req.session settingsing success & successObject variable BEFORE::', req.session);
-          req.session.confirmStatus = 'ERROR: confirmation FAILED';
-          req.session.confirmObject = {msg: 'ERROR!', info: info};
-          console.log('req.session setting success & successObject variable AFTER::', req.session);
+          confirmStatus = 'FAILED';
+          confirmObject = {msg: 'ERROR!', info: info};
+          console.log('err in confirming user account::', err);
           // return res.status(404).send('ERROR: sending confirmation email FAILED');
         }else {
-          console.log('req.session settingsing success & successObject variable BEFORE::', req.session);
-          req.session.confirmStatus = 'Account confirmed successfully';
-          req.session.confirmObject = {msg: 'CONFIRMED!', info: info};
-          console.log('req.session setting success & successObject variable AFTER::', req.session);
+          confirmStatus = 'CONFIRMED';
+          confirmObject = {msg: 'CONFIRMED!', info: info};
         }
 
 
@@ -317,14 +316,14 @@ router.get('/email-verification/:URL', function(req, res) {
         // });
         // res.sendFile(path.resolve(__dirname, "../public/assets/views/register.html"));
 
-        req.session.save(function (err) {
-          console.log('inside req.session.save 1::');
-          if (err) console.error('req.session.save err.stack',err.stack);
-          debug('saved');
-          console.log('inside req.session.save just before res.redirect::');
-          res.redirect('/');
-        })
-        // res.redirect("/");
+        // req.session.save(function (err) {
+        //   console.log('inside req.session.save 1::');
+        //   if (err) console.error('req.session.save err.stack',err.stack);
+        //   debug('saved');
+        //   console.log('inside req.session.save just before res.redirect::');
+        //   res.redirect('/');
+        // })
+        res.redirect("/?reservationSid="+confirmStatus);
       });
     } else {
       return res.status(404).send('ERROR: confirming temp user FAILED');
