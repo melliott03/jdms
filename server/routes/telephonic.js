@@ -272,7 +272,7 @@ router.post('/telephonicPassCode', twilio.webhook({validate: false}), function (
               numDigits: "1",
               method: "POST"
           }, function (node) {
-            twiml.say('Please choose the language of interpretation. Spanish, 1. Hmong, 2. ');
+            twiml.say('Please choose the language of interpretation. Spanish, 1. Hmong, 2. French, 3.');
           });
           response.send(twiml);
         }
@@ -299,7 +299,7 @@ router.post('/menu', twilio.webhook({validate: false}), function (request, respo
     var optionActions = {
         "1": getSpanishInterpreter,
         "2": getHmongInterpreter,
-        "3": getSomaliInterpreter,
+        "3": getFrenchInterpreter, //        "3": getSomaliInterpreter,
         "4": getOromoInterpreter,
         "5": getAmharicInterpreter
     };
@@ -752,35 +752,34 @@ var saveLanguageToDB = function(CallSid, language){
 }
 
 var getSpanishInterpreter = function (twiml, teleAppCallID, CallSid) {
-    saveLanguageToDB(CallSid, "spanish");
+    saveLanguageToDB(CallSid, "Spanish");
     twiml.say("TPlease hold while we connect you with a Spanish interpreter",
         {voice: "alice", language: "en-GB"});
-
     var arr = {selected_language:"Spanish", selected_medium:"Voice"};
     var json = JSON.stringify(arr);
     var voiceChannelSid = 'TC930839dfbc7a503a57b90e57e7a12648';
     twiml.enqueue({
-      // taskChannel: 'voice',
-      // taskChannelSid: 'TC930839dfbc7a503a57b90e57e7a12648',
       workflowSid:"WW2f071edf445c3e932ff733ae5013a515",
       action:"/telephonic/callSummary?callShortID="+teleAppCallID}, function(node) {
         node.task(json);
     });
     console.log("I'm right after enqueue in getSpanishInterpreter");
-
-    // twiml.enqueue('Spanish Queue');
-    // console.log("I'm right after enqueue in getSpanishInterpreter");
-    // //, waitUrl: "/telephonic/waitmusic"
-    // // var twiml = new twilio.TwimlResponse();
-    //
-    // twiml.dial({ action: '/telephonic/callSummary', callerId: "+16122172551"}, function() {
-    //       this.number('+16128121238', {
-    //         url: '/telephonic/screencall'
-    //       });
-    //
-    // });
-
-
+    twiml.hangup();
+    return twiml;
+};
+var getFrenchInterpreter = function (twiml, teleAppCallID, CallSid) {
+    saveLanguageToDB(CallSid, "French");
+    twiml.say("TPlease hold while we connect you with a French interpreter",
+        {voice: "alice", language: "en-GB"});
+    var arr = {selected_language:"French", selected_medium:"Voice"};
+    var json = JSON.stringify(arr);
+    var voiceChannelSid = 'TC930839dfbc7a503a57b90e57e7a12648';
+    twiml.enqueue({
+      workflowSid:"WW2f071edf445c3e932ff733ae5013a515",
+      action:"/telephonic/callSummary?callShortID="+teleAppCallID}, function(node) {
+        node.task(json);
+    });
+    console.log("I'm right after enqueue in getFrenchInterpreter");
     twiml.hangup();
     return twiml;
 };
