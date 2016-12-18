@@ -318,8 +318,11 @@ router.get('/email-verification/:URL', function(req, res) {
         // res.sendFile(path.resolve(__dirname, "../public/assets/views/register.html"));
 
         req.session.save(function (err) {
-          if (err) return next(err)
-          res.redirect('/')
+          console.log('inside req.session.save 1::');
+          if (err) console.error(err.stack);
+          debug('saved');
+          console.log('inside req.session.save just before res.redirect::');
+          res.redirect('/');
         })
         // res.redirect("/");
       });
