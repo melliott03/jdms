@@ -3,7 +3,10 @@ body {
   margin: 0;
   height: 100%;
 }
-
+#ngview-content {
+  -webkit-flex: 1 0 auto;
+  flex: 1 0 auto;
+}
 header {
   background: rgba(0, 0, 0, 0.2);
   width: 100vw;
