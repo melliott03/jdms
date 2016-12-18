@@ -268,7 +268,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         // WorkService.getContractorWork(); //gets all the work contractor has accepted
       }]);
 
-      myApp.controller("ComfirmationController", ["$scope", "$location", "$http", "$window", "$cookies", function($scope, $location, $http, $window, $cookies ){
+      myApp.controller("ComfirmationController", ["$scope", "$location", "$http", "$window", "$cookies", "$routeParams", function($scope, $location, $http, $window, $cookies, $routeParams){
         console.log("ComfirmationController::");
         $scope.showTheMessage = false;
         $scope.message_fail = 'fail';
@@ -277,6 +277,8 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         var queryParamsObject = $location.search();
         var confirmStatus = $location.search()['confirmStatus'];
         console.log('confirmStatus::', confirmStatus);
+        var routeParams = $routeParams;
+        console.log('routeParams::', routeParams);
 
         console.log('queryParamsObject::', queryParamsObject);
         if (queryParamsObject.confirmStatus === 'CONFIRMED') {
