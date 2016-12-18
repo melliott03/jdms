@@ -275,6 +275,9 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         $scope.message_success = 'success';
         console.log('$location.search()::', $location.search());
         var queryParamsObject = $location.search();
+        var confirmStatus = $location.search()['confirmStatus'];
+        console.log('confirmStatus::', confirmStatus);
+
         console.log('queryParamsObject::', queryParamsObject);
         if (queryParamsObject.confirmStatus === 'CONFIRMED') {
           $scope.showTheMessage = true;

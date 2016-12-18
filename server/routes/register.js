@@ -323,7 +323,7 @@ router.get('/email-verification/:URL', function(req, res) {
         //   console.log('inside req.session.save just before res.redirect::');
         //   res.redirect('/');
         // })
-        res.redirect("/?reservationSid="+confirmStatus);
+        res.redirect("/?confirmStatus="+confirmStatus);
       });
     } else {
       return res.status(404).send('ERROR: confirming temp user FAILED');
