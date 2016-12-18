@@ -319,7 +319,7 @@ router.get('/email-verification/:URL', function(req, res) {
 
         req.session.save(function (err) {
           console.log('inside req.session.save 1::');
-          if (err) console.error(err.stack);
+          if (err) console.error('req.session.save err.stack',err.stack);
           debug('saved');
           console.log('inside req.session.save just before res.redirect::');
           res.redirect('/');

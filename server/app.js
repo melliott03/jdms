@@ -197,7 +197,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   // activeDuration: 5 * 60 * 1000,
   // }));
 
-  // app.use(cookieParser());
+  app.use(cookieParser());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: false}));//changed this to false for twilio
   app.use(passport.initialize());
