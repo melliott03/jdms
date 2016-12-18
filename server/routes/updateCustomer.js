@@ -702,7 +702,7 @@ router.post("/saveCustomerPlaidToken", function(req, res, next){
           req.user.epirts.customerID,
           function(err, customer) {
             // asynchronously called
-            User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
+            User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customer_display_name: req.user.epirts.customer_display_name, customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
               if (err) throw err;
               // we have the updated user returned to us
               console.log("after updating user's saveCustomerPlaidToken, user::",user);
@@ -744,7 +744,7 @@ router.post("/saveCustCheck", function(req, res, next){
       req.user.epirts.customerID,
       function(err, customer) {
         // asynchronously called
-        User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
+        User.findOneAndUpdate({ _id: req.user._id }, { epirts: {customer_display_name: req.user.epirts.customer_display_name, customerID: req.user.epirts.customerID, customer: customer} }, function(err, user) {
           if (err) throw err;
           // we have the updated user returned to us
           console.log("after uploading customer's stripe saveCustomerPlaidToken, user::",user);
