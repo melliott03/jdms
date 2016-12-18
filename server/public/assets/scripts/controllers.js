@@ -276,6 +276,8 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         console.log('$location.search()::', $location.search());
         var queryParamsObject = $location.search();
         var confirmStatus = $location.search()['confirmStatus'];
+        var confirmStatus2 = $location.search().confirmStatus;
+
         console.log('confirmStatus::', confirmStatus);
         var routeParams = $routeParams;
         console.log('routeParams::', routeParams);
