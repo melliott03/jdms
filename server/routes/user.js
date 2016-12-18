@@ -66,6 +66,13 @@ router.get("/name", function(req,res,next){
         };
         paymentSourcesNewArray.push(paymentSourceObject);
       };
+
+      var autoRecharge;
+      if (req.user.autoPaymentsChoice && req.user.autoPaymentsChoice.autoRecharge && req.user.autoPaymentsChoice.autoRecharge.autoRecharge) {
+        autoRecharge = req.user.autoPaymentsChoice.autoRecharge.autoRecharge;
+      }else {
+        autoRecharge = 'disabled';
+      }
       console.log('paymentSourcesNewArray', paymentSourcesNewArray);
 
       resUser = {
@@ -83,7 +90,7 @@ router.get("/name", function(req,res,next){
         display_name: req.user.epirts.customer_display_name,
         telephonicID: req.user.telephonicID,
         telephonicPassCode: req.user.telephonicPassCode,
-        autoRecharge: req.user.autoPaymentsChoice.autoRecharge.autoRecharge,
+        autoRecharge: autoRecharge,
         sources: {
           total_count: req.user.epirts.customer.sources.total_count,
           data: paymentSourcesNewArray,
