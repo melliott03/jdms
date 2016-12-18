@@ -316,7 +316,12 @@ router.get('/email-verification/:URL', function(req, res) {
         //   info: info
         // });
         // res.sendFile(path.resolve(__dirname, "../public/assets/views/register.html"));
-        res.redirect("/");
+
+        req.session.save(function (err) {
+          if (err) return next(err)
+          res.redirect('/')
+        })
+        // res.redirect("/");
       });
     } else {
       return res.status(404).send('ERROR: confirming temp user FAILED');
