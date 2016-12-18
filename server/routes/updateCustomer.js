@@ -983,13 +983,34 @@ var autoRechargeCustomer = function(data){
         console.log('recharge stripeCustomer balance with :: ', charge);
         data.charge = charge;
         return data;
+      }).then(function(data){
+        var customer_id = data.stripeCustomer.id;
+        data.customer_id = customer_id;
+        return stripe.customers.retrieve(customer_id)
+        .then(function(customer){
+          if (customer){
+            data.stripeCustomer = customer;
+            data.balance = customer.account_balance;
+            data.customer_id = customer_id;
+            return data;
+          }
+        })
+
+      }).then(function(data){
+        return stripe.customers.update(data.customer_id, {
+          account_balance: data.stripeCustomer.account_balance - data.charge.amount
+        }).then(function(stripeCustomer){
+          console.log('stripeCustomer account_balance updated with recharge amount:: ', stripeCustomer);
+          data.rechargedCustomer = stripeCustomer;
+          return data;
+        })
       }).then(function(data) {
         if (data.charge.captured == true) {
           console.log('data at before update user suspended to false::');
           var promise = User.findOneAndUpdate({ _id: data.user._id }, { 'accountSuspension.suspended': false }).exec();
           return promise.then(function(aUserWithID) {
-            console.log('aUserWithID updated accountSuspension.suspended to true field 32::', aUserWithID);
-            console.log('data updated accountSuspension.suspended to true field 32::', data);
+            console.log('aUserWithID updated accountSuspension.suspended to false field 32::', aUserWithID);
+            console.log('data updated accountSuspension.suspended to false field 32::', data);
             return data;
           });
         }else {
