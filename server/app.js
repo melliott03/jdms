@@ -1,5 +1,4 @@
 require('dotenv').load();//Twilio Video
-var cookieSession = require('cookie-session');
 var express = require("express");
 // Requires multiparty  https://github.com/danialfarid/ng-file-upload/wiki/Node-example
 // var multiparty = require('connect-multiparty');
@@ -45,7 +44,6 @@ var stripe = require("stripe")(configsty.STRIPE_TEST);
 
 app.use(function(req, res, next){ //https://onedesigncompany.com/news/express-generator-and-socket-io
   res.io = io;
-  req.connection.setNoDelay(true);
   next();
 });
 
@@ -70,7 +68,7 @@ var updateCustomer = require('./routes/updateCustomer');
 
 //PASSPORT original before jtw strategy
 // var passport = require("passport");
-var session = require("express-session");
+// var session = require("express-session");
 // var localStrategy = require("passport-local");
 
 //START: http://slatepeak.com/guides/building-a-software-as-a-service-saas-startup-pt-2/
@@ -177,30 +175,16 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
 
 
   // app.use(session({
-  //     secret: "session",
-  //     key: "us4eD5&r*1Sfdf34S#<msGtEz",
+  //     secret: "secret",
+  //     key: "user",
   //     resave: true,
   //     s: false,
   //     cookie: {maxAge: 365 * 24 * 60 * 60 * 1000, secure: false}
   // }));
-  app.use(cookieSession({
-    name: 'session',
-    keys: ['us4eD5&r*1Sfdf34S#<msGtEz'],
 
-    // Cookie Options
-    maxAge: 5 * 60 * 1000 // 5 minutes
-  }));
-
-  // app.use(session({
-  // cookieName: 'session',
-  // secret: 'us4eD5&r*1Sfdf34S#<msGtEz',
-  // duration: 30 * 60 * 1000,
-  // activeDuration: 5 * 60 * 1000,
-  // }));
-
-  app.use(cookieParser());
+  // app.use(cookieParser());
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({extended: true}));//changed this to false for twilio
+  app.use(bodyParser.urlencoded({extended: false}));//changed this to false for twilio
   app.use(passport.initialize());
   // app.use(passport.session());
 
