@@ -265,7 +265,7 @@ nev.configure({
    verifyMailOptions: {
        from: 'Do Not Reply <myawesomeemail_do_not_reply@gmail.com>',
        subject: 'Please confirm account',
-       html: 'Click the following link to confirm your NowLanguage account:</p><p>${URL}</p>',
+       html: '<p>Thank you for registering.</p><p>Click the following link to confirm your NowLanguage account:</p><p>${URL}</p>',
        text: 'Please confirm your NowLanguage account by clicking the following link: ${URL}'
    }
 });

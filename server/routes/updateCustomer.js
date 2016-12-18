@@ -908,7 +908,7 @@ router.get('/customerMoneyBalance', passport.authenticate('jwt', { session: fals
 }).then(function(newdata) {
   console.log('newdata at top s::',newdata);
   var dataToSend;
-  if (newdata.availabel_balance) {
+  if (newdata && newdata.availabel_balance) {
     dataToSend = newdata;
   }else {
     console.log('newdata.stripeCustomer.account_balance::',newdata.stripeCustomer.account_balance);
