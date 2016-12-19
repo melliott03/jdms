@@ -753,7 +753,7 @@ var saveLanguageToDB = function(CallSid, language){
 
 var getSpanishInterpreter = function (twiml, teleAppCallID, CallSid) {
     saveLanguageToDB(CallSid, "Spanish");
-    twiml.say("TPlease hold while we connect you with a Spanish interpreter",
+    twiml.say("Please hold while we connect you with a Spanish interpreter",
         {voice: "alice", language: "en-GB"});
     var arr = {selected_language:"Spanish", selected_medium:"Voice"};
     var json = JSON.stringify(arr);
@@ -769,7 +769,7 @@ var getSpanishInterpreter = function (twiml, teleAppCallID, CallSid) {
 };
 var getFrenchInterpreter = function (twiml, teleAppCallID, CallSid) {
     saveLanguageToDB(CallSid, "French");
-    twiml.say("TPlease hold while we connect you with a French interpreter",
+    twiml.say("Please hold while we connect you with a French interpreter",
         {voice: "alice", language: "en-GB"});
     var arr = {selected_language:"French", selected_medium:"Voice"};
     var json = JSON.stringify(arr);

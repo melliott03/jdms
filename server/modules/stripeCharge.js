@@ -285,7 +285,7 @@ var prePaid = function(data){
           } else {
             if (abalanceMinusAmountDue <= 0) {
               //suspend the account
-              var promise = User.findOne({ _id: userId }, { 'accountSuspension.suspended': true }).exec();
+              var promise = User.findOne({ _id: data.aUserWithCustomer_ID._id }, { 'accountSuspension.suspended': true }).exec();
               promise.then(function(aUserWithID) {
                 console.log('aUserWithID updated accountSuspension.suspended to true field::', aUserWithID);
                 return aUserWithID;
