@@ -51,7 +51,7 @@
         <td > <strong>{{work.language | capitalize}}</strong></td>
         <td > <strong>{{work.outboundSummary.createdAt | date}}</strong></td>
         <td > <strong>{{work.outboundSummary.createdAt | date:'h:mm a'}} {{work.outboundSummary.createdAtTZ | lowercase}}</strong></td>
-        <td > <strong>{{work.outboundSummary.durationObj.minutes}} min {{work.outboundSummary.durationObj.seconds}} sec</strong></td>
+        <td > <strong>{{work.outboundSummary.durationObj.roundedDurationUpInMins}} min</strong></td>
         <!-- <td > <strong>{{work.money.customerCost/100 | currency}}</strong></td> -->
 
 
