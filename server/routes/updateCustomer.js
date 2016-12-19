@@ -121,6 +121,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
       var visualData = {};
       var work_telsLanguageList = [];
       var work_tels = works.work_tels;
+      var accumulatedDuration = 0;
 
       work_tels.map(function(obj){
         if (obj.language) {
@@ -187,6 +188,11 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
           var month = createdAt.getMonth();
           console.log('month::', month);
           arrayOfObjDates.push(createdAt);
+
+          if (obj.outboundSummary.durationObj && obj.outboundSummary.durationObj.roundedDurationUpInMins) {
+            accumulatedDuration += obj.outboundSummary.durationObj.roundedDurationUpInMins;
+          }
+
 
           twelveMonth_label.find(x => {
             var idx = twelveMonth_label.indexOf(x);

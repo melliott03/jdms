@@ -14,7 +14,7 @@
 
     </tr>
     <tr>
-        <th class="thsecond"></th>
+        <th class="thsecond"></th><!-- Call Count:{{displayWorkTelCollection.length}} -->
         <th class="thsecond searchfont">
             <input placeholder="search Phone Numbers" st-search="inboundSummary.From2" />
         </th>
@@ -30,6 +30,7 @@
 
         <th class="thsecond">
           <!-- <input placeholder="search Duration" st-search="(outboundSummary.CallDuration * 1)" /> -->
+          <!-- <span>Total Duration: {{roundedDurationUpInMins}}</span> -->
         </th>
         <!-- <th class="thsecond">
           <input placeholder="search Cost" st-search="customer_rate" />
@@ -83,7 +84,7 @@
 			</tr>
     </tfoot>
 </table>
-<p><br><div ng-if="displayWorkTelCollection.length === 0">No calls made yet!</div></p>
+<p><br><div ng-if="displayWorkTelCollection.length === 0">No calls to display!</div></p>
 
 
 </div>
