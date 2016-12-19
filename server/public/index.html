@@ -198,14 +198,14 @@
                         </li> -->
                         <li>
                           <div ng-controller="ConfirmationController">
-                            <span style="color:#ffffff;">{{message_fail}} {{message_success}}</span>
+                            <span style="color:#ffffff;" ng-cloak>{{message_fail}} {{message_success}}</span>
                           </div>
                       </li>
                         <li>
                             <!-- <a ng-click="showTabDialog($event)">Login/Register</a> -->
 
                             <div ng-controller="HomeController">
-                            <md-button class="md-raised md-primary" ng-click="showTabDialog($event)" >
+                            <md-button class="md-raised md-primary" ng-click="showTabDialog($event)" ng-cloak>
                               Login/Register
                             </md-button>
                             </div>

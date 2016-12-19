@@ -536,7 +536,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
         assignmentStatus: 'completed',
         reason: 'call completed'
       }, function(err, task) {
-        if (err) console.log('err updating post_work_activity_sid::', err);
+        if (err) console.log('err updating task to completed::', err);
           console.log('task after updating task to completed::', task);
       });
 
