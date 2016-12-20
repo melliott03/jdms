@@ -164,7 +164,6 @@ var createTwilioWorker = function(user, telephonicUser){
   var createTelephonicIDnPassCode = function(user, req){
     //search db for the generated ids. if found, run the generator again
     var userid = chance.integer({min: 1111111, max: 9999999});
-    var userid = 1375116;
     // telephonic: {userID: uerID, passCode: passCode}
     console.log('userid1::', userid);
 
