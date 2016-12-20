@@ -45,10 +45,11 @@
     <md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
 
 
-
+<!--  ng-show="showTheForm" -->
       <div ng-controller="RegistrationController">
         <span></span>
-        <form ng-submit="submitRegistration()" ng-show="showTheForm">
+        <form ng-submit="submitRegistration()" >
+          <fieldset ng-disabled="showTheForm">
         <md-input-container>
           <label for="email">EMAIL: </label>
           <input ng-model="register.email" type="email" name="email" id="email" class="md-block" flex-gt-sm required/>
@@ -151,6 +152,7 @@
         <!-- <md-button class="md-raised md-primary" type="submit" value="Register">Register</md-button> -->
         <input type="submit" value="Register" />
 
+      </fieldset>
 
       </form>
       <span class="text-danger">{{message_fail}}</span> <span class="text-success ">{{message_success}}</span>
