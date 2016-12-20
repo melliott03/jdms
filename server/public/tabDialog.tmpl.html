@@ -20,7 +20,7 @@
               <span></span>
               <form ng-submit="submit()">
                 <input ng-model="user.email" type="text" name="user" placeholder="email" />
-                <input ng-model="user.password" type="password" name="pass" placeholder="Password" />
+                <input ng-model="user.password" type="password" placeholder="Password" />
                 <input type="submit" value="Login" />
               </form>
               <span class="text-danger">{{message_fail}}</span> <span class="text-success ">{{message_success}}</span>
@@ -56,7 +56,7 @@
         </md-input-container>
         <md-input-container>
           <label for="password">PASSWORD: </label>
-          <input ng-model="register.password" type="text" name="password" id="password" class="md-block" flex-gt-sm required/>
+          <input ng-model="register.password" type="password" name="password" id="password" class="md-block" flex-gt-sm required/>
         </md-input-container>
         <md-input-container>
           <label for="firstname">FIRST NAME: </label>
