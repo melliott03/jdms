@@ -302,7 +302,7 @@ var createTwilioWorker = function(user, telephonicUser){
           if (err) {
             confirmStatus = 'FAILED';
             confirmObject = {msg: 'ERROR!', info: info};
-            console.log('err in confirming user account::', err);
+            console.log('err in confirming user account 1::', err);
             // return res.status(404).send('ERROR: sending confirmation email FAILED');
           }else {
             confirmStatus = 'CONFIRMED';
@@ -313,7 +313,7 @@ var createTwilioWorker = function(user, telephonicUser){
       } else if (err){
         confirmStatus = 'FAILED';
         // confirmObject = {msg: 'ERROR!', info: info};
-        console.log('err in confirming user account::', err);
+        console.log('err in confirming user account 2::', err);
         return res.redirect("/?confirmStatus="+confirmStatus);
         // return res.status(404).send('ERROR: confirming temp user FAILED');
       }
