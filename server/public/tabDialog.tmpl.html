@@ -150,8 +150,7 @@
         <input ng-model="register.action" ng-init="register.action='signup'" type="text" name="action" hidden/>
 
         <!-- <md-button class="md-raised md-primary" type="submit" value="Register">Register</md-button> -->
-        <input type="submit" value="Register" />
-
+        <input type="submit" value="Register" ng-readonly="!showTheForm" /><!-- ng-disabled="!showTheForm" -->
       </fieldset>
 
       </form>
