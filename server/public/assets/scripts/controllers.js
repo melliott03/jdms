@@ -220,10 +220,11 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           })
           .error(function (data, status, headers, config) {
             // Erase the token if the user fails to log in
+            console.log('in controller .error Error confirming account::');
             delete $window.localStorage.token;
 
             // Handle login errors here
-            $scope.message = 'Error: Invalid user or password';
+            $scope.message_fail = 'Error confirming your account';
           });
         };
         // WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
