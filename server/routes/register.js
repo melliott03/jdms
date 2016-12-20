@@ -172,7 +172,7 @@ var createTwilioWorker = function(user, telephonicUser){
     //If it is a find, then results == []. If it is a findOne, then results == null
     var promise = User.findOne({telephonicID: userid}).exec();
     promise.then(function(anyUserWithID) {
-      console.log('anyUserWithID ::', anyUserWithID);
+      console.log('anyUserWithID, 1::', anyUserWithID);
       // if (anyUserWithID == null){
       //   addTelephonicIDnPassCode();
       // }
@@ -186,12 +186,9 @@ var createTwilioWorker = function(user, telephonicUser){
         addTelephonicIDnPassCode(user, req, userid);
       } else {
         console.log('inside "else" of .then of createTelephonicIDnPassCode, anyUserWithID::', anyUserWithID);
-        rerunCreateTelephonicIDnPassCode(user, req);
-
+        // rerunCreateTelephonicIDnPassCode(user, req);
+        return createTelephonicIDnPassCode(user, req);
       }
-      // do something with updated work
-    }).then(function(userid) {
-      console.log('inside .then of createTelephonicIDnPassCode, anyUserWithID in .then::', userid);
       // do something with updated work
     })
     .catch(function(err){
@@ -225,7 +222,7 @@ var createTwilioWorker = function(user, telephonicUser){
     //If it is a find, then results == []. If it is a findOne, then results == null
     var promise = User.findOne({telephonicID: userid}).exec();
     promise.then(function(anyUserWithID) {
-      console.log('anyUserWithID ::', anyUserWithID);
+      console.log('anyUserWithID, 2::', anyUserWithID);
       // if (anyUserWithID == null){
       //   addTelephonicIDnPassCode();
       // }
