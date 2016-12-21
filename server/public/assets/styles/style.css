@@ -21,7 +21,9 @@ header {
   overflow-y: hidden;
   overflow-x: hidden;
 }
-
+.grayallfieldtext{
+  color: gray;
+}
 #video {
   position: absolute;
   top: 50%;
