@@ -211,7 +211,7 @@ var createTwilioWorker = function(user, telephonicUser){
       createTwilioWorker(aUser, userid);
     });
   };
-
+/*
   var rerunCreateTelephonicIDnPassCode = function(user, req){
     //search db for the generated ids. if found, run the generator again
     var userid = chance.integer({min: 1111111, max: 9999999});
@@ -242,7 +242,7 @@ var createTwilioWorker = function(user, telephonicUser){
     });
 
   };
-
+*/
   //EMAIL VARIFICATION
   nev.configure({
     verificationURL: configsty.APP_URL+'/register/email-verification/${URL}',
@@ -294,18 +294,19 @@ var createTwilioWorker = function(user, telephonicUser){
           payable.createWorker(user)
         }
 
-        nev.sendConfirmationEmail(user.email, function(err, info) {
-          if (err) {
-            confirmStatus = 'FAILED';
-            confirmObject = {msg: 'ERROR!', info: info};
-            console.log('err in confirming user account 1::', err);
-            // return res.status(404).send('ERROR: sending confirmation email FAILED');
-          }else {
-            confirmStatus = 'CONFIRMED';
-            confirmObject = {msg: 'CONFIRMED!', info: info};
-          }
-          res.redirect("/?confirmStatus="+confirmStatus);
-        });
+        // nev.sendConfirmationEmail(user.email, function(err, info) {
+        //   if (err) {
+        //     confirmStatus = 'FAILED';
+        //     confirmObject = {msg: 'ERROR!', info: info};
+        //     console.log('err in confirming user account 1::', err);
+        //     // return res.status(404).send('ERROR: sending confirmation email FAILED');
+        //   }else {
+        //     confirmStatus = 'CONFIRMED';
+        //     confirmObject = {msg: 'CONFIRMED!', info: info};
+        //   }
+        //   res.redirect("/?confirmStatus="+confirmStatus);
+        // });
+        res.redirect("/?confirmStatus="+confirmStatus);
       } else if (err){
         confirmStatus = 'FAILED';
         // confirmObject = {msg: 'ERROR!', info: info};
