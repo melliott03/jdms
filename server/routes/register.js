@@ -263,7 +263,14 @@ var createTwilioWorker = function(user, telephonicUser){
       subject: 'Please confirm account',
       html: '<p>Thank you for registering.</p><p>Click the following link to confirm your NowLanguage account:</p><p>${URL}</p>',
       text: 'Please confirm your NowLanguage account by clicking the following link: ${URL}'
-    }
+    },
+    shouldSendConfirmation: true, //will send an email automatically without the need for calling sendConfirmationEmail function
+    confirmMailOptions: {
+        from: 'Do Not Reply <user@gmail.com>',
+        subject: 'Successfully verified!',
+        html: '<p>Congratulations! Your NowLanguage account has been successfully verified.</p>',
+        text: 'Congratulations! Your NowLanguage account has been successfully verified.'
+    },
   });
   nev.generateTempUserModel(User, function(err, tempUserModel) {
     console.log('inside nev.generateTempUserModel', tempUserModel);
@@ -285,6 +292,7 @@ var createTwilioWorker = function(user, telephonicUser){
       var confirmObject;
 
       if (user) {
+        confirmStatus = 'CONFIRMED';
         //create stripe account object for contractor or customer object customer
         if (user.role == 'customer') {
           createStripeCustomer(user, req);
