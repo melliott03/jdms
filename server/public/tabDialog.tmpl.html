@@ -47,10 +47,10 @@
 
 <!--  ng-show="showTheForm" -->
       <div ng-controller="RegistrationController">
-        <span></span>
+
         <form name="registerForm" ng-submit="submitRegistration()" >
-          <fieldset ng-disabled="!showTheForm" ng-class="{grayallfieldtext: !showTheForm}">
-            <!--  -->
+          <fieldset ng-disabled="!showTheForm">
+          <span ng-class="{searchfont: !showTheForm}">
         <md-input-container>
           <label for="email">EMAIL: </label>
           <input ng-model="register.email" type="email" name="email" id="email" class="md-block" flex-gt-sm required/>
@@ -153,6 +153,7 @@
         <md-button class="md-raised md-primary" type="submit" value="Register" ng-disabled="registerForm.$pristine || registerForm.$invalid">Register</md-button>
         <!-- <input type="submit" value="Register" ng-readonly="!showTheForm" ng-disabled="registerForm.$pristine|| registerForm.$invalid"/> -->
        <!-- ng-disabled="!showTheForm" -->
+       </span>
       </fieldset>
 
       </form>

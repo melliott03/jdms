@@ -22,7 +22,7 @@ header {
   overflow-x: hidden;
 }
 .grayallfieldtext{
-  color: gray;
+  color: #d3d3d3;
 }
 #video {
   position: absolute;
