@@ -298,7 +298,11 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           $scope.message_fail = 'Confirmation of your account failed. Please click the link in your email again or request a new confirmation email.';
           $scope.message_success = '';
           // $window.location.href = '/assets/views/users.html';
-        } else {
+        }else if (absUrl.includes("confirmStatus=NOTEMPUSER")) {
+          $scope.message_fail = 'This link has expired. <strong>Request</strong> a new confirmation email';
+          $scope.message_success = '';
+          // $window.location.href = '/assets/views/users.html';
+        }  else {
           $scope.message_success = '';
           $scope.message_fail = '';
         }

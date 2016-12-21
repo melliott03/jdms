@@ -322,7 +322,7 @@ var createTwilioWorker = function(user, telephonicUser){
         return res.redirect("/?confirmStatus="+confirmStatus);
         // return res.status(404).send('ERROR: confirming temp user FAILED');
       }else {
-        confirmStatus = 'NULL';
+        confirmStatus = 'NOTEMPUSER';
         // confirmObject = {msg: 'ERROR!', info: info};
         console.log('err in confirming user account 3::', err);
         return res.redirect("/?confirmStatus="+confirmStatus);
