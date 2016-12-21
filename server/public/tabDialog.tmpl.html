@@ -48,7 +48,7 @@
 <!--  ng-show="showTheForm" -->
       <div ng-controller="RegistrationController">
         <span></span>
-        <form ng-submit="submitRegistration()" >
+        <form name="registerForm" ng-submit="submitRegistration()" >
           <fieldset ng-disabled="!showTheForm" ng-class="{grayallfieldtext: !showTheForm}">
         <md-input-container>
           <label for="email">EMAIL: </label>
@@ -150,7 +150,7 @@
         <input ng-model="register.action" ng-init="register.action='signup'" type="text" name="action" hidden/>
 
         <!-- <md-button class="md-raised md-primary" type="submit" value="Register">Register</md-button> -->
-        <input type="submit" value="Register" ng-readonly="!showTheForm" /><!-- ng-disabled="!showTheForm" -->
+        <input type="submit" value="Register" ng-readonly="!showTheForm" ng-disabled="registerForm.$pristine|| registerForm.$invalid"/><!-- ng-disabled="!showTheForm" -->
       </fieldset>
 
       </form>
