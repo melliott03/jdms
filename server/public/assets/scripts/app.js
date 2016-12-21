@@ -40,6 +40,51 @@ myApp.filter('capitalize', function() {
     }
 });
 
+
+// START route protection stuff
+/*
+myApp.run(['$rootScope', '$location', 'Auth', function ($rootScope, $location, Auth) {
+    $rootScope.$on('$routeChangeStart', function (event) {
+
+        if (!Auth.isLoggedIn()) {
+            console.log('DENY');
+            event.preventDefault();
+            $location.path('/login');
+        }
+        else {
+            console.log('ALLOW');
+            $location.path('/home');
+        }
+    });
+}]).factory('Auth', function(){
+var user;
+
+return{
+    setUser : function(aUser){
+        user = aUser;
+    },
+    isLoggedIn : function(){
+        return(user)? user : false;
+    }
+  }
+}).controller('loginCtrl', [ '$scope', 'Auth', function ($scope, Auth) {
+  //submit
+  $scope.login = function () {
+    // Ask to the server, do your job and THEN set the user
+
+    Auth.setUser(user); //Update the state of the user in the app
+  };
+}]).controller('loginCtrl', [ '$scope', 'Auth', function ($scope, Auth) {
+  //submit
+  $scope.login = function () {
+    // Ask to the server, do your job and THEN set the user
+
+    Auth.setUser(user); //Update the state of the user in the app
+  };
+}]);
+/*
+// END route protection stuff
+
 myApp.config(["$routeProvider", function($routeProvider){
   $routeProvider.
   when("/home", {
