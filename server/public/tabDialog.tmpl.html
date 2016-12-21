@@ -49,7 +49,7 @@
       <div ng-controller="RegistrationController">
         <span></span>
         <form name="registerForm" ng-submit="submitRegistration()" >
-          <fieldset ng-disabled="!showTheForm" ng-class="{grayallfieldtext: !showTheForm}">
+          <fieldset >
         <md-input-container>
           <label for="email">EMAIL: </label>
           <input ng-model="register.email" type="email" name="email" id="email" class="md-block" flex-gt-sm required/>
