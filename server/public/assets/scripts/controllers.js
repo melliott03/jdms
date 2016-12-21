@@ -299,7 +299,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           $scope.message_success = '';
           // $window.location.href = '/assets/views/users.html';
         }else if (absUrl.includes("confirmStatus=NOTEMPUSER")) {
-          $scope.message_fail = 'This link has expired. <strong>Request</strong> a new confirmation email';
+          $scope.message_fail = 'This link has expired. Request a new confirmation email';
           $scope.message_success = '';
           // $window.location.href = '/assets/views/users.html';
         }  else {
