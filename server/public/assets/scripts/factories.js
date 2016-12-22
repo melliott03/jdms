@@ -284,15 +284,24 @@ myApp.factory("WorkService", ["$http", function($http){
       }
     };
 
+    var setUser = function(aUser){
+        user = aUser;
+    };
+    var isLoggedIn = function(){
+        return(user)? user : false;
+    };
+
     var getUser = function(){
         $http.get("/user/name").then(function(response){
-            console.log(response.data);
+            console.log('response.data::', response.data);
             userObject.response = response.data;
             console.log('userObject in factory', userObject);
             if (userObject.response == "Unauthorized") {
-              userObject.isLogin = function(){return false;;};
+                // userObject.isLogin = function(){return false;};
+                 isLoggedIn();
             } else {
-              userObject.isLogin = function(){return true};
+              // userObject.isLogin = function(){return true};
+                 isLoggedIn(userObject);
             }
             console.log('userObject in factory 2', userObject);
             console.log('userObject.response.sources.data in factory', userObject.response.sources.data);
@@ -383,6 +392,8 @@ myApp.factory("WorkService", ["$http", function($http){
     getUser();
     return {
         getUser : getUser,
+        setUser : setUser,
+        isLoggedIn : isLoggedIn,
         postWork : postWork,
         postedWork : postedWork,
         getWorks : getWorks,
