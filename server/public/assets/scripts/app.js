@@ -43,38 +43,54 @@ myApp.filter('capitalize', function() {
 
 // START route protection stuff
 
-myApp.run(['$rootScope', '$location', '$window', 'WorkService', function ($rootScope, $location, $window, WorkService) {
-    var Auth = WorkService;
-    $rootScope.$on('$routeChangeStart', function (event) {
-        console.log('window.location.href::', window.location.href);
-        console.log('$location.path::', $location.path);
-        console.log('$location.path()::', $location.path());
-        console.log('$location.path().length::', $location.path().length);
-
-        if (!Auth.isLoggedIn() && $location.path() != "/home" && $location.path().length != 0) { //&& $location.path().length > 1
-            console.log('DENY');
-            // event.preventDefault();
-            // $location.path('/');
-            window.location.href = "/";
-        }
-        else {
-            console.log('ALLOW');
-            // $location.path('/home');
-        }
-    });
-}])
-// .factory('Auth', function(){
-// var user;
+myApp
+// .run(['$rootScope', '$location', '$window', 'WorkService', 'Auth', function ($rootScope, $location, $window, WorkService, Auth) {
+//     var workService = WorkService;
+//     $rootScope.$on('$routeChangeStart', function (event) {
+//         console.log('window.location.href::', window.location.href);
+//         console.log('$location.path::', $location.path);
+//         console.log('$location.path()::', $location.path());
+//         console.log('$location.path().length::', $location.path().length);
+//         console.log('$location.url()::', $location.url());
+//         console.log('$location.url()::', $location.url());
+//         console.log('Auth.isLoggedIn()::', Auth.isLoggedIn());
+//         debugger;
 //
-// return{
-//     setUser : function(aUser){
-//         user = aUser;
-//     },
-//     isLoggedIn : function(){
-//         return(user)? user : false;
-//     }
-//   }
-// })
+//         console.log('$location.absUrl()::',$location.absUrl());
+//         console.log('does absUrl().includes(/assets/views/users.html?::',$location.absUrl().includes('/assets/views/users.html'));
+//         // if (!workService.isLoggedIn() && $location.path() != "/home" && $location.path().length != 0) { //&& $location.path().length > 1
+//         if (!Auth.isLoggedIn()) { //&& $location.path().length > 1
+//             console.log('inside if before redirect 1::');
+//             console.log('DENY');
+//             event.preventDefault();
+//             // $location.path('/');
+//             if ($location.absUrl().includes('/assets/views/users.html') ) {
+//               console.log('inside if before redirect 2::');
+//                 // window.location.href = "/";
+//             }else {
+//
+//             }
+//             // window.location.href = "/";
+//         }else {
+//             console.log('ALLOW');
+//             // $location.path('/home');
+//         }
+//     });
+// }])
+.factory('Auth', function(){
+var user;
+
+return{
+    setUser : function(aUser){
+      console.log('setting user to aUser::', aUser);
+        user = aUser;
+    },
+    isLoggedIn : function(){
+      console.log('inside isLoggedIn function, user::', user);
+        return(user)? user : false;
+    }
+  }
+});
 // .controller('loginCtrl', [ '$scope', 'WorkService', function ($scope, WorkService) {
 //   var Auth = WorkService;
 //   //submit
@@ -84,133 +100,133 @@ myApp.run(['$rootScope', '$location', '$window', 'WorkService', function ($rootS
 //     Auth.setUser(user); //Update the state of the user in the app
 //   };
 // }])
-.controller('mainCtrl', ['$scope', 'WorkService', '$location', function ($scope, WorkService, $location) {
-  var Auth = WorkService;
-
-  $scope.$watch(Auth.isLoggedIn, function (value, oldValue) {
-    console.log('in mainCtrl $scope.$watch(Auth.isLoggedIn value::', value);
-    console.log('in mainCtrl $scope.$watch(Auth.isLoggedIn oldValue::', oldValue);
-
-    if(!value && oldValue) {
-      console.log("Disconnect");
-      $location.path('/');
-    }
-
-    if(value) {
-      console.log("Connect");
-      //Do something when the user is connected
-    }
-
-  }, true);
-
-}]);
+// myApp.controller('mainCtrl', ['$scope', 'WorkService', '$location', function ($scope, WorkService, $location) {
+//   var Auth = WorkService;
+//
+//   $scope.$watch(Auth.isLoggedIn, function (value, oldValue) {
+//     console.log('in mainCtrl $scope.$watch(Auth.isLoggedIn value::', value);
+//     console.log('in mainCtrl $scope.$watch(Auth.isLoggedIn oldValue::', oldValue);
+//
+//     if(!value && oldValue) {
+//       console.log("Disconnect");
+//       $location.path('/');
+//     }
+//
+//     if(value) {
+//       console.log("Connect");
+//       //Do something when the user is connected
+//     }
+//
+//   }, true);
+//
+// }]);
 
 // END route protection stuff
 
 myApp.config(["$routeProvider", function($routeProvider){
   $routeProvider.
   when("/home", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/home/dashboard.html",
     controller: "HomeController"
   }).
   when("/home/charges", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/home/charges.html",
     controller: "ShowController"
   }).
   when("/home/dashboard", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/home/dashboard.html",
     controller: "ShowController"
   }).
   when("/availibleView", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/availibleView.html",
     controller: "ShowController"
   }).
   when("/acceptedView", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/accepted.html",
     controller: "ShowController"
   }).
   when("/onsite", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/onsite/appointments.html",
     controller: "ShowController"
   }).
   when("/onsite/dashboard", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/onsite/dashboard.html",
     controller: "ShowController"
   }).
   when("/onsite/appointments", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/onsite/appointments.html",
     controller: "ShowController"
   }).
   when("/onsite/appointments2", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/onsite/appointments2.html",
     controller: "pipeCtrl"
   }).
   when("/workdetail", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/workdetail.html",
     controller: "ShowController"
   }).
   when("/terms", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/terms.html",
     controller: "ShowController"
   }).
   when("/accountCont", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/account-contractor.html",
     controller: "ShowController"
   }).
   when("/accountCust", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/account-customer.html",
     controller: "ShowController"
   }).
   when("/sign", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/sign.html",
     controller: "ShowController"
   }).
   when("/phone", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/phone/calls.html",
     controller: "ShowController"
   }).
   when("/phone/dashboard", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/phone/dashboard.html",
     controller: "ShowController"
   }).
   when("/phone/calls", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/phone/calls.html",
     controller: "ShowController"
   }).
   when("/admin_addwork", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/adminAddDialog.tmpl.html",
     controller: "ShowController"
   }).
   when("/videoCust", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/getvideointerpreter.html",
     controller: "ShowController"
   }).
   when("/translateCust", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/translate/documentTranslate.html",
     controller: "ShowController"
   }).
   when("/userRegisterSuccess", {
-    // requireAuth: true,
+    requireAuth: true,
     templateUrl: "/assets/views/routes/translate/documentTranslate.html",
     controller: "ShowController"
   }).
@@ -219,23 +235,23 @@ myApp.config(["$routeProvider", function($routeProvider){
   });
 }]);
 
-// myApp.controller('AuthCnt', ['$scope','$location','$window','WorkService', function($scope, $location, $window, WorkService) {
-//         var workService = WorkService;
-//         $scope.$on('$routeChangeStart', function(angularEvent, newUrl) {
-//           console.log('route changed state::');
-//           var user = {};
-//           // user.isAuthenticated = false;
-//             if (newUrl.requireAuth && workService.userObject.isLogin === false) {
-//               console.log('user is not authenticated::');
-//                 // User isn’t authenticated
-//                 // $location.path("login");
-//                 window.location.href = "/";
-//                 // $location.absUrl("nowlanguage.com");
-//
-//             }
-//
-//         });
-//     }]);
+myApp.controller('AuthCnt', ['$scope','$location','$window','WorkService', function($scope, $location, $window, WorkService) {
+        var workService = WorkService;
+        $scope.$on('$routeChangeStart', function(angularEvent, newUrl) {
+          console.log('route changed state::');
+          console.log('workService.userObject.isLogin::', workService.userObject.isLogin);
+
+          var user = {};
+          // user.isAuthenticated = false;
+            if (newUrl.requireAuth && workService.userObject.isLogin === false) {
+              console.log('user is not authenticated, redirecting to homepage::');
+                // User isn’t authenticated
+                // $location.path("login");
+                window.location.href = "/";
+                // $location.absUrl("nowlanguage.com");
+            }
+        });
+    }]);
 /*
 // end Protecting routes
 myApp.config(function ($stateProvider) {

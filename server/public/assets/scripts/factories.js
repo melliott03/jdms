@@ -39,7 +39,7 @@ myApp.config(function ($httpProvider) {
 });
 
 
-myApp.factory("WorkService", ["$http", function($http){
+myApp.factory("WorkService", ["$http", "Auth", function($http, Auth){
     var postedWork = {};
     var data = {};
     var customerWorkObject = {};
@@ -284,24 +284,17 @@ myApp.factory("WorkService", ["$http", function($http){
       }
     };
 
-    var setUser = function(aUser){
-        user = aUser;
-    };
-    var isLoggedIn = function(user){
-        return(user)? user : false;
-    };
-
     var getUser = function(){
         $http.get("/user/name").then(function(response){
-            console.log('response.data::', response.data);
+            console.log(response.data);
             userObject.response = response.data;
             console.log('userObject in factory', userObject);
             if (userObject.response == "Unauthorized") {
-                // userObject.isLogin = function(){return false;};
-                 isLoggedIn();
+              userObject.isLogin = false;
+              // Auth.setUser(false);
             } else {
-              // userObject.isLogin = function(){return true};
-                 isLoggedIn(userObject);
+              userObject.isLogin = true;
+              // Auth.setUser(true);
             }
             console.log('userObject in factory 2', userObject);
             console.log('userObject.response.sources.data in factory', userObject.response.sources.data);
@@ -386,14 +379,22 @@ myApp.factory("WorkService", ["$http", function($http){
     };
 
 
-
+    var isLogin = function(user){
+      console.log('isLogin user 1::' , user);
+        if (user) {
+          console.log('isLogin user 2::' , user);
+          this.status = true;
+        }else {
+          console.log('isLogin user 3::' , user);
+          this.status = false;
+        }
+    };
 
 
     getUser();
     return {
         getUser : getUser,
-        setUser : setUser,
-        isLoggedIn : isLoggedIn,
+        isLogin : isLogin,
         postWork : postWork,
         postedWork : postedWork,
         getWorks : getWorks,
