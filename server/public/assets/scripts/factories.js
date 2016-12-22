@@ -287,7 +287,7 @@ myApp.factory("WorkService", ["$http", function($http){
     var setUser = function(aUser){
         user = aUser;
     };
-    var isLoggedIn = function(){
+    var isLoggedIn = function(user){
         return(user)? user : false;
     };
 

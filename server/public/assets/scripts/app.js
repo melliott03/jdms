@@ -43,14 +43,19 @@ myApp.filter('capitalize', function() {
 
 // START route protection stuff
 
-myApp.run(['$rootScope', '$location', 'WorkService', function ($rootScope, $location, WorkService) {
+myApp.run(['$rootScope', '$location', '$window', 'WorkService', function ($rootScope, $location, $window, WorkService) {
     var Auth = WorkService;
     $rootScope.$on('$routeChangeStart', function (event) {
+        console.log('window.location.href::', window.location.href);
+        console.log('$location.path::', $location.path);
+        console.log('$location.path()::', $location.path());
+        console.log('$location.path().length::', $location.path().length);
 
-        if (!Auth.isLoggedIn()) {
+        if (!Auth.isLoggedIn() && $location.path() != "/home" && $location.path().length != 0) { //&& $location.path().length > 1
             console.log('DENY');
-            event.preventDefault();
-            $location.path('/');
+            // event.preventDefault();
+            // $location.path('/');
+            window.location.href = "/";
         }
         else {
             console.log('ALLOW');
