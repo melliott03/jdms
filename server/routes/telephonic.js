@@ -32,6 +32,10 @@ router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res)
   console.log("req.body in router.post CallCenterCallback::", req.body);
   // var callbody = req.body;
   var workerSid = req.body.WorkerSid;
+  if (req.body.EventType == 'worker.activity.update'){
+    res.send(req.body);
+  }
+
 
   if (req.body.EventType == 'reservation.accepted' && req.body.TaskSid && req.body.WorkflowName == 'VideoWorkflow') {
     console.log('Im inside the eventtype = reservation.accepted req.body.WorkflowName == VideoWorkflow, telephonic/CallCenterCallback req.body::', req.body);
