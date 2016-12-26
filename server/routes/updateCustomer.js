@@ -13,6 +13,14 @@ var mongoose = require("mongoose");
 var moment = require("moment");
 var stripe = require("stripe")('sk_test_SfT5Rf2DMVfT0unJf7aIIskQ');
 
+var twilio = require('twilio');
+
+var twilo = require('twilio-stream');
+// ({
+//   sid: 'mySid',
+//   token: 'myToken'
+// });
+
 var plaid = require('plaid');
 
 var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
@@ -44,6 +52,77 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   Promise.promisifyAll(Work_Tel);
   Promise.promisifyAll(Work_Tel.prototype);
 
+
+
+  router.post("/availibleWorkers", function(req, res, next){
+    console.log('In /availibleWorkers, req.body::::', req.body);
+    // var address = req.body.address;
+    var accountSid = configsty.TWILIO_ACCOUNT_SID;
+    var authToken = configsty.TWILIO_AUTH_TOKEN;
+    var workspaceSid = configsty.TWILIO_WORKSPACE_SID;
+    var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
+
+    client.workspace.workers.get({"TargetWorkersExpression":"languages HAS 'French'","Available":"yes"}, function(err, data) { //
+        if(!err) {
+          console.log('return of client.workspace.workers.get data::', data);
+            data.workers.forEach(function(worker) {
+                console.log('worker.friendly_name::',worker.friendly_name);
+            });
+            res.send(data);
+        }else {
+          console.log('error in getting availibleWorkers::', err);
+        }
+    });
+
+
+    // var client = new twilo.TaskRouterClient(accountSid, authToken, workspaceSid);
+    //
+    // client.workspace.workers.get({"TargetWorkersExpression":"languages HAS 'French'","Available":"yes"}, function(err, data) { //
+    //     if(!err) {
+    //       console.log('return of client.workspace.workers.get data::', data);
+    //         data.workers.forEach(function(worker) {
+    //             console.log('worker.friendly_name::',worker.friendly_name);
+    //         });
+    //     }else {
+    //       console.log('error in getting availibleWorkers::', err);
+    //     }
+    // });
+    // client('workspace.workers.get',{"TargetWorkersExpression":"languages HAS 'French'","Available":"yes"})
+    //   .on('data', (message) => console.log('message in client.on data::',message));
+
+
+
+
+    // twilio('messages')
+    //   .on('data', (message) => console.log('message::',message));
+
+    // client.workspace.workers.get({"TargetWorkersExpression":"languages == 'French'", "Available":"yes"}).then(function(workers) {
+    //   if(!err) {
+    //     console.log('return of client.workspace.tasks.create::',workers);
+    //
+    //       data.workers.forEach(function(worker) {
+    //           console.log(worker.friendly_name);
+    //       });
+    //       res.send(workers);
+    //   }else {
+    //     console.log('error in getting availibleWorkers::', err);
+    //   }
+    //
+    // });
+
+    // client.workspace.tasks(taskSid).update({
+    //   assignmentStatus: 'completed',
+    //   reason: 'call completed'
+    // }).then(function(reservation) {
+    //   console.log('return of client.workspace.tasks.create::',data);
+    //
+    // });
+
+    // User.findOneAndUpdate({ _id: req.user._id }, { address: address }, function(err, user) {
+    //   console.log('after saving user"s geo data, user::::', user);
+    // });
+
+  });
 
   router.post("/customerGraphData", function(req, res, next){
     console.log('inside post/customerGraphData::::',req.body);

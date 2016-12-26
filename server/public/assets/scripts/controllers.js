@@ -1,3 +1,121 @@
+myApp.controller("AuthenticationController", ["$timeout", "$scope", "$location", "$http", "$window", "AuthenticationService", "WorkService", function($timeout, $scope, $location, $http, $window, AuthenticationService, WorkService){ //,  "Auth"
+  console.log("Authentication Controller");
+  // console.log("Auth::", Auth);
+  // console.log('Auth.isLoggedIn() at the top::', Auth.isLoggedIn());
+
+  var authenticationService = AuthenticationService;
+  $scope.logout = function(){
+    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
+    userProfile = null;
+    // console.log('before Auth.setUser(false)::');
+    // Auth.setUser(false);
+    // debugger;
+    // console.log('Auth.isLoggedIn() afer set false::', Auth.isLoggedIn());
+    // debugger;
+    window.location.href = "/";
+    // debugger;
+
+  }
+
+  // $scope.user = {email: '', password: ''};
+  $scope.message = '';
+  $scope.submit = function () {
+    // console.log('in controller Auth in submit 1::::::',Auth);
+    $http.post('/api/authenticate', $scope.user).then(function(response){
+      // console.log('in controller Auth in submit 2::::::',Auth);
+
+      console.log('in controller response::::::',response);
+
+
+      console.log('in controller response.data.token::::::',response.data.token);
+      // debugger;
+
+      $window.localStorage.token = response.data.token;
+      // console.log('in controller $window.localStorage.token::::::',$window.localStorage.token);
+
+
+
+
+
+      if (response.data.token) {
+        // WorkService.setUser(true); //Update the state of the user in the app
+        // console.log('before Auth.setUser(true) 2::');
+        // Auth.setUser(true);
+        // console.log('after Auth.setUser(true)::');
+        // debugger;
+
+        $scope.message_fail = '';
+        $scope.message_success = 'Success!';
+        // debugger;
+        $window.location.href = '/assets/views/users.html';
+        // debugger;
+
+      }else {
+        $scope.message_success = '';
+        $scope.message_fail = 'You entered an incorrect username or password';
+        // Auth.setUser(false);
+      }
+    }).catch(function(err){
+      // Erase the token if the user fails to log in
+      console.log('in controller .error Error confirming account::');
+      // Auth.setUser(false);
+      delete $window.localStorage.token;
+
+      // Handle login errors here
+      $scope.message_fail = 'Error confirming your account';
+
+    });
+    /*
+    .error(function (data, status, headers, config) {
+      // Erase the token if the user fails to log in
+      console.log('in controller .error Error confirming account::');
+      delete $window.localStorage.token;
+
+      // Handle login errors here
+      $scope.message_fail = 'Error confirming your account';
+    });
+    */
+    /*
+    .success(function (data, status, headers, config) {
+      console.log('in controller data.token::::::',data.token);
+      $window.localStorage.token = data.token;
+      // console.log('in controller $window.localStorage.token::::::',$window.localStorage.token);
+
+      $timeout(function () {
+        Auth.setUser(true);
+      }, 0);
+
+
+
+      if (data.token) {
+        // WorkService.setUser(true); //Update the state of the user in the app
+        console.log('before Auth.setUser(true)::');
+        console.log('Auth.isLoggedIn() afer set true::', Auth.isLoggedIn());
+
+        $scope.message_fail = '';
+        $scope.message_success = 'Success!';
+        $window.location.href = '/assets/views/users.html';
+      }else {
+        $scope.message_success = '';
+        $scope.message_fail = 'You entered an incorrect username or password';
+        Auth.setUser(false);
+      }
+    })
+    .error(function (data, status, headers, config) {
+      // Erase the token if the user fails to log in
+      console.log('in controller .error Error confirming account::');
+      delete $window.localStorage.token;
+
+      // Handle login errors here
+      $scope.message_fail = 'Error confirming your account';
+    });
+    */
+  };
+  // WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
+  // WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
+  // WorkService.getContractorWork(); //gets all the work contractor has accepted
+}]);
 
 myApp.controller('Ctrl', function($scope) {
 
@@ -188,117 +306,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
         }
       });
-      myApp.controller("AuthenticationController", ["$timeout", "$scope", "$location", "$http", "$window", "AuthenticationService", "WorkService",  "Auth", function($timeout, $scope, $location, $http, $window, AuthenticationService, WorkService, Auth){
-        console.log("Authentication Controller");
-        console.log("Auth::", Auth);
-        console.log('Auth.isLoggedIn() at the top::', Auth.isLoggedIn());
 
-        var authenticationService = AuthenticationService;
-        $scope.logout = function(){
-          localStorage.removeItem('token');
-          sessionStorage.removeItem('token');
-          userProfile = null;
-          console.log('before Auth.setUser(false)::');
-          Auth.setUser(false);
-          console.log('Auth.isLoggedIn() afer set false::', Auth.isLoggedIn());
-          window.location.href = "/";
-
-        }
-
-        // $scope.user = {email: '', password: ''};
-        $scope.message = '';
-        $scope.submit = function () {
-          console.log('in controller Auth in submit 1::::::',Auth);
-          $http.post('/api/authenticate', $scope.user).then(function(response){
-            console.log('in controller Auth in submit 2::::::',Auth);
-
-            console.log('in controller response::::::',response);
-
-
-            console.log('in controller response.data.token::::::',response.data.token);
-            $window.localStorage.token = response.data.token;
-            // console.log('in controller $window.localStorage.token::::::',$window.localStorage.token);
-
-
-
-
-
-            if (response.data.token) {
-              // WorkService.setUser(true); //Update the state of the user in the app
-              console.log('before Auth.setUser(true) 2::');
-              Auth.setUser(true);
-              console.log('after Auth.setUser(true)::');
-              debugger;
-
-              $scope.message_fail = '';
-              $scope.message_success = 'Success!';
-              debugger;
-              $window.location.href = '/assets/views/users.html';
-            }else {
-              $scope.message_success = '';
-              $scope.message_fail = 'You entered an incorrect username or password';
-              Auth.setUser(false);
-            }
-          }).catch(function(err){
-            // Erase the token if the user fails to log in
-            console.log('in controller .error Error confirming account::');
-            Auth.setUser(false);
-            delete $window.localStorage.token;
-
-            // Handle login errors here
-            $scope.message_fail = 'Error confirming your account';
-
-          });
-          /*
-          .error(function (data, status, headers, config) {
-            // Erase the token if the user fails to log in
-            console.log('in controller .error Error confirming account::');
-            delete $window.localStorage.token;
-
-            // Handle login errors here
-            $scope.message_fail = 'Error confirming your account';
-          });
-          */
-          /*
-          .success(function (data, status, headers, config) {
-            console.log('in controller data.token::::::',data.token);
-            $window.localStorage.token = data.token;
-            // console.log('in controller $window.localStorage.token::::::',$window.localStorage.token);
-
-            $timeout(function () {
-              Auth.setUser(true);
-            }, 0);
-
-
-
-            if (data.token) {
-              // WorkService.setUser(true); //Update the state of the user in the app
-              console.log('before Auth.setUser(true)::');
-              console.log('Auth.isLoggedIn() afer set true::', Auth.isLoggedIn());
-
-              $scope.message_fail = '';
-              $scope.message_success = 'Success!';
-              $window.location.href = '/assets/views/users.html';
-            }else {
-              $scope.message_success = '';
-              $scope.message_fail = 'You entered an incorrect username or password';
-              Auth.setUser(false);
-            }
-          })
-          .error(function (data, status, headers, config) {
-            // Erase the token if the user fails to log in
-            console.log('in controller .error Error confirming account::');
-            delete $window.localStorage.token;
-
-            // Handle login errors here
-            $scope.message_fail = 'Error confirming your account';
-          });
-          */
-        };
-        // WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
-        // WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
-        // WorkService.getContractorWork(); //gets all the work contractor has accepted
-      }]);
 
       myApp.controller("RegistrationController", ["$scope", "$location", "$http", "$window", function($scope, $location, $http, $window){
         console.log("RegistrationController Controller");
@@ -398,10 +406,32 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
       }]);
 
 
-      myApp.controller("AddController", ["$scope", "$http", "$filter", "$log", "WorkService", function($scope, $http, $filter, $log, WorkService){
+      myApp.controller("AddController", ["$scope", "$http", "$filter", "$timeout", "$log", "WorkService", "rx", function($scope, $http, $filter, $timeout, $log, WorkService, rx){
         // http://ngmodules.org/modules/ngAutocomplete
-
+        var workService = WorkService;
         console.log('inside AddController');
+
+        /*
+        var promise;
+        $scope.languageChanged = function(){
+          var source = {language: $scope.work.language};
+              promise = $timeout(function () {
+              workService.getAvailibleWorkers(source)
+              $scope.languageChanged(source);
+            }, 10000);
+        };
+        $scope.$on('$destroy', function(){
+            $timeout.cancel(promise);
+        });
+        $scope.$on('$locationChangeStart', function(){
+            $timeout.cancel(promise);
+        });
+        */
+        $scope.languageChanged = function(){
+          var source = {language: $scope.work.language};
+          var result = Rx.Observable.fromPromise($http.post("/telephonic/CallCenterCallback", source));
+          result.subscribe(x => console.log('in controller back from getting availibleWorkers::',x), e => console.error(e));
+        };
 
 
 
@@ -552,6 +582,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           workService.getContractorWork(); //gets all the work contractor has accepted
           workService.getCustomerBalance();
           workService.getCustomerCharges();
+          // workService.getAvailibleWorkers();
 
           /*
           //Secket.io suff turning off to code further

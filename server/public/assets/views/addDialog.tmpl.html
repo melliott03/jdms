@@ -28,7 +28,7 @@
         <div layout-gt-sm="row">
           <md-input-container class="md-block" flex-gt-sm>
             <label>Language</label>
-            <md-select ng-model="work.language" required="required">
+            <md-select ng-model="work.language" ng-change="languageChanged()" required="required">
               <md-option ng-repeat="language in languages" >
                 {{language}}
               </md-option>

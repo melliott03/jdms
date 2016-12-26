@@ -39,7 +39,7 @@ myApp.config(function ($httpProvider) {
 });
 
 
-myApp.factory("WorkService", ["$http", "Auth", function($http, Auth){
+myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,"Auth"
     var postedWork = {};
     var data = {};
     var customerWorkObject = {};
@@ -54,8 +54,17 @@ myApp.factory("WorkService", ["$http", "Auth", function($http, Auth){
     var customerPaymentSourceObject = {};
     var customerDefaultPaymentSourceObject = {};
     var customerChargeMethodChoiceObject = {};
+    var availibleWorkers = {};
     // var customerInvoicesObject = {};
 
+
+    var getAvailibleWorkers = function(source){
+          $http.post("/updateCustomer/availibleWorkers", source).then(function(response){
+            availibleWorkers.data = response.data;
+            console.log('return of getAvailibleWorkers ::  ', response.data);
+        });
+
+    };
 
     var updateCustomerDefaultPaymentSource = function(source){
         $http.post("/updateCustomer/customerDefaultPaymentSource", source).then(function(response){
@@ -432,7 +441,9 @@ myApp.factory("WorkService", ["$http", "Auth", function($http, Auth){
         customerDefaultPaymentSourceObject : customerDefaultPaymentSourceObject,
         submitRecharge: submitRecharge,
         submitCustomerChargeMethodChoice: submitCustomerChargeMethodChoice,
-        customerChargeMethodChoiceObject: customerChargeMethodChoiceObject
+        customerChargeMethodChoiceObject: customerChargeMethodChoiceObject,
+        getAvailibleWorkers : getAvailibleWorkers,
+        availibleWorkers : availibleWorkers
     };
 }]);
 
