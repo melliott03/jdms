@@ -10,7 +10,8 @@ var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var morgan = require('morgan');//brought in here for passport JWT but might be a dependency for others
 var http = require('http').Server(app);  // .createServer(app)
-var io = require('socket.io')(http);
+// var io = require('socket.io')(http);
+var io = require('socket.io').listen(http);
 var socketioJwt = require('socketio-jwt');
 // var sio = socketIo.listen(http);
 
@@ -230,7 +231,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     console.log('A User socket connection, socket.id::', socket.id);
     console.log('A User socket connection, socket.request::', socket.request);
     console.log('A User socket connection, socket.handshake::', socket.handshake);
-    console.log('A User socket connection, socket.handshake._events::', socket.handshake._events);
+    console.log('A User socket connection, socket.handshake._events::', socket.handshake.headers._events);
     // console.log('A User has connected to socket.client.Client.conn.request::', socket.client.Client.conn.request);
     // console.log('A User has connected to socket.request.secret.data::', socket.request.secret.data);
 
@@ -246,7 +247,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     //
     // });
     io.to("/#" + socket.id).emit('connectedSocketID', {"socketid" : socket.id});
-    // io.emit('connectedSocketID', {"socketid" : socket.id})
+    io.emit('connectedSocketID', {"socketid" : socket.id})
     //Find the User and store their socketid on their user Object
     socket.on('disconnect', function(){
       console.log("A User socket connection has disconnected", socket);

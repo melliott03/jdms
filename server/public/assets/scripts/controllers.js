@@ -615,11 +615,12 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           // workService.getAvailibleWorkers();
 
 
+          /*
           //Secket.io suff turning off to code further
-          // Socket.connect();
-          // $scope.$on('$locationChangeStart', function(event){
-          //   Socket.disconnect(true);
-          // })
+          Socket.connect();
+          $scope.$on('$locationChangeStart', function(event){
+            Socket.disconnect(true); //CAUTION!!!!!A THIS LINE SHUT DOWN SOCKET CONNECTION BEFORE IT CONNECTS TO CLIENT
+          })
 
           Socket.on('connect', function (msg) {
             console.log("in controller, connected msg,::", msg);
@@ -685,6 +686,15 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           //     console.log("msg");
           //     // $('#messages').append($('<li>').text(msg));
           // });
+          Socket.on('error', function (data) {
+          console.log(data || 'socket connection error');
+          });
+
+          Socket.on('connect_failed', function (data) {
+              console.log(data || 'socket connect_failed');
+          });
+          */
+
 
 
 
@@ -1042,7 +1052,8 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             //Secket.io suff turning off to code further
             Socket.connect();
             $scope.$on('$locationChangeStart', function(event){
-              Socket.disconnect(true);
+              console.log("$scope.$on('$locationChangeStart, event::", event);
+              // Socket.disconnect(true);
             })
 
             Socket.on('connect', function (msg) {
@@ -1109,6 +1120,13 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             //     console.log("msg");
             //     // $('#messages').append($('<li>').text(msg));
             // });
+            Socket.on('error', function (data) {
+            console.log(data || 'error');
+            });
+
+            Socket.on('connect_failed', function (data) {
+                console.log(data || 'connect_failed');
+            });
 
 
 
