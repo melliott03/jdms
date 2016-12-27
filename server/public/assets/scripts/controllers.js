@@ -452,7 +452,11 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           var result = rx.Observable.of($http.post("/updateCustomer/availibleWorkers", source));
           result.subscribe(x => console.log('in controller back from getting availibleWorkers::',x), e => console.error(e));
 
+          Socket.leave(Socket.room);
+      		// join new room, received as function parameter
+      		Socket.join($scope.work.language);
           Socket.on($scope.work.language, function (msg) {
+            console.log('Socket::', Socket);
             console.log('in socket $scope.work.language::', $scope.work.language);
             console.log("in AddController, $scope.work.language from server, msg::", msg);
             // WorkService.saveSocketId(msg);
