@@ -444,6 +444,9 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           // .subscribe();
 
         */
+
+
+
         var socketRoom;
         $scope.languageChanged = function(){
           console.log('$scope.work.language::', $scope.work.language);
@@ -453,6 +456,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           result.subscribe(x => console.log('in controller back from getting availibleWorkers::',x), e => console.error(e));
 
           console.log('Socket bedfore leaving::', Socket);
+          console.log('before if (socketRoom),  socketRoom::', socketRoom);
           // console.log('Socket.room bedfore leaving::', Socket.room);
           if (socketRoom) {
             console.log('in  if (socketRoom)::', socketRoom);
@@ -484,6 +488,19 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           // }, 0);
 
         };
+
+
+        $scope.$on('$destroy', function () {
+            Socket.removeListener(socketRoom, function(msg) {
+              console.log("socket 'socketRoom' is closed::", socketRoom);
+              console.log("socket 'socketRoom' is closed msg::", msg);
+
+            });
+            Socket.removeListener($scope.work.language, function(msg) {
+              console.log("socket 'socketRoom' is closed::", $scope.work.language);
+              console.log("socket 'socketRoom' is closed msg::", msg);
+            });
+        });
 
 
 
