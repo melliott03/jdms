@@ -231,21 +231,20 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     console.log('A User socket connection, socket.request::', socket.request);
     console.log('A User socket connection, socket.handshake::', socket.handshake);
     console.log('A User socket connection, socket.handshake._events::', socket.handshake._events);
-    console.log('A User socket connection, socket.request::', socket.request);
     // console.log('A User has connected to socket.client.Client.conn.request::', socket.client.Client.conn.request);
     // console.log('A User has connected to socket.request.secret.data::', socket.request.secret.data);
 
-    // socket.on('authenticate', function(token){
-    //   console.log("A User has sent an authToken to server after connetion, token::!", token);
-    //   console.log("A User has sent an authToken to server after connetion, token::!", token);
-    //
-    //   // socketioJwt.authorize({
-    //   //     secret: config.secret, //Buffer(JSON.stringify(configsty.AUTH0_CLIENT_SECRET), 'base64'),
-    //   //     timeout: 15000 // 15 seconds to send the authentication message
-    //   //   });
-    //   io.emit('authenticated', {"authenticated": "from server: authenticated complete "});
-    //
-    // });
+    socket.on('authenticate', function(token){
+      console.log("A User has sent an authToken to server after connetion, token::!", token);
+      console.log("A User has sent an authToken to server after connetion, token::!", token);
+
+      // socketioJwt.authorize({
+      //     secret: config.secret, //Buffer(JSON.stringify(configsty.AUTH0_CLIENT_SECRET), 'base64'),
+      //     timeout: 15000 // 15 seconds to send the authentication message
+      //   });
+      io.emit('authenticated', {"authenticated": "from server: authenticated complete "});
+
+    });
     io.to(socket.id).emit('connectedSocketID', {"socketid" : socket.id});
     // io.emit('connectedSocketID', {"socketid" : socket.id})
     //Find the User and store their socketid on their user Object
