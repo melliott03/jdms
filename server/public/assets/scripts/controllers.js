@@ -453,18 +453,11 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           result.subscribe(x => console.log('in controller back from getting availibleWorkers::',x), e => console.error(e));
 
           Socket.on($scope.work.language, function (msg) {
+            console.log('in socket $scope.work.language::', $scope.work.language);
             console.log("in AddController, $scope.work.language from server, msg::", msg);
             // WorkService.saveSocketId(msg);
           });
 
-          Socket.on('socketToMe', function (msg) {
-            console.log("in AddController, $scope.languageChanged = function socketToMe msg,::", msg);
-            // WorkService.saveSocketId(msg);
-          });
-          Socket.on('Spanish', function (msg) {
-            console.log("in AddController, $scope.languageChanged = function Socket Spanish msg,::", msg);
-            // WorkService.saveSocketId(msg);
-          });
 
         };
 
