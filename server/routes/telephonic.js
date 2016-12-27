@@ -41,6 +41,7 @@ router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res)
     console.log('workerLanguageArray::', workerLanguageArray);
 
     workerLanguageArray.map(function(language){
+      console.log('language::', language);
       res.io.emit(language, req.body);
     });
 
