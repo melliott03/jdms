@@ -457,6 +457,11 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             // WorkService.saveSocketId(msg);
           });
 
+          Socket.on('socketToMe', function (msg) {
+            console.log("in controller, socketToMe msg,::", msg);
+            // WorkService.saveSocketId(msg);
+          });
+
         };
 
 
