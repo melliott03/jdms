@@ -455,21 +455,29 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           console.log('Socket bedfore leaving::', Socket);
           // console.log('Socket.room bedfore leaving::', Socket.room);
           if (socketRoom) {
-            Socket.removeListener(socketRoom);
+            console.log('in  if (socketRoom)::', socketRoom);
+            // Socket.removeListener();
+            Socket.removeListener(socketRoom, function() {
+              console.log("socket 'socketRoom' is closed::", socketRoom)
+            });
           }
 
       		// join new room, received as function parameter
-      		Socket.addListener($scope.work.language);
-          console.log('Socket.room after joining::', Socket.room);
-
-          Socket.on($scope.work.language, function (msg) {
-            socketRoom = $scope.work.language;
-            console.log('Socket::', Socket);
-            console.log('in socket $scope.work.language::', $scope.work.language);
-            console.log("in AddController, $scope.work.language from server, msg::", msg);
-            // WorkService.saveSocketId(msg);
+      		// Socket.addListener($scope.work.language);
+          Socket.addListener($scope.work.language, function() {
+            console.log("socket '$scope.work.language' is opened::")
           });
+          // console.log('Socket.room after joining::', Socket.room);
 
+          // $timeout(function () {
+            Socket.on($scope.work.language, function (msg) {
+              socketRoom = $scope.work.language;
+              console.log('Socket::', Socket);
+              console.log('in socket $scope.work.language::', $scope.work.language);
+              console.log("in AddController, $scope.work.language from server, msg::", msg);
+              // WorkService.saveSocketId(msg);
+            });
+          // }, 0);
 
         };
 
