@@ -452,8 +452,8 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           var result = rx.Observable.of($http.post("/updateCustomer/availibleWorkers", source));
           result.subscribe(x => console.log('in controller back from getting availibleWorkers::',x), e => console.error(e));
 
-          console.log('Socket.room bedfore leaving::', Socket.room);
           console.log('Socket bedfore leaving::', Socket);
+          console.log('Socket.room bedfore leaving::', Socket.room);
 
           Socket.leave(Socket.room);
       		// join new room, received as function parameter
