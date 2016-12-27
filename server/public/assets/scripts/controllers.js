@@ -614,12 +614,12 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           workService.getCustomerCharges();
           // workService.getAvailibleWorkers();
 
-          /*
+
           //Secket.io suff turning off to code further
-          Socket.connect();
-          $scope.$on('$locationChangeStart', function(event){
-            Socket.disconnect(true);
-          })
+          // Socket.connect();
+          // $scope.$on('$locationChangeStart', function(event){
+          //   Socket.disconnect(true);
+          // })
 
           Socket.on('connect', function (msg) {
             console.log("in controller, connected msg,::", msg);
@@ -686,7 +686,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           //     // $('#messages').append($('<li>').text(msg));
           // });
 
-          */
+
 
           $scope.updateWorkEntered = function(work){
             workService.updateWork(work);
