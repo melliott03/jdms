@@ -36,7 +36,7 @@ router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res)
   var workerSid = req.body.WorkerSid;
   if (req.body.EventType == 'worker.activity.update'){
     var WorkerAttributes = JSON.parse(req.body.WorkerAttributes);
-    console.log('WorkerAttributes::', WorkerAttributess);
+    console.log('WorkerAttributes::', WorkerAttributes);
     var workerLanguageArray = WorkerAttributes.languages;
     console.log('workerLanguageArray::', workerLanguageArray);
 
