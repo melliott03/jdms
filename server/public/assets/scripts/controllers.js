@@ -499,7 +499,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           $scope.fields = ['Legal','Social Service','Medical'];
           $scope.channels = ['OnSite','Phone'];
 
-          $scope.languages = ['Spanish', 'Oromo', 'Somali', 'Hmong'];
+          $scope.languages = ['French', 'Spanish', 'Oromo', 'Somali', 'Hmong'];
           $scope.estimatePriceObject = workService.estimatePriceObject;
           var workItem={};
           $scope.estimatePrice = function(work){
