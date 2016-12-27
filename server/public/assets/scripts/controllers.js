@@ -445,11 +445,13 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
         */
         $scope.languageChanged = function(){
+          console.log('$scope.work.language::', $scope.work.language);
+          console.log('$scope.work.language::', typeof $scope.work.language);
           var source = {language: $scope.work.language};
           var result = rx.Observable.of($http.post("/updateCustomer/availibleWorkers", source));
           result.subscribe(x => console.log('in controller back from getting availibleWorkers::',x), e => console.error(e));
 
-          Socket.on($scope.work.language, function (msg) {
+          Socket.on('Spanish', function (msg) {
             console.log("in AddController, $scope.work.language from server, msg::", msg);
             // WorkService.saveSocketId(msg);
           });

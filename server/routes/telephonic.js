@@ -41,10 +41,10 @@ router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res)
     console.log('workerLanguageArray::', workerLanguageArray);
 
     workerLanguageArray.map(function(language){
-      console.log('language::', language);
+      console.log('language::', typeof language);
       language = ''+language;
-      console.log('language 2::', language);
-      res.io.emit(language, req.body);
+      console.log('language 2::', typeof language);
+      res.io.emit('Spanish', workerLanguageArray);
     });
 
 /*
