@@ -449,7 +449,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           // WorkService.saveSocketId(msg);
         });
         $scope.languageChanged = function(){
-          console.log('$scope.work.language::', );
+          console.log('$scope.work.language::', $scope.work.language);
           console.log('$scope.work.language::', typeof $scope.work.language);
           var source = {language: $scope.work.language};
           var result = rx.Observable.of($http.post("/updateCustomer/availibleWorkers", source));
