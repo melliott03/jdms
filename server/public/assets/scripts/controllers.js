@@ -455,7 +455,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           console.log('Socket bedfore leaving::', Socket);
           console.log('Socket.room bedfore leaving::', Socket.room);
 
-          Socket.leave(Socket.room);
+          // Socket.leave(Socket.room);
       		// join new room, received as function parameter
       		Socket.join($scope.work.language);
           console.log('Socket.room after joining::', Socket.room);
