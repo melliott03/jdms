@@ -457,21 +457,25 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           if (socketRoom) {
             console.log('in  if (socketRoom)::', socketRoom);
             // Socket.removeListener();
-            Socket.removeListener(socketRoom, function() {
-              console.log("socket 'socketRoom' is closed::", socketRoom)
+            Socket.removeListener(socketRoom, function(msg) {
+              console.log("socket 'socketRoom' is closed::", socketRoom);
+              console.log("socket 'socketRoom' is closed msg::", msg);
+
             });
           }
 
       		// join new room, received as function parameter
       		// Socket.addListener($scope.work.language);
-          Socket.addListener($scope.work.language, function() {
-            console.log("socket '$scope.work.language' is opened::")
+          Socket.addListener($scope.work.language, function(msg) {
+            socketRoom = $scope.work.language;
+            console.log("socket '$scope.work.language' is opened for::", $scope.work.language);
+            console.log("socket '$scope.work.language' is opened msg::", msg);
+
           });
           // console.log('Socket.room after joining::', Socket.room);
 
           // $timeout(function () {
             Socket.on($scope.work.language, function (msg) {
-              socketRoom = $scope.work.language;
               console.log('Socket::', Socket);
               console.log('in socket $scope.work.language::', $scope.work.language);
               console.log("in AddController, $scope.work.language from server, msg::", msg);
