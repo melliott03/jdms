@@ -450,41 +450,47 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         var socketRoom;
         $scope.languageChanged = function(){
           console.log('$scope.work.language::', $scope.work.language);
-          console.log('$scope.work.language::', typeof $scope.work.language);
+          // console.log('$scope.work.language::', typeof $scope.work.language);
           var source = {language: $scope.work.language};
           var result = rx.Observable.of($http.post("/updateCustomer/availibleWorkers", source));
           result.subscribe(x => console.log('in controller back from getting availibleWorkers::',x), e => console.error(e));
 
-          console.log('Socket bedfore leaving::', Socket);
+          // console.log('Socket bedfore leaving::', Socket);
           console.log('before if (socketRoom),  socketRoom::', socketRoom);
           // console.log('Socket.room bedfore leaving::', Socket.room);
-          if (socketRoom) {
-            console.log('in  if (socketRoom)::', socketRoom);
-            // Socket.removeListener();
-            Socket.removeListener(socketRoom, function(msg) {
-              console.log("socket 'socketRoom' is closed::", socketRoom);
-              console.log("socket 'socketRoom' is closed msg::", msg);
 
-            });
-          }
+          $scope.$watch('work.language', function (newValue, oldValue, scope) {
+              //Do anything with $scope.work.language
+              Socket.removeListener(oldValue, function(msg) {
+                console.log("inside socket Socket.addListener oldValue::", oldValue);
+                console.log("socket 'socketRoom' is closed msg::", msg);
+              });
+
+              Socket.addListener(newValue, function(msg) {
+                socketRoom = $scope.work.language;
+                console.log("inside socket Socket.addListener newValue::", newValue);
+                console.log("socket '$scope.work.language' is opened msg::", msg);
+              });
+
+          });
+
+          // if (socketRoom) {
+            // console.log('in  if (socketRoom)::', socketRoom);
+            // Socket.removeListener();
+          // }
 
       		// join new room, received as function parameter
       		// Socket.addListener($scope.work.language);
-          Socket.addListener($scope.work.language, function(msg) {
-            socketRoom = $scope.work.language;
-            console.log("socket '$scope.work.language' is opened for::", $scope.work.language);
-            console.log("socket '$scope.work.language' is opened msg::", msg);
 
-          });
           // console.log('Socket.room after joining::', Socket.room);
 
           // $timeout(function () {
-            Socket.on($scope.work.language, function (msg) {
-              console.log('Socket::', Socket);
-              console.log('in socket $scope.work.language::', $scope.work.language);
-              console.log("in AddController, $scope.work.language from server, msg::", msg);
-              // WorkService.saveSocketId(msg);
-            });
+            // Socket.on($scope.work.language, function (msg) {
+            //   console.log('Socket::', Socket);
+            //   console.log('in socket $scope.work.language::', $scope.work.language);
+            //   console.log("in AddController, $scope.work.language from server, msg::", msg);
+            //   // WorkService.saveSocketId(msg);
+            // });
           // }, 0);
 
         };
