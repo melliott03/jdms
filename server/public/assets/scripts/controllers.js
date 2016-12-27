@@ -444,7 +444,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           // .subscribe();
 
         */
-
+        var socketRoom;
         $scope.languageChanged = function(){
           console.log('$scope.work.language::', $scope.work.language);
           console.log('$scope.work.language::', typeof $scope.work.language);
@@ -455,12 +455,13 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           console.log('Socket bedfore leaving::', Socket);
           console.log('Socket.room bedfore leaving::', Socket.room);
 
-          // Socket.leave(Socket.room);
+          Socket.removeListener(socketRoom);
       		// join new room, received as function parameter
-      		Socket.join($scope.work.language);
+      		Socket.addListener($scope.work.language);
           console.log('Socket.room after joining::', Socket.room);
 
           Socket.on($scope.work.language, function (msg) {
+            socketRoom = $scope.work.language;
             console.log('Socket::', Socket);
             console.log('in socket $scope.work.language::', $scope.work.language);
             console.log("in AddController, $scope.work.language from server, msg::", msg);
