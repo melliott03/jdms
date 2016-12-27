@@ -406,7 +406,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
       }]);
 
 
-      myApp.controller("AddController", ["$scope", "$http", "$filter", "$timeout", "$log", "WorkService", "rx", function($scope, $http, $filter, $timeout, $log, WorkService, rx){
+      myApp.controller("AddController", ["$scope", "$http", "$filter", "$timeout", "$log", "WorkService", "rx", "Socket", function($scope, $http, $filter, $timeout, $log, WorkService, rx, Socket){
         // http://ngmodules.org/modules/ngAutocomplete
         var workService = WorkService;
         console.log('inside AddController');
@@ -427,12 +427,34 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             $timeout.cancel(promise);
         });
         */
+        /*
         $scope.languageChanged = function(){
           var source = {language: $scope.work.language};
-          var result = Rx.Observable.fromPromise($http.post("/telephonic/CallCenterCallback", source));
+          var result = rx.Observable.of($http.post("/telephonic/CallCenterCallback", source));
           result.subscribe(x => console.log('in controller back from getting availibleWorkers::',x), e => console.error(e));
-        };
 
+          // rx.Observable.create(function (observer) {
+          //   request('/telephonic/CallCenterCallback', function (error, response, body) {
+          //     if (error) { observer.onError(); }
+          //     else { observer.onNext({response: response, body: body }); }
+          //     observer.onCompleted();
+          //   })
+          // })
+          // .map() // do something
+          // .subscribe();
+
+        */
+        $scope.languageChanged = function(){
+          var source = {language: $scope.work.language};
+          var result = rx.Observable.of($http.post("/updateCustomer/availibleWorkers", source));
+          result.subscribe(x => console.log('in controller back from getting availibleWorkers::',x), e => console.error(e));
+
+          Socket.on($scope.work.language, function (msg) {
+            console.log("in AddController, $scope.work.language from server, msg::", msg);
+            // WorkService.saveSocketId(msg);
+          });
+
+        };
 
 
 

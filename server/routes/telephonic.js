@@ -27,15 +27,35 @@ var stripeCharge = require('../modules/stripeCharge');
 
 var payable = require('../modules/payable');
 
+var Rx = require('rx');
+
 router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res) => {
   //twilio@3.3.1-edge
   console.log("req.body in router.post CallCenterCallback::", req.body);
   // var callbody = req.body;
   var workerSid = req.body.WorkerSid;
   if (req.body.EventType == 'worker.activity.update'){
-    res.send(req.body);
-  }
+    var WorkerAttributes = JSON.parse(req.body.WorkerAttributes);
+    console.log('WorkerAttributes::', WorkerAttributess);
+    var workerLanguageArray = WorkerAttributes.languages;
+    console.log('workerLanguageArray::', workerLanguageArray);
 
+    workerLanguageArray.map(function(language){
+      res.io.emit(language, req.body);
+    });
+
+/*
+    var source = Rx.Observable.create(observer => {
+      // Yield a single value and complete
+      observer.onNext(42);
+      observer.onCompleted();
+
+      // Any cleanup logic might go here
+      return () => console.log('disposed')
+    });
+
+*/
+  }
 
   if (req.body.EventType == 'reservation.accepted' && req.body.TaskSid && req.body.WorkflowName == 'VideoWorkflow') {
     console.log('Im inside the eventtype = reservation.accepted req.body.WorkflowName == VideoWorkflow, telephonic/CallCenterCallback req.body::', req.body);
