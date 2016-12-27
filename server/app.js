@@ -245,7 +245,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     //   io.emit('authenticated', {"authenticated": "from server: authenticated complete "});
     //
     // });
-    io.to(socket.id).emit('connectedSocketID', {"socketid" : socket.id});
+    io.to("/#" + socket.id).emit('connectedSocketID', {"socketid" : socket.id});
     // io.emit('connectedSocketID', {"socketid" : socket.id})
     //Find the User and store their socketid on their user Object
     socket.on('disconnect', function(){
