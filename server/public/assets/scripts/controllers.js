@@ -458,7 +458,11 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           });
 
           Socket.on('socketToMe', function (msg) {
-            console.log("in controller, socketToMe msg,::", msg);
+            console.log("in AddController, $scope.languageChanged = function socketToMe msg,::", msg);
+            // WorkService.saveSocketId(msg);
+          });
+          Socket.on('Spanish', function (msg) {
+            console.log("in AddController, $scope.languageChanged = function Socket Spanish msg,::", msg);
             // WorkService.saveSocketId(msg);
           });
 
