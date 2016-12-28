@@ -468,8 +468,8 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             console.log("$scope.$watch('work.language' changed oldValue::", oldValue);
             console.log("$scope.$watch('work.language' changed newValue::", newValue);
               //Do anything with $scope.work.language
-              Socket.removeAllListeners(oldValue, eventCallback);
-              // Socket.removeAllListeners();
+              // Socket.removeListener(oldValue, eventCallback);
+              Socket.removeAllListeners();
 
               Socket.addListener(newValue, function(msg) {
                 socketRoom = $scope.work.language;
