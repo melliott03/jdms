@@ -464,6 +464,16 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             console.log('data in eventCallback::', data);
           };
 
+          Socket.removeAllListeners();
+
+          Socket.addListener($scope.work.language, function(msg) {
+            socketRoom = $scope.work.language;
+            console.log("inside socket Socket.addListener newValue::", newValue);
+            console.log("socket '$scope.work.language' is opened msg::", msg);
+          });
+
+          /*
+
           $scope.$watch('work.language', function (newValue, oldValue, scope) {
             console.log("$scope.$watch('work.language' changed oldValue::", oldValue);
             console.log("$scope.$watch('work.language' changed newValue::", newValue);
@@ -479,6 +489,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
               // Socket.on(newValue);
 
           });
+          */
 
           // if (socketRoom) {
             // console.log('in  if (socketRoom)::', socketRoom);
