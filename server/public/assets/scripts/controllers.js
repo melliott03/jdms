@@ -455,11 +455,13 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           var result = rx.Observable.of($http.post("/updateCustomer/availibleWorkers", source));
           result.subscribe(x => console.log('in controller back from getting availibleWorkers::',x), e => console.error(e));
 
-          // console.log('Socket bedfore leaving::', Socket);
+          console.log('Socket ::', Socket);
           console.log('before if (socketRoom),  socketRoom::', socketRoom);
           // console.log('Socket.room bedfore leaving::', Socket.room);
 
           $scope.$watch('work.language', function (newValue, oldValue, scope) {
+            console.log("$scope.$watch('work.language' changed newValue::", newValue);
+            console.log("$scope.$watch('work.language' changed oldValue::", oldValue);
               //Do anything with $scope.work.language
               Socket.removeListener(oldValue, function(msg) {
                 console.log("inside socket Socket.addListener oldValue::", oldValue);
