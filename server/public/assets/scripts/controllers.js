@@ -459,15 +459,17 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           console.log('before if (socketRoom),  socketRoom::', socketRoom);
           // console.log('Socket.room bedfore leaving::', Socket.room);
 
+          var eventCallback = function(data) {
+            // do something nice
+            console.log('data in eventCallback::', eventCallback);
+          };
+
           $scope.$watch('work.language', function (newValue, oldValue, scope) {
-            console.log("$scope.$watch('work.language' changed newValue::", newValue);
             console.log("$scope.$watch('work.language' changed oldValue::", oldValue);
+            console.log("$scope.$watch('work.language' changed newValue::", newValue);
               //Do anything with $scope.work.language
-              Socket.removeListener(oldValue, function(msg) {
-                console.log("inside socket Socket.addListener oldValue::", oldValue);
-                console.log("socket 'socketRoom' is closed msg::", msg);
-              });
-              Socket.removeAllListeners();
+              Socket.removeListener(oldValue, eventCallback);
+              // Socket.removeAllListeners();
 
               Socket.addListener(newValue, function(msg) {
                 socketRoom = $scope.work.language;
