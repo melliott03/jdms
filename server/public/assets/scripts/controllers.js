@@ -467,14 +467,14 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
                 console.log("inside socket Socket.addListener oldValue::", oldValue);
                 console.log("socket 'socketRoom' is closed msg::", msg);
               });
-              Socket.off(oldValue);
+              Socket.removeAllListeners();
 
               Socket.addListener(newValue, function(msg) {
                 socketRoom = $scope.work.language;
                 console.log("inside socket Socket.addListener newValue::", newValue);
                 console.log("socket '$scope.work.language' is opened msg::", msg);
               });
-              Socket.on(newValue);
+              // Socket.on(newValue);
 
           });
 
