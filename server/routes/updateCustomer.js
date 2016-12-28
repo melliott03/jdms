@@ -61,8 +61,10 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     var authToken = configsty.TWILIO_AUTH_TOKEN;
     var workspaceSid = configsty.TWILIO_WORKSPACE_SID;
     var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
+    var language = req.body.language;
+    console.log('In /availibleWorkers, language::::', language);
 
-    client.workspace.workers.get({"TargetWorkersExpression":"languages HAS 'Spanish'","Available":"yes"}, function(err, data) { //
+    client.workspace.workers.get({"TargetWorkersExpression":"languages HAS '"+language+"'","Available":"yes"}, function(err, data) { //
         if(!err) {
           console.log('return of client.workspace.workers.get data::', data);
             data.workers.forEach(function(worker) {
