@@ -461,14 +461,14 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
           var eventCallback = function(data) {
             // do something nice
-            console.log('data in eventCallback::', eventCallback);
+            console.log('data in eventCallback::', data);
           };
 
           $scope.$watch('work.language', function (newValue, oldValue, scope) {
             console.log("$scope.$watch('work.language' changed oldValue::", oldValue);
             console.log("$scope.$watch('work.language' changed newValue::", newValue);
               //Do anything with $scope.work.language
-              Socket.removeListener(oldValue, eventCallback);
+              Socket.removeAllListeners(oldValue, eventCallback);
               // Socket.removeAllListeners();
 
               Socket.addListener(newValue, function(msg) {
