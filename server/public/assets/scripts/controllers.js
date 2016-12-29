@@ -137,6 +137,17 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
   ChartJsProvider.setOptions('line', {
     showLines: true
   });
+  // Configure all bubble charts
+  ChartJsProvider.setOptions('bubble', {
+    // chart-data: series data
+    // chart-labels: x axis labels
+    // chart-options (default: {}): Chart.js options
+    // chart-series (default: []): series labels
+    // chart-click (optional): onclick event handler
+    // chart-hover (optional): onmousemove event handler
+    // chart-colors (default to global colors): colors for the chart
+    // chart-dataset-override (optional): override datasets individually
+  });
 }])
 .controller("BarCtrl", ['$scope', '$timeout', '$window', 'WorkService', function ($scope, $timeout, $window, WorkService) {
   var workService = WorkService;
@@ -446,14 +457,117 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         */
 
 
+        // see examples/bubble.js for random bubbles source code
+        // $scope.series = ['Series A', 'Series B'];
+        //
+        // $scope.data = [
+        //   [{
+        //     x: 40,
+        //     y: 10,
+        //     r: 20
+        //   }],
+        //   [{
+        //     x: 10,
+        //     y: 40,
+        //     r: 50
+        //   }]
+        // ];
+
+
+        // $scope.labels =["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"];
+        //
+        // $scope.data = [
+        //   [65, 59, 90, 81, 56, 55, 40],
+        //   [28, 48, 40, 19, 96, 27, 100]
+        // ];
+        //
+        // $scope.Doughnut_labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
+        // $scope.Doughnut_data = [300, 500, 100];
+
+        // var canvas = document.getElementById('canvas'); angular.element(document.body)
+        // var canvas = angular.element('canvas');
+        // console.log('canvas::', canvas);
+        // var context = canvas.contentType('2d');
+
+
+
+
+        // ctrl.data = [{
+        //     x: 30,
+        //     y: 20,
+        //     value: 10
+        // }, {
+        //     x: 10,
+        //     y: 10,
+        //     value: 10
+        // }];
+
+        var ctrl = this;
+        $scope.data = [];
+        ctrl.data  = [];
+
+
+
+        function generateRandomData(len, data) {
+          for (var i = 0; i < len; i++) {
+            var randomWidth = Math.floor(Math.random() * 450); //500px canvas size
+            var randomHeight = Math.floor(Math.random() * 250); //300px canvas size
+
+            var point = {
+              x: randomWidth,
+              y: randomHeight
+            };
+            ctrl.data.push(point);
+          }
+          console.log('in generateRandomData, data::', data);
+          // $scope.$emit('newData', data);
+          $scope.$broadcast('newData', data);
+          console.log('in generateRandomData, after scope.emit::');
+        };
+
+        // $timeout(function () {
+        //   ctrl.data = [{
+        //       x: 30,
+        //       y: 20,
+        //       value: 10
+        //   }, {
+        //       x: 10,
+        //       y: 10,
+        //       value: 10
+        //   }];
+        // }, 3000);
+
+        // $timeout(function () {
+        //   generateRandomData(12, ctrl.data);
+        // }, 10000);
+
+
 
         var socketRoom;
+        var numAvailible;
         $scope.languageChanged = function(){
+          $scope.showAvailablityDiv = true;
           console.log('$scope.work.language::', $scope.work.language);
           // console.log('$scope.work.language::', typeof $scope.work.language);
           var source = {language: $scope.work.language};
-          var result = rx.Observable.of($http.post("/updateCustomer/availibleWorkers", source));
-          result.subscribe(x => console.log('in controller back from getting availibleWorkers::',x), e => console.error(e));
+
+          // var result = rx.Observable.of($http.post("/updateCustomer/availibleWorkers", source));
+          // result.subscribe(x => {
+          //   console.log('in controller back from getting availibleWorkers::',x);
+          //   console.log('in controller back from getting availibleWorkers::',x.d);
+          //   console.log('in controller back from getting availibleWorkers::',x.d.$$state);
+          //   console.log('in controller back from getting availibleWorkers::',x.$$state);
+          //
+          //   numAvailible = x.$$state.value.data.number;
+          // }, e => console.error(e));
+          //
+          // $http.post("/updateCustomer/availibleWorkers", source);
+          $http.post("/updateCustomer/availibleWorkers", source).then(function(response){
+            console.log('in controller back from getting availibleWorkers::', response.data);
+            numAvailible = parseInt(response.data.number);
+            ctrl.data  = [];
+            generateRandomData(numAvailible, ctrl.data);
+          });
 
           console.log('Socket ::', Socket);
           console.log('before if (socketRoom),  socketRoom::', socketRoom);
@@ -466,7 +580,15 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
           Socket.removeAllListeners();
 
-          Socket.addListener($scope.work.language, function(msg) {
+          Socket.addListener($scope.work.language, function(data) {
+            if (data.num == 1) {
+              numAvailible += 1;
+            }else if (data.num == 0) {
+              numAvailible -= 1;
+            }
+            ctrl.data  = [];
+            generateRandomData(numAvailible, ctrl.data);
+            // numAvailible += parseInt(msg);
             socketRoom = $scope.work.language;
             // console.log("inside socket Socket.addListener newValue::", newValue);
             console.log("socket '$scope.work.language' is opened msg::", msg);

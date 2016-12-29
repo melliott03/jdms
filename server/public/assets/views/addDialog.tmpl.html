@@ -34,7 +34,22 @@
               </md-option>
             </md-select>
           </md-input-container>
-        </div>        <div layout-gt-sm="row">
+        </div>
+        <div layout-gt-sm="row" ng-controller="AddController as dataCtrl" style="width: 500px; height: 300px;" ng-show="showAvailablityDiv">
+          <!-- <canvas id="base" class="chart-bubble" chart-data="data" chart-series="series"> -->
+          <!-- </canvas> -->
+
+          <!-- <canvas id="doughnut" class="chart chart-doughnut" chart-data="Doughnut_data" chart-labels="Doughnut_label">
+          </canvas> -->
+
+          <!-- <canvas id="radar" class="chart chart-radar" chart-data="data" chart-options="options" chart-labels="labels">
+          </canvas> -->
+          <!-- <canvas id="canvas" style="border: 1px gray solid; float: left"></canvas> -->
+          <!-- <angular-points-path points-data="data"></angular-points-path> -->
+          <angular-points-path points-data="dataCtrl.data"></angular-points-path>
+
+        </div>
+        <div layout-gt-sm="row">
           <div >
             <!-- <md-datepicker ng-model="work.date"></md-datepicker> -->
           <md-input-container class="md-block" flex-gt-sm>

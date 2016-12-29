@@ -70,7 +70,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
             data.workers.forEach(function(worker) {
                 console.log('worker.friendly_name::',worker.friendly_name);
             });
-            res.send(data);
+            res.send({number: data.workers.length});
         }else {
           console.log('error in getting availibleWorkers::', err);
         }

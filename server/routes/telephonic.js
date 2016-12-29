@@ -35,6 +35,12 @@ router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res)
   // var callbody = req.body;
   var workerSid = req.body.WorkerSid;
   if (req.body.EventType == 'worker.activity.update'){
+    var data = {};
+    if (req.body.WorkerActivityName === 'Idle') {
+      data.num = 1;
+    } else {
+      data.num = 0;
+    }
     var WorkerAttributes = JSON.parse(req.body.WorkerAttributes);
     console.log('WorkerAttributes::', WorkerAttributes);
     var workerLanguageArray = WorkerAttributes.languages;
@@ -50,7 +56,7 @@ router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res)
       console.log('res.io::', res.io);
       console.log('res::', res);
 
-      res.io.emit(language, workerLanguageArray);
+      res.io.emit(language, data);
     });
 
 /*
