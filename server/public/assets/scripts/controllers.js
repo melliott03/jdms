@@ -585,6 +585,9 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
               numAvailible += 1;
             }else if (data.num == 0) {
               numAvailible -= 1;
+              if (numAvailible < 0;) {
+                numAvailible = 0;
+              }
             }
             ctrl.data  = [];
             generateRandomData(numAvailible, ctrl.data);
