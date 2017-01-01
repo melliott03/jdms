@@ -232,6 +232,11 @@ myApp.config(["$routeProvider", function($routeProvider){
     templateUrl: "/assets/views/routes/phone/calls.html",
     controller: "ShowController"
   }).
+  when("/addwork", {
+    // requireAuth: true,
+    templateUrl: "/assets/views/addDialog.tmpl.html",
+    controller: "ShowController"
+  }).
   when("/admin_addwork", {
     // requireAuth: true,
     templateUrl: "/assets/views/adminAddDialog.tmpl.html",
