@@ -216,8 +216,14 @@
                             <!-- <a ng-click="showTabDialog($event)">Login/Register</a> -->
 
                             <div ng-controller="HomeController">
-                            <md-button class="md-raised md-primary" ng-click="showTabDialog($event)" ng-cloak>
+                            <!-- <md-button class="md-raised md-primary" ng-click="showTabDialog($event)" ng-cloak>
                               Login/Register
+                            </md-button> -->
+                            <md-button class="md-raised md-primary" href="/assets/views/users.html#/login" ng-cloak>
+                              Login
+                            </md-button>
+                            <md-button class="md-raised md-primary" href="#sign-up" ng-cloak>
+                              sign up
                             </md-button>
                             </div>
                         </li>

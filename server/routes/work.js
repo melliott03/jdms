@@ -53,9 +53,10 @@ var shortid = require('shortid');
 //   next();
 // });
 
+/*
 router.get("/calls", function(req,res){
   var requser = req.user;
-/**@todo find and send all works for this customer */
+//@todo find and send all works for this customer
 console.log('INSIDE get on work req.user._id:: ',req.user._id);
 console.log('INSIDE get on work req.user:: ',req.user);
 console.log(req.user._id);
@@ -89,7 +90,73 @@ promised.then(function(work_Tels) {
   console.log('error:', err);
 });
 });// END router.get
+*/
 
+router.get("/calls", function(req,res){
+  var requser = req.user;
+/**@todo find and send all works for this customer */
+console.log('INSIDE get on work req.user._id:: ',req.user._id);
+console.log('INSIDE get on work req.user:: ',req.user);
+console.log(req.user._id);
+var params = {};
+if (requser.role == 'customer') {
+  params = {customer_id: req.user._id}
+} else if(requser.role == 'contractor') {
+  params = {contractor_id: req.user._id}
+} else if (requser.role == 'admin'){
+  params = {}
+}
+console.log("== open tailable cursor");
+// Work_Tel.find(params, {tailable:true, awaitdata:true, numberOfRetries:-1}).each(function(err, doc) {
+//   console.log('new doc added to Work_Tel of customer req.user.email, doc', doc);
+//   // send message to client
+//   // if (doc.type == "message") {
+//     // res.io.emit("message",doc);
+//     res.io.to(req.user.socketID).emit('newTelWorkForSocket', doc);
+//     res.send(doc);
+//     // res.io.to(contractorSocketArray[0].socketID).emit('socketToYou', JSON.stringify(savedWork._id));
+//   // }
+// })
+
+const cursor = Work_Tel.find(params).cursor();
+var count = 0;
+cursor.on('data', function(doc) {
+  console.log('in cursor.on(data), doc::',count, doc);
+  console.log('req.user.socketID::', req.user.socketID);
+      res.io.to(req.user.socketID).emit('newTelWorkForSocket', doc);
+      count++;
+});
+
+cursor.on('end', function(doc) {
+  console.log('in cursor.on(end), doc::', doc);
+
+      // res.send(doc);
+});
+
+// promised.then(function(work_Tels) {
+//   console.log('Work_Tels documents found for '+requser.role+' are ::', work_Tels);
+//   var newWork_tels = [];
+//   work_Tels.map(function(obj){
+//     if (obj.inboundSummary && obj.outboundSummary && obj.outboundSummary.createdAt && obj.money && obj.money.customerCost) {
+//       console.log('inside if (obj.inboundSummary && obj.outboundSummary && obj.money && obj.money.customerCost)::');
+//       newWork_tels.push(obj);
+//       res.io.emit(language, data);
+//     }
+//   });
+//
+//   return newWork_tels;
+// })
+// .then(function(work_tels) {
+//   console.log('inside the then work_tels::', work_tels);
+//   work_tels.sort(function(aze,bze){return Date.parse(bze.outboundSummary.createdAt) - Date.parse(aze.outboundSummary.createdAt)});
+//   console.log('after sorting by date work_tels::', work_tels);
+//   res.send(work_tels);
+// })
+// .catch(function(err){
+//   // just need one of these
+//   console.log('error:', err);
+// });
+});// END router.get
 
 router.route("/accept/")
     .put(function(req, res) {

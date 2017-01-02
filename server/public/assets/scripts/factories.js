@@ -39,7 +39,7 @@ myApp.config(function ($httpProvider) {
 });
 
 
-myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,"Auth"
+myApp.factory("WorkService", ["$http",'$timeout','Socket', function($http, $timeout, Socket){ //,"Auth"
     var postedWork = {};
     var data = {};
     var customerWorkObject = {};
@@ -126,6 +126,11 @@ myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,
         $http.get("/work/calls").then(function(response){
             customerWorkTelObject.response = response.data;
             console.log('RETRUN OF GET WROKS_TEL FUNCTION !!! !!!!!  ::  ', response);
+
+            Socket.on('newTelWorkForSocket', function (msg) {
+              console.log("in factory, newTelWorkForSocket msg,::", msg);
+              customerWorkTelObject.response.push(msg);
+            });
 
             // getWeather(response.data);
             // console.log(response.data);

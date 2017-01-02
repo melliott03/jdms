@@ -147,6 +147,16 @@ return{
 
 myApp.config(["$routeProvider", function($routeProvider){
   $routeProvider.
+  when("/login", {
+    // requireAuth: true,
+    url: "/assets/views/users.html#/login", //assets/views/users.html#/home
+    controller: "HomeController"
+  }).
+  when("/sign-up", {
+    // requireAuth: true,
+    templateUrl: "/assets/views/routes/login/login.html",
+    controller: "HomeController"
+  }).
   when("/home", {
     // requireAuth: true,
     templateUrl: "/assets/views/routes/home/dashboard.html",

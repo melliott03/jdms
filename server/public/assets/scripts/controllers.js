@@ -962,6 +962,10 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             $scope.works_tel = WorkService.customerWorkTelObject;
             $scope.displayWorkTelCollection = [].concat($scope.works_tel.response);
 
+            Socket.on('newTelWorkForSocket', function (msg) {
+              console.log("in controller newTelWorkForSocket, msg::", msg);
+            });
+
             $scope.customerBalance = workService.customerBalanceObject;
             $scope.customerCharges = workService.customerChargesObject;
             // $scope.customerInvoices = workService.customerInvoicesObject;
