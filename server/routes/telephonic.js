@@ -515,6 +515,10 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       return promisesyo.then(function(aUserWithCustomer_ID) {
         console.log('aUserWithCustomer_ID ::', aUserWithCustomer_ID);
         data.aUserWithCustomer_ID = aUserWithCustomer_ID;
+
+        console.log('aUserWithCustomer_ID.socketID::', aUserWithCustomer_ID.socketID);
+            res.io.to(aUserWithCustomer_ID.socketID).emit('newTelWorkForSocket', doc);
+
         return data;
       })
 
