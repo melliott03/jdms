@@ -129,7 +129,7 @@ myApp.factory("WorkService", ["$http",'$timeout','Socket', function($http, $time
 
             Socket.on('newTelWorkForSocket', function (msg) {
               console.log("in factory, newTelWorkForSocket msg,::", msg);
-              customerWorkTelObject.response.push(msg);
+              // customerWorkTelObject.response.push(msg);
             });
 
             // getWeather(response.data);

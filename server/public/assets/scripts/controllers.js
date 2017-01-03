@@ -959,11 +959,14 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             $scope.completeWork = WorkService.completeWork;
 
             //Phone Call Version    $scope.works = WorkService.customerWorkObject;
-            $scope.works_tel = WorkService.customerWorkTelObject;
+            $scope.works_tel ={};
+            $scope.works_tel.response = [];
+            // $scope.works_tel = WorkService.customerWorkTelObject;
             $scope.displayWorkTelCollection = [].concat($scope.works_tel.response);
 
             Socket.on('newTelWorkForSocket', function (msg) {
               console.log("in controller newTelWorkForSocket, msg::", msg);
+              $scope.works_tel.response.push(msg);
             });
 
             $scope.customerBalance = workService.customerBalanceObject;
