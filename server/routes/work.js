@@ -118,15 +118,17 @@ console.log("== open tailable cursor");
 //   // }
 // })
 
-const cursor = Work_Tel.find(params, {tailable:true, awaitdata:true, numberOfRetries:-1}).sort({ $natural: -1 }).cursor();
+const cursor = Work_Tel.find(params).sort({ $natural: -1 }).cursor(); //, {tailable:true, awaitdata:true, numberOfRetries:-1}
 var count = 0;
 cursor.on('data', function(doc) {
   console.log('in cursor.on(data), doc::',count, doc);
   console.log('req.user.socketID::', req.user.socketID);
   var socketsids = req.user.socketID;
-  socketsids.forEach(function(socketid){res.io.to(socketid).emit('newTelWorkForSocket', doc)});
-      // res.io.to(req.user.socketID).emit('newTelWorkForSocket', doc);
-      count++;
+  if (doc.inboundSummary && doc.outboundSummary && doc.outboundSummary.createdAt && doc.money && doc.money.customerCost) {
+        console.log('inside if (doc.inboundSummary && doc.outboundSummary && doc.money && doc.money.customerCost)::');
+        socketsids.forEach(function(socketid){res.io.to(socketid).emit('newTelWorkForSocket', doc)});
+  }
+  count++;
 });
 
 cursor.on('end', function(doc) {
