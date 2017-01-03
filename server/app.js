@@ -314,7 +314,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
       if (err) throw err;
 
       // we have the updated user returned to us
-      console.log('after saving user oooo',user);
+      console.log('after add new socketID to user',socketID, user);
     });
 
 
