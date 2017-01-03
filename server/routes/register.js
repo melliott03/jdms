@@ -426,7 +426,7 @@ var createTwilioWorker = function(user, telephonicUser){
             role: req.body.role,
             type: req.body.type || '',
             epirts: '',
-            socketID: '',
+            socketID: [],
             geo: geo || '',
             telephonicPassCode: 0,
             telephonicID: 0,
@@ -450,7 +450,7 @@ var createTwilioWorker = function(user, telephonicUser){
             role: req.body.role,
             type: req.body.type || '',
             epirts: '',
-            socketID: '',
+            socketID: [],
             geo: geo || '',
             telephonicPassCode: 0,
             telephonicID: 0,
@@ -573,7 +573,7 @@ var createTwilioWorker = function(user, telephonicUser){
           role: 'customer',
           clearance: 'user',
           epirts: '',
-          socketID: '',
+          socketID: [],
           company: 'United Bank'//req.user.company
         });
         var agentAddress = req.body.address;

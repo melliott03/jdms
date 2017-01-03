@@ -251,6 +251,27 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     //Find the User and store their socketid on their user Object
     socket.on('disconnect', function(){
       console.log("A User socket connection has disconnected", socket);
+      //@@todo find user with socket id and remove from socket id DB
+      /*
+      var socketID = req.body.socketid;
+      User.findOneAndUpdate({ _id: req.user._id }, { $push: { socketID: socketID }}, function(err, user) {
+        if (err) throw err;
+
+        // we have the updated user returned to us
+        console.log('after saving user oooo',user);
+      });
+      */
+
+      /*
+      It will find document with the given _id and remove the phone +1786543589455 from its contact.phone array.
+      You can use $unset to unset the value in the array (set it to null), but not to remove it completely.
+      */
+
+      User.update(
+        { socketID: [socket.id] },
+        { $pull: { 'socketID': [socket.id] } }
+      );
+
     })
 
   });
@@ -282,7 +303,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     console.log('insode updateUserSocketId req.user._id:', req.user._id);
     console.log('inside updateUserSocketId req.user._id:', req.body);
     var socketID = req.body.socketid;
-    User.findOneAndUpdate({ _id: req.user._id }, { socketID: socketID }, function(err, user) {
+    User.findOneAndUpdate({ _id: req.user._id }, { $push: { socketID: socketID }}, function(err, user) {
       if (err) throw err;
 
       // we have the updated user returned to us

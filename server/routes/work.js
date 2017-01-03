@@ -123,7 +123,9 @@ var count = 0;
 cursor.on('data', function(doc) {
   console.log('in cursor.on(data), doc::',count, doc);
   console.log('req.user.socketID::', req.user.socketID);
-      res.io.to(req.user.socketID).emit('newTelWorkForSocket', doc);
+  var socketsids = req.user.socketID;
+  socketsids.forEach(function(socketid){res.io.to(socketid).emit('newTelWorkForSocket', doc)}
+      // res.io.to(req.user.socketID).emit('newTelWorkForSocket', doc);
       count++;
 });
 
