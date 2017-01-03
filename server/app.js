@@ -269,7 +269,12 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
 
       User.update(
         { socketID: socket.id },
-        { $pull: { 'socketID': socket.id } }
+        { $pull: { 'socketID': socket.id } }, function(err, user) {
+          if (err) throw err;
+
+          // we have the updated user returned to us
+          console.log('after $pull: { socketID: socket.id, user ::',user);
+        }
       );
 
     })
