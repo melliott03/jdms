@@ -522,7 +522,13 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
         console.log('before if statement to send to socket, obj::', obj);
         if (obj.inboundSummary && obj.outboundSummary) { // && obj.money && obj.money.customerCost //(money not yet in the db)   && obj.outboundSummary.createdAt
           console.log('about to send to socket, obj::', obj);
-          socketsids.forEach(function(socketid){res.io.to(socketid).emit('newTelWorkForSocket', obj)});
+          socketsids.forEach(function(socketid){
+            if(io.sockets.sockets[socketid]!=undefined){
+              res.io.to(socketid).emit('newTelWorkForSocket', obj)
+            }else{
+              console.log("Socket not connected");
+            }
+          });
         }
         return data;
       })
