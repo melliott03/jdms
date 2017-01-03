@@ -118,7 +118,7 @@ console.log("== open tailable cursor");
 //   // }
 // })
 
-const cursor = Work_Tel.find(params).cursor();
+const cursor = Work_Tel.find(params, {tailable:true, awaitdata:true, numberOfRetries:-1}).cursor();
 var count = 0;
 cursor.on('data', function(doc) {
   console.log('in cursor.on(data), doc::',count, doc);
