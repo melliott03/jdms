@@ -520,7 +520,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
         var socketsids = aUserWithCustomer_ID.socketID;
         var obj = data.theTeleWorkWithcall_sid;
         console.log('before if statement to send to socket, obj::', obj);
-        if (obj.inboundSummary && obj.outboundSummary && obj.outboundSummary.createdAt) { // && obj.money && obj.money.customerCost //(money not yet in the db)
+        if (obj.inboundSummary && obj.outboundSummary) { // && obj.money && obj.money.customerCost //(money not yet in the db)   && obj.outboundSummary.createdAt
           console.log('about to send to socket, obj::', obj);
           socketsids.forEach(function(socketid){res.io.to(socketid).emit('newTelWorkForSocket', obj)});
         }
