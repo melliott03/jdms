@@ -966,7 +966,10 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
             Socket.on('newTelWorkForSocket', function (msg) {
               console.log("in controller newTelWorkForSocket, msg::", msg);
-              $scope.works_tel.response.unshift(msg);
+              if ($scope.works_tel.response.indexOf(item) == -1) {
+                  $scope.works_tel.response.unshift(item);
+              }
+              // $scope.works_tel.response.unshift(msg);
             });
 
             $scope.customerBalance = workService.customerBalanceObject;
