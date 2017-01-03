@@ -117,8 +117,8 @@ console.log("== open tailable cursor");
 //     // res.io.to(contractorSocketArray[0].socketID).emit('socketToYou', JSON.stringify(savedWork._id));
 //   // }
 // })
-
-const cursor = Work_Tel.find(params).sort({ $natural: -1 }).cursor(); //, {tailable:true, awaitdata:true, numberOfRetries:-1}
+/*
+const cursor = Work_Tel.find(params).cursor(); //, {tailable:true, awaitdata:true, numberOfRetries:-1}    .sort({ $natural: -1 })
 var count = 0;
 cursor.on('data', function(doc) {
   console.log('in cursor.on(data), doc::',count, doc);
@@ -130,36 +130,32 @@ cursor.on('data', function(doc) {
   }
   count++;
 });
-
 cursor.on('end', function(doc) {
   console.log('in cursor.on(end), doc::', doc);
-
-      // res.send(doc);
 });
-
-// promised.then(function(work_Tels) {
-//   console.log('Work_Tels documents found for '+requser.role+' are ::', work_Tels);
-//   var newWork_tels = [];
-//   work_Tels.map(function(obj){
-//     if (obj.inboundSummary && obj.outboundSummary && obj.outboundSummary.createdAt && obj.money && obj.money.customerCost) {
-//       console.log('inside if (obj.inboundSummary && obj.outboundSummary && obj.money && obj.money.customerCost)::');
-//       newWork_tels.push(obj);
-//       res.io.emit(language, data);
-//     }
-//   });
-//
-//   return newWork_tels;
-// })
-// .then(function(work_tels) {
-//   console.log('inside the then work_tels::', work_tels);
-//   work_tels.sort(function(aze,bze){return Date.parse(bze.outboundSummary.createdAt) - Date.parse(aze.outboundSummary.createdAt)});
-//   console.log('after sorting by date work_tels::', work_tels);
-//   res.send(work_tels);
-// })
-// .catch(function(err){
-//   // just need one of these
-//   console.log('error:', err);
-// });
+*/
+var promised = Work_Tel.find(params).exec();
+promised.then(function(work_Tels) {
+  console.log('Work_Tels documents found for '+requser.role+' are ::', work_Tels);
+  var newWork_tels = [];
+  work_Tels.map(function(obj){
+    if (obj.inboundSummary && obj.outboundSummary && obj.outboundSummary.createdAt && obj.money && obj.money.customerCost) {
+      console.log('inside if (obj.inboundSummary && obj.outboundSummary && obj.money && obj.money.customerCost)::');
+      newWork_tels.push(obj);
+    }
+  });
+  return newWork_tels;
+})
+.then(function(work_tels) {
+  console.log('inside the then work_tels::', work_tels);
+  work_tels.sort(function(aze,bze){return Date.parse(bze.outboundSummary.createdAt) - Date.parse(aze.outboundSummary.createdAt)});
+  console.log('after sorting by date work_tels::', work_tels);
+  res.send(work_tels);
+})
+.catch(function(err){
+  // just need one of these
+  console.log('error:', err);
+});
 });// END router.get
 
 router.route("/accept/")
