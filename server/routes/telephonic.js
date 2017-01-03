@@ -518,7 +518,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
 
         console.log('aUserWithCustomer_ID.socketID::', aUserWithCustomer_ID.socketID);
         var socketsids = aUserWithCustomer_ID.socketID;
-        socketsids.forEach(function(socketid){res.io.to(socketid).emit('newTelWorkForSocket', data.theTeleWorkWithcall_sid)}
+        socketsids.forEach(function(socketid){res.io.to(socketid).emit('newTelWorkForSocket', data.theTeleWorkWithcall_sid)});
             // res.io.to(aUserWithCustomer_ID.socketid).emit('newTelWorkForSocket', data.theTeleWorkWithcall_sid);
         return data;
       })
