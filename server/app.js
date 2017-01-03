@@ -268,8 +268,8 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
       */
 
       User.update(
-        { socketID: [socket.id] },
-        { $pull: { 'socketID': [socket.id] } }
+        { socketID: socket.id },
+        { $pull: { 'socketID': socket.id } }
       );
 
     })
@@ -300,7 +300,9 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   });
 
   app.post('/updateUserSocketId', passport.authenticate('jwt', { session: false }), function(req, res) {
+    console.log('insode updateUserSocketId req.user:', req.user);
     console.log('insode updateUserSocketId req.user._id:', req.user._id);
+    console.log('insode updateUserSocketId req.user.socketID:', req.user.socketID);
     console.log('inside updateUserSocketId req.user._id:', req.body);
     var socketID = req.body.socketid;
     User.findOneAndUpdate({ _id: req.user._id }, { $push: { socketID: socketID }}, function(err, user) {
