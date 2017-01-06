@@ -372,6 +372,16 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
               console.log('inside  worker.on("ready") worker.friendlyName::', worker.friendlyName)    // 'Worker 1'
               console.log('inside  worker.on("ready") worker.activityName::', worker.activityName)    // 'Reserved'
               console.log('inside  worker.on("ready") worker.available::', worker.available)       // false
+              // ADD html elements to DOM
+            });
+
+            worker.on("reservation.created", function(reservation) {
+                console.log('reservation.created, reservation::', reservation);
+                console.log(reservation.task.attributes)      // {foo: 'bar', baz: 'bang' }
+                console.log(reservation.task.priority)        // 1
+                console.log(reservation.task.age)             // 300
+                console.log(reservation.task.sid)             // WTxxx
+                console.log(reservation.sid)                  // WRxxx
             });
         });
 
@@ -391,6 +401,8 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
               }
           );
         }
+
+
 
 
       }]);
