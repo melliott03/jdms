@@ -740,6 +740,12 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             }
           };
 
+
+          $scope.submitCallRequest = function(work){
+              console.log('work:', work);
+              WorkService.postCallRequest(work);
+          };
+
           $scope.submit = function(work){
             console.log('work.endDateTime:', work.endDateTime);
             $scope.dateErrorMessage_start = '';

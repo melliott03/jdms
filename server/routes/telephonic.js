@@ -29,6 +29,42 @@ var payable = require('../modules/payable');
 
 var Rx = require('rx');
 
+var accountSid = configsty.TWILIO_ACCOUNT_SID;
+var authToken = configsty.TWILIO_AUTH_TOKEN;
+var workspaceSid = configsty.TWILIO_WORKSPACE_SID;
+var workflowSid = "WW4641b95360367b10cec28753644d043c";
+var videoChannelSid = 'TC2eae701e12864f7382abbe99d53ecacf';
+
+
+var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
+
+router.post('/callRequest', twilio.webhook({validate: false}), function (req, res) {
+  console.log('inside /callRequest');
+  console.log('inside /callRequest req.body::', req.body);
+  console.log('inside /callRequest req.body::', req.user);
+  
+  var workflowSid = "WW4641b95360367b10cec28753644d043c";
+
+  //. CREATE TASK
+  client.workspace.tasks.create({
+    workflowSid: workflowSid,
+    attributes: '{"bookingID":"232315"}'
+  }).then(function(data) {
+    console.log(' in .then of create task, data ::', data);
+    res.send(data);
+  }).catch(function(err){
+    // just need one of these
+    console.log(' in .catch of create task, err ::', err);
+  });;
+  //. RESERVE A WORKER
+  //. GIVE CUSTOMER A CALL-IN-CODE
+  //. GIVE WORKER A CALL-IN-CODE
+  //. CALL CUSTOMER PUT THEM IN CONFERENCE CALL
+  //. CALL WORKER PUT THEM IN CONFERENCE CALL
+
+});
+
+
 router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res) => {
   //twilio@3.3.1-edge
   console.log("req.body in router.post CallCenterCallback::", req.body);
@@ -75,14 +111,7 @@ router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res)
 if (req.body.EventType == 'reservation.accepted' && req.body.TaskSid && req.body.WorkflowName == 'VideoWorkflow') {
   console.log('Im inside the eventtype = reservation.accepted req.body.WorkflowName == VideoWorkflow, telephonic/CallCenterCallback req.body::', req.body);
 
-  var accountSid = configsty.TWILIO_ACCOUNT_SID;
-  var authToken = configsty.TWILIO_AUTH_TOKEN;
-  var workspaceSid = 'WS74baf6dd30ead8306f310450b290cbb2';
-  var workflowSid = "WW4641b95360367b10cec28753644d043c";
-  var videoChannelSid = 'TC2eae701e12864f7382abbe99d53ecacf';
 
-
-  var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
 
   //find user in mongo with matching workerSid and add there contractor_id
   var promisen = User.findOne({'twilioSids.workerSid': workerSid}).exec();
@@ -804,6 +833,23 @@ var saveLanguageToDB = function(CallSid, language){
   });
 
 }
+
+var getReservedInterpreter = function (twiml, teleAppCallID, CallSid) {
+  saveLanguageToDB(CallSid, "Spanish");
+  twiml.say("Please hold while we connect you with a Spanish interpreter",
+  {voice: "alice", language: "en-GB"});
+  var arr = {bookingID:"Spanish", selected_medium:"Voice"};
+  var json = JSON.stringify(arr);
+  var voiceChannelSid = 'TC930839dfbc7a503a57b90e57e7a12648';
+  twiml.enqueue({
+    workflowSid:"WW2f071edf445c3e932ff733ae5013a515",
+    action:"/telephonic/callSummary?callShortID="+teleAppCallID}, function(node) {
+      node.task(json);
+    });
+    console.log("I'm right after enqueue in getSpanishInterpreter");
+    twiml.hangup();
+    return twiml;
+  };
 
 var getSpanishInterpreter = function (twiml, teleAppCallID, CallSid) {
   saveLanguageToDB(CallSid, "Spanish");

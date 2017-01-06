@@ -140,6 +140,14 @@ myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,
         });
     };
 
+    var postCallRequest = function(data){
+        $http.post("/telephonic/callRequest", data).then(function(response){
+            console.log("WORK SAVED! ", response);
+            postedWork.data = response.data;
+            getWorks();
+        });
+    };
+
     var getWorksTel = function(){
         $http.get("/work/calls").then(function(response){
             customerWorkTelObject.response = response.data;
