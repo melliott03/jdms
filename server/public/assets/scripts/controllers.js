@@ -367,14 +367,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             var token = response.data;
             console.log('RETRUN OF GET taskRouterWorkerToken::', response);
             worker = new Twilio.TaskRouter.Worker(token);
-            worker.on("ready", function(error, worker) {
-              if(error) {
-                console.log('error::', error);
-                console.log(error.code);
-                console.log(error.message);
-              } else {
-                console.log(worker.activityName); // "Offline"
-              }
+            worker.on("ready", function(worker) {
               console.log('inside  worker.on("ready") worker.sid::', worker.sid)             // 'WKxxx'
               console.log('inside  worker.on("ready") worker.friendlyName::', worker.friendlyName)    // 'Worker 1'
               console.log('inside  worker.on("ready") worker.activityName::', worker.activityName)    // 'Reserved'
