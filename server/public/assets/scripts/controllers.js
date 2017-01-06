@@ -356,6 +356,34 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         // WorkService.getContractorWork(); //gets all the work contractor has accepted
       }]);
 
+
+
+      myApp.controller("TaskRouterController", ["$scope", "$window", "$timeout", "$http", "TaskRouterFactory", function($scope, $window, $timeout, $http, TaskRouterFactory){
+        console.log("TaskRouterController::");
+
+        var Twilio = $window.Twilio;
+        var worker;
+        $http.get("/updateUser/taskRouterWorkerToken").then(function(response){
+            var token = response.data;
+            console.log('RETRUN OF GET taskRouterWorkerToken::', response);
+            worker = new Twilio.TaskRouter.Worker(token);
+            worker.on("ready", function(error, worker) {
+              if(error) {
+                console.log('error::', error);
+                console.log(error.code);
+                console.log(error.message);
+              } else {
+                console.log(worker.activityName); // "Offline"
+              }
+              console.log('inside  worker.on("ready") worker.sid::', worker.sid)             // 'WKxxx'
+              console.log('inside  worker.on("ready") worker.friendlyName::', worker.friendlyName)    // 'Worker 1'
+              console.log('inside  worker.on("ready") worker.activityName::', worker.activityName)    // 'Reserved'
+              console.log('inside  worker.on("ready") worker.available::', worker.available)       // false
+            });
+        });
+
+      }]);
+
       myApp.controller("ConfirmationController", ["$scope", "$location", "$http", "$window", "$routeParams", function($scope, $location, $http, $window, $routeParams){
         console.log("ConfirmationController::");
         $scope.showTheMessage = false;
@@ -394,119 +422,121 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           $scope.message_fail = '';
         }
 
-        // $scope.submitRegistration = function () {
-        //   $scope.showTheForm = false;
-        //   $httpindow
-        //   .post('/register', $scope.register)
-        //   .success(function (data, status, headers, config) {
-        //     console.log('in controller data::::::', data);
-        //
-        //
-        //   })
-        //   .error(function (data, status, headers, config) {
-        //     // Erase the token if the user fails to log in
-        //     delete
-        //
-        //     // Handle login errors here
-        //     $scope.message = 'Error: Invalid user or password';
-        //   });
-        // };
-        // WorkService.getWorks(); //this triggers ANOTHER other sms and voice calls
-        // WorkService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
-        // WorkService.getContractorWork(); //gets all the work contractor has accepted
       }]);
 
+      myApp.controller('NavCtrlAddWork', function($scope, $location) {
 
-      myApp.controller("AddController", ["$scope", "$http", "$filter", "$timeout", "$log", "WorkService", "rx", "Socket", function($scope, $http, $filter, $timeout, $log, WorkService, rx, Socket){
+      });
+
+      myApp.controller("AddController", ["$scope", "$http", "$filter", "$timeout", "$log", "$location", "WorkService", "rx", "Socket", "datetime", function($scope, $http, $filter, $timeout, $log, $location, WorkService, rx, Socket, datetime){
+
+        $scope.show = 1;
+
+        $scope.collection = [
+          // {number:'1', path: 'home', name: '../img/icons/ic_home_black_24px.svg'},
+          {number:'2', path: 'phone', name: '../img/icons/ic_call_black_24px.svg'},
+          // {number:'3', path: 'onsite', name: '../img/icons/ic_business_black_24px.svg'},
+          // {number:'4', path: 'videoCust', name: '../img/icons/ic_videocam_black_24px.svg'},
+          // {number:'5', path: 'translateCust', name: '../img/icons/ic_translate_black_24px.svg'},
+          // {number:'6', path: 'accountCust', name: '../img/icons/ic_settings_black_24px.svg'}
+        ];
+        var pathdata = $location.path().split('/');
+        console.log('pathdata::', pathdata);
+        console.log('pathdata[1]::', pathdata[1]);
+
+        console.log('not click $location.path()::', $location.path());
+        if (pathdata[1] == 'home') {
+          $scope.selectedIndex = 0;
+          $scope.show = '1';
+          $location.path('home');
+        } else if (pathdata[1] == 'phone'){
+          $scope.selectedIndex = 1;
+          $scope.show = '2';
+          $location.path('phone');
+        } else if (pathdata[1] == 'onsite'){
+          $scope.selectedIndex = 2;
+          $scope.show = '3';
+          $location.path('onsite');
+        } else if (pathdata[1] == 'videoCust'){
+          $scope.selectedIndex = 3;
+          $scope.show = '4';
+          $location.path('videoCust');
+        } else if (pathdata[1] == 'translateCust'){
+          $scope.selectedIndex = 4;
+          $scope.show = '5';
+          $location.path('translateCust');
+        } else if (pathdata[1] == 'accountCust'){
+          $scope.selectedIndex = 5;
+          $scope.show = '6';
+          $location.path('accountCust');
+        } else {
+        }
+        $scope.work.nowFuture = "Now";
+        $scope.showNowSpecific = true;
+        $scope.showOnsiteSpecific = false;
+        $scope.showFutureSpecific = false;
+
+        $scope.$watch('work.nowFuture', function(newValues, oldValues) {
+          console.log('newValues', newValues);
+          console.log('oldValues', oldValues);
+          if (newValues == "Now") {
+            $scope.showNowSpecific = true;
+            $scope.showFutureSpecific = false;
+            $scope.languageChanged();
+          } else if (newValues == "Future") {
+            $scope.showFutureSpecific = true;
+            $scope.showNowSpecific = false;
+            $scope.showAvailablityDiv = false;
+
+          }
+          // $scope.doSomething();
+        });
+
+        $scope.itemClicked = function ($index, item) {
+          console.log('inside $scope.itemClicked, $index::', $index);
+          console.log('inside $scope.itemClicked, item::', item);
+
+          if (item.path == "phone") {
+            $scope.showOnsiteSpecific = false;
+            $scope.work.channel = 'phone';
+          } else if (item.path == "onsite") {
+            $scope.showOnsiteSpecific = true;
+            $scope.work.channel = 'onsite';
+          }
+          // $scope.selectedIndex = $index;
+          // $scope.show = item.number;
+          // $location.path(item.path);
+          // console.log('$location.path() in NavCtrl::', $location.path());
+          //
+          // var pathdata = $location.path().split('/');
+          // console.log('pathdata::', pathdata);
+          // console.log('pathdata[1]::', pathdata[1]);
+          //
+          // console.log('been clicked $location.path()::', $location.path());
+          // if (pathdata[1] == 'home') {
+          //   $scope.selectedIndex = 0;
+          // } else if (pathdata[1] == 'phone'){
+          //   $scope.selectedIndex = 1;
+          // } else if (pathdata[1] == 'onsite'){
+          //   $scope.selectedIndex = 2;
+          // } else if (pathdata[1] == 'videoCust'){
+          //   $scope.selectedIndex = 3;
+          // }else if (pathdata[1] == 'translateCust'){
+          //   $scope.selectedIndex = 4;
+          // }else if (pathdata[1] == 'accountCust'){
+          //   $scope.selectedIndex = 5;
+          // }else {
+          // }
+
+        }
+
         // http://ngmodules.org/modules/ngAutocomplete
         var workService = WorkService;
         console.log('inside AddController');
 
-        /*
-        var promise;
-        $scope.languageChanged = function(){
-          var source = {language: $scope.work.language};
-              promise = $timeout(function () {
-              workService.getAvailibleWorkers(source)
-              $scope.languageChanged(source);
-            }, 10000);
-        };
-        $scope.$on('$destroy', function(){
-            $timeout.cancel(promise);
-        });
-        $scope.$on('$locationChangeStart', function(){
-            $timeout.cancel(promise);
-        });
-        */
-        /*
-        $scope.languageChanged = function(){
-          var source = {language: $scope.work.language};
-          var result = rx.Observable.of($http.post("/telephonic/CallCenterCallback", source));
-          result.subscribe(x => console.log('in controller back from getting availibleWorkers::',x), e => console.error(e));
-
-          // rx.Observable.create(function (observer) {
-          //   request('/telephonic/CallCenterCallback', function (error, response, body) {
-          //     if (error) { observer.onError(); }
-          //     else { observer.onNext({response: response, body: body }); }
-          //     observer.onCompleted();
-          //   })
-          // })
-          // .map() // do something
-          // .subscribe();
-
-        */
-
-
-        // see examples/bubble.js for random bubbles source code
-        // $scope.series = ['Series A', 'Series B'];
-        //
-        // $scope.data = [
-        //   [{
-        //     x: 40,
-        //     y: 10,
-        //     r: 20
-        //   }],
-        //   [{
-        //     x: 10,
-        //     y: 40,
-        //     r: 50
-        //   }]
-        // ];
-
-
-        // $scope.labels =["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"];
-        //
-        // $scope.data = [
-        //   [65, 59, 90, 81, 56, 55, 40],
-        //   [28, 48, 40, 19, 96, 27, 100]
-        // ];
-        //
-        // $scope.Doughnut_labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-        // $scope.Doughnut_data = [300, 500, 100];
-
-        // var canvas = document.getElementById('canvas'); angular.element(document.body)
-        // var canvas = angular.element('canvas');
-        // console.log('canvas::', canvas);
-        // var context = canvas.contentType('2d');
-
-
-
-
-        // ctrl.data = [{
-        //     x: 30,
-        //     y: 20,
-        //     value: 10
-        // }, {
-        //     x: 10,
-        //     y: 10,
-        //     value: 10
-        // }];
-
         var ctrl = this;
         $scope.data = [];
         ctrl.data  = [];
-
-
 
         function generateRandomData(len, data) {
           for (var i = 0; i < len; i++) {
@@ -525,24 +555,6 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           console.log('in generateRandomData, after scope.emit::');
         };
 
-        // $timeout(function () {
-        //   ctrl.data = [{
-        //       x: 30,
-        //       y: 20,
-        //       value: 10
-        //   }, {
-        //       x: 10,
-        //       y: 10,
-        //       value: 10
-        //   }];
-        // }, 3000);
-
-        // $timeout(function () {
-        //   generateRandomData(12, ctrl.data);
-        // }, 10000);
-
-
-
         var socketRoom;
         var numAvailible;
         $scope.languageChanged = function(){
@@ -551,16 +563,6 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           // console.log('$scope.work.language::', typeof $scope.work.language);
           var source = {language: $scope.work.language};
 
-          // var result = rx.Observable.of($http.post("/updateCustomer/availibleWorkers", source));
-          // result.subscribe(x => {
-          //   console.log('in controller back from getting availibleWorkers::',x);
-          //   console.log('in controller back from getting availibleWorkers::',x.d);
-          //   console.log('in controller back from getting availibleWorkers::',x.d.$$state);
-          //   console.log('in controller back from getting availibleWorkers::',x.$$state);
-          //
-          //   numAvailible = x.$$state.value.data.number;
-          // }, e => console.error(e));
-          //
           // $http.post("/updateCustomer/availibleWorkers", source);
           $http.post("/updateCustomer/availibleWorkers", source).then(function(response){
             console.log('in controller back from getting availibleWorkers::', response.data);
@@ -597,46 +599,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             console.log("socket '$scope.work.language' is opened msg::", msg);
           });
 
-          /*
-
-          $scope.$watch('work.language', function (newValue, oldValue, scope) {
-            console.log("$scope.$watch('work.language' changed oldValue::", oldValue);
-            console.log("$scope.$watch('work.language' changed newValue::", newValue);
-              //Do anything with $scope.work.language
-              // Socket.removeListener(oldValue, eventCallback);
-              Socket.removeAllListeners();
-
-              Socket.addListener(newValue, function(msg) {
-                socketRoom = $scope.work.language;
-                console.log("inside socket Socket.addListener newValue::", newValue);
-                console.log("socket '$scope.work.language' is opened msg::", msg);
-              });
-              // Socket.on(newValue);
-
-          });
-          */
-
-          // if (socketRoom) {
-            // console.log('in  if (socketRoom)::', socketRoom);
-            // Socket.removeListener();
-          // }
-
-      		// join new room, received as function parameter
-      		// Socket.addListener($scope.work.language);
-
-          // console.log('Socket.room after joining::', Socket.room);
-
-          // $timeout(function () {
-            // Socket.on($scope.work.language, function (msg) {
-            //   console.log('Socket::', Socket);
-            //   console.log('in socket $scope.work.language::', $scope.work.language);
-            //   console.log("in AddController, $scope.work.language from server, msg::", msg);
-            //   // WorkService.saveSocketId(msg);
-            // });
-          // }, 0);
-
         };
-
 
         $scope.$on('$destroy', function () {
             Socket.removeListener(socketRoom, function(msg) {
@@ -650,15 +613,14 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             });
         });
 
-
-
-
         var workService = WorkService;
         $scope.data = [];
         var now = new Date(),
         minDate = now.toISOString(); //.substring(0,10)
         $scope.minDate = minDate;
 
+        $scope.work.startTime = new Date();
+        $scope.work.endTime = new Date();
 
         $scope.myDate = new Date();
         $scope.minDate = new Date(
@@ -675,17 +637,9 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             return day === 0 || day === 6;
           }
 
+          $scope.work.field = 'Any';
 
-          // moment().seconds(duration);
-          // var duration = moment().seconds('123').format("mm:ss");
-          // console.log('convert seconds to HH:MM duration::', duration);
-
-
-          // moment("123", "hmm").format("HH:mm") === "01:23"
-          // moment(duration, "ss").format("HH:mm") === "01:23"
-
-
-          $scope.fields = ['Legal','Social Service','Medical'];
+          $scope.fields = ['Any', 'Business', 'Legal', 'Medical', 'Social Service', 'Education'];
           $scope.channels = ['OnSite','Phone'];
 
           $scope.languages = ['French', 'Spanish', 'Oromo', 'Somali', 'Hmong'];
@@ -732,9 +686,6 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
               console.log('work.datetime:', work.date.getTime());
               console.log('moment()', moment());
               console.log( 'moment(work.date).isBefore(moment())' , moment(work.date).isBefore( moment() ) );
-
-
-
 
               workItem.type = work.type;
               workItem.datetime = work.date;
@@ -1223,11 +1174,11 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             $scope.work.details.cTravelTime = 0;
             $scope.work.details.ctotal = 0;
 
-            $scope.work.details.requester = 'William Carvajal';
-            $scope.work.details.doctor = 'Dr. Steven Rothke';
-            $scope.work.details.patient = 'Mondg Kor';
-            $scope.work.details.po = '1009876';
-            $scope.work.address = '3710 Commercial Ave Suite 6, NORTHBROOK, COOK, ILLINOIS, 60062';
+            // $scope.work.details.requester = 'William Carvajal';
+            // $scope.work.details.doctor = 'Dr. Steven Rothke';
+            // $scope.work.details.patient = 'Mondg Kor';
+            // $scope.work.details.po = '1009876';
+            // $scope.work.address = '3710 Commercial Ave Suite 6, NORTHBROOK, COOK, ILLINOIS, 60062';
 
 
 

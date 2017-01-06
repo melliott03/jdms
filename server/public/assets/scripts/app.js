@@ -1,4 +1,4 @@
-var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad', 'btford.socket-io', 'angularjs-dropdown-multiselect', 'myApp.core.services', 'myApp.core.directives', 'myApp.videochat', 'chart.js', 'duScroll', 'rx', 'angular-points-path'])
+var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad', 'btford.socket-io', 'angularjs-dropdown-multiselect', 'myApp.core.services', 'myApp.core.directives', 'myApp.videochat', 'chart.js', 'duScroll', 'rx', 'angular-points-path', 'datetime'])
 .value('duScrollDuration', 2000)
 .value('duScrollOffset', 30);
 /*'bc.TelephoneFilter' is replaced by 'ngIntlTelInput'*/
@@ -40,6 +40,17 @@ myApp.filter('capitalize', function() {
     }
 });
 
+
+//STARRT ANGULAR TWILIO TaskRouter STUFF
+// angular.module('angularTwilioTaskRouter', [])
+// myApp.controller('TwilioTaskRouterController', ['$scope', function($scope) {
+// }])
+// .directive('twilioTaskRouter', function() {
+//   return {
+//     templateUrl: 'taskrouter.html'
+//   };
+// });
+//END ANGULAR TWILIO TaskRouter STUFF
 
 // START route protection stuff
 /*

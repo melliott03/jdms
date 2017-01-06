@@ -1,170 +1,200 @@
 <div ng-controller="AddController">
 
 
-<md-content layout-padding >
+
+
+  <md-content layout-padding >
     <div style="width : 600px; margin: 0 auto;">
       <div layout-align="center center" layout="column">
-          <h3 class="md-title">Work Information</h3>
+        <!-- <h3 class="md-title">New Request</h3> -->
       </div>
       <form name="workEntry">
-        <div layout-gt-sm="row">
-          <md-input-container class="md-block" flex-gt-sm>
-            <label>Channel</label>
-            <md-select ng-model="work.type" required="required">
-              <md-option ng-repeat="channel in channels" >
-                {{channel}}
-              </md-option>
-            </md-select>
-          </md-input-container>
-          <md-input-container class="md-block" flex-gt-sm>
-            <label>Field</label>
-            <md-select ng-model="field.type" required="required">
-              <md-option ng-repeat="field in fields" >
-                {{field}}
-              </md-option>
-            </md-select>
+        <div layout-gt-sm="row" >
+
+          <md-input-container class="md-block" flex>
+            <md-radio-group ng-model="work.nowFuture" layout="row" layout-align="space-around stretch" >
+              <md-radio-button value="Now" class="md-primary" style="border-radius: 20%; border: 2px solid #ddd; width: 85px; height: 30px; display: block; " >Now</md-radio-button>
+              <md-radio-button value="Future" class="md-primary" style="border-radius: 20%; border: 2px solid #ddd; width: 85px; height: 30px; display: block; " > Future </md-radio-button>
+            </md-radio-group>
           </md-input-container>
         </div>
         <div layout-gt-sm="row">
           <md-input-container class="md-block" flex-gt-sm>
-            <label>Language</label>
-            <md-select ng-model="work.language" ng-change="languageChanged()" required="required">
-              <md-option ng-repeat="language in languages" >
-                {{language}}
-              </md-option>
-            </md-select>
-          </md-input-container>
-        </div>
-        <div layout-gt-sm="row" ng-controller="AddController as dataCtrl" style="width: 500px; height: 300px;" ng-show="showAvailablityDiv">
-          <!-- <canvas id="base" class="chart-bubble" chart-data="data" chart-series="series"> -->
-          <!-- </canvas> -->
-
-          <!-- <canvas id="doughnut" class="chart chart-doughnut" chart-data="Doughnut_data" chart-labels="Doughnut_label">
-          </canvas> -->
-
-          <!-- <canvas id="radar" class="chart chart-radar" chart-data="data" chart-options="options" chart-labels="labels">
-          </canvas> -->
-          <!-- <canvas id="canvas" style="border: 1px gray solid; float: left"></canvas> -->
-          <!-- <angular-points-path points-data="data"></angular-points-path> -->
-          <angular-points-path points-data="dataCtrl.data"></angular-points-path>
-
-        </div>
-        <div layout-gt-sm="row">
-          <div >
-            <!-- <md-datepicker ng-model="work.date"></md-datepicker> -->
-          <md-input-container class="md-block" flex-gt-sm>
-
-          <input name="dateField" type="datetime-local"
-          min="{{minDate}}"
-          md-min-date="{{minDate}}"
-          placeholder="Enter date & start time"
-          ng-model="work.date"
-          ng-model-options="{ updateOn: 'blur' }"
-          oninvalid="this.setCustomValidity('Witinnovation')"
-          required="required"
-          >
-          <p class="dateErrorMessage">{{dateErrorMessage_start}}</p>
-
+            <!-- <div ng-controller="NavCtrlAddWork" class="full-heigth"> -->
+            <ul class="nav-icon" layout="row">
+              <span ng-repeat="item in collection"
+              ng-class="{ 'selected-class-name': $index == selectedIndex }" class='nohighlight' id="mdiconx" style="margin: 0px auto;">
+              <li class="padding" style="border-radius: 100%; border: 2px solid #ddd; width: 45px; height: 45px; display: block; " ng-class="{ 'icon': $index == selectedIndex }"><md-icon ng-class="{ 'mdicon svg': $index == selectedIndex }" md-svg-src="{{item.name}}" ng-click="itemClicked($index, item)"></md-icon>
+              </li>
+            </span>
+          </ul>
+          <!-- </div> -->
         </md-input-container>
-        <!-- <h4>Date-picker with min date and max date</h4>
-        <md-datepicker ng-model="myDate" md-placeholder="Enter date"
-        md-min-date="minDate" md-max-date="maxDate"></md-datepicker>
-        <md-datepicker name="dateField" ng-model="myDate" md-placeholder="Enter date"
-          required md-min-date="minDate" md-max-date="maxDate"
-          md-date-filter="onlyWeekendsPredicate"></md-datepicker>
-      <div class="validation-messages" ng-messages="workEntry.dateField.$error">
-        <div ng-message="valid">The entered value is not a date!</div>
-        <div ng-message="required">This date is required!</div>
-        <div ng-message="mindate">Date is too early!</div>
-        <div ng-message="maxdate">Date is too late!</div>
-        <div ng-message="filtered">Only weekends are allowed!</div>
-      </div> -->
-        </div>
-
-        <!-- <div>
+      </div>
+      <div layout-gt-sm="row">
         <md-input-container class="md-block" flex-gt-sm>
+          <label>Language</label>
+          <md-select ng-model="work.language" ng-change="languageChanged()" required="required">
+            <md-option ng-repeat="language in languages" >
+              {{language}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+
+      <div layout-gt-sm="row" ng-controller="AddController as dataCtrl" style="width: 500px; height: 300px;" ng-show="showAvailablityDiv">
+    <angular-points-path points-data="dataCtrl.data" ng-if="showNowSpecific"></angular-points-path>
+
+  </div>
+
+
+
+  <div layout-gt-sm="row" layout-align="center center">
+
+    <!-- <div  flex-gt-sm> -->
+      <div class="" style="padding-right: 10px;" flex-gt-sm>
+        <label>Duration(mins)</label>
+        <input ng-model="work.duration" type="number" min="5" step="1" style="padding-right:0px; text-align:left;" required></input>
+      </div>
+      <div class="" style="padding-right: 10px;" ng-if="showFutureSpecific" flex-gt-sm>
+        <label>Date</label>
+        <input type="text" datetime="mediumDate" ng-model="work.startTime">
+      </div>
+      <div class="" style="padding-right: 10px;" ng-if="showFutureSpecific" flex-gt-sm>
         <label>Start Time</label>
-        <input type="time"
-        placeholder="Start Time"
-        ng-model="work.StartTime"
-        ng-model-options="{ updateOn: 'blur' }">
-      </md-input-container>
-      </div> -->
-      <div >
-        <!-- <md-datepicker ng-model="work.endDateTime"></md-datepicker> -->
-      <md-input-container class="md-block" flex-gt-sm>
-      <input type="datetime-local" name="endDate" onblur="setDateErrorMessage()()"
+        <input type="text" datetime="shortTime" ng-model="work.startTime">
+      </div>
+      <div class="" style="" ng-if="showFutureSpecific" flex-gt-sm>
+        <label>End Time</label>
+        <input type="text" datetime="shortTime" ng-model="work.endTime">
+      </div>
+    <!-- </div> -->
+
+
+
+    <!-- https://rawgit.com/eight04/angular-datetime/master/example/demo-1.5.html more options -->
+
+
+  </div>
+
+
+
+  <div layout-gt-sm="row" >
+    <!-- <md-input-container class="md-block" flex>
+    <md-radio-group ng-model="work.nowFuture" layout="row" layout-align="space-around stretch" >
+    <md-radio-button value="Now" class="md-primary" style="border-radius: 20%; border: 2px solid #ddd; width: 85px; height: 30px; display: block; " >Now</md-radio-button>
+    <md-radio-button value="Future" class="md-primary" style="border-radius: 20%; border: 2px solid #ddd; width: 85px; height: 30px; display: block; " > Future </md-radio-button>
+  </md-radio-group>
+</md-input-container> -->
+<md-input-container class="md-block"  flex>
+
+  <md-radio-group ng-model="work.field" layout="row" layout-align="space-around stretch" >
+    <!-- <md-radio-button value="Now" class="md-primary" style="border-radius: 20%; border: 2px solid #ddd; width: 85px; height: 30px; display: block; " >Now</md-radio-button> -->
+    <md-radio-button ng-repeat="field in fields"
+    ng-value="field"
+    class="md-primary"
+    style="font-size:12pt;"
+    >
+    {{ field }}<br/>
+  </md-radio-group>
+</md-input-container>
+</div>
+
+<!-- KEEP !!!! -->
+<!-- <div layout-gt-sm="row" style="margin: 20px; padding: 20px;" ng-if="showFutureSpecific">
+  <div >
+    <md-input-container class="md-block" flex-gt-sm>
+
+      <input name="dateField" type="datetime-local"
       min="{{minDate}}"
-      placeholder="End Date & Time"
-      ng-model="work.endDateTime"
+      md-min-date="{{minDate}}"
+      placeholder="Enter date & start time"
+      ng-model="work.date"
       ng-model-options="{ updateOn: 'blur' }"
-      ng-keyup="resetDateErrorMessage()"
+      oninvalid="this.setCustomValidity('Witinnovation')"
       required="required"
       >
-      <p class="dateErrorMessage">{{dateErrorMessage_end}}</p>
+      <p class="dateErrorMessage">{{dateErrorMessage_start}}</p>
+
     </md-input-container>
-    </div>
-  </div>
-  <!--  -->
+
+</div>
+
+<div >
+  <md-input-container class="md-block" flex-gt-sm>
+    <input type="datetime-local" name="endDate" onblur="setDateErrorMessage()()"
+    min="{{minDate}}"
+    placeholder="End Date & Time"
+    ng-model="work.endDateTime"
+    ng-model-options="{ updateOn: 'blur' }"
+    ng-keyup="resetDateErrorMessage()"
+    required="required"
+    >
+    <p class="dateErrorMessage">{{dateErrorMessage_end}}</p>
+  </md-input-container>
+</div>
+</div> -->
+
+<!-- GoogleAutoComplete -->
+<!-- <div ng-controller="GoogleController"> -->
+<div layout-gt-sm="row" ng-if="showOnsiteSpecific">
+  <md-input-container class="md-block" flex-gt-sm>
+    <input type="text" ng-model="work.address"
+    ng-places-autocomplete
+    ng-model="query"
+    pa-options="paOptions"
+    pa-on-place-ready="placesCallback"
+    pa-trigger="paTrigger"
+    aria-label="Work Address"
+    required="required"/>
+  </md-input-container>
+  <md-button ng-click="paTrigger()">Send</md-button>
+</div>
 
 
-        <!-- GoogleAutoComplete -->
-        <!-- <div ng-controller="GoogleController"> -->
-          <div layout-gt-sm="row">
-        	<md-input-container class="md-block" flex-gt-sm>
-              <input type="text" ng-model="work.address"
-            		   ng-places-autocomplete
-            		   ng-model="query"
-            		   pa-options="paOptions"
-            		   pa-on-place-ready="placesCallback"
-            		   pa-trigger="paTrigger"
-                   aria-label="Work Address"
-            			 required="required"/>
-          </md-input-container>
-        		<md-button ng-click="paTrigger()">Send</md-button>
-          </div>
-          <p>
-            {{worklatlon}}
-          </p>
+<!-- <input type="text" ng-model="work.location"
+value="{{worklatlon}}"
+/> -->
 
-          <input type="text" ng-model="work.location"
-               value="{{worklatlon}}"
-              />
-
-        <!-- </div> -->
-        <!-- End GoogleAutoComplete -->
+<!-- </div> -->
+<!-- End GoogleAutoComplete -->
 
 
-        <div layout-gt-sm="row">
-          <md-input-container class="md-block" flex-gt-sm>
-            <label>Other Work Details</label>
-            <input ng-model="work.details">
-          </md-input-container>
-        </div>
-        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-          <md-button ng-click="estimatePrice(work)" class="md-raised">GET ESTIMATE</md-button>
-        </section>
-        <p>
-          ${{estimatePriceObject.data.finalCost}} estimate
-          <p ng-model="work.customer_estimate" value="estimatePriceObject.data" ></p>
-        </p>
-        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-          <md-button ng-click="submit(work)" class="md-raised">SUBMIT REQUEST</md-button>
-        </section>
-      </form>
-      <p>
-        SCHEDULING 24 HOURS IN ADVANCE TO INCREASE THE LIKELYHOOD OF YOUR REQUEST BEING FILLED AND SAVE 20%.
-      </p>
+<div layout="row">
+  <md-input-container class="md-block" flex>
+    <label>Other Details</label>
+    <!-- <md-input ng-model="work.details"> -->
+    <textarea ng-model="work.notes" rows="2" md-select-on-focus></textarea>
+  </md-input-container>
+  <!-- <md-input-container class="md-block">
+  <label>Biography</label>
+  <textarea ng-model="user.notes" md-maxlength="150" rows="5" md-select-on-focus></textarea>
+</md-input-container> -->
+</div>
+<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+  <md-button ng-click="estimatePrice(work)" class="md-raised">GET ESTIMATE</md-button>
+</section>
+<p>
+  ${{estimatePriceObject.data.finalCost}} estimate
+  <p ng-model="work.customer_estimate" value="estimatePriceObject.data" ></p>
+</p>
+<section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+  <md-button ng-click="submit(work)" class="md-raised">SUBMIT REQUEST</md-button>
+</section>
+</form>
+<p>
+  SCHEDULING 24 HOURS IN ADVANCE TO INCREASE THE LIKELYHOOD OF YOUR REQUEST BEING FILLED AND SAVE 20%.
+</p>
 
-    </div>
-  </md-content>
+</div>
+</md-content>
 
 
 
 <div >
   <md-input-container class="md-block" flex-gt-sm>
-  <md-timepicker ng-model="startTime" md-placeholder="Enter time"></md-timepicker>
-</md-input-container>
+    <md-timepicker ng-model="startTime" md-placeholder="Enter time"></md-timepicker>
+  </md-input-container>
 </div>
 
 </div>

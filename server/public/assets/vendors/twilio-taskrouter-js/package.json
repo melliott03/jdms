@@ -1,0 +1,69 @@
+{
+  "_args": [
+    [
+      "twilio-taskrouter-js",
+      "/Users/mikeelliott/AtomProjects/04052016_1_work"
+    ]
+  ],
+  "_from": "twilio-taskrouter-js@latest",
+  "_id": "twilio-taskrouter-js@1.1.1",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/twilio-taskrouter-js",
+  "_nodeVersion": "0.12.9",
+  "_npmUser": {
+    "email": "nina@cupcakesystems.com",
+    "name": "ninachaubal"
+  },
+  "_npmVersion": "2.14.9",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "twilio-taskrouter-js",
+    "raw": "twilio-taskrouter-js",
+    "rawSpec": "",
+    "scope": null,
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/twilio-taskrouter-js/-/twilio-taskrouter-js-1.1.1.tgz",
+  "_shasum": "6e46e98a8f8c09594408776afc6ef38eff2468d7",
+  "_shrinkwrap": null,
+  "_spec": "twilio-taskrouter-js",
+  "_where": "/Users/mikeelliott/AtomProjects/04052016_1_work",
+  "bugs": {
+    "url": "https://github.com/ninachaubal/twilio-taskrouter-js/issues"
+  },
+  "dependencies": {},
+  "description": "Twilio Taskrouter client JS packaged for npm",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "6e46e98a8f8c09594408776afc6ef38eff2468d7",
+    "tarball": "https://registry.npmjs.org/twilio-taskrouter-js/-/twilio-taskrouter-js-1.1.1.tgz"
+  },
+  "gitHead": "5698a4976e8aa41a931c9b60194e3e6f26ba9e24",
+  "homepage": "https://github.com/ninachaubal/twilio-taskrouter-js#readme",
+  "keywords": [
+    "twilio",
+    "taskrouter"
+  ],
+  "main": "taskrouter.min.js",
+  "maintainers": [
+    {
+      "email": "nina@cupcakesystems.com",
+      "name": "ninachaubal"
+    }
+  ],
+  "name": "twilio-taskrouter-js",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ninachaubal/twilio-taskrouter-js.git"
+  },
+  "scripts": {},
+  "version": "1.1.1"
+}

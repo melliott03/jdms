@@ -18,6 +18,24 @@ myApp.factory('authInterceptor', function ($rootScope, $q, $window) {
   };
 });
 
+
+myApp.factory("TaskRouterFactory", ["$http", function($http){
+  var taskRouterWorkerToken = {};
+  var getTaskRouterWorkerToken = function(){
+      $http.get("/updateUser/taskRouterWorkerToken").then(function(response){
+          taskRouterWorkerToken.response = response.data;
+          console.log('RETRUN OF GET taskRouterWorkerToken !!! !!!!!  ::  ', response);
+      });
+  };
+  getTaskRouterWorkerToken();
+
+  return {
+      getTaskRouterWorkerToken : getTaskRouterWorkerToken,
+      taskRouterWorkerToken : taskRouterWorkerToken
+  };
+
+}]);
+
 myApp.factory("HomeService", ["$http", function($http){
   var contractorAccountObject = {};
   var createContractorAccount = function(info){
