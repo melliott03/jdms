@@ -377,12 +377,44 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
             worker.on("reservation.created", function(reservation) {
                 console.log('reservation.created, reservation::', reservation);
-                console.log(reservation.task.attributes)      // {foo: 'bar', baz: 'bang' }
-                console.log(reservation.task.priority)        // 1
-                console.log(reservation.task.age)             // 300
-                console.log(reservation.task.sid)             // WTxxx
-                console.log(reservation.sid)                  // WRxxx
+                console.log('reservation::',reservation)
+                console.log('reservation.task::',reservation.task)
             });
+            worker.on("reservation.created", function(reservation) {
+                console.log('reservation::',reservation)
+                console.log('reservation.task::',reservation.task)
+            });
+            worker.on("reservation.accepted", function(reservation) {
+                console.log('reservation::',reservation)
+                console.log('reservation.task::',reservation.task)
+            });
+            worker.on("reservation.rejected", function(reservation) {
+                console.log('reservation::',reservation)
+                console.log('reservation.task::',reservation.task)
+            });
+            worker.on("reservation.timeout", function(reservation) {
+                console.log('reservation::',reservation)
+                console.log('reservation.task::',reservation.task)
+            });
+            worker.on("reservation.canceled", function(reservation) {
+                console.log('reservation::',reservation)
+                console.log('reservation.task::',reservation.task)
+            });
+            worker.on("reservation.rescinded", function(reservation) {
+                console.log('reservation::',reservation)
+                console.log('reservation.task::',reservation.task)
+            });
+            worker.on("activity.update", function(worker) {
+                console.log('worker activity updated::', worker);
+                console.log(worker.sid)             // 'WKxxx'
+                console.log(worker.friendlyName)   // 'Worker 1'
+                console.log(worker.activityName)   // 'Reserved'
+                console.log(worker.available)       // false
+                console.log(worker.activityName)   // 'Reserved'
+                console.log(worker.activitySid)    // 'WAxxx'
+                console.log(worker.available)      // false
+            });
+
         });
 
         $scope.getworkerActivities = function(){
