@@ -375,12 +375,23 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             });
         });
 
-        worker.on("ready", function(worker) {
-          console.log('inside  worker.on("ready") worker.sid 2::', worker.sid)             // 'WKxxx'
-          console.log('inside  worker.on("ready") worker.friendlyName 2::', worker.friendlyName)    // 'Worker 1'
-          console.log('inside  worker.on("ready") worker.activityName 2::', worker.activityName)    // 'Reserved'
-          console.log('inside  worker.on("ready") worker.available 2::', worker.available)       // false
-        });
+        $scope.getworkerActivities = function(){
+          console.log("inside getworkerActivities::" );
+          worker.activities.fetch(
+              function(error, activityList) {
+                  if(error) {
+                      console.log(error.code);
+                      console.log(error.message);
+                      return;
+                  }
+                  var data = activityList.data;
+                  for(i=0; i<data.length; i++) {
+                      console.log(data[i].friendlyName);
+                  }
+              }
+          );
+        }
+
 
       }]);
 

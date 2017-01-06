@@ -278,6 +278,11 @@ myApp.config(["$routeProvider", function($routeProvider){
     templateUrl: "/assets/views/routes/translate/documentTranslate.html",
     controller: "ShowController"
   }).
+  when("/worker", {
+    // requireAuth: true,
+    templateUrl: "/assets/views/routes/worker/dashboard.html",
+    controller: "ShowController"
+  }).
   otherwise({
     redirectTo: '/home'
   });
