@@ -364,10 +364,11 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         var Twilio = $window.Twilio;
         var worker;
         var refreshJWT = function(){
-          $http.get("/updateUser/taskRouterWorkerToken").then(function(response){
+          return $http.get("/updateUser/taskRouterWorkerToken").then(function(response){
             return response.data;
-          };
+          });
         };
+
         $http.get("/updateUser/taskRouterWorkerToken").then(function(response){
             var token = response.data;
             console.log('RETRUN OF GET taskRouterWorkerToken::', response);
