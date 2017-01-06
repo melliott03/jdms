@@ -414,6 +414,20 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
                 console.log(worker.activitySid)    // 'WAxxx'
                 console.log(worker.available)      // false
             });
+            worker.on("connected", function() {
+              console.log("Websocket has connected");
+            });
+            worker.on("disconnected", function() {
+              console.log("Websocket has disconnected");
+            });
+            worker.on("error", function(error) {
+                console.log("Websocket had an error: "+ error.response + " with message: "+error.message);
+            });
+            worker.on("token.expired", function() {
+                console.log("updating token");
+                var token = refreshJWT(); // your method to retrieve a new capability token
+                worker.updateToken(token);
+            });
 
         });
 
