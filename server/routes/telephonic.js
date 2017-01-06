@@ -32,7 +32,7 @@ var Rx = require('rx');
 var accountSid = configsty.TWILIO_ACCOUNT_SID;
 var authToken = configsty.TWILIO_AUTH_TOKEN;
 var workspaceSid = configsty.TWILIO_WORKSPACE_SID;
-var workflowSid = "WW4641b95360367b10cec28753644d043c";
+var videoWorkflowSid = configsty.TWILIO_VIDEO_WORKFLOW_SID;
 var videoChannelSid = 'TC2eae701e12864f7382abbe99d53ecacf';
 
 
@@ -42,13 +42,16 @@ router.post('/callRequest', twilio.webhook({validate: false}), function (req, re
   console.log('inside /callRequest');
   console.log('inside /callRequest req.body::', req.body);
   console.log('inside /callRequest req.body::', req.user);
-  
+
+  var lang = req.body.language;
+  var arr = {selected_language: lang, selected_medium:"Voice", "bookingID":"232315"};
+  var json = JSON.stringify(arr);
   var workflowSid = "WW4641b95360367b10cec28753644d043c";
 
   //. CREATE TASK
   client.workspace.tasks.create({
     workflowSid: workflowSid,
-    attributes: '{"bookingID":"232315"}'
+    attributes: json
   }).then(function(data) {
     console.log(' in .then of create task, data ::', data);
     res.send(data);
@@ -88,9 +91,9 @@ router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res)
       // language = ''+language;
       // console.log('language 2::', typeof language);
       // res.io.to(contractorSocketArray[0].socketID).emit('socketToYou', JSON.stringify(savedWork._id));
-      console.log('res.io.emit::', res.io.emit);
-      console.log('res.io::', res.io);
-      console.log('res::', res);
+      // console.log('res.io.emit::', res.io.emit);
+      // console.log('res.io::', res.io);
+      // console.log('res::', res);
 
       res.io.emit(language, data);
     });
@@ -110,6 +113,7 @@ router.post('/CallCenterCallback', twilio.webhook({validate: false}), (req, res)
 
 if (req.body.EventType == 'reservation.accepted' && req.body.TaskSid && req.body.WorkflowName == 'VideoWorkflow') {
   console.log('Im inside the eventtype = reservation.accepted req.body.WorkflowName == VideoWorkflow, telephonic/CallCenterCallback req.body::', req.body);
+
 
 
 

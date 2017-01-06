@@ -59,6 +59,7 @@ myApp.config(function ($httpProvider) {
 
 myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,"Auth"
     var postedWork = {};
+    var postedCallRequest = {};
     var data = {};
     var customerWorkObject = {};
     var customerWorkTelObject = {};
@@ -143,7 +144,7 @@ myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,
     var postCallRequest = function(data){
         $http.post("/telephonic/callRequest", data).then(function(response){
             console.log("WORK SAVED! ", response);
-            postedWork.data = response.data;
+            postedCallRequest.data = response.data;
             getWorks();
         });
     };
@@ -428,7 +429,9 @@ myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,
         getUser : getUser,
         isLogin : isLogin,
         postWork : postWork,
+        postCallRequest: postCallRequest,
         postedWork : postedWork,
+        postedCallRequest : postedCallRequest,
         getWorks : getWorks,
         getWorksTel : getWorksTel,
         deleteWork : deleteWork,

@@ -385,6 +385,21 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
                 console.log('reservation.created, reservation::', reservation);
                 console.log('reservation::',reservation)
                 console.log('reservation.task::',reservation.task)
+                if (true) {
+                  reservation.accept(
+                      function(error, reservation) {
+                          if(error) {
+                              console.log(error.code);
+                              console.log(error.message);
+                              return;
+                          }
+                          console.log("reservation accepted");
+                          for (var property in reservation) {
+                              console.log(property+" : "+reservation[property]);
+                          }
+                      }
+                  );
+                }
             });
             worker.on("reservation.accepted", function(reservation) {
                 console.log('reservation.accepted::',reservation)
