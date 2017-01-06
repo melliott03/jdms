@@ -178,9 +178,8 @@ console.log('err in task complete::',err);
     console.log('error:', err);
   });
 }else {
-  //do nothing
+  res.status(200);
 }
-// res.status(200);
 
 });
 
