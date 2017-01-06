@@ -363,6 +363,11 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
         var Twilio = $window.Twilio;
         var worker;
+        var refreshJWT = function(){
+          $http.get("/updateUser/taskRouterWorkerToken").then(function(response){
+            return response.data;
+          };
+        };
         $http.get("/updateUser/taskRouterWorkerToken").then(function(response){
             var token = response.data;
             console.log('RETRUN OF GET taskRouterWorkerToken::', response);
@@ -380,28 +385,24 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
                 console.log('reservation::',reservation)
                 console.log('reservation.task::',reservation.task)
             });
-            worker.on("reservation.created", function(reservation) {
-                console.log('reservation::',reservation)
-                console.log('reservation.task::',reservation.task)
-            });
             worker.on("reservation.accepted", function(reservation) {
-                console.log('reservation::',reservation)
+                console.log('reservation.accepted::',reservation)
                 console.log('reservation.task::',reservation.task)
             });
             worker.on("reservation.rejected", function(reservation) {
-                console.log('reservation::',reservation)
+                console.log('reservation.rejected::',reservation)
                 console.log('reservation.task::',reservation.task)
             });
             worker.on("reservation.timeout", function(reservation) {
-                console.log('reservation::',reservation)
+                console.log('reservation.timeout::',reservation)
                 console.log('reservation.task::',reservation.task)
             });
             worker.on("reservation.canceled", function(reservation) {
-                console.log('reservation::',reservation)
+                console.log('reservation.canceled::',reservation)
                 console.log('reservation.task::',reservation.task)
             });
             worker.on("reservation.rescinded", function(reservation) {
-                console.log('reservation::',reservation)
+                console.log('reservation.rescinded::',reservation)
                 console.log('reservation.task::',reservation.task)
             });
             worker.on("activity.update", function(worker) {
@@ -415,17 +416,18 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
                 console.log(worker.available)      // false
             });
             worker.on("connected", function() {
-              console.log("Websocket has connected");
+              console.log("workerjs Websocket has connected");
             });
             worker.on("disconnected", function() {
-              console.log("Websocket has disconnected");
+              console.log("workerjs Websocket has disconnected");
             });
             worker.on("error", function(error) {
-                console.log("Websocket had an error: "+ error.response + " with message: "+error.message);
+                console.log("workerjs Websocket had an error: "+ error.response + " with message: "+error.message);
             });
             worker.on("token.expired", function() {
                 console.log("updating token");
                 var token = refreshJWT(); // your method to retrieve a new capability token
+                console.log('token after refreshJWT()::', token);
                 worker.updateToken(token);
             });
 
