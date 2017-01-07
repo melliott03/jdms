@@ -42,6 +42,7 @@ router.post('/callRequest', twilio.webhook({validate: false}), function (req, re
   console.log('inside /callRequest');
   console.log('inside /callRequest req.body::', req.body);
   console.log('inside /callRequest req.body::', req.user);
+  // @TODO save new item work_tel collection
 
   var lang = req.body.language;
   console.log('lang::', lang);
@@ -264,6 +265,8 @@ response.send(twiml);
 });
 
 router.post('/enteredBookingID', twilio.webhook({validate: false}), function (req, res) {
+  console.log('in /enteredBookingID req.body::', req.body);
+
   var twiml = new twilio.TwimlResponse();
   var bookingid = req.body.Digits;
   var conferenceName = bookingid;
@@ -753,7 +756,7 @@ router.post('/screencall', twilio.webhook({validate: false}), function (req, res
 });
 // POST: /telephonic/connectmessage
 router.post('/connectmessage', twilio.webhook({validate: false}), function (req, res) {
-  console.log('in connectmessage req.body', req.body);
+  console.log('in connectmessage req.body', req.body); // @TODO save call to interpreter summary to work_tel
   console.log('inside /connectmessage req.query.reservationSid::', req.query.reservationSid);
   var reservationSid = req.query.reservationSid;
   var bookingid = req.query.bookingid;
