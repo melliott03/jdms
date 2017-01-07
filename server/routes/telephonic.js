@@ -226,6 +226,65 @@ router.use('/VoiceAssignmentCallbackUrl', twilio.webhook({validate: false}), (re
 router.post('/welcome', twilio.webhook({validate: false}), function (request, response) {
   var twiml = new twilio.TwimlResponse();
   twiml.gather({
+    action: "/telephonic/hasBookingID",
+    numDigits: "1",
+    method: "POST"
+  }, function (node) {
+    twiml.say("If you have a reservation press 1, If not, press 2");
+
+    // twiml.say('Please choose the language of interpretation. Spanish, 1. Hmong, 2. Somali, 3. Oromo, 4. Amharic, 5.');
+
+    // node.play("http://howtodocs.s3.amazonaws.com/et-phone.mp3", {loop: 3});
+  }); //.redirect('/telephonic/welcome');
+  response.send(twiml);
+});
+
+router.post('/hasBookingID', twilio.webhook({validate: false}), function (request, response) {
+  var twiml = new twilio.TwimlResponse();
+
+  var bookingidVSchooseLang = request.body.Digits;
+  if (bookingidVSchooseLang.length != 1 ) {
+    console.log('bookingidVSchooseLang.length::', bookingidVSchooseLang.length);
+    // twiml.say('Your User ID must be 7 degits. Please try again.');
+    twiml.redirect('/telephonic/welcome');
+  }else if (bookingidVSchooseLang == 1 ){
+    twiml.gather({
+      action: "/telephonic/enteredBookingID", //?ID=' + telephonicUserID
+      numDigits: "6",
+      method: "POST"
+    }, function (node) {
+      twiml.say('Please enter your reservation I D');
+    });
+  }else if (bookingidVSchooseLang == 2 ){
+    twiml.redirect('/telephonic/welcome_chooseLang');
+  }
+
+console.log("Before response ::");
+response.send(twiml);
+});
+
+router.post('/enteredBookingID', twilio.webhook({validate: false}), function (request, response) {
+  var twiml = new twilio.TwimlResponse();
+  var bookingid = request.body.Digits;
+  var conferenceName = bookingid;
+  // var telephonicUserID = request.query.ID;
+  console.log('bookingid::', bookingid);
+  if (bookingid.length != 6 ) {
+    response.send(twiml,redirectWelcome());
+  }
+  // PUT THEM INTO CONFERENCE CALL WHERE THE INTERPREER IS WAITING
+  twiml.say('You are connecting to the conference.')
+  twiml.dial(function(node) {
+    node.conference(conferenceName, {
+      startConferenceOnEnter: true
+    });
+  });
+
+});
+
+router.post('/welcome_chooseLang', twilio.webhook({validate: false}), function (request, response) {
+  var twiml = new twilio.TwimlResponse();
+  twiml.gather({
     action: "/telephonic/telephonicUserID",
     numDigits: "7",
     method: "POST"
@@ -239,7 +298,6 @@ router.post('/welcome', twilio.webhook({validate: false}), function (request, re
   response.send(twiml);
 });
 
-// POST: '/ivr/menu'
 router.post('/telephonicUserID', twilio.webhook({validate: false}), function (request, response) {
   var twiml = new twilio.TwimlResponse();
 
@@ -257,54 +315,7 @@ router.post('/telephonicUserID', twilio.webhook({validate: false}), function (re
       twiml.say('Please enter your 4 digit pass code');
     });
   }
-  /*
-  else {
-  console.log('telephonicUserID 1::', telephonicUserID);
-  // findUserInDB(telephonicUserID, twiml);
-  var promise = User.findOne({telephonicID: telephonicUserID}).exec();
-  return promise.then(function(aUserWithID) {
-  console.log("aUserWithID 1::", aUserWithID);
 
-  if (aUserWithID == undefined || aUserWithID == null) {
-  console.log("aUserWithID 2::", aUserWithID);
-  twiml.say('You entered an incorrect User ID');
-  twiml.redirect('/telephonic/welcome');
-  return aUserWithID;
-} else if (aUserWithID != null) {
-console.log("aUserWithID 3::", aUserWithID);
-return aUserWithID;
-}
-//Gather the USERID and the Password then find see if that combination exists in the DB
-//that way, hackers can't dial until the figure out a userID (by not validating after UserID is entered)
-
-})
-.then(function(aUserWithID) {
-// do something with
-console.log("I'm inside of .then (aUserWithID) 1::", aUserWithID);
-// var twiml = new twilio.TwimlResponse();
-if (aUserWithID == undefined || aUserWithID == null) {
-console.log("I'm inside of .then (aUserWithID) 2::", aUserWithID);
-twiml.say('You entered an incorrect User ID');
-twiml.redirect('/telephonic/welcome');
-response.send(twiml);
-} else if(aUserWithID._id) {
-console.log("I'm inside of .then (aUserWithID) 3::", aUserWithID);
-twiml.gather({
-action: "/telephonic/telephonicPassCode?ID=" + telephonicUserID,
-numDigits: "4",
-method: "POST"
-}, function (node) {
-twiml.say('Please enter your 4 digit pass code');
-});
-}
-console.log("I'm inside of .then (aUserWithID) 4::", aUserWithID);
-})
-.catch(function(err){
-// just need one of these
-console.log('error:', err);
-});
-
-}*/
 console.log("Before response ::");
 response.send(twiml);
 });
