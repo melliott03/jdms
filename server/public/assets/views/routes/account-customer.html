@@ -1,9 +1,12 @@
+<div class="dashboardleftmargin">
+  <h1>Account Setings</h1>
+
 <!-- BEGIN ACCOUNT SETTING  -->
 <div ng-controller="XAccountCtrl2" ng-cloak>
   <!-- <div class="leftmargin alert alert-danger" ng-if="customerBalance.response.availabel_balance <= 0">
     Your NowLanguage Account is currently suspended due to a lack of funds. Recharge your account and get back to making calls.
   </div> -->
-  <div class="leftmargin">
+  <div >
     <p>
       <strong>For telephonic interpreters call:</strong> <br> Local: {{localPhoneNumber}}  -or-  <br>Tollfree: {{tollfreePhoneNumber}}
     </p>
@@ -18,7 +21,7 @@
 
   </div>
 
-  <div class="leftmargin" layout="row">
+  <div  layout="row">
     <div flex>
       <h4>Current Balance</h4>
       <strong>Balance: </strong>{{customerBalance.response.availabel_balance | currency : $}} <br>
@@ -508,3 +511,4 @@
 
 <!-- END OF ng-if="work.addPhoneNumbers" -->
 <!-- END OF ADD PHONE -->
+</div>

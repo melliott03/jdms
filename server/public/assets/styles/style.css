@@ -451,6 +451,10 @@ tfoot td {
 .mdlistitemtext, .leftmargin{
   padding: 20px;
 }
+.dashboardleftmargin{
+  padding: 20px;
+  margin: 0px 20px 0px 20px;
+}
 .leftmarginmodal{
   /*padding: 20px;*/
   margin: 0px 20px 0px 20px;
