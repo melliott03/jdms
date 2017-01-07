@@ -180,8 +180,10 @@ console.log('err in task complete::',err);
 }else {
   // res.sendStatus(200);
   // res.status(200);
-  res.status(200).send('Everything is Awesome!');
+  // res.status(200).send('Everything is Awesome!');
+
 }
+res.sendStatus(200); // equivalent to res.status(200).send('OK')
 
 });
 
