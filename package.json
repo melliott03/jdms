@@ -108,6 +108,7 @@
     "twilio-heroku": "^0.3.2",
     "twilio-stream": "^1.0.1",
     "twilio-taskrouter-js": "^1.1.1",
+    "unique-random": "^1.0.0",
     "waze-travel-time": "0.0.3",
     "xml2js": "^0.4.16",
     "xmlbuilder": "^8.2.0",

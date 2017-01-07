@@ -27,6 +27,8 @@ var stripeCharge = require('../modules/stripeCharge');
 
 var payable = require('../modules/payable');
 
+var uniqueRandom = require('unique-random');
+
 var Rx = require('rx');
 
 var accountSid = configsty.TWILIO_ACCOUNT_SID;
@@ -42,11 +44,15 @@ router.post('/callRequest', twilio.webhook({validate: false}), function (req, re
   console.log('inside /callRequest');
   console.log('inside /callRequest req.body::', req.body);
   console.log('inside /callRequest req.body::', req.user);
-  // @TODO save new item work_tel collection
 
+  var rand = uniqueRandom(100000, 999999);
+  var bookingid = rand();
+
+  bookingid = ""+bookingid;
+  console.log('bookingid after math.random::', bookingid);
   var lang = req.body.language;
   console.log('lang::', lang);
-  var arr = {selected_language: lang, selected_medium:"Voice", bookingid:"232315"};
+  var arr = {selected_language: lang, selected_medium:"Voice", bookingid: bookingid};
   var json = JSON.stringify(arr);
   var voiceWorkflowSid = "WW2f071edf445c3e932ff733ae5013a515";
 
@@ -265,7 +271,7 @@ response.send(twiml);
 });
 
 router.post('/enteredBookingID', twilio.webhook({validate: false}), function (req, res) {
-  console.log('in /enteredBookingID req.body::', req.body);
+  console.log('in /enteredBookingID req.body::', req.body); //@TODO save as inboundSummary
 
   var twiml = new twilio.TwimlResponse();
   var bookingid = req.body.Digits;
@@ -781,7 +787,7 @@ router.post('/connectmessage', twilio.webhook({validate: false}), function (req,
     twiml.say('You are connecting to the conference.')
     twiml.dial(function(node) {
       node.conference(conferenceName, {
-        startConferenceOnEnter: true
+        startConferenceOnEnter: false
       });
     });
   }
