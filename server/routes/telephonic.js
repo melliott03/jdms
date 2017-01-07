@@ -44,9 +44,12 @@ router.post('/callRequest', twilio.webhook({validate: false}), function (req, re
   console.log('inside /callRequest req.body::', req.user);
 
   var lang = req.body.language;
-  var arr = {selected_language: lang, selected_medium:"Voice", "bookingID":"232315"};
+  console.log('lang::', lang);
+  var arr = {selected_language: lang, selected_medium:"Voice", bookingid:"232315"};
   var json = JSON.stringify(arr);
   var voiceWorkflowSid = "WW2f071edf445c3e932ff733ae5013a515";
+
+  //. UPDATE WORKER WITH bookingID
 
   //. CREATE TASK
   client.workspace.tasks.create({
@@ -739,15 +742,26 @@ router.post('/connectmessage', twilio.webhook({validate: false}), function (req,
   // twiml.say('You will now be connected to the first caller in the queue.')
 
   ///*
-  twiml.say('You will now be connected to the interpreting session.')
-  .dial({}, function() {
-    this.queue({reservationSid: ''+reservationSid});
-    // this.queue({queueSid:'QU764c27d4fad6b2d3f06d9481441f1e43'});
-    // this.queue('spanish');
+  if (false) { //if someone calls in without bookinng on the website
+    twiml.say('You will now be connected to the interpreting session.')
+    .dial({}, function() {
+      this.queue({reservationSid: ''+reservationSid});
+      // this.queue({queueSid:'QU764c27d4fad6b2d3f06d9481441f1e43'});
+      // this.queue('spanish');
+    });
+  }
 
-  });
-  // .redirect();
   //*/
+
+  if (true) {
+    twiml.say('You are connecting to the conference.')
+    twiml.dial(function(node) {
+      node.conference(conferenceName, {
+        startConferenceOnEnter: true
+      });
+    });
+  }
+
   console.log(twiml.toString());
   res.header('Content-Type', 'application/xml');
   res.send(twiml.toString());
