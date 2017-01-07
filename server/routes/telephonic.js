@@ -178,8 +178,9 @@ console.log('err in task complete::',err);
     console.log('error:', err);
   });
 }else {
-  res.sendStatus(200);
+  // res.sendStatus(200);
   // res.status(200);
+  res.status(200).send('Everything is Awesome!');
 }
 
 });
