@@ -280,6 +280,10 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
     });
   });
 
+  console.log(twiml.toString());
+  res.header('Content-Type', 'application/xml');
+  res.send(twiml.toString());
+
 });
 
 router.post('/welcome_chooseLang', twilio.webhook({validate: false}), function (request, response) {
