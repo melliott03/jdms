@@ -209,10 +209,11 @@ router.use('/VoiceAssignmentCallbackUrl', twilio.webhook({validate: false}), (re
 
   console.log('str.call_sid::', str.call_sid );
   var call_sid = str.call_sid;
+  var bookingid = str.bookingid;
   var assignmentInstruction = {
     instruction: 'call',
     // post_work_activity_sid: 'WA442ed2a8dcf0fa1b169207b8cd80dbab',
-    url: configsty.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid,
+    url: configsty.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid+'?bookingid='+bookingid,
     status_callback_url: configsty.APP_URL+'/telephonic/callSummary?callSid='+call_sid+'&workerSid='+callbody.WorkerSid+'&TaskSid='+callbody.TaskSid,
     from: '+16122172551' // a verified phone number from your twilio account
   };
@@ -715,10 +716,11 @@ router.post('/screencall', twilio.webhook({validate: false}), function (req, res
   console.log('inside /screencall');
   console.log('inside /screencall req.query.reservationSid::', req.query.reservationSid);
   var reservationSid = req.query.reservationSid;
+  var bookingid = req.query.bookingid;
   var twiml = new twilio.TwimlResponse();
   twiml.say('Please press any key to accept this interpreting session.');
   twiml.gather({
-    action: '/telephonic/connectmessage?reservationSid='+reservationSid,
+    action: '/telephonic/connectmessage?reservationSid='+reservationSid+'?bookingid='+bookingid,
     numDigits: '1'
   }, function () {
     this
@@ -736,13 +738,14 @@ router.post('/connectmessage', twilio.webhook({validate: false}), function (req,
   console.log('in connectmessage req.body', req.body);
   console.log('inside /connectmessage req.query.reservationSid::', req.query.reservationSid);
   var reservationSid = req.query.reservationSid;
-
+  var bookingid = req.query.bookingid;
+  var conferenceName = bookingid;
 
   var twiml = new twilio.TwimlResponse();
   // twiml.say('You will now be connected to the first caller in the queue.')
 
   ///*
-  if (false) { //if someone calls in without bookinng on the website
+  if (req.query.reservationSid) { //if someone calls in without bookinng on the website
     twiml.say('You will now be connected to the interpreting session.')
     .dial({}, function() {
       this.queue({reservationSid: ''+reservationSid});
@@ -753,7 +756,7 @@ router.post('/connectmessage', twilio.webhook({validate: false}), function (req,
 
   //*/
 
-  if (true) {
+  if (req.query.bookingid) {
     twiml.say('You are connecting to the conference.')
     twiml.dial(function(node) {
       node.conference(conferenceName, {
