@@ -717,7 +717,9 @@ router.post('/screencall', twilio.webhook({validate: false}), function (req, res
   console.log('inside /screencall req.query.reservationSid::', req.query.reservationSid);
   var reservationSid = req.query.reservationSid;
   var bookingid = req.query.bookingid;
-  log
+  console.log('in screencall bookingid::', bookingid);
+  console.log('in screencall reservationSid::', reservationSid);
+
   var twiml = new twilio.TwimlResponse();
   twiml.say('Please press any key to accept this interpreting session.');
   twiml.gather({
