@@ -213,7 +213,7 @@ router.use('/VoiceAssignmentCallbackUrl', twilio.webhook({validate: false}), (re
   var assignmentInstruction = {
     instruction: 'call',
     // post_work_activity_sid: 'WA442ed2a8dcf0fa1b169207b8cd80dbab',
-    url: configsty.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid+'?bookingid='+bookingid,
+    url: configsty.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid+'&bookingid='+bookingid,
     status_callback_url: configsty.APP_URL+'/telephonic/callSummary?callSid='+call_sid+'&workerSid='+callbody.WorkerSid+'&TaskSid='+callbody.TaskSid,
     from: '+16122172551' // a verified phone number from your twilio account
   };
@@ -713,14 +713,15 @@ res.send(twiml.toString());
 });
 
 router.post('/screencall', twilio.webhook({validate: false}), function (req, res) {
-  console.log('inside /screencall');
+  console.log('inside /screencall req.query::', req.query);
   console.log('inside /screencall req.query.reservationSid::', req.query.reservationSid);
   var reservationSid = req.query.reservationSid;
   var bookingid = req.query.bookingid;
+  log
   var twiml = new twilio.TwimlResponse();
   twiml.say('Please press any key to accept this interpreting session.');
   twiml.gather({
-    action: '/telephonic/connectmessage?reservationSid='+reservationSid+'?bookingid='+bookingid,
+    action: '/telephonic/connectmessage?reservationSid='+reservationSid+'&bookingid='+bookingid,
     numDigits: '1'
   }, function () {
     this
