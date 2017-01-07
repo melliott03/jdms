@@ -227,11 +227,12 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   //    timeout: 15000 // 15 seconds to send the authentication message
   //  })
   io.on('connection', function(socket){
-    console.log('A User socket connection, socket!::', socket);
-    console.log('A User socket connection, socket.id::', socket.id);
-    console.log('A User socket connection, socket.request::', socket.request);
-    console.log('A User socket connection, socket.handshake::', socket.handshake);
-    console.log('A User socket connection, socket.handshake._events::', socket.handshake.headers._events);
+    console.log('A User socket connection, socket!::');
+    // console.log('A User socket connection, socket!::', socket);
+    // console.log('A User socket connection, socket.id::', socket.id);
+    // console.log('A User socket connection, socket.request::', socket.request);
+    // console.log('A User socket connection, socket.handshake::', socket.handshake);
+    // console.log('A User socket connection, socket.handshake._events::', socket.handshake.headers._events);
     // console.log('A User has connected to socket.client.Client.conn.request::', socket.client.Client.conn.request);
     // console.log('A User has connected to socket.request.secret.data::', socket.request.secret.data);
 
@@ -253,8 +254,9 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     // io.emit('connectedSocketID', {"socketid" : socket.id})
     //Find the User and store their socketid on their user Object
     socket.on('disconnect', function(){
-      console.log("A User socket connection has disconnected", socket);
-      console.log("A User socket connection has disconnected socket.id::", socket.id);
+      console.log("A User socket connection has disconnected");
+      // console.log("A User socket connection has disconnected", socket);
+      // console.log("A User socket connection has disconnected socket.id::", socket.id);
       //@@todo find user with socket id and remove from socket id DB
       /*
       var socketID = req.body.socketid;
