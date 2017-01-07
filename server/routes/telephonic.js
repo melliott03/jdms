@@ -263,7 +263,7 @@ console.log("Before response ::");
 response.send(twiml);
 });
 
-router.post('/enteredBookingID', twilio.webhook({validate: false}), function (request, response) {
+router.post('/enteredBookingID', twilio.webhook({validate: false}), function (req, res) {
   var twiml = new twilio.TwimlResponse();
   var bookingid = request.body.Digits;
   var conferenceName = bookingid;
