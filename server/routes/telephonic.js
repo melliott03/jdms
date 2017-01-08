@@ -74,14 +74,14 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
     attributes: json
   }).then(function(data) {
     console.log(' in .then of create task, data ::', data);
-
+    /*/
     const money = {
       payable : {'test' : 'key'},
       amount : {'test' : 'key'}
     };
     var customerUserID = req.user._id;
-    var promise = new Work_Tel({taskSid: data.sid, contractor_id: ""});
-    // var promise = new Work_Tel({taskSid: data.sid, inboundCallSid: "", workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", bookingid: bookingid, language: language, shortid: teleAppCallID});
+    // var promise = new Work_Tel({taskSid: data.sid, contractor_id: ""});
+    var promise = new Work_Tel({taskSid: data.sid, inboundCallSid: "", workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", bookingid: bookingid, language: language, shortid: teleAppCallID});
     // const promise = Work_Tel.create({callSummary: {}, customer_id: '', contractor_id: "", money: {}, shortid: teleAppCallID}).exec();
     promise.save()
     .then(function(data) {
@@ -103,7 +103,7 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
   }).catch(function(err){
     // just need one of these
     console.log(' in .catch of create task, err ::', err);
-  });;
+  });;*/
   //. RESERVE A WORKER
   //. GIVE CUSTOMER A CALL-IN-CODE
   //. GIVE WORKER A CALL-IN-CODE
