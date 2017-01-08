@@ -338,7 +338,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
           data.conferences.forEach(function(conference) {
               console.log('conference::', conference);
               console.log('conference.Status::', conference.Status);
-            })
+            });
         }else {
           console.log('in client.conferences.list, NO DATA!');
         }
@@ -346,7 +346,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
       }).catch(function(err){
         // just need one of these
         console.log('error in client.conferences.list::', err);
-  });
+      });
 
   // client.conferences.list({ status: "in-progress",
   //     friendlyName: bookingid
