@@ -330,6 +330,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
       });
   });
   */
+  var client = require('twilio')(accountSid, authToken);
 
   client.conferences.list({ status: "in-progress",
       friendlyName: bookingid }).then(function(data) {
