@@ -398,12 +398,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
 router.post('/reenteringhasBookingID', twilio.webhook({validate: false}), function (request, response) {
   var twiml = new twilio.TwimlResponse();
 
-  var bookingidVSchooseLang = request.body.Digits;
-  if (bookingidVSchooseLang.length != 1 ) {
-    console.log('bookingidVSchooseLang.length::', bookingidVSchooseLang.length);
-    // twiml.say('Your User ID must be 7 degits. Please try again.');
-    twiml.redirect('/telephonic/welcome');
-  }else if (bookingidVSchooseLang == 1 ){
+
     twiml.gather({
       action: "/telephonic/enteredBookingID", //?ID=' + telephonicUserID
       numDigits: "6",
@@ -411,12 +406,9 @@ router.post('/reenteringhasBookingID', twilio.webhook({validate: false}), functi
     }, function (node) {
       twiml.say('Please enter your reservation I D');
     });
-  }else if (bookingidVSchooseLang == 2 ){
-    twiml.redirect('/telephonic/welcome_chooseLang');
-  }
 
-console.log("Before response ::");
-response.send(twiml);
+  console.log("Before response ::");
+  response.send(twiml);
 });
 
 router.post('/welcome_chooseLang', twilio.webhook({validate: false}), function (request, response) {
