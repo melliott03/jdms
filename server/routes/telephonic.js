@@ -57,8 +57,8 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
   console.log('bookingid after math.random::', bookingid);
   const language = req.body.language;
   console.log('language::', language);
-  const arr = {selected_language: language, selected_medium:"Voice", bookingid: bookingid};
-  const json = JSON.stringify(arr);
+  let arr = {selected_language: language, selected_medium:"Voice", bookingid: bookingid};
+  let json = JSON.stringify(arr);
   const voiceWorkflowSid = "WW2f071edf445c3e932ff733ae5013a515";
 
   //. SAVE WORK_TEL INTO DB
@@ -66,7 +66,7 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
   //@TODO save customer_id to work_tel
   //@TODO save bookingid to work_tel
 
-  const teleAppCallID = shortid.generate();
+  var teleAppCallID = shortid.generate();
 
   //. CREATE TASK
   client.workspace.tasks.create({
@@ -79,14 +79,14 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
       payable : {'test' : 'key'},
       amount : {'test' : 'key'}
     };
-    const customerUserID = req.user._id;
-
-    const promise = new Work_Tel({taskSid: data.sid, inboundCallSid: "", workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", bookingid: bookingid, language: language, shortid: teleAppCallID});
+    var customerUserID = req.user._id;
+    var promise = new Work_Tel({taskSid: data.sid, contractor_id: ""});
+    // var promise = new Work_Tel({taskSid: data.sid, inboundCallSid: "", workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", bookingid: bookingid, language: language, shortid: teleAppCallID});
     // const promise = Work_Tel.create({callSummary: {}, customer_id: '', contractor_id: "", money: {}, shortid: teleAppCallID}).exec();
     promise.save()
     .then(function(data) {
       console.log('Works_Tel item after saving with bookingid ::', data);
-      const twiml = new twilio.TwimlResponse();
+      var twiml = new twilio.TwimlResponse();
 
       if (data) {
         res.send(data);
@@ -338,7 +338,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
                 startConferenceOnEnter: true
               });
             });
-            saveInboundSummary();
+            // saveInboundSummary();
             return;
           } else {
             console.log('data.conferences.length is not greater than 0::', data);
@@ -364,6 +364,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
         // just need one of these
         console.log('error in client.conferences.list::', err);
       });
+
 
   var saveInboundSummary = function(){
     const callSummaryBody = req.body; //@TODO save as inboundSummary
