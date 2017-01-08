@@ -338,6 +338,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
                 startConferenceOnEnter: true
               });
             });
+            saveInboundSummary();
             return;
           } else {
             console.log('data.conferences.length is not greater than 0::', data);
@@ -364,40 +365,33 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
         console.log('error in client.conferences.list::', err);
       });
 
-
- /*
-
-
-  const callSummaryBody = req.body; //@TODO save as inboundSummary
-  //@TODO find work_tel and save inboundSummary
-  var callShortID = req.query.callShortID;
-  var promised = Work_Tel.findOne({shortid: callShortID}).exec();
-  promised.then(function(theTeleWorkWithShortID) {
-    console.log('theTeleWorkWithShortID ::', theTeleWorkWithShortID);
-    theTeleWorkWithShortID.inboundSummary = callSummaryBody;
-    theTeleWorkWithShortID.inboundSummary.From2 = callSummaryBody.From.replace('+', '');
-    theTeleWorkWithShortID.inboundCallSidSecond = callSummaryBody.CallSid;
-    // theTeleWorkWithShortID.taskSid = req.query.TaskSid;
-    theTeleWorkWithShortID.save();
-    return theTeleWorkWithShortID;
-  })
-  .then(function(theTeleWorkWithShortID) {
-    // console.log('inside the then theTeleWorkWithShortID::', theTeleWorkWithShortID);
-  })
-  .catch(function(err){
-    // just need one of these
-    console.log('error:', err);
-  });
-
-
-
-  */
+  let saveInboundSummary = function(){
+    const callSummaryBody = req.body; //@TODO save as inboundSummary
+    //@TODO find work_tel and save inboundSummary
+    var callShortID = req.query.callShortID;
+    var promised = Work_Tel.findOne({bookingid: bookingid}).exec();
+    promised.then(function(theTeleWorkWithShortID) {
+      console.log('theTeleWorkWithShortID ::', theTeleWorkWithShortID);
+      theTeleWorkWithShortID.inboundSummary = callSummaryBody;
+      theTeleWorkWithShortID.inboundSummary.From2 = callSummaryBody.From.replace('+', '');
+      theTeleWorkWithShortID.inboundCallSidSecond = callSummaryBody.CallSid;
+      // theTeleWorkWithShortID.taskSid = req.query.TaskSid;
+      theTeleWorkWithShortID.save();
+      return theTeleWorkWithShortID;
+    })
+    .then(function(theTeleWorkWithShortID) {
+      // console.log('inside the then theTeleWorkWithShortID::', theTeleWorkWithShortID);
+    })
+    .catch(function(err){
+      // just need one of these
+      console.log('error:', err);
+    });
+  }
 
 });
 
 router.post('/reenteringhasBookingID', twilio.webhook({validate: false}), function (request, response) {
   var twiml = new twilio.TwimlResponse();
-
 
     twiml.gather({
       action: "/telephonic/enteredBookingID", //?ID=' + telephonicUserID
