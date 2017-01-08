@@ -353,7 +353,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
   //   // just need one of these
   //   console.log('error in client.conferences.list::', err);
   // });
-
+ /*
   // IF CONFERENCE EXISTS, PUT THEM INTO CONFERENCE CALL WHERE THE INTERPREER IS WAITING
   twiml.say('You are connecting to the conference.')
   twiml.dial(function(node) {
@@ -387,7 +387,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
   console.log(twiml.toString());
   res.header('Content-Type', 'application/xml');
   res.send(twiml.toString());
-
+  */
 });
 
 router.post('/welcome_chooseLang', twilio.webhook({validate: false}), function (request, response) {
