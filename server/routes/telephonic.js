@@ -332,12 +332,15 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
           console.log('client.conferences.list data.conferences::', data.conferences);
           if (data.conferences.length > 0 ) {
             //CONFERENCE EXISTS, PUT THEM INTO CONFERENCE CALL WHERE THE INTERPREER IS WAITING
-            twiml.say('You are being connected to the interpreter.')
+            twiml.say('You are being connected to the interpreter.');
             twiml.dial(function(node) {
               node.conference(conferenceName, {
                 startConferenceOnEnter: true
               });
             });
+          } else {
+            console.log('data.conferences.length is not greater than 0::', data);
+            twiml.say('The conference does not exist or is no longer active.');
           }
           // data.conferences.forEach(function(conference) {
           //     console.log('conference::', conference);
@@ -345,8 +348,6 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
           //   });
         }else {
           console.log('in client.conferences.list, NO DATA!');
-          twiml.say('The conference does not exist or is no longer active.')
-
         }
 
       }).catch(function(err){
