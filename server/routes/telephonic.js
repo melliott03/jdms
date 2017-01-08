@@ -404,7 +404,7 @@ router.post('/reenteringhasBookingID', twilio.webhook({validate: false}), functi
       numDigits: "6",
       method: "POST"
     }, function (node) {
-      twiml.say('Please enter your reservation I D');
+      // twiml.say('Please enter your reservation I D');
     });
 
   console.log("Before response ::");
