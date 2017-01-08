@@ -66,7 +66,7 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
   //@TODO save customer_id to work_tel
   //@TODO save bookingid to work_tel
 
-
+  const teleAppCallID = shortid.generate();
 
   //. CREATE TASK
   client.workspace.tasks.create({
@@ -81,7 +81,7 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
     };
     const customerUserID = req.user._id;
 
-    const promise = new Work_Tel({taskSid: data.sid, inboundCallSid: "", workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", bookingid: bookingid, language: language, shortid: ""});
+    const promise = new Work_Tel({taskSid: data.sid, inboundCallSid: "", workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", bookingid: bookingid, language: language, shortid: teleAppCallID});
     // const promise = Work_Tel.create({callSummary: {}, customer_id: '', contractor_id: "", money: {}, shortid: teleAppCallID}).exec();
     promise.save()
     .then(function(data) {
@@ -309,7 +309,9 @@ response.send(twiml);
 });
 
 router.post('/enteredBookingID', twilio.webhook({validate: false}), function (req, res) {
-  console.log('in /enteredBookingID req.body::', req.body); //@TODO save as inboundSummary
+  console.log('in /enteredBookingID req.body::', req.body);
+
+  const inboundSummary = req.body; //@TODO save as inboundSummary
 
   var twiml = new twilio.TwimlResponse();
   var bookingid = req.body.Digits;
