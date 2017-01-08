@@ -358,7 +358,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
         console.log(twiml.toString());
         res.header('Content-Type', 'application/xml');
         res.send(twiml.toString());
-      });.catch(function(err){
+      }).catch(function(err){
         // just need one of these
         console.log('error in client.conferences.list::', err);
       });
