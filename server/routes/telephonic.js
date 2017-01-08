@@ -332,8 +332,10 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
   */
   var client = require('twilio')(accountSid, authToken);
 
-  client.conferences.list({ status: "in-progress",
-      friendlyName: bookingid }).then(function(data) {
+  client.conferences.list(
+    // { status: "in-progress",
+    //   friendlyName: bookingid }
+    ).then(function(data) {
         if (data) {
           data.conferences.forEach(function(conference) {
               console.log('conference::', conference);
