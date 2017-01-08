@@ -338,9 +338,11 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
                 startConferenceOnEnter: true
               });
             });
+            return;
           } else {
             console.log('data.conferences.length is not greater than 0::', data);
             twiml.say('The conference does not exist or is no longer active.');
+            return;
           }
           // data.conferences.forEach(function(conference) {
           //     console.log('conference::', conference);
@@ -348,6 +350,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
           //   });
         }else {
           console.log('in client.conferences.list, NO DATA!');
+          return;
         }
 
       }).catch(function(err){
