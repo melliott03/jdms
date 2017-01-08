@@ -334,10 +334,15 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
 
   client.conferences.list({ status: "in-progress",
       friendlyName: bookingid }).then(function(data) {
-        data.conferences.forEach(function(conference) {
-            console.log('conference::', conference);
-            console.log('conference.Status::', conference.Status);
-          })
+        if (data) {
+          data.conferences.forEach(function(conference) {
+              console.log('conference::', conference);
+              console.log('conference.Status::', conference.Status);
+            })
+        }else {
+          console.log('in client.conferences.list, NO DATA!');
+        }
+
       }).catch(function(err){
         // just need one of these
         console.log('error in client.conferences.list::', err);
