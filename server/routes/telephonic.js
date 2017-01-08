@@ -332,23 +332,31 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
   */
   var client = require('twilio')(accountSid, authToken);
 
-  client.conferences.list(
-    { status: "in-progress",
-      friendly_name: bookingid }
-    ).then(function(data) {
-        if (data) {
-          data.conferences.forEach(function(conference) {
-              console.log('conference::', conference);
-              console.log('conference.Status::', conference.Status);
-            });
-        }else {
-          console.log('in client.conferences.list, NO DATA!');
-        }
+  client.conferences.list({ status: "in-progress",
+    friendlyName: bookingid }, function(err, data) {
+    data.conferences.forEach(function(conference) {
+      console.log('conference::', conference);
+      console.log(conference.status);
+    });
+  });
 
-      }).catch(function(err){
-        // just need one of these
-        console.log('error in client.conferences.list::', err);
-      });
+  // client.conferences.list(
+  //   { status: "in-progress",
+  //     friendly_name: bookingid }
+  //   ).then(function(data) {
+  //       if (data) {
+  //         data.conferences.forEach(function(conference) {
+  //             console.log('conference::', conference);
+  //             console.log('conference.Status::', conference.status);
+  //           });
+  //       }else {
+  //         console.log('in client.conferences.list, NO DATA!');
+  //       }
+  //
+  //     }).catch(function(err){
+  //       // just need one of these
+  //       console.log('error in client.conferences.list::', err);
+  //     });
 
   // client.conferences.list({ status: "in-progress",
   //     friendlyName: bookingid
