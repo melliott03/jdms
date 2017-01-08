@@ -371,11 +371,12 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
     var callShortID = req.query.callShortID;
     var promised = Work_Tel.findOne({bookingid: bookingid}).exec();
     promised.then(function(theTeleWorkWithShortID) {
-      console.log('theTeleWorkWithShortID ::', theTeleWorkWithShortID);
+      console.log('in saveInboundSummary theTeleWorkWithShortID ::', theTeleWorkWithShortID);
       theTeleWorkWithShortID.inboundSummary = callSummaryBody;
       theTeleWorkWithShortID.inboundSummary.From2 = callSummaryBody.From.replace('+', '');
       theTeleWorkWithShortID.inboundCallSidSecond = callSummaryBody.CallSid;
       // theTeleWorkWithShortID.taskSid = req.query.TaskSid;
+      theTeleWorkWithShortID.markModified('inboundSummary');
       theTeleWorkWithShortID.save();
       return theTeleWorkWithShortID;
     })
