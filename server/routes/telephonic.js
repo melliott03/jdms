@@ -310,8 +310,8 @@ response.send(twiml);
 
 router.post('/enteredBookingID', twilio.webhook({validate: false}), function (req, res) {
   console.log('in /enteredBookingID req.body::', req.body);
+  console.log('in /enteredBookingID req.query::', req.query);
 
-  const inboundSummary = req.body; //@TODO save as inboundSummary
 
   var twiml = new twilio.TwimlResponse();
   var bookingid = req.body.Digits;
@@ -321,13 +321,67 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
   if (bookingid.length != 6 ) {
     response.send(twiml,redirectWelcome());
   }
-  // PUT THEM INTO CONFERENCE CALL WHERE THE INTERPREER IS WAITING
+  //FINDOUT IF THEIR CONFERENCE EXISTS
+  /*
+  client.conferences.list({ status: "in-progress",
+      friendlyName: bookingid }, function(err, data) {
+      data.conferences.forEach(function(conference) {
+          console.log(conference.Status);
+      });
+  });
+  */
+
+  client.conferences.list({ status: "in-progress",
+      friendlyName: bookingid }).then(function(data) {
+        data.conferences.forEach(function(conference) {
+            console.log('conference::', conference);
+            console.log('conference.Status::', conference.Status);
+          })
+      }).catch(function(err){
+        // just need one of these
+        console.log('error in client.conferences.list::', err);
+  });
+
+  // client.conferences.list({ status: "in-progress",
+  //     friendlyName: bookingid
+  //     });
+  // }).then(function(data) {
+  //   data.conferences.forEach(function(conference) {
+  //       console.log(conference.Status);
+  // }).catch(function(err){
+  //   // just need one of these
+  //   console.log('error in client.conferences.list::', err);
+  // });
+
+  // IF CONFERENCE EXISTS, PUT THEM INTO CONFERENCE CALL WHERE THE INTERPREER IS WAITING
   twiml.say('You are connecting to the conference.')
   twiml.dial(function(node) {
     node.conference(conferenceName, {
       startConferenceOnEnter: true
     });
   });
+
+  const callSummaryBody = req.body; //@TODO save as inboundSummary
+  //@TODO find work_tel and save inboundSummary
+  var callShortID = req.query.callShortID;
+  var promised = Work_Tel.findOne({shortid: callShortID}).exec();
+  promised.then(function(theTeleWorkWithShortID) {
+    console.log('theTeleWorkWithShortID ::', theTeleWorkWithShortID);
+    theTeleWorkWithShortID.inboundSummary = callSummaryBody;
+    theTeleWorkWithShortID.inboundSummary.From2 = callSummaryBody.From.replace('+', '');
+    theTeleWorkWithShortID.inboundCallSidSecond = callSummaryBody.CallSid;
+    // theTeleWorkWithShortID.taskSid = req.query.TaskSid;
+    theTeleWorkWithShortID.save();
+    return theTeleWorkWithShortID;
+  })
+  .then(function(theTeleWorkWithShortID) {
+    // console.log('inside the then theTeleWorkWithShortID::', theTeleWorkWithShortID);
+  })
+  .catch(function(err){
+    // just need one of these
+    console.log('error:', err);
+  });
+
 
   console.log(twiml.toString());
   res.header('Content-Type', 'application/xml');
