@@ -365,7 +365,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
         console.log('error in client.conferences.list::', err);
       });
 
-  let saveInboundSummary = function(){
+  var saveInboundSummary = function(){
     const callSummaryBody = req.body; //@TODO save as inboundSummary
     //@TODO find work_tel and save inboundSummary
     var callShortID = req.query.callShortID;
