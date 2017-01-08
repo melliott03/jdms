@@ -322,28 +322,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
     response.send(twiml,redirectWelcome());
   }
   //FINDOUT IF THEIR CONFERENCE EXISTS
-  /*
-  client.conferences.list({ status: "in-progress",
-      friendlyName: bookingid }, function(err, data) {
-      data.conferences.forEach(function(conference) {
-          console.log(conference.Status);
-      });
-  });
-  */
   var client = require('twilio')(accountSid, authToken);
-
-  // client.conferences.list({ status: "in-progress",
-  //   friendlyName: bookingid }, function(err, data) {
-  //     if (err) {
-  //       console.log('client.conferences.list err::', err);
-  //     }
-  //     console.log('client.conferences.list data::', data);
-  //   data.conferences.forEach(function(conference) {
-  //     console.log('conference::', conference);
-  //     console.log(conference.status);
-  //   });
-  // });
-
   client.conferences.list(
     { status: "in-progress",
       friendlyName: bookingid }
@@ -351,13 +330,23 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
         if (data) {
           console.log('client.conferences.list data::', data);
           console.log('client.conferences.list data.conferences::', data.conferences);
-
-          data.conferences.forEach(function(conference) {
-              console.log('conference::', conference);
-              console.log('conference.Status::', conference.status);
+          if (data.conferences.length > 0 ) {
+            //CONFERENCE EXISTS, PUT THEM INTO CONFERENCE CALL WHERE THE INTERPREER IS WAITING
+            twiml.say('You are being connected to the interpreter.')
+            twiml.dial(function(node) {
+              node.conference(conferenceName, {
+                startConferenceOnEnter: true
+              });
             });
+          }
+          // data.conferences.forEach(function(conference) {
+          //     console.log('conference::', conference);
+          //     console.log('conference.Status::', conference.status);
+          //   });
         }else {
           console.log('in client.conferences.list, NO DATA!');
+          twiml.say('The conference does not exist or is no longer active.')
+
         }
 
       }).catch(function(err){
@@ -365,24 +354,9 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
         console.log('error in client.conferences.list::', err);
       });
 
-  // client.conferences.list({ status: "in-progress",
-  //     friendlyName: bookingid
-  //     });
-  // }).then(function(data) {
-  //   data.conferences.forEach(function(conference) {
-  //       console.log(conference.Status);
-  // }).catch(function(err){
-  //   // just need one of these
-  //   console.log('error in client.conferences.list::', err);
-  // });
+
  /*
-  // IF CONFERENCE EXISTS, PUT THEM INTO CONFERENCE CALL WHERE THE INTERPREER IS WAITING
-  twiml.say('You are connecting to the conference.')
-  twiml.dial(function(node) {
-    node.conference(conferenceName, {
-      startConferenceOnEnter: true
-    });
-  });
+
 
   const callSummaryBody = req.body; //@TODO save as inboundSummary
   //@TODO find work_tel and save inboundSummary
@@ -406,10 +380,11 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
   });
 
 
+
+  */
   console.log(twiml.toString());
   res.header('Content-Type', 'application/xml');
   res.send(twiml.toString());
-  */
 });
 
 router.post('/welcome_chooseLang', twilio.webhook({validate: false}), function (request, response) {
