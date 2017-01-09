@@ -55,11 +55,11 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
 
   bookingid = ""+bookingid;
   console.log('bookingid after math.random::', bookingid);
-  const language = req.body.language;
+  var language = req.body.language;
   console.log('language::', language);
-  let arr = {selected_language: language, selected_medium:"Voice", bookingid: bookingid};
-  let json = JSON.stringify(arr);
-  const voiceWorkflowSid = "WW2f071edf445c3e932ff733ae5013a515";
+  var arr = {selected_language: language, selected_medium:"Voice", bookingid: bookingid};
+  var json = JSON.stringify(arr);
+  var voiceWorkflowSid = "WW2f071edf445c3e932ff733ae5013a515";
 
   //. SAVE WORK_TEL INTO DB
   //@TODO create work_tel
@@ -74,15 +74,15 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
     attributes: json
   }).then(function(data) {
     console.log(' in .then of create task, data ::', data);
-    /*/
-    const money = {
+
+    var money = {
       payable : {'test' : 'key'},
       amount : {'test' : 'key'}
     };
     var customerUserID = req.user._id;
-    // var promise = new Work_Tel({taskSid: data.sid, contractor_id: ""});
+
     var promise = new Work_Tel({taskSid: data.sid, inboundCallSid: "", workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", bookingid: bookingid, language: language, shortid: teleAppCallID});
-    // const promise = Work_Tel.create({callSummary: {}, customer_id: '', contractor_id: "", money: {}, shortid: teleAppCallID}).exec();
+    // var promise = Work_Tel.create({callSummary: {}, customer_id: '', contractor_id: "", money: {}, shortid: teleAppCallID}).exec();
     promise.save()
     .then(function(data) {
       console.log('Works_Tel item after saving with bookingid ::', data);
@@ -103,7 +103,7 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
   }).catch(function(err){
     // just need one of these
     console.log(' in .catch of create task, err ::', err);
-  });;*/
+  });;
   //. RESERVE A WORKER
   //. GIVE CUSTOMER A CALL-IN-CODE
   //. GIVE WORKER A CALL-IN-CODE
@@ -367,7 +367,7 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
 
 
   var saveInboundSummary = function(){
-    const callSummaryBody = req.body; //@TODO save as inboundSummary
+    var callSummaryBody = req.body; //@TODO save as inboundSummary
     //@TODO find work_tel and save inboundSummary
     var callShortID = req.query.callShortID;
     var promised = Work_Tel.findOne({bookingid: bookingid}).exec();
