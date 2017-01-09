@@ -214,7 +214,7 @@ console.log('err in task complete::',err);
   //find user in mongo with matching workerSid and add there contractor_id
   var promise = User.findOne({'twilioSids.workerSid': workerSid}).exec();
   promise.then(function(aUserWithWorkerSid) {
-    console.log('aUserWithWorkerSid | ::', aUserWithWorkerSid);
+    console.log("in req.body.EventType == 'reservation.accepted' && req.body.TaskSid aUserWithWorkerSid | ::", aUserWithWorkerSid);
     return aUserWithWorkerSid;
   })
   .then(function(aUserWithWorkerSid) {
