@@ -92,6 +92,47 @@ promised.then(function(work_Tels) {
 });// END router.get
 */
 
+
+router.get("/bookings", function(req,res){
+  var requser = req.user;
+/**@todo find and send all works for this customer */
+console.log('INSIDE get on work req.user._id:: ',req.user._id);
+console.log('INSIDE get on work req.user:: ',req.user);
+console.log(req.user._id);
+var params = {};
+if (requser.role == 'customer') {
+  params = {customer_id: req.user._id}
+} else if(requser.role == 'contractor') {
+  params = {contractor_id: req.user._id}
+} else if (requser.role == 'admin'){
+  params = {}
+}
+console.log("== open tailable cursor");
+
+var promised = Work_Tel.find(params).exec();
+promised.then(function(work_Tels) {
+  console.log('Work_Tels documents found for '+requser.role+' are ::', work_Tels);
+  var newWork_tels = [];
+  work_Tels.map(function(obj){
+    if (obj.bookingid && obj.conferenceConcluded == "no") {
+      console.log('inside if (obj.inboundSummary && obj.outboundSummary && obj.money && obj.money.customerCost)::');
+      newWork_tels.push(obj);
+    }
+  });
+  return newWork_tels;
+})
+.then(function(work_tels) {
+  console.log('inside the then work_tels::', work_tels);
+  work_tels.sort(function(aze,bze){return Date.parse(bze.outboundSummary.createdAt) - Date.parse(aze.outboundSummary.createdAt)});
+  console.log('after sorting by date work_tels::', work_tels);
+  res.send(work_tels);
+})
+.catch(function(err){
+  // just need one of these
+  console.log('error:', err);
+});
+});// END router.get
+
 router.get("/calls", function(req,res){
   var requser = req.user;
 /**@todo find and send all works for this customer */

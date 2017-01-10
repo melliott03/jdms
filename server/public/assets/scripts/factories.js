@@ -64,6 +64,7 @@ myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,
     var data = {};
     var customerWorkObject = {};
     var customerWorkTelObject = {};
+    var customerWorkTelBookingsObject = {};
     var userObject = {};
     var availibleWorkObject = {};
     var contractorWorkObject = {};
@@ -153,6 +154,12 @@ myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,
     var getWorksTel = function(){
         $http.get("/work/calls").then(function(response){
             customerWorkTelObject.response = response.data;
+            console.log('RETRUN OF GET WROKS_TEL FUNCTION !!! !!!!!  ::  ', response);
+        });
+    };
+    var getWorksTelBookings = function(){
+        $http.get("/work/bookings").then(function(response){
+            customerWorkTelBookingsObject.response = response.data;
             console.log('RETRUN OF GET WROKS_TEL FUNCTION !!! !!!!!  ::  ', response);
         });
     };
@@ -435,6 +442,8 @@ myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,
         postedCallRequest : postedCallRequest,
         getWorks : getWorks,
         getWorksTel : getWorksTel,
+        getWorksTelBookings : getWorksTelBookings,
+        customerWorkTelBookingsObject : customerWorkTelBookingsObject,
         deleteWork : deleteWork,
         acceptWork : acceptWork,
         completeWork : completeWork,

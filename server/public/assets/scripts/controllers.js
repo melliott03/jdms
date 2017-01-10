@@ -761,7 +761,20 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
               WorkService.postCallRequest(work);
           };
 
-          $scope.bookings = WorkService.postedCallRequest.array;
+          $scope.bookings = WorkService.customerWorkTelBookingsObject.response;
+          Socket.on('newBookingForSocket', function (msg) {
+            console.log("in controller newTelWorkForSocket, msg::", msg);
+            if ($scope.bookings.indexOf(msg) == -1) {
+                $scope.bookings.unshift(msg);
+            }
+          });
+          Socket.on('newRemoveBookingItem', function (msg) {
+            console.log("in controller newRemoveBookingItem, msg::", msg);
+            $scope.bookings = $scope.bookings.filter(function( obj ) {
+              return obj._id !== _id;
+            });
+          });
+
 
           $scope.submit = function(work){
             console.log('work.endDateTime:', work.endDateTime);
@@ -840,6 +853,8 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           // WorkService.getSMS(); //this triggers ANOTHER other sms and voice calls
           workService.getWorks(); //this triggers ANOTHER other sms and voice calls
           workService.getWorksTel();
+          workService.getWorksTelBookings();
+
           workService.getAvailibleWorks(); //this triggers ANOTHER other sms and voice calls
           workService.getContractorWork(); //gets all the work contractor has accepted
           workService.getCustomerBalance();

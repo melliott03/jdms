@@ -81,7 +81,7 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
     };
     var customerUserID = req.user._id;
 
-    var promise = new Work_Tel({taskSid: data.sid, inboundCallSid: "", workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", bookingid: bookingid, language: language, shortid: teleAppCallID});
+    var promise = new Work_Tel({taskSid: data.sid, inboundCallSid: "", workerSid: "", inboundSummary: {}, outboundSummary: {}, customer_id: customerUserID, contractor_id: "", bookingid: bookingid, language: language, shortid: teleAppCallID, conferenceConcluded: "no"});
     // var promise = Work_Tel.create({callSummary: {}, customer_id: '', contractor_id: "", money: {}, shortid: teleAppCallID}).exec();
     promise.save()
     .then(function(data) {
@@ -628,6 +628,8 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       console.log('theTeleWorkWithcall_sid found call item in db with call_sid to save to::', theTeleWorkWithcall_sid);
       console.log('theTeleWorkWithcall_sid found call item in db with call_sid.outboundSummary to save to::', theTeleWorkWithcall_sid.outboundSummary);
 
+      theTeleWorkWithcall_sid.conferenceConcluded == "yes";
+
       //convert duration seconds to minutes and seconds
       console.log('callSummaryBody::', callSummaryBody);
       var durationSeconds = callSummaryBody.CallDuration;
@@ -723,6 +725,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
           socketsids.forEach(function(socketid){
             if(res.io.sockets.sockets[socketid]!=undefined){
               res.io.to(socketid).emit('newTelWorkForSocket', obj)
+              res.io.to(socketid).emit('newRemoveBookingItem', obj)
             }else{
               console.log("Socket not connected");
             }
