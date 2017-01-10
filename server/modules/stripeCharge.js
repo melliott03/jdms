@@ -107,7 +107,7 @@ stripe.charges.create({
     application_fee: app_fee,
     metadata: {'telephonic_id ': ''+theTeleWorkWithcall_sid._id}
   }, function(err, charge) {
-    if (err) {console.log('err after charges create::', err);
+    if (err) {console.log('err after charges create 1::', err);
   } else if(charge) {
     console.log('charge::',charge);
     console.log('theTeleWorkWithcall_sid.moneySummary::', theTeleWorkWithcall_sid.moneySummary);
@@ -172,7 +172,7 @@ stripe.invoiceItems.create({
     // application_fee: 123,
     metadata: {'telephonic_id': ''+telwork._id, 'shortid': ''+telwork.shortid }
   }, function(err, charge) {
-    if (err) {console.log('err after charges create::', err);
+    if (err) {console.log('err after charges create 2::', err);
   } else if(charge) {
     console.log('charge::',charge);
   }
@@ -329,7 +329,7 @@ var prePaid = function(data){
         // application_fee: 123,
         metadata: {'telephonic_id': ''+telwork._id, 'shortid': ''+telwork.shortid }
       }, function(err, invoiceItem) {
-        if (err) {console.log('err after charges create::', err);
+        if (err) {console.log('err after charges create 3::', err);
       } else if(invoiceItem) {
             console.log('inside else if invoiceItem::',invoiceItem);
             console.log('telwork',telwork);

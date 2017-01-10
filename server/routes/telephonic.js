@@ -772,12 +772,15 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       var workerSid = data.theTeleWorkWithcall_sid.workerSid;
       // console.log('worker_activity_sid before updating post_work_activity_sid::', );
       console.log('taskSid before marking as complete::', taskSid);
-      console.log('taskSid before marking as complete::', taskSid);
-      if (taskSid != 'undefined') {
-        // do nothing
-      }else {
+      console.log('data.theTeleWorkWithcall_sid.taskSid before marking as complete::', data.theTeleWorkWithcall_sid.taskSid);
+      if (taskSid = 'undefined') {
+        console.log('inside if taskSid = "undefined"');
         taskSid = data.theTeleWorkWithcall_sid.taskSid;
+      }else {
+        // do nothing
       }
+      console.log('taskSid after marking as complete::', taskSid);
+
       console.log('accountSid, authToken, workspaceSid::',accountSid, authToken, workspaceSid);
       var client = new twilio.TaskRouterClient(accountSid, authToken, workspaceSid);
 
