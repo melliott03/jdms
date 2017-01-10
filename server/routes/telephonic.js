@@ -366,9 +366,11 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
 
 
   var saveInboundSummary = function(req){
-    console.log('in saveInboundSummary::', req);
+    console.log('in saveInboundSummary::');
     var callSummaryBody = req.body; //@TODO save as inboundSummary
     //@TODO find work_tel and save inboundSummary
+    console.log('in saveInboundSummary, callSummaryBody::', callSummaryBody);
+
     var callShortID = req.query.callShortID;
     var promised = Work_Tel.findOne({bookingid: bookingid}).exec();
     return promised.then(function(theTeleWorkWithShortID) {
