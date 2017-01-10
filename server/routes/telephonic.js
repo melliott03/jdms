@@ -607,7 +607,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
     console.log('else if taskSid::', taskSid);
     console.log('else if workerSid::', workerSid);
     var query;
-    if (call_sid) {
+    if (call_sid != "undefined") {
       query = {inboundCallSid: call_sid};
     } else if (taskSid) {
       query = {taskSid: taskSid};
