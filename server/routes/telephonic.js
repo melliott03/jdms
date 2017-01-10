@@ -94,10 +94,11 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
       if (data) {
         var obj = data.theTeleWorkWithcall_sid;
         console.log('before if statement to send to socket, obj::', obj);
-        if (obj.inboundSummary && obj.outboundSummary) { // && obj.money && obj.money.customerCost //(money not yet in the db)   && obj.outboundSummary.createdAt
-          console.log('about to send to socket, obj::', obj);
+        if (obj.conferenceConcluded == "no") { // && obj.money && obj.money.customerCost //(money not yet in the db)   && obj.outboundSummary.createdAt
+          console.log('conferenceConcluded == "no" about to send to socket, obj::', obj);
           socketsids.forEach(function(socketid){
             if(res.io.sockets.sockets[socketid]!=undefined){
+              console.log('sending newBookingForSocket, obj::', obj);
               res.io.to(socketid).emit('newBookingForSocket', obj)
             }else{
               console.log("Socket not connected");

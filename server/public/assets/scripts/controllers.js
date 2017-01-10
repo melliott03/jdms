@@ -773,6 +773,14 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             $scope.bookings = $scope.bookings.filter(function( obj ) {
               return obj._id !== _id;
             });
+            /*
+            var id = 88;
+            for(var i = 0; i < data.length; i++) {
+                if(data[i].id == id) {
+                    data.splice(i, 1);
+                    break;
+                }
+            }*/
           });
 
 
