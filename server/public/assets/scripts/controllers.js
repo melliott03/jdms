@@ -761,6 +761,8 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
               WorkService.postCallRequest(work);
           };
 
+          $scope.bookingID = WorkService.postedCallRequest;
+
           $scope.submit = function(work){
             console.log('work.endDateTime:', work.endDateTime);
             $scope.dateErrorMessage_start = '';

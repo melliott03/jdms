@@ -9,18 +9,17 @@
         <!-- <h3 class="md-title">New Request</h3> -->
       </div>
       <form name="workEntry">
-        <div layout-gt-sm="row" >
-
+        <!-- KEEP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+        <!-- <div layout-gt-sm="row" >
           <md-input-container class="md-block" flex>
             <md-radio-group ng-model="work.nowFuture" layout="row" layout-align="space-around stretch" >
               <md-radio-button value="Now" class="md-primary" style="border-radius: 20%; border: 2px solid #ddd; width: 85px; height: 30px; display: block; " >Now</md-radio-button>
               <md-radio-button value="Future" class="md-primary" style="border-radius: 20%; border: 2px solid #ddd; width: 85px; height: 30px; display: block; " > Future </md-radio-button>
             </md-radio-group>
           </md-input-container>
-        </div>
-        <div layout-gt-sm="row">
+        </div> -->
+        <!-- <div layout-gt-sm="row">
           <md-input-container class="md-block" flex-gt-sm>
-            <!-- <div ng-controller="NavCtrlAddWork" class="full-heigth"> -->
             <ul class="nav-icon" layout="row">
               <span ng-repeat="item in collection"
               ng-class="{ 'selected-class-name': $index == selectedIndex }" class='nohighlight' id="mdiconx" style="margin: 0px auto;">
@@ -28,9 +27,8 @@
               </li>
             </span>
           </ul>
-          <!-- </div> -->
         </md-input-container>
-      </div>
+      </div> -->
       <div layout-gt-sm="row">
         <md-input-container class="md-block" flex-gt-sm>
           <label>Language</label>
@@ -42,7 +40,7 @@
         </md-input-container>
       </div>
 
-      <div layout-gt-sm="row" ng-controller="AddController as dataCtrl" style="width: 500px; height: 300px;" ng-show="showAvailablityDiv">
+      <div layout-gt-sm="row" ng-controller="AddController as dataCtrl" style="width: 580px; height: 300px;" ng-show="showAvailablityDiv">
     <angular-points-path points-data="dataCtrl.data" ng-if="showNowSpecific"></angular-points-path>
 
   </div>
@@ -78,18 +76,11 @@
   </div>
 
 
-
-  <div layout-gt-sm="row" >
-    <!-- <md-input-container class="md-block" flex>
-    <md-radio-group ng-model="work.nowFuture" layout="row" layout-align="space-around stretch" >
-    <md-radio-button value="Now" class="md-primary" style="border-radius: 20%; border: 2px solid #ddd; width: 85px; height: 30px; display: block; " >Now</md-radio-button>
-    <md-radio-button value="Future" class="md-primary" style="border-radius: 20%; border: 2px solid #ddd; width: 85px; height: 30px; display: block; " > Future </md-radio-button>
-  </md-radio-group>
-</md-input-container> -->
+  <!-- KEEP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+  <!-- <div layout-gt-sm="row" >
 <md-input-container class="md-block"  flex>
 
   <md-radio-group ng-model="work.field" layout="row" layout-align="space-around stretch" >
-    <!-- <md-radio-button value="Now" class="md-primary" style="border-radius: 20%; border: 2px solid #ddd; width: 85px; height: 30px; display: block; " >Now</md-radio-button> -->
     <md-radio-button ng-repeat="field in fields"
     ng-value="field"
     class="md-primary"
@@ -98,7 +89,7 @@
     {{ field }}<br/>
   </md-radio-group>
 </md-input-container>
-</div>
+</div> -->
 
 <!-- KEEP !!!! -->
 <!-- <div layout-gt-sm="row" style="margin: 20px; padding: 20px;" ng-if="showFutureSpecific">
