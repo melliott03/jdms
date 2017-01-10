@@ -605,11 +605,13 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
     console.log('else if req.query::', req.query);
     console.log('else if call_sid::', call_sid);
     console.log('else if workerSid::', workerSid);
+    var query;
     if (call_sid) {
       query = {inboundCallSid: call_sid};
     } else if (taskSid) {
       query = {taskSid: taskSid};
     }
+    console.log('query::', query);
 
     // then save the duration in the database as an appointment to charge client and pay the interpreter for
     // console.log('callSummaryBody.CallDuration::', callSummaryBody.CallDuration);
