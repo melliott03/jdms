@@ -88,7 +88,22 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
       console.log('Works_Tel item after saving with bookingid ::', data);
       var twiml = new twilio.TwimlResponse();
 
+      var socketsids = req.user.socketID;
+      console.log('before if statement to send to socket, obj::', obj);
+
       if (data) {
+        var obj = data.theTeleWorkWithcall_sid;
+        console.log('before if statement to send to socket, obj::', obj);
+        if (obj.inboundSummary && obj.outboundSummary) { // && obj.money && obj.money.customerCost //(money not yet in the db)   && obj.outboundSummary.createdAt
+          console.log('about to send to socket, obj::', obj);
+          socketsids.forEach(function(socketid){
+            if(res.io.sockets.sockets[socketid]!=undefined){
+              res.io.to(socketid).emit('newBookingForSocket', obj)
+            }else{
+              console.log("Socket not connected");
+            }
+          });
+        }
         res.send(data);
       }else {
         res.sendStatus(500);
