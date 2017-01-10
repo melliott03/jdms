@@ -332,7 +332,7 @@ var prePaid = function(data){
         if (err) {console.log('err after charges create 3::', err);
       } else if(invoiceItem) {
             console.log('inside else if invoiceItem::',invoiceItem);
-            console.log('telwork',telwork);
+            console.log('invoiceItem, telwork::',telwork);
             var theTeleWorkWithcall_sid = data.theTeleWorkWithcall_sid;
             // telwork.amount = ''+amount;
             // if (!telwork.moneySummary) {
@@ -454,12 +454,19 @@ var saveMoneyToDB = function(telworkitem, amount){
 
 }
 */
-var saveMoneyToDB = function(data, amount){
-  console.log('saveMoneyToDB data::', data);
+var saveMoneyToDB = function(telWork, amount){
+  console.log('saveMoneyToDB telWork::', telWork);
   console.log('saveMoneyToDB amount::', amount);
 
-  var CallSid = data.inboundCallSid;
-  var promised = Work_Tel.findOne({inboundCallSid: CallSid}).exec();
+  var CallSid = telWork.inboundCallSid;
+  var taskSid = telWork.taskSid;
+  var query;
+  if (CallSid == '') {
+    query = {taskSid: taskSid};
+  }else {
+    query = {inboundCallSid: CallSid};
+  }
+  var promised = Work_Tel.findOne(query).exec();
   promised.then(function(telwork) {
     console.log('telwork in saveMoneyToDB function::', telwork);
 
@@ -489,7 +496,7 @@ var saveMoneyToDB = function(data, amount){
   })
   .catch(function(err){
     // just need one of these
-    console.log('error:', err);
+    console.log('saveMoneyToDB, error:', err);
   });
 
 }
