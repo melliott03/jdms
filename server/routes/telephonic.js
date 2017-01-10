@@ -337,8 +337,8 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
                 startConferenceOnEnter: true
               });
             });
-            // saveInboundSummary();
-            return;
+            return saveInboundSummary(req);
+
           } else {
             console.log('data.conferences.length is not greater than 0::', data);
             twiml.say('The conference does not exist or is no longer active. Please enter a different reservation I D');
@@ -365,12 +365,13 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
       });
 
 
-  var saveInboundSummary = function(){
+  var saveInboundSummary = function(req){
+    console.log('in saveInboundSummary::', req);
     var callSummaryBody = req.body; //@TODO save as inboundSummary
     //@TODO find work_tel and save inboundSummary
     var callShortID = req.query.callShortID;
     var promised = Work_Tel.findOne({bookingid: bookingid}).exec();
-    promised.then(function(theTeleWorkWithShortID) {
+    return promised.then(function(theTeleWorkWithShortID) {
       console.log('in saveInboundSummary theTeleWorkWithShortID ::', theTeleWorkWithShortID);
       theTeleWorkWithShortID.inboundSummary = callSummaryBody;
       theTeleWorkWithShortID.inboundSummary.From2 = callSummaryBody.From.replace('+', '');
@@ -382,10 +383,11 @@ router.post('/enteredBookingID', twilio.webhook({validate: false}), function (re
     })
     .then(function(theTeleWorkWithShortID) {
       // console.log('inside the then theTeleWorkWithShortID::', theTeleWorkWithShortID);
+      return;
     })
     .catch(function(err){
       // just need one of these
-      console.log('error:', err);
+      console.log(' saveInboundSummary error:', err);
     });
   }
 
@@ -680,7 +682,6 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
         if (theTeleWorkWithcall_sid) {
           console.log('theTeleWorkWithcall_sid::', theTeleWorkWithcall_sid);
           console.log('numAffected::', numAffected);
-
         }
       })
       return theTeleWorkWithcall_sid;
