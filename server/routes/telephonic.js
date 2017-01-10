@@ -92,7 +92,7 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
       console.log('before if statement to send to socket, obj::', obj);
 
       if (data) {
-        var obj = data.theTeleWorkWithcall_sid;
+        var obj = data;
         console.log('before if statement to send to socket, obj::', obj);
         if (obj.conferenceConcluded == "no") { // && obj.money && obj.money.customerCost //(money not yet in the db)   && obj.outboundSummary.createdAt
           console.log('conferenceConcluded == "no" about to send to socket, obj::', obj);

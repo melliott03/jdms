@@ -683,7 +683,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             // numAvailible += parseInt(msg);
             socketRoom = $scope.work.language;
             // console.log("inside socket Socket.addListener newValue::", newValue);
-            console.log("socket '$scope.work.language' is opened msg::", msg);
+            console.log("socket '$scope.work.language' is opened data::", data);
           });
 
         };
