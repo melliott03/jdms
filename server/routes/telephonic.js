@@ -817,6 +817,9 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
         reason: 'call completed'
       }, function(err, task) {
         if (err) console.log('err updating task to completed::', err);
+        if (task) {
+          data.theTeleWorkWithcall_sid.conferenceConcluded == "yes";
+        }
         console.log('task after updating task to completed::', task);
       });
 
@@ -1027,6 +1030,39 @@ var reservationSid = callbody.ReservationSid;
 });
 */
 
+var markWork_TelConferenceNonExist = function(workTelItem){
+  //FINDOUT IF THEIR CONFERENCE EXISTS
+  var bookingid = workTelItem.bookingid;
+  var client = require('twilio')(accountSid, authToken);
+  client.conferences.list(
+    { status: "in-progress",
+      friendlyName: bookingid }
+    ).then(function(data) {
+        if (data) {
+          console.log('client.conferences.list data::', data);
+          console.log('client.conferences.list data.conferences::', data.conferences);
+          if (data.conferences.length > 0 ) {
+            //CONFERENCE EXISTS, PUT THEM INTO CONFERENCE CALL WHERE THE INTERPREER IS WAITING
+            //do nothing
+          } else {
+            console.log('data.conferences.length is not greater than 0::', data);
+            //@@todo update the work item in DB as conferenceConcluded = "yes"
+
+            return;
+          }
+        }else {
+          console.log('in client.conferences.list, NO DATA!');
+          return;
+        }
+
+      })
+      .then(function(data){
+        res.send({});
+      }).catch(function(err){
+        // just need one of these
+        console.log('error in client.conferences.list::', err);
+      });
+}
 
 var saveLanguageToDB = function(CallSid, language){
   var promised = Work_Tel.findOne({inboundCallSid: CallSid}).exec();
