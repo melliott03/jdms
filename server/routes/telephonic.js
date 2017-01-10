@@ -673,7 +673,16 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       theTeleWorkWithcall_sid.workerSid = workerSid;
       // theTeleWorkWithcall_sid.taskSid = req.query.TaskSid;
 
-      theTeleWorkWithcall_sid.save();
+      theTeleWorkWithcall_sid.save(function (err, theTeleWorkWithcall_sid, numAffected) {
+        if (err) {
+          console.log('theTeleWorkWithcall_sid.save err ::', err);
+        }
+        if (theTeleWorkWithcall_sid) {
+          console.log('theTeleWorkWithcall_sid::', theTeleWorkWithcall_sid);
+          console.log('numAffected::', numAffected);
+
+        }
+      })
       return theTeleWorkWithcall_sid;
     })
     .then(function(theTeleWorkWithcall_sid) {
