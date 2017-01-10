@@ -761,7 +761,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
               WorkService.postCallRequest(work);
           };
 
-          $scope.bookingID = WorkService.postedCallRequest;
+          $scope.bookings = WorkService.postedCallRequest.array;
 
           $scope.submit = function(work){
             console.log('work.endDateTime:', work.endDateTime);
