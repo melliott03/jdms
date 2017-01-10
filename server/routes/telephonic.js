@@ -218,8 +218,7 @@ console.log('err in task complete::',err);
     return aUserWithWorkerSid;
   })
   .then(function(aUserWithWorkerSid) {
-    // do something with
-    res.sendStatus(200);
+    // res.sendStatus(200);
   })
   .catch(function(err){
     // just need one of these
@@ -602,14 +601,20 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
     console.log('im inside else if (callSummaryBody.CallStatus == completed callSummaryBody::', callSummaryBody);
     var call_sid = req.query.callSid;
     var workerSid = req.query.workerSid;
+    var taskSid = req.query.TaskSid;
     console.log('else if req.query::', req.query);
     console.log('else if call_sid::', call_sid);
     console.log('else if workerSid::', workerSid);
+    if (call_sid) {
+      query = {inboundCallSid: call_sid};
+    } else if (taskSid) {
+      query = {taskSid: taskSid};
+    }
 
     // then save the duration in the database as an appointment to charge client and pay the interpreter for
     // console.log('callSummaryBody.CallDuration::', callSummaryBody.CallDuration);
 
-    var promise = Work_Tel.findOne({inboundCallSid: call_sid}).exec();
+    var promise = Work_Tel.findOne(query).exec();
     promise.then(function(theTeleWorkWithcall_sid) {
       console.log('after finding work assignment else if req.query::', req.query);
       console.log('after finding work assignment else if req.query.TaskSid::', req.query.TaskSid);
@@ -869,7 +874,7 @@ router.post('/screencall', twilio.webhook({validate: false}), function (req, res
   })
   // .queue('Spanish Queue');
   .say('Sorry. Did not get your response')
-  .redirect('/telephonic/screencall');
+  .redirect('/telephonic/screencall?reservationSid='+reservationSid+'&bookingid='+bookingid);
   // .hangup()
 
   res.send(twiml.toString());
