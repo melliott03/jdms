@@ -1316,10 +1316,10 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
             //Secket.io suff turning off to code further
             Socket.connect();
-            $scope.$on('$locationChangeStart', function(event){
-              console.log("$scope.$on('$locationChangeStart, event::", event);
-              // Socket.disconnect(true);
-            })
+            // $scope.$on('$locationChangeStart', function(event){
+            //   console.log("$scope.$on('$locationChangeStart, event::", event);
+            //   // Socket.disconnect(true);
+            // })
 
             Socket.on('connect', function (msg) {
               console.log("in controller, connected msg,::", msg);
