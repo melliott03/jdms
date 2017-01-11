@@ -227,7 +227,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
   //    timeout: 15000 // 15 seconds to send the authentication message
   //  })
   io.on('connection', function(socket){
-    console.log('A User socket connection, socket!::');
+    console.log('A User socket connection, socket.id!::', socket.id);
     // console.log('A User socket connection, socket!::', socket);
     // console.log('A User socket connection, socket.id::', socket.id);
     // console.log('A User socket connection, socket.request::', socket.request);
@@ -248,6 +248,8 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     //
     // });
     io.to(socket.id).emit('connectedSocketID', {"socketid" : socket.id}); //"/#" +
+    io.sockets.connected[socket.id].emit('connectedSocketID', {"socketid" : socket.id});
+    // console.log('io::', io);
 
     //find the user and update thier socketID
 
@@ -272,6 +274,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     It will find document with the given _id and remove the phone +1786543589455 from its contact.phone array.
     You can use $unset to unset the value in the array (set it to null), but not to remove it completely.
     */
+
     console.log('just before User.find socketID:  "$in" : [socket.id], socket.id::', socket.id);
     User.find({ socketID: { "$in" : [socket.id]} }, function(err, user) {
       if (err) throw err;
@@ -286,8 +289,9 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
 
         // we have the updated user returned to us
         console.log('after $pull: socketID: socket.id, user ::',user);
-      });
-    })
+    });
+
+    });
 
 });
 
