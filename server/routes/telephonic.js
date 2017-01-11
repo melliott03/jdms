@@ -89,22 +89,21 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
       var twiml = new twilio.TwimlResponse();
 
       var socketsids = req.user.socketID;
-      console.log('before if statement to send to socket, obj::', obj);
 
       if (data) {
-        var obj = data;
-        console.log('before if statement to send to socket, obj::', obj);
-        if (obj.conferenceConcluded == "no") { // && obj.money && obj.money.customerCost //(money not yet in the db)   && obj.outboundSummary.createdAt
-          console.log('conferenceConcluded == "no" about to send to socket, obj::', obj);
+        // var obj = data;
+        // console.log('before if statement to send to socket, obj::', obj);
+        // if (obj.conferenceConcluded == "no") { // && obj.money && obj.money.customerCost //(money not yet in the db)   && obj.outboundSummary.createdAt
+          console.log('conferenceConcluded == "no" about to send to socket, data::', data);
           socketsids.forEach(function(socketid){
             if(res.io.sockets.sockets[socketid]!=undefined){
-              console.log('sending newBookingForSocket, obj::', obj);
-              res.io.to(socketid).emit('newBookingForSocket', obj)
+              console.log('sending newBookingForSocket, data::', data);
+              res.io.to(socketid).emit('newBookingForSocket', data)
             }else{
               console.log("Socket not connected");
             }
           });
-        }
+        // }
         res.send(data);
       }else {
         res.sendStatus(500);
