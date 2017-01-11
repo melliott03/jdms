@@ -740,7 +740,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
           socketsids.forEach(function(socketid){
             if(res.io.sockets.sockets[socketid]!=undefined){
               res.io.to(socketid).emit('newTelWorkForSocket', obj)
-              res.io.to(socketid).emit('newRemoveBookingItem', obj)
+              // res.io.to(socketid).emit('newRemoveBookingItem', obj)
             }else{
               console.log("Socket not connected");
             }
