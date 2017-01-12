@@ -897,13 +897,13 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           });
 
           Socket.on('newBookingForSocket', function (msg) {
-            console.log("in controller newBookingForSocket, msg::", msg);
+            console.log("in controller SocketBooking Alert, newBookingForSocket, msg::", msg);
             if ($scope.bookings.indexOf(msg) == -1) {
                 $scope.bookings.unshift(msg);
             }
           });
           Socket.on('newRemoveBookingItem', function (msg) {
-            console.log("in controller newRemoveBookingItem, msg::", msg);
+            console.log("in controller SocketBooking Alert, newRemoveBookingItem, msg::", msg);
             $scope.bookings = $scope.bookings.filter(function( obj ) {
               return obj._id !== _id;
             });
