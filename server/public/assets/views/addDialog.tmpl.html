@@ -1,8 +1,17 @@
 
+<div ng-controller="ShowController">
+  <div ng-repeat="booking in bookings">
+    <span>Language: {{booking.language}} Reservation ID: {{booking.bookingid}}</span>
+  </div>
+</div>
 
 <div ng-controller="AddController">
 
-
+  <div ng-controller="ShowController">
+    <div ng-repeat="booking in bookings">
+      <span>Language: {{booking.language}} Reservation ID: {{booking.bookingid}}</span>
+    </div>
+  </div>
 
 
   <md-content layout-padding >
