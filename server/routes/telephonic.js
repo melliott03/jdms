@@ -742,13 +742,16 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
           console.log('about to send to socket, obj::', obj);
           socketsids.forEach(function(socketid){
             if(res.io.sockets.sockets[socketid]!=undefined){
-              res.io.to(socketid).emit('newTelWorkForSocket', obj)
-              res.io.to(socketid).emit('newRemoveBookingItem', obj)
+              res.io.to(socketid).emit('newTelWorkForSocket', obj);
+              if (obj.conferenceWorkerConnected == "yes") {
+                res.io.to(socketid).emit('newRemoveBookingItem', obj);
+              }
             }else{
               console.log("Socket not connected");
             }
           });
         }
+
         return data;
       })
 
@@ -992,7 +995,7 @@ router.post('/connectmessage', twilio.webhook({validate: false}), function (req,
 
   })
   .then(function(data) {
-    // Emit to USER that conference is ready
+    // Emit to  SOCKET that conference is ready
     var socketsids = data.aUserWithTaskSid.socketID;
 
     console.log('conferenceWorkerConnected == "yes" about to send to socket, data.aUserWithTaskSid::', data.aUserWithTaskSid);
@@ -1001,7 +1004,7 @@ router.post('/connectmessage', twilio.webhook({validate: false}), function (req,
     socketsids.forEach(function(socketid){
       if(res.io.sockets.sockets[socketid]!=undefined){
         console.log('sending newBookingForSocket, data.theTeleWorkWithtaskSid::', data.theTeleWorkWithtaskSid);
-        res.io.to(socketid).emit('newBookingForSocket', data.theTeleWorkWithtaskSid)
+        res.io.to(socketid).emit('newBookingForSocket', data.theTeleWorkWithtaskSid);
       }else{
         console.log("Socket not connected");
       }
