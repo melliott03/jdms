@@ -938,7 +938,7 @@ router.post('/connectmessage', twilio.webhook({validate: false}), function (req,
   console.log('inside /connectmessage req.query.reservationSid::', req.query.reservationSid);
   var reservationSid = req.query.reservationSid,
       bookingid = req.query.bookingid,
-      taskSid = req.query.taskSid,
+      taskSid = req.query.TaskSid,
       workerSid = req.query.workerSid,
       conferenceName = bookingid;
 
