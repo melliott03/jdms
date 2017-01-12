@@ -89,6 +89,7 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
       var twiml = new twilio.TwimlResponse();
 
       var socketsids = req.user.socketID;
+      console.log('before sending newBookingForSocket, socketsids::', socketsids);
 
       if (data) {
         // var obj = data;
@@ -740,7 +741,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
           socketsids.forEach(function(socketid){
             if(res.io.sockets.sockets[socketid]!=undefined){
               res.io.to(socketid).emit('newTelWorkForSocket', obj)
-              // res.io.to(socketid).emit('newRemoveBookingItem', obj)
+              res.io.to(socketid).emit('newRemoveBookingItem', obj)
             }else{
               console.log("Socket not connected");
             }
@@ -901,6 +902,7 @@ res.send(twiml.toString());
 });
 
 router.post('/screencall', twilio.webhook({validate: false}), function (req, res) {
+  console.log('inside /screencall req.body::', req.body);
   console.log('inside /screencall req.query::', req.query);
   console.log('inside /screencall req.query.reservationSid::', req.query.reservationSid);
   var reservationSid = req.query.reservationSid;

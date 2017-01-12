@@ -248,9 +248,9 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     //
     // });
     socket.to("/#" +socket.id).emit('connectedSocketID', {"socketid" : socket.id}); //"/#" +
-    socket.to(socket.id).emit('connectedSocketID', {"socketid" : socket.id}); //"/#" +
-    io.emit("socketToMe", "users io");
-    socket.emit("socketToMe", "users socket");
+    // socket.to(socket.id).emit('connectedSocketID', {"socketid" : socket.id}); //"/#" +
+    // io.emit("socketToMe", "users io");
+    // socket.emit("socketToMe", "users socket");
 
 
     // socket.sockets.connected[socket.id].emit('connectedSocketID', {"socketid" : socket.id});
