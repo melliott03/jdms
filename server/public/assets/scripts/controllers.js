@@ -763,7 +763,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
           $scope.bookings = WorkService.customerWorkTelBookingsObject.response;
           Socket.on('newBookingForSocket', function (msg) {
-            console.log("in controller newTelWorkForSocket, msg::", msg);
+            console.log("in controller newBookingForSocket, msg::", msg);
             if ($scope.bookings.indexOf(msg) == -1) {
                 $scope.bookings.unshift(msg);
             }
@@ -896,6 +896,27 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             // WorkService.saveSocketId(msg);
           });
 
+          Socket.on('newBookingForSocket', function (msg) {
+            console.log("in controller newBookingForSocket, msg::", msg);
+            if ($scope.bookings.indexOf(msg) == -1) {
+                $scope.bookings.unshift(msg);
+            }
+          });
+          Socket.on('newRemoveBookingItem', function (msg) {
+            console.log("in controller newRemoveBookingItem, msg::", msg);
+            $scope.bookings = $scope.bookings.filter(function( obj ) {
+              return obj._id !== _id;
+            });
+            /*
+            var id = 88;
+            for(var i = 0; i < data.length; i++) {
+                if(data[i].id == id) {
+                    data.splice(i, 1);
+                    break;
+                }
+            }*/
+          });
+
           Socket.on('socketToYou', function (msg) {
             console.log("in controller, socketToYou msg, BEFORE::", msg);
             $scope.myVar = true;
@@ -949,7 +970,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           Socket.on('connect_failed', function (data) {
               console.log(data || 'socket connect_failed');
           });
-          
+
 
 
 
