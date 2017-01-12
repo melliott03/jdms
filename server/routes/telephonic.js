@@ -738,11 +738,13 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
         var socketsids = aUserWithCustomer_ID.socketID;
         var obj = data.theTeleWorkWithcall_sid;
         console.log('before if statement to send to socket, obj::', obj);
-        if (obj.inboundSummary && obj.outboundSummary) { // && obj.money && obj.money.customerCost //(money not yet in the db)   && obj.outboundSummary.createdAt
-          console.log('about to send to socket, obj::', obj);
+        
           socketsids.forEach(function(socketid){
             if(res.io.sockets.sockets[socketid]!=undefined){
-              res.io.to(socketid).emit('newTelWorkForSocket', obj);
+              if (obj.inboundSummary && obj.outboundSummary) { // && obj.money && obj.money.customerCost //(money not yet in the db)   && obj.outboundSummary.createdAt
+                console.log('about to send to socket, obj::', obj);
+                res.io.to(socketid).emit('newTelWorkForSocket', obj);
+              }
               if (obj.conferenceWorkerConnected == "yes") {
                 res.io.to(socketid).emit('newRemoveBookingItem', obj);
               }
@@ -750,7 +752,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
               console.log("Socket not connected");
             }
           });
-        }
+
 
         return data;
       })
