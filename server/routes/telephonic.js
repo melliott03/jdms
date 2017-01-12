@@ -273,7 +273,7 @@ router.use('/VoiceAssignmentCallbackUrl', twilio.webhook({validate: false}), (re
   var assignmentInstruction = {
     instruction: 'call',
     // post_work_activity_sid: 'WA442ed2a8dcf0fa1b169207b8cd80dbab',
-    url: configsty.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid+'&bookingid='+bookingid,
+    url: configsty.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid+'&bookingid='+bookingid+'&TaskSid='+callbody.TaskSid+'&workerSid='+callbody.WorkerSid+'callSid='+call_sid,
     status_callback_url: configsty.APP_URL+'/telephonic/callSummary?callSid='+call_sid+'&workerSid='+callbody.WorkerSid+'&TaskSid='+callbody.TaskSid,
     from: '+16122172551' // a verified phone number from your twilio account
   };
