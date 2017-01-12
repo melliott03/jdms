@@ -984,21 +984,24 @@ router.post('/connectmessage', twilio.webhook({validate: false}), function (req,
     return promise.then(function(aUserWithTaskSid) {
       console.log('aUserWithTaskSid ::', aUserWithTaskSid);
       console.log('aUserWithTaskSid._id ::', aUserWithTaskSid._id);
-      return aUserWithTaskSid;
+      var data = {};
+      data.theTeleWorkWithtaskSid = theTeleWorkWithtaskSid;
+      data.aUserWithTaskSid = aUserWithTaskSid;
+      return data;
     });
 
   })
-  .then(function(aUserWithTaskSid) {
+  .then(function(data) {
     // Emit to USER that conference is ready
-    var socketsids = aUserWithTaskSid.socketID;
+    var socketsids = data.aUserWithTaskSid.socketID;
 
-    console.log('conferenceWorkerConnected == "yes" about to send to socket, aUserWithTaskSid::', aUserWithTaskSid);
+    console.log('conferenceWorkerConnected == "yes" about to send to socket, data.aUserWithTaskSid::', data.aUserWithTaskSid);
     console.log('conferenceWorkerConnected == "yes" about to send to socket, socketsids::', socketsids);
 
     socketsids.forEach(function(socketid){
       if(res.io.sockets.sockets[socketid]!=undefined){
-        console.log('sending newBookingForSocket, data::', data);
-        res.io.to(socketid).emit('newBookingForSocket', data)
+        console.log('sending newBookingForSocket, data.theTeleWorkWithtaskSid::', data.theTeleWorkWithtaskSid);
+        res.io.to(socketid).emit('newBookingForSocket', data.theTeleWorkWithtaskSid)
       }else{
         console.log("Socket not connected");
       }
