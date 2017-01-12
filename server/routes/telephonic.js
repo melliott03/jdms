@@ -984,7 +984,6 @@ router.post('/connectmessage', twilio.webhook({validate: false}), function (req,
     return promise.then(function(aUserWithTaskSid) {
       console.log('aUserWithTaskSid ::', aUserWithTaskSid);
       console.log('aUserWithTaskSid._id ::', aUserWithTaskSid._id);
-      theTeleWorkWithcall_sid.save();
       return aUserWithTaskSid;
     });
 
