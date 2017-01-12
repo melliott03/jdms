@@ -95,6 +95,7 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
         // var obj = data;
         // console.log('before if statement to send to socket, obj::', obj);
         // if (obj.conferenceConcluded == "no") { // && obj.money && obj.money.customerCost //(money not yet in the db)   && obj.outboundSummary.createdAt
+          /*
           console.log('conferenceConcluded == "no" about to send to socket, data::', data);
           socketsids.forEach(function(socketid){
             if(res.io.sockets.sockets[socketid]!=undefined){
@@ -104,6 +105,7 @@ router.post('/callRequest', passport.authenticate('jwt', { session: false }), tw
               console.log("Socket not connected");
             }
           });
+          */
         // }
         res.send(data);
       }else {
@@ -934,9 +936,11 @@ router.post('/connectmessage', twilio.webhook({validate: false}), function (req,
   console.log('in connectmessage req.body', req.body); // @TODO save call to interpreter summary to work_tel
   console.log('inside /connectmessage req.query::', req.query);
   console.log('inside /connectmessage req.query.reservationSid::', req.query.reservationSid);
-  var reservationSid = req.query.reservationSid;
-  var bookingid = req.query.bookingid;
-  var conferenceName = bookingid;
+  var reservationSid = req.query.reservationSid,
+      bookingid = req.query.bookingid,
+      taskSid = req.query.taskSid,
+      workerSid = req.query.workerSid,
+      conferenceName = bookingid;
 
   var twiml = new twilio.TwimlResponse();
   // twiml.say('You will now be connected to the first caller in the queue.')
@@ -961,6 +965,50 @@ router.post('/connectmessage', twilio.webhook({validate: false}), function (req,
       });
     });
   }
+
+  //FIND THE CUSTOMER AND SEND SOCKET MESSAGE OF BOOKING ID
+  var promised = Work_Tel.findOne({taskSid: taskSid}).exec();
+  promised.then(function(theTeleWorkWithtaskSid) {
+    console.log('theTeleWorkWithtaskSid in saveLanguageToDB function::', theTeleWorkWithtaskSid);
+    theTeleWorkWithtaskSid.conferenceWorkerConnected = 'yes';
+    // theTeleWorkWithtaskSid.taskSid = req.query.TaskSid;
+    theTeleWorkWithtaskSid.save();
+    return theTeleWorkWithtaskSid;
+  })
+  .then(function(theTeleWorkWithtaskSid) {
+
+    //FIND THE CUSTOMER
+    console.log('inside the then theTeleWorkWithtaskSid::', theTeleWorkWithtaskSid);
+    //add invoiceitem to customer in stripe
+    var promise = User.findById(theTeleWorkWithtaskSid.customer_id).exec();
+    return promise.then(function(aUserWithTaskSid) {
+      console.log('aUserWithTaskSid ::', aUserWithTaskSid);
+      console.log('aUserWithTaskSid._id ::', aUserWithTaskSid._id);
+      theTeleWorkWithcall_sid.save();
+      return aUserWithTaskSid;
+    });
+
+  })
+  .then(function(aUserWithTaskSid) {
+    // Emit to USER that conference is ready
+    var socketsids = aUserWithTaskSid.socketID;
+
+    console.log('conferenceWorkerConnected == "yes" about to send to socket, aUserWithTaskSid::', aUserWithTaskSid);
+    console.log('conferenceWorkerConnected == "yes" about to send to socket, socketsids::', socketsids);
+
+    socketsids.forEach(function(socketid){
+      if(res.io.sockets.sockets[socketid]!=undefined){
+        console.log('sending newBookingForSocket, data::', data);
+        res.io.to(socketid).emit('newBookingForSocket', data)
+      }else{
+        console.log("Socket not connected");
+      }
+    });
+  })
+  .catch(function(err){
+    // just need one of these
+    console.log('error:', err);
+  });
 
   console.log(twiml.toString());
   res.header('Content-Type', 'application/xml');
