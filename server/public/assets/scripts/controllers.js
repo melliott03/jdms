@@ -762,17 +762,33 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           };
 
           $scope.bookings = WorkService.customerWorkTelBookingsObject.response;
-          Socket.on('newBookingForSocket', function (msg) {
-            console.log("in controller newBookingForSocket, msg::", msg);
+          // Socket.addListener($scope.work.language, function(data) {
+          //   if (data.num == 1) {
+          //     numAvailible += 1;
+          //   }else if (data.num == 0) {
+          //     numAvailible -= 1;
+          //     if (numAvailible < 0) {
+          //       numAvailible = 0;
+          //     }
+          //   }
+          //   ctrl.data  = [];
+          //   generateRandomData(numAvailible, ctrl.data);
+          //   // numAvailible += parseInt(msg);
+          //   socketRoom = $scope.work.language;
+          //   // console.log("inside socket Socket.addListener newValue::", newValue);
+          //   console.log("socket '$scope.work.language' is opened data::", data);
+          // });
+          Socket.addListener('newBookingForSocket', function (msg) {
+            console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
             if ($scope.bookings.indexOf(msg) == -1) {
                 $scope.bookings.unshift(msg);
             }
           });
-          Socket.on('newRemoveBookingItem', function (msg) {
-            console.log("in controller newRemoveBookingItem, msg::", msg);
+          Socket.addListener('newRemoveBookingItem', function (msg) {
+            console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
             $scope.bookings = $scope.bookings.filter(function( obj ) {
               return obj._id !== _id;
-            });
+          });
             /*
             var id = 88;
             for(var i = 0; i < data.length; i++) {
