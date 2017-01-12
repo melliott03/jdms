@@ -273,7 +273,7 @@ router.use('/VoiceAssignmentCallbackUrl', twilio.webhook({validate: false}), (re
   var assignmentInstruction = {
     instruction: 'call',
     // post_work_activity_sid: 'WA442ed2a8dcf0fa1b169207b8cd80dbab',
-    url: configsty.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid+'&bookingid='+bookingid+'&TaskSid='+callbody.TaskSid+'&workerSid='+callbody.WorkerSid+'callSid='+call_sid,
+    url: configsty.APP_URL+'/telephonic/screencall?reservationSid='+reservationSid+'&bookingid='+bookingid+'&TaskSid='+callbody.TaskSid+'&workerSid='+callbody.WorkerSid+'&callSid='+call_sid,
     status_callback_url: configsty.APP_URL+'/telephonic/callSummary?callSid='+call_sid+'&workerSid='+callbody.WorkerSid+'&TaskSid='+callbody.TaskSid,
     from: '+16122172551' // a verified phone number from your twilio account
   };
@@ -907,13 +907,16 @@ router.post('/screencall', twilio.webhook({validate: false}), function (req, res
   console.log('inside /screencall req.query.reservationSid::', req.query.reservationSid);
   var reservationSid = req.query.reservationSid;
   var bookingid = req.query.bookingid;
+  var TaskSid = req.query.TaskSid;
+  var workerSid = req.query.workerSid;
+
   console.log('in screencall bookingid::', bookingid);
   console.log('in screencall reservationSid::', reservationSid);
 
   var twiml = new twilio.TwimlResponse();
   twiml.say('Please press any key to accept this interpreting session.');
   twiml.gather({
-    action: '/telephonic/connectmessage?reservationSid='+reservationSid+'&bookingid='+bookingid,
+    action: '/telephonic/connectmessage?reservationSid='+reservationSid+'&bookingid='+bookingid+'&TaskSid='+callbody.TaskSid+'&workerSid='+callbody.WorkerSid,
     numDigits: '1'
   }, function () {
     this
@@ -929,6 +932,7 @@ router.post('/screencall', twilio.webhook({validate: false}), function (req, res
 // POST: /telephonic/connectmessage
 router.post('/connectmessage', twilio.webhook({validate: false}), function (req, res) {
   console.log('in connectmessage req.body', req.body); // @TODO save call to interpreter summary to work_tel
+  console.log('inside /connectmessage req.query::', req.query);
   console.log('inside /connectmessage req.query.reservationSid::', req.query.reservationSid);
   var reservationSid = req.query.reservationSid;
   var bookingid = req.query.bookingid;
