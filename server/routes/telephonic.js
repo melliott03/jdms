@@ -907,7 +907,7 @@ router.post('/screencall', twilio.webhook({validate: false}), function (req, res
   console.log('inside /screencall req.query.reservationSid::', req.query.reservationSid);
   var reservationSid = req.query.reservationSid;
   var bookingid = req.query.bookingid;
-  var TaskSid = req.query.TaskSid;
+  var taskSid = req.query.TaskSid;
   var workerSid = req.query.workerSid;
 
   console.log('in screencall bookingid::', bookingid);
@@ -916,7 +916,7 @@ router.post('/screencall', twilio.webhook({validate: false}), function (req, res
   var twiml = new twilio.TwimlResponse();
   twiml.say('Please press any key to accept this interpreting session.');
   twiml.gather({
-    action: '/telephonic/connectmessage?reservationSid='+reservationSid+'&bookingid='+bookingid+'&TaskSid='+TaskSid+'&workerSid='+WorkerSid,
+    action: '/telephonic/connectmessage?reservationSid='+reservationSid+'&bookingid='+bookingid+'&TaskSid='+taskSid+'&workerSid='+workerSid,
     numDigits: '1'
   }, function () {
     this
