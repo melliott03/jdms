@@ -247,13 +247,20 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     //   io.emit('authenticated', {"authenticated": "from server: authenticated complete "});
     //
     // });
-    io.to(socket.id).emit('connectedSocketID', {"socketid" : socket.id}); //"/#" +
-    io.sockets.connected[socket.id].emit('connectedSocketID', {"socketid" : socket.id});
+    socket.to("/#" +socket.id).emit('connectedSocketID', {"socketid" : socket.id}); //"/#" +
+    socket.to(socket.id).emit('connectedSocketID', {"socketid" : socket.id}); //"/#" +
+    io.emit("socketToMe", "users io");
+    socket.emit("socketToMe", "users socket");
+
+
+    // socket.sockets.connected[socket.id].emit('connectedSocketID', {"socketid" : socket.id});
+    // socket.sockets.sockets[socket.id].emit('connectedSocketID', {"socketid" : socket.id});
+    // io.broadcast.to(socket.id).emit( 'connectedSocketID', {"socketid" : socket.id} );
     // console.log('io::', io);
 
     //find the user and update thier socketID
 
-    // io.emit('connectedSocketID', {"socketid" : socket.id})
+    io.emit('connectedSocketID', {"socketid" : socket.id})
     //Find the User and store their socketid on their user Object
     socket.on('disconnect', function(){
       console.log("A User socket connection has disconnected");
@@ -314,7 +321,7 @@ app.post('/testExpressSocket', passport.authenticate('jwt', { session: false }),
   console.log('testExpressSocket on server req::', req);
   console.log('testExpressSocket on server req.user::', req.user);
 
-  res.io.emit("socketToMe", "users");
+  // res.io.emit("socketToMe", "users");
   res.send('respond with a resource.');
 });
 

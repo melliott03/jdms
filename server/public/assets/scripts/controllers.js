@@ -876,6 +876,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           $scope.$on('$locationChangeStart', function(event){
             Socket.disconnect(true); //CAUTION!!!!!A THIS LINE SHUT DOWN SOCKET CONNECTION BEFORE IT CONNECTS TO CLIENT
           })
+          */
 
           Socket.on('connect', function (msg) {
             console.log("in controller, connected msg,::", msg);
@@ -948,7 +949,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           Socket.on('connect_failed', function (data) {
               console.log(data || 'socket connect_failed');
           });
-          */
+          
 
 
 
@@ -1386,11 +1387,11 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             //     // $('#messages').append($('<li>').text(msg));
             // });
             Socket.on('error', function (data) {
-            console.log(data || 'error');
+            console.log('Socket.on error::' , data || 'error');
             });
 
             Socket.on('connect_failed', function (data) {
-                console.log(data || 'connect_failed');
+                console.log("Socket.on connect_failed::" , data || 'connect_failed');
             });
 
 
