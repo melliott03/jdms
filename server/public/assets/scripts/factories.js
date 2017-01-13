@@ -76,6 +76,7 @@ myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,
     var customerDefaultPaymentSourceObject = {};
     var customerChargeMethodChoiceObject = {};
     var availibleWorkers = {};
+    var socketId = '';
     // var customerInvoicesObject = {};
 
 
@@ -298,7 +299,7 @@ myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,
       // }
       // console.log('work object', work);
       // console.log('work.datetime:', work.date);
-
+      socketId = msg;
        $http.post("/updateUserSocketId", msg).then(function(response){
           // travelTimeReturned.theTime = response.data;
           // estimatePriceObject.data = response.data;
@@ -465,6 +466,7 @@ myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,
         estimatePrice : estimatePrice,
         estimatePriceObject : estimatePriceObject,
         saveSocketId : saveSocketId,
+        socketId: socketId,
         updateContractorSwitchStatus: updateContractorSwitchStatus,
         getCustomerBalance : getCustomerBalance,
         customerBalanceObject : customerBalanceObject,
