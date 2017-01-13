@@ -698,6 +698,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           });
           Socket.addListener('newRemoveBookingItem', function (msg) {
             console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
+            console.log("in AddController new Socket Alert newRemoveBookingItem, $scope.bookings::", $scope.bookings);
             $scope.bookings = $scope.bookings.filter(function( obj ) {
               return obj._id !== _id;
             });
@@ -710,7 +711,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
                 }
             }*/
           });
-          
+
 
         };
 
