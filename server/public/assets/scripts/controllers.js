@@ -700,8 +700,17 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
             $scope.bookings = $scope.bookings.filter(function( obj ) {
               return obj._id !== _id;
+            });
+            /*
+            var id = 88;
+            for(var i = 0; i < data.length; i++) {
+                if(data[i].id == id) {
+                    data.splice(i, 1);
+                    break;
+                }
+            }*/
           });
-
+          
 
         };
 
@@ -794,18 +803,6 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           //   // console.log("inside socket Socket.addListener newValue::", newValue);
           //   console.log("socket '$scope.work.language' is opened data::", data);
           // });
-
-
-            /*
-            var id = 88;
-            for(var i = 0; i < data.length; i++) {
-                if(data[i].id == id) {
-                    data.splice(i, 1);
-                    break;
-                }
-            }*/
-          });
-
 
           $scope.submit = function(work){
             console.log('work.endDateTime:', work.endDateTime);
