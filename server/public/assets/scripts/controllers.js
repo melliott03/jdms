@@ -617,6 +617,10 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
         }
 
+        $scope.bookings = [];
+        // $scope.bookings = WorkService.customerWorkTelBookingsObject.response;
+
+
         // http://ngmodules.org/modules/ngAutocomplete
         var workService = WorkService;
         console.log('inside AddController');
@@ -685,6 +689,19 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             // console.log("inside socket Socket.addListener newValue::", newValue);
             console.log("socket '$scope.work.language' is opened data::", data);
           });
+
+          Socket.addListener('newBookingForSocket', function (msg) {
+            console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
+            if ($scope.bookings.indexOf(msg) == -1) {
+                $scope.bookings.unshift(msg);
+            }
+          });
+          Socket.addListener('newRemoveBookingItem', function (msg) {
+            console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
+            $scope.bookings = $scope.bookings.filter(function( obj ) {
+              return obj._id !== _id;
+          });
+
 
         };
 
@@ -761,7 +778,6 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
               WorkService.postCallRequest(work);
           };
 
-          $scope.bookings = WorkService.customerWorkTelBookingsObject.response;
           // Socket.addListener($scope.work.language, function(data) {
           //   if (data.num == 1) {
           //     numAvailible += 1;
@@ -778,17 +794,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           //   // console.log("inside socket Socket.addListener newValue::", newValue);
           //   console.log("socket '$scope.work.language' is opened data::", data);
           // });
-          Socket.addListener('newBookingForSocket', function (msg) {
-            console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
-            if ($scope.bookings.indexOf(msg) == -1) {
-                $scope.bookings.unshift(msg);
-            }
-          });
-          Socket.addListener('newRemoveBookingItem', function (msg) {
-            console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
-            $scope.bookings = $scope.bookings.filter(function( obj ) {
-              return obj._id !== _id;
-          });
+
 
             /*
             var id = 88;
@@ -912,7 +918,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             console.log("in controller, socketToMe msg,::", msg);
             // WorkService.saveSocketId(msg);
           });
-          
+
           $scope.bookings = [];
           // $scope.bookings = WorkService.customerWorkTelBookingsObject.response;
 
