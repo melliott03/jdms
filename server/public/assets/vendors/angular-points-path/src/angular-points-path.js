@@ -488,7 +488,7 @@ angular.module('angular-points-path')
         alpha += delta;
 
         //// if delta <=0 or >=1 then reverse
-        if (alpha <= 0 || alpha >= 1) delta = -delta; ctrl.context.clearRect(data.x, data.y, data.value, 0, 2 * Math.PI, false);
+        if (alpha <= 0 || alpha >= 1) delta = -delta;
         /// set global alpha
         ctrl.context.globalAlpha = alpha;
 
@@ -619,8 +619,9 @@ angular.module('angular-points-path')
         }
 
         ctrl.init();
-        scope.$on('newData', function(args) {
-          console.log("inside scope.$on('newData') in directive::", args);
+        scope.$on('newData', function(evnt, args) {
+          console.log("inside scope.$on('newData') in directive, evnt::", evnt);
+          console.log("inside scope.$on('newData') in directive, args::", args);
 
            //do stuff
            ctrl.init();
