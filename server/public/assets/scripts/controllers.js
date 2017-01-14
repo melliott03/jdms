@@ -631,8 +631,8 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
         function generateRandomData(len, data) {
           for (var i = 0; i < len; i++) {
-            var randomWidth = Math.floor(Math.random() * 450); //500px canvas size
-            var randomHeight = Math.floor(Math.random() * 250); //300px canvas size
+            var randomWidth = Math.floor(Math.random() * 400); //500px canvas size
+            var randomHeight = Math.floor(Math.random() * 200); //300px canvas size
 
             var point = {
               x: randomWidth,
