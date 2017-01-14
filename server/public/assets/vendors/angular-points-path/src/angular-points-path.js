@@ -495,16 +495,20 @@ angular.module('angular-points-path')
 
         //// if delta <=0 or >=1 then reverse
         if (alpha <= 0 || alpha >= 1) {
+          ctrl.context.clearRect(data.x, data.y, data.value, 0);
           ctrl.context.shadowBlur = 3;
           ctrl.context.shadowColor = "black";
+          console.log('delta::', delta);
+          console.log('alpha::', alpha);
           delta = -delta;
         }else {
-          ctrl.context.clearRect(data.x, data.y, data.value, 0);
           // ctrl.context.clearRect(0, 0, ctrl.canvas.width, ctrl.canvas.height);
           ctrl.context.strokeStyle = "#707070"; // #707070 light gray border
 
           // ctrl.context.fillStyle = "#00ff00"; //"#ccddff";
           // ctrl.context.shadowBlur = 3;
+          ctrl.context.shadowColor = "black";
+
         }
         /// set global alpha
         ctrl.context.globalAlpha = alpha;
