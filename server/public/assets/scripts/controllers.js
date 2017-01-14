@@ -672,11 +672,17 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             console.log('data in eventCallback, err ::', err);
           };
 
-          // Socket.removeAllListeners();
+          Socket.removeAllListeners();
+          /*
           if (socketRoom) {
             console.log("socket 'socketRoom' before closing for ::", socketRoom);
-            Socket.removeListener(socketRoom, callback);
+            Socket.removeListener(socketRoom, callback) {
+              console.log("socket 'socketRoom' is closed for ::", socketRoom);
+              console.log("socket 'socketRoom' is closed msg::", msg);
+              console.log("socket 'socketRoom' is closed err::", err);
+            });
           }
+          */
 
           Socket.addListener($scope.work.language, function(data) {
             console.log("socket '$scope.work.language' is opened data::", data);
@@ -696,6 +702,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             // console.log("inside socket Socket.addListener newValue::", newValue);
           });
 
+          /*
           Socket.addListener('newBookingForSocket', function (msg) {
             console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
             if ($scope.bookings.indexOf(msg) == -1) {
@@ -709,6 +716,8 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             $scope.bookings = $scope.bookings.filter(function( obj ) {
               return obj._id !== _id;
             });
+            */
+            
             /*
             var id = 88;
             for(var i = 0; i < data.length; i++) {
@@ -924,29 +933,29 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             // WorkService.saveSocketId(msg);
           });
 
-          // $scope.bookings = [];
-          // // $scope.bookings = WorkService.customerWorkTelBookingsObject.response;
-          //
-          // Socket.on('newBookingForSocket', function (msg) {
-          //   console.log("in controller SocketBooking Alert, newBookingForSocket, msg::", msg);
-          //   if ($scope.bookings.indexOf(msg) == -1) {
-          //       $scope.bookings.unshift(msg);
-          //   }
-          // });
-          // Socket.on('newRemoveBookingItem', function (msg) {
-          //   console.log("in controller SocketBooking Alert, newRemoveBookingItem, msg::", msg);
-          //   $scope.bookings = $scope.bookings.filter(function( obj ) {
-          //     return obj._id !== _id;
-          //   });
-          //   /*
-          //   var id = 88;
-          //   for(var i = 0; i < data.length; i++) {
-          //       if(data[i].id == id) {
-          //           data.splice(i, 1);
-          //           break;
-          //       }
-          //   }*/
-          // });
+          $scope.bookings = [];
+          // $scope.bookings = WorkService.customerWorkTelBookingsObject.response;
+
+          Socket.on('newBookingForSocket', function (msg) {
+            console.log("in controller SocketBooking Alert, newBookingForSocket, msg::", msg);
+            if ($scope.bookings.indexOf(msg) == -1) {
+                $scope.bookings.unshift(msg);
+            }
+          });
+          Socket.on('newRemoveBookingItem', function (msg) {
+            console.log("in controller SocketBooking Alert, newRemoveBookingItem, msg::", msg);
+            $scope.bookings = $scope.bookings.filter(function( obj ) {
+              return obj._id !== _id;
+            });
+            /*
+            var id = 88;
+            for(var i = 0; i < data.length; i++) {
+                if(data[i].id == id) {
+                    data.splice(i, 1);
+                    break;
+                }
+            }*/
+          });
 
           Socket.on('socketToYou', function (msg) {
             console.log("in controller, socketToYou msg, BEFORE::", msg);
