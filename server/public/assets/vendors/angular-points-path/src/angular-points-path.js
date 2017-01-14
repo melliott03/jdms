@@ -508,7 +508,7 @@ angular.module('angular-points-path')
           ctrl.context.strokeStyle = "#666666";//#666666
 
           ctrl.context.fillStyle = "#00ff00"; //"#ccddff";
-          ctrl.context.shadowBlur = 1;
+          ctrl.context.shadowBlur = 10;
           ctrl.context.shadowColor = "black";
 
           // ctrl.context.stroke();
