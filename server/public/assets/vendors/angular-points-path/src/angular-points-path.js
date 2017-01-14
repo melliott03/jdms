@@ -477,6 +477,10 @@ angular.module('angular-points-path')
        var alpha = 0,          /// current alpha
            delta = 0.1;        /// delta value = speed
 
+       var timer;
+
+       $timeout.cancel(timer);
+
       function drawDotOnCanvas(data) {
 
 
@@ -504,7 +508,7 @@ angular.module('angular-points-path')
 
           ctrl.context.stroke();
 
-          $timeout(function () {
+          timer = $timeout(function () {
             drawDotOnCanvas(data);
           }, 100);
 
