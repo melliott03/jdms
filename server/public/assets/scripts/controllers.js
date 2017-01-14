@@ -723,13 +723,13 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
         };
 
-        Socket.addListener('newBookingForSocket', function (msg) {
+        Socket.on('newBookingForSocket', function (msg) {
           console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
           if ($scope.bookings.indexOf(msg) == -1) {
               $scope.bookings.unshift(msg);
           }
         });
-        Socket.addListener('newRemoveBookingItem', function (msg) {
+        Socket.on('newRemoveBookingItem', function (msg) {
           console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
           console.log("in AddController new Socket Alert newRemoveBookingItem, $scope.bookings::", $scope.bookings);
           var _id = msg._id;
