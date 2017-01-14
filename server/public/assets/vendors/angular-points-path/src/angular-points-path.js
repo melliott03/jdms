@@ -13,6 +13,8 @@ angular.module('angular-points-path', []);
 
 angular.module('angular-points-path')
   .controller('angularPointsPathController', function($scope, $timeout, $route) {
+    var timer;
+
     var ctrl = this;
     ctrl.container = {};
 
@@ -292,6 +294,8 @@ angular.module('angular-points-path')
     }
 
     $scope.$on('newData', function(event, args) {
+
+      $timeout.cancel(timer);
       console.log("inside $scope.$on('newData') event::", event);
       console.log("inside $scope.$on('newData')  args::", args);
 
@@ -477,9 +481,7 @@ angular.module('angular-points-path')
        var alpha = 0,          /// current alpha
            delta = 0.1;        /// delta value = speed
 
-       var timer;
 
-       $timeout.cancel(timer);
 
       function drawDotOnCanvas(data) {
 
