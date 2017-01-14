@@ -997,6 +997,27 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             }*/
           });
 
+          Socket.addListener('newBookingForSocket', function (msg) {
+            console.log("in controller SocketBooking Alert, newBookingForSocket, msg::", msg);
+            if ($scope.bookings.indexOf(msg) == -1) {
+                $scope.bookings.unshift(msg);
+            }
+          });
+          Socket.addListener('newRemoveBookingItem', function (msg) {
+            console.log("in controller SocketBooking Alert, newRemoveBookingItem, msg::", msg);
+            $scope.bookings = $scope.bookings.filter(function( obj ) {
+              return obj._id !== _id;
+            });
+            /*
+            var id = 88;
+            for(var i = 0; i < data.length; i++) {
+                if(data[i].id == id) {
+                    data.splice(i, 1);
+                    break;
+                }
+            }*/
+          });
+
           Socket.on('socketToYou', function (msg) {
             console.log("in controller, socketToYou msg, BEFORE::", msg);
             $scope.myVar = true;
