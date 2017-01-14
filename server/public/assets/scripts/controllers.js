@@ -674,6 +674,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           Socket.removeAllListeners();
 
           Socket.addListener($scope.work.language, function(data) {
+            console.log("socket '$scope.work.language' is opened data::", data);
             if (data.num == 1) {
               numAvailible += 1;
             }else if (data.num == 0) {
@@ -682,12 +683,12 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
                 numAvailible = 0;
               }
             }
+            console.log("socket '$scope.work.language' is opened numAvailible::", numAvailible);
             ctrl.data  = [];
             generateRandomData(numAvailible, ctrl.data);
             // numAvailible += parseInt(msg);
             socketRoom = $scope.work.language;
             // console.log("inside socket Socket.addListener newValue::", newValue);
-            console.log("socket '$scope.work.language' is opened data::", data);
           });
 
           Socket.addListener('newBookingForSocket', function (msg) {

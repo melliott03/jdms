@@ -199,7 +199,7 @@ angular.module('angular-points-path')
     function drawDotOnCanvas(data) {
 
       // $timeout(function () {
-        console.log('in drawDotOnCanvas before $scope.$apply');
+        console.log('in drawDotOnCanvas before $scope.$apply 1');
         // $scope.$apply(function() {
         ctrl.context.beginPath();
         ctrl.context.arc(data.x, data.y, data.value, 0, 2 * Math.PI, false);
@@ -480,7 +480,7 @@ angular.module('angular-points-path')
       function drawDotOnCanvas(data) {
 
 
-          console.log('in drawDotOnCanvas before $scope.$apply');
+          console.log('in drawDotOnCanvas before $scope.$apply 2');
           // $scope.$apply(function() {
           // });
 
