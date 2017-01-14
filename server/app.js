@@ -253,7 +253,10 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
         console.log('http.getConnections error::', error);
       }
     });
-    console.log('number of connected sockets::', io.sockets.sockets.length);
+    console.log('number of connected sockets, 1::', io.engine.clientsCount);
+    console.log('number of connected sockets, 2::', io.sockets.manager.connected);
+    console.log('number of connected sockets, 3::', Object.keys(io.sockets.sockets).length);
+    console.log('number of connected sockets, 4::', Object.keys(io.sockets.connected).length);
 
     socket.to("/#" +socket.id).emit('connectedSocketID', {"socketid" : socket.id}); //"/#" +
     // socket.to(socket.id).emit('connectedSocketID', {"socketid" : socket.id}); //"/#" +
