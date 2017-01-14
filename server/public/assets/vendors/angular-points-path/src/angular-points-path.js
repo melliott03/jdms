@@ -293,13 +293,10 @@ angular.module('angular-points-path')
 
     $scope.$on('newData', function(event, args) {
 
-      var timer;
       console.log("inside $scope.$on('newData') event::", event);
       console.log("inside $scope.$on('newData')  args::", args);
 
       var reLoadCanvas =  function(){
-      $timeout.cancel( timer );
-
       ctrl.container = {};
 
       ctrl.data = args;
@@ -317,11 +314,22 @@ angular.module('angular-points-path')
         fps = 10;
       }
 
+      var alpha = 0,          /// current alpha
+          delta = 0.1;        /// delta value = speed
+
       function animate() {
         if(!ctrl.animate){
           return;
         }
+
+
         setTimeout(function() {
+          /// increase alpha with delta value
+          alpha += delta;
+
+          //// if delta <=0 or >=1 then reverse
+          if (alpha <= 0 || alpha >= 1) delta = -delta;
+
           var vertices = ctrl.data;
           var waypoints = ctrl.waypoints;
           // Continues the animation 'til I have
@@ -332,6 +340,8 @@ angular.module('angular-points-path')
             if (tLine > 0 && tPoint > 0) {
               var waypoint1 = waypoints[tLine][tPoint];
               var waypoint2 = waypoints[tLine][tPoint - 1];
+              /// set global alpha
+              ctrl.context.globalAlpha = alpha;
               ctrl.context.beginPath();
               ctrl.context.moveTo(waypoint1.x, waypoint1.y);
               ctrl.context.lineTo(waypoint2.x, waypoint2.y);
@@ -348,6 +358,9 @@ angular.module('angular-points-path')
               is drawn to overwrite the animation points
                */
               if (tLine > 0 && animationType == 0) {
+                /// set global alpha
+                ctrl.context.globalAlpha = alpha;
+
                 ctrl.context.beginPath();
                 var data1 = waypoints[tLine][0];
                 var data2 = waypoints[tLine][waypoints[tLine].length - 1];
@@ -355,6 +368,16 @@ angular.module('angular-points-path')
                 ctrl.context.lineTo(data2.x, data2.y);
                 ctrl.context.strokeStyle = "black";
                 ctrl.context.stroke();
+
+
+
+
+
+
+                // timer = $timeout(function () {
+                //   drawDotOnCanvas(data);
+                // }, 100);
+
               }
               // Following line and reset point
               tLine++;
@@ -490,13 +513,13 @@ angular.module('angular-points-path')
           // $scope.$apply(function() {
           // });
 
-          /// increase alpha with delta value
-        alpha += delta;
-
-        //// if delta <=0 or >=1 then reverse
-        if (alpha <= 0 || alpha >= 1) delta = -delta;
-        /// set global alpha
-        ctrl.context.globalAlpha = alpha;
+        // /// increase alpha with delta value
+        // alpha += delta;
+        //
+        // //// if delta <=0 or >=1 then reverse
+        // if (alpha <= 0 || alpha >= 1) delta = -delta;
+        // /// set global alpha
+        // ctrl.context.globalAlpha = alpha;
 
           ctrl.context.beginPath();
           ctrl.context.arc(data.x, data.y, data.value, 0, 2 * Math.PI, false);
@@ -510,9 +533,9 @@ angular.module('angular-points-path')
 
           ctrl.context.stroke();
 
-          timer = $timeout(function () {
-            drawDotOnCanvas(data);
-          }, 100);
+          // timer = $timeout(function () {
+          //   drawDotOnCanvas(data);
+          // }, 100);
 
       }
 
