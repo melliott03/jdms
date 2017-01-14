@@ -496,6 +496,8 @@ angular.module('angular-points-path')
         //// if delta <=0 or >=1 then reverse
         if (alpha <= 0 || alpha >= 1) {
           ctrl.context.clip();
+          ctrl.context.clearRect(data.x, data.y, data.value, 0);
+          // ctrl.context.clearRect(0, 0, ctrl.canvas.width, ctrl.canvas.height);
           delta = -delta;
         }else {
           // ctrl.context.clearRect(0, 0, ctrl.canvas.width, ctrl.canvas.height);
