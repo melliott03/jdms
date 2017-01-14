@@ -499,11 +499,11 @@ angular.module('angular-points-path')
         }else {
           ctrl.context.clearRect(data.x, data.y, data.value, 0);
           // ctrl.context.clearRect(0, 0, ctrl.canvas.width, ctrl.canvas.height);
-          ctrl.context.strokeStyle = "#666666";//#666666
+          // ctrl.context.strokeStyle = "#666666"; // #666666 baby blue
 
           // ctrl.context.fillStyle = "#00ff00"; //"#ccddff";
-          ctrl.context.shadowBlur = 5;
-          ctrl.context.shadowColor = "black";
+          // ctrl.context.shadowBlur = 5;
+          // ctrl.context.shadowColor = "black";
         }
         /// set global alpha
         ctrl.context.globalAlpha = alpha;
