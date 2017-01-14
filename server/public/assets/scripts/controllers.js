@@ -666,7 +666,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           console.log('before if (socketRoom),  socketRoom::', socketRoom);
           // console.log('Socket.room bedfore leaving::', Socket.room);
 
-          var eventCallback = function(err, data) {
+          var callback = function(err, data) {
             // do something nice
             console.log('data in eventCallback, data ::', data);
             console.log('data in eventCallback, err ::', err);
@@ -675,11 +675,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           // Socket.removeAllListeners();
           if (socketRoom) {
             console.log("socket 'socketRoom' before closing for ::", socketRoom);
-            Socket.removeListener(socketRoom, function(err, msg) {
-              console.log("socket 'socketRoom' is closed for ::", socketRoom);
-              console.log("socket 'socketRoom' is closed msg::", msg);
-              console.log("socket 'socketRoom' is closed err::", err);
-            });
+            Socket.removeListener(socketRoom, callback);
           }
 
           Socket.addListener($scope.work.language, function(data) {
