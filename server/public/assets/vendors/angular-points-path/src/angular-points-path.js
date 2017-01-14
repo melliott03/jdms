@@ -497,6 +497,11 @@ angular.module('angular-points-path')
         if (alpha <= 0 || alpha >= 1) {
           delta = -delta;
           ctrl.context.clearRect(data.x, data.y, data.value, 0);
+          ctrl.context.strokeStyle = "#666666";//#666666
+
+          // ctrl.context.fillStyle = "#00ff00"; //"#ccddff";
+          ctrl.context.shadowBlur = 5;
+          ctrl.context.shadowColor = "black";
         }
         /// set global alpha
         ctrl.context.globalAlpha = alpha;
@@ -505,11 +510,11 @@ angular.module('angular-points-path')
           ctrl.context.arc(data.x, data.y, data.value, 0, 2 * Math.PI, false);
           ctrl.context.fill();
           ctrl.context.lineWidth = 0;
-          ctrl.context.strokeStyle = "#666666";//#666666
-
+          // ctrl.context.strokeStyle = "#666666";//#666666
+          //
           ctrl.context.fillStyle = "#00ff00"; //"#ccddff";
-          ctrl.context.shadowBlur = 10;
-          ctrl.context.shadowColor = "black";
+          // ctrl.context.shadowBlur = 5;
+          // ctrl.context.shadowColor = "black";
 
           // ctrl.context.stroke();
 
