@@ -248,7 +248,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     //
     // });
     http.getConnections(function(error, count){
-      console.log('number of concurrent connections (TCP and or UDP) = '+ count);
+      console.log('number of concurrent connections (TCP and or UDP) = :: '+ count);
       if (error) {
         console.log('http.getConnections error::', error);
       }
@@ -276,7 +276,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
       console.log("A User socket connection has disconnected");
       console.log('number of connected sockets, 1::', io.engine.clientsCount);
       http.getConnections(function(error, count){
-        console.log('number of concurrent connections (TCP and or UDP) = '+ count);
+        console.log('number of concurrent connections (TCP and or UDP) = :: '+ count);
         if (error) {
           console.log('http.getConnections error::', error);
         }
