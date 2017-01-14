@@ -247,6 +247,14 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     //   io.emit('authenticated', {"authenticated": "from server: authenticated complete "});
     //
     // });
+    http.getConnections(function(error, count){
+      console.log('number of concurrent connections (TCP and or UDP) = '+ count);
+      if (error) {
+        console.log('http.getConnections error::', error);
+      }
+    });
+    console.log('number of connected sockets::', io.sockets.sockets.length);
+
     socket.to("/#" +socket.id).emit('connectedSocketID', {"socketid" : socket.id}); //"/#" +
     // socket.to(socket.id).emit('connectedSocketID', {"socketid" : socket.id}); //"/#" +
     // io.emit("socketToMe", "users io");
@@ -264,6 +272,14 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     //Find the User and store their socketid on their user Object
     socket.on('disconnect', function(){
       console.log("A User socket connection has disconnected");
+      console.log('number of connected sockets::', io.sockets.sockets.length);
+      http.getConnections(function(error, count){
+        console.log('number of concurrent connections (TCP and or UDP) = '+ count);
+        if (error) {
+          console.log('http.getConnections error::', error);
+        }
+      });
+
       // console.log("A User socket connection has disconnected", socket);
       // console.log("A User socket connection has disconnected socket.id::", socket.id);
       //@@todo find user with socket id and remove from socket id DB
