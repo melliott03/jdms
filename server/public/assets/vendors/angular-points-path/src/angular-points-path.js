@@ -196,57 +196,21 @@ angular.module('angular-points-path')
      * @param  {Point data for drawing}
      * @return {void}
      */
-    // function drawDotOnCanvas(data) {
-    //
-    //   // $timeout(function () {
-    //     console.log('in drawDotOnCanvas before $scope.$apply');
-    //     // $scope.$apply(function() {
-    //     ctrl.context.beginPath();
-    //     ctrl.context.arc(data.x, data.y, data.value, 0, 2 * Math.PI, false);
-    //     ctrl.context.fillStyle = "#ccddff";
-    //     ctrl.context.fill();
-    //     ctrl.context.lineWidth = 0;
-    //     ctrl.context.strokeStyle = "#666666";
-    //     ctrl.context.stroke();
-    //     // });
-    //   // }, 0);
-    // }
+    function drawDotOnCanvas(data) {
 
-    var alpha = 0,          /// current alpha
-        delta = 0.1;        /// delta value = speed
-
-   function drawDotOnCanvas(data) {
-
-
-       console.log('in drawDotOnCanvas before $scope.$apply');
-       // $scope.$apply(function() {
-       // });
-
-       /// increase alpha with delta value
-     alpha += delta;
-
-     //// if delta <=0 or >=1 then reverse
-     if (alpha <= 0 || alpha >= 1) delta = -delta; ctrl.context.clearRect(data.x, data.y, data.value, 0, 2 * Math.PI, false);
-     /// set global alpha
-     ctrl.context.globalAlpha = alpha;
-
-       ctrl.context.beginPath();
-       ctrl.context.arc(data.x, data.y, data.value, 0, 2 * Math.PI, false);
-       ctrl.context.fill();
-       ctrl.context.lineWidth = 0;
-       ctrl.context.strokeStyle = "#666666";//#666666
-
-       ctrl.context.fillStyle = "#00ff00"; //"#ccddff";
-       ctrl.context.shadowBlur = 1;
-       ctrl.context.shadowColor = "black";
-
-       ctrl.context.stroke();
-
-       $timeout(function () {
-         drawDotOnCanvas(data);
-       }, 100);
-
-   }
+      // $timeout(function () {
+        console.log('in drawDotOnCanvas before $scope.$apply');
+        // $scope.$apply(function() {
+        ctrl.context.beginPath();
+        ctrl.context.arc(data.x, data.y, data.value, 0, 2 * Math.PI, false);
+        ctrl.context.fillStyle = "#ccddff";
+        ctrl.context.fill();
+        ctrl.context.lineWidth = 0;
+        ctrl.context.strokeStyle = "#666666";
+        ctrl.context.stroke();
+        // });
+      // }, 0);
+    }
 
     /**
      * Draws a line between two points, passed as arguments
