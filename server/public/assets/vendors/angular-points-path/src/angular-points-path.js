@@ -208,7 +208,7 @@ angular.module('angular-points-path')
         ctrl.context.fillStyle = "#ccddff";
         ctrl.context.fill();
         ctrl.context.lineWidth = 0;
-        ctrl.context.strokeStyle = "#666666";
+        ctrl.context.strokeStyle = "#707070";
         ctrl.context.stroke();
         // });
       // }, 0);
@@ -499,7 +499,7 @@ angular.module('angular-points-path')
         }else {
           ctrl.context.clearRect(data.x, data.y, data.value, 0);
           // ctrl.context.clearRect(0, 0, ctrl.canvas.width, ctrl.canvas.height);
-          // ctrl.context.strokeStyle = "#666666"; // #666666 baby blue
+          ctrl.context.strokeStyle = "#707070"; // #707070 light gray border 
 
           // ctrl.context.fillStyle = "#00ff00"; //"#ccddff";
           // ctrl.context.shadowBlur = 5;
@@ -512,7 +512,7 @@ angular.module('angular-points-path')
           ctrl.context.arc(data.x, data.y, data.value, 0, 2 * Math.PI, false);
           ctrl.context.fill();
           ctrl.context.lineWidth = 0;
-          // ctrl.context.strokeStyle = "#666666";//#666666
+          // ctrl.context.strokeStyle = "#707070";//#707070
           //
           ctrl.context.fillStyle = "#00ff00"; //"#ccddff";
           // ctrl.context.shadowBlur = 5;
