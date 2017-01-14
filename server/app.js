@@ -274,7 +274,7 @@ var plaidClient = new plaid.Client(configsty.PLAID_CLIENT_ID,
     //Find the User and store their socketid on their user Object
     socket.on('disconnect', function(){
       console.log("A User socket connection has disconnected");
-
+      console.log('number of connected sockets, 1::', io.engine.clientsCount);
       http.getConnections(function(error, count){
         console.log('number of concurrent connections (TCP and or UDP) = '+ count);
         if (error) {
