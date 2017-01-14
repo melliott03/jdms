@@ -292,13 +292,14 @@ angular.module('angular-points-path')
     }
 
     $scope.$on('newData', function(event, args) {
+
       var timer;
-      $timeout.cancel( timer );
-      
       console.log("inside $scope.$on('newData') event::", event);
       console.log("inside $scope.$on('newData')  args::", args);
 
       var reLoadCanvas =  function(){
+      $timeout.cancel( timer );
+
       ctrl.container = {};
 
       ctrl.data = args;
