@@ -511,7 +511,7 @@ angular.module('angular-points-path')
           ctrl.context.shadowBlur = 1;
           ctrl.context.shadowColor = "black";
 
-          ctrl.context.stroke();
+          // ctrl.context.stroke();
 
           timer = $timeout(function () {
             drawDotOnCanvas(data);
