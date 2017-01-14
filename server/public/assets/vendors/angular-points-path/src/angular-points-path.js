@@ -499,16 +499,13 @@ angular.module('angular-points-path')
           ctrl.context.clearRect(data.x, data.y, data.value, 0);
           ctrl.context.restore();
           // ctrl.context.clearRect(0, 0, ctrl.canvas.width, ctrl.canvas.height);
-          
+
           delta = -delta;
         }else {
           // ctrl.context.clearRect(0, 0, ctrl.canvas.width, ctrl.canvas.height);
           ctrl.context.strokeStyle = "#707070"; // #707070 light gray border
-
-          // ctrl.context.fillStyle = "#00ff00"; //"#ccddff";
           ctrl.context.shadowBlur = 3;
           ctrl.context.shadowColor = "black";
-
         }
         /// set global alpha
         ctrl.context.globalAlpha = alpha;
@@ -519,7 +516,7 @@ angular.module('angular-points-path')
           ctrl.context.lineWidth = 0;
           // ctrl.context.strokeStyle = "#707070";//#707070
           //
-          ctrl.context.fillStyle = "#00ff00"; //"#ccddff";
+          ctrl.context.fillStyle = "#00ff00"; //#00ff00 limegreen, "#ccddff" baby blue;
           // ctrl.context.shadowBlur = 5;
           // ctrl.context.shadowColor = "black";
 
