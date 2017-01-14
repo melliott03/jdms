@@ -702,7 +702,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             // console.log("inside socket Socket.addListener newValue::", newValue);
           });
 
-          /*
+          
           Socket.addListener('newBookingForSocket', function (msg) {
             console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
             if ($scope.bookings.indexOf(msg) == -1) {
@@ -718,7 +718,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             });
 
 
-            
+
             var id = 88;
             for(var i = 0; i < data.length; i++) {
                 if(data[i].id == id) {
@@ -727,7 +727,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
                 }
             }
           });
-          */
+          
 
 
         };
