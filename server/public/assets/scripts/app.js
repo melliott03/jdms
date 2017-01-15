@@ -92,7 +92,7 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
       socket.removeAllListeners(eventName);
 
       return function () {
-        socket.removeListener(eventName);
+        socket.removeAllListeners(eventName);
       };
     },
 
