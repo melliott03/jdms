@@ -719,7 +719,6 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             });
           });
 
-          });
 
         };
 
