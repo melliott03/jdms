@@ -43,7 +43,7 @@ myApp.filter('capitalize', function() {
 // START SOCKET IO
 myApp.factory('Socket', ['$rootScope', function ($rootScope) {
   var socket = io.connect();
-  console.log("socket created");
+  console.log("socket created, socket::", socket);
 
   return {
     on: function (eventName, callback) {
