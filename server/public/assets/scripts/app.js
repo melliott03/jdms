@@ -80,7 +80,7 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
         });
       }
 
-      socket.on(eventName, wrapper);
+      socket.removeListener(eventName, wrapper);
 
       return function () {
         socket.removeListener(eventName, wrapper);
@@ -88,17 +88,11 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
     },
 
     removeAllListeners: function (eventName) {
-      function wrapper() {
-        var args = arguments;
-        $rootScope.$apply(function () {
-          callback.apply(socket, args);
-        });
-      }
 
-      socket.on(eventName, wrapper);
+      socket.removeAllListeners(eventName);
 
       return function () {
-        socket.removeListener(eventName, wrapper);
+        socket.removeListener(eventName);
       };
     },
 
@@ -110,10 +104,10 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
         });
       }
 
-      socket.on(eventName, wrapper);
+      socket.addListener(eventName, wrapper);
 
       return function () {
-        socket.removeListener(eventName, wrapper);
+        socket.addListener(eventName, wrapper);
       };
     },
 
