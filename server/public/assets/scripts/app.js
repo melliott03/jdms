@@ -80,10 +80,10 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
         });
       }
 
-      socket.removeListener(eventName, wrapper);
+      socket.off(eventName, wrapper);
 
       return function () {
-        socket.removeListener(eventName, wrapper);
+        socket.off(eventName, wrapper);
       };
     },
 
