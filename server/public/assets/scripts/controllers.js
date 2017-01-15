@@ -675,17 +675,13 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             console.log('data in eventCallback, err ::', err);
           };
 
-          Socket.removeAllListeners();
-          /*
+          // Socket.removeAllListeners();
+
           if (socketRoom) {
             console.log("socket 'socketRoom' before closing for ::", socketRoom);
-            Socket.removeListener(socketRoom, callback) {
-              console.log("socket 'socketRoom' is closed for ::", socketRoom);
-              console.log("socket 'socketRoom' is closed msg::", msg);
-              console.log("socket 'socketRoom' is closed err::", err);
-            });
+            Socket.removeListener(socketRoom, callback);
           }
-          */
+
 
           Socket.addListener($scope.work.language, function(data) {
             console.log("socket '$scope.work.language' is opened data::", data);
@@ -704,23 +700,25 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             socketRoom = $scope.work.language;
             // console.log("inside socket Socket.addListener newValue::", newValue);
           });
-          Socket.addListener($scope.newBookingForSocket, function(data) {
-            console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
-            if ($scope.bookings.indexOf(msg) == -1) {
-                $scope.bookings.unshift(msg);
-            }
-          });
-          Socket.addListener($scope.newRemoveBookingItem, function(data) {
-            console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
-            console.log("in AddController new Socket Alert newRemoveBookingItem, $scope.bookings::", $scope.bookings);
-            var _id = msg._id;
-            $scope.bookings = $scope.bookings.filter(function( obj ) {
-              return obj._id !== _id;
-            });
-          });
+
 
 
         };
+
+        Socket.on($scope.newBookingForSocket, function(msg) {
+          console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
+          if ($scope.bookings.indexOf(msg) == -1) {
+              $scope.bookings.unshift(msg);
+          }
+        });
+        Socket.on($scope.newRemoveBookingItem, function(data) {
+          console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
+          console.log("in AddController new Socket Alert newRemoveBookingItem, $scope.bookings::", $scope.bookings);
+          var _id = msg._id;
+          $scope.bookings = $scope.bookings.filter(function( obj ) {
+            return obj._id !== _id;
+          });
+        });
 
 
 

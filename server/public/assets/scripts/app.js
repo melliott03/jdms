@@ -87,7 +87,7 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
       };
     },
 
-    removeAllListeners: function (eventName, callback) {
+    removeAllListeners: function (eventName) {
       function wrapper() {
         var args = arguments;
         $rootScope.$apply(function () {
