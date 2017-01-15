@@ -646,6 +646,9 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           console.log('in generateRandomData, after scope.emit::');
         };
 
+        $scope.newBookingForSocket  = 'newBookingForSocket';
+        $scope.newRemoveBookingItem = 'newRemoveBookingItem';
+
         var socketRoom;
         var numAvailible;
         $scope.languageChanged = function(){
@@ -701,75 +704,26 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             socketRoom = $scope.work.language;
             // console.log("inside socket Socket.addListener newValue::", newValue);
           });
-
-
-          Socket.addListener('newBookingForSocket', function (msg) {
+          Socket.addListener($scope.newBookingForSocket, function(data) {
             console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
             if ($scope.bookings.indexOf(msg) == -1) {
                 $scope.bookings.unshift(msg);
             }
           });
-          Socket.addListener('newRemoveBookingItem', function (msg) {
+          Socket.addListener($scope.newRemoveBookingItem, function(data) {
             console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
             console.log("in AddController new Socket Alert newRemoveBookingItem, $scope.bookings::", $scope.bookings);
             var _id = msg._id;
             $scope.bookings = $scope.bookings.filter(function( obj ) {
               return obj._id !== _id;
             });
-
           });
 
-          Socket.on('newBookingForSocket', function (msg) {
-            console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
-            if ($scope.bookings.indexOf(msg) == -1) {
-                $scope.bookings.unshift(msg);
-            }
           });
-          Socket.on('newRemoveBookingItem', function (msg) {
-            console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
-            console.log("in AddController new Socket Alert newRemoveBookingItem, $scope.bookings::", $scope.bookings);
-            var _id = msg._id;
-            $scope.bookings = $scope.bookings.filter(function( obj ) {
-              return obj._id !== _id;
-            });
-
-          });
-
-
 
         };
 
-        Socket.on('newBookingForSocket', function (msg) {
-          console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
-          if ($scope.bookings.indexOf(msg) == -1) {
-              $scope.bookings.unshift(msg);
-          }
-        });
-        Socket.on('newRemoveBookingItem', function (msg) {
-          console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
-          console.log("in AddController new Socket Alert newRemoveBookingItem, $scope.bookings::", $scope.bookings);
-          var _id = msg._id;
-          $scope.bookings = $scope.bookings.filter(function( obj ) {
-            return obj._id !== _id;
-          });
 
-        });
-
-        Socket.addListener('newBookingForSocket', function (msg) {
-          console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
-          if ($scope.bookings.indexOf(msg) == -1) {
-              $scope.bookings.unshift(msg);
-          }
-        });
-        Socket.addListener('newRemoveBookingItem', function (msg) {
-          console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
-          console.log("in AddController new Socket Alert newRemoveBookingItem, $scope.bookings::", $scope.bookings);
-          var _id = msg._id;
-          $scope.bookings = $scope.bookings.filter(function( obj ) {
-            return obj._id !== _id;
-          });
-
-        });
 
         $scope.$on('$destroy', function () {
             Socket.removeListener(socketRoom, function(msg) {
@@ -973,20 +927,20 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             // WorkService.saveSocketId(msg);
           });
 
-          $scope.bookings = [];
+          // $scope.bookings = [];
           // $scope.bookings = WorkService.customerWorkTelBookingsObject.response;
 
-          Socket.on('newBookingForSocket', function (msg) {
-            console.log("in controller SocketBooking Alert, newBookingForSocket, msg::", msg);
-            if ($scope.bookings.indexOf(msg) == -1) {
-                $scope.bookings.unshift(msg);
-            }
-          });
-          Socket.on('newRemoveBookingItem', function (msg) {
-            console.log("in controller SocketBooking Alert, newRemoveBookingItem, msg::", msg);
-            $scope.bookings = $scope.bookings.filter(function( obj ) {
-              return obj._id !== _id;
-            });
+          // Socket.on('newBookingForSocket', function (msg) {
+          //   console.log("in controller SocketBooking Alert, newBookingForSocket, msg::", msg);
+          //   if ($scope.bookings.indexOf(msg) == -1) {
+          //       $scope.bookings.unshift(msg);
+          //   }
+          // });
+          // Socket.on('newRemoveBookingItem', function (msg) {
+          //   console.log("in controller SocketBooking Alert, newRemoveBookingItem, msg::", msg);
+          //   $scope.bookings = $scope.bookings.filter(function( obj ) {
+          //     return obj._id !== _id;
+          //   });
             /*
             var id = 88;
             for(var i = 0; i < data.length; i++) {
@@ -995,28 +949,28 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
                     break;
                 }
             }*/
-          });
+          // });
 
-          Socket.addListener('newBookingForSocket', function (msg) {
-            console.log("in controller SocketBooking Alert, newBookingForSocket, msg::", msg);
-            if ($scope.bookings.indexOf(msg) == -1) {
-                $scope.bookings.unshift(msg);
-            }
-          });
-          Socket.addListener('newRemoveBookingItem', function (msg) {
-            console.log("in controller SocketBooking Alert, newRemoveBookingItem, msg::", msg);
-            $scope.bookings = $scope.bookings.filter(function( obj ) {
-              return obj._id !== _id;
-            });
-            /*
-            var id = 88;
-            for(var i = 0; i < data.length; i++) {
-                if(data[i].id == id) {
-                    data.splice(i, 1);
-                    break;
-                }
-            }*/
-          });
+          // Socket.addListener('newBookingForSocket', function (msg) {
+          //   console.log("in controller SocketBooking Alert, newBookingForSocket, msg::", msg);
+          //   if ($scope.bookings.indexOf(msg) == -1) {
+          //       $scope.bookings.unshift(msg);
+          //   }
+          // });
+          // Socket.addListener('newRemoveBookingItem', function (msg) {
+          //   console.log("in controller SocketBooking Alert, newRemoveBookingItem, msg::", msg);
+          //   $scope.bookings = $scope.bookings.filter(function( obj ) {
+          //     return obj._id !== _id;
+          //   });
+          //   /*
+          //   var id = 88;
+          //   for(var i = 0; i < data.length; i++) {
+          //       if(data[i].id == id) {
+          //           data.splice(i, 1);
+          //           break;
+          //       }
+          //   }*/
+          // });
 
           Socket.on('socketToYou', function (msg) {
             console.log("in controller, socketToYou msg, BEFORE::", msg);
