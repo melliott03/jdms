@@ -1,6 +1,51 @@
-var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad', 'btford.socket-io', 'angularjs-dropdown-multiselect', 'myApp.core.services', 'myApp.core.directives', 'myApp.videochat', 'chart.js', 'duScroll', 'rx', 'angular-points-path', 'datetime'])
+var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad', 'btford.socket-io', 'myApp.SocketIOController', 'angularjs-dropdown-multiselect', 'myApp.core.services', 'myApp.core.directives', 'myApp.videochat', 'chart.js', 'duScroll', 'rx', 'angular-points-path', 'datetime'])
 .value('duScrollDuration', 2000)
-.value('duScrollOffset', 30);
+.value('duScrollOffset', 30)
+.factory("Socket", [ "socketFactory", function(socketFactory){
+    return socketFactory();
+}]).
+.controller("SocketIOController", ['$http', 'Socket', function($http, Socket){
+  console.log('Inside SocketIOController:::');
+  this.$onInit = function() {
+    this.state = 'Loaded!';
+  };
+  var workService = WorkService;
+
+  Socket.connect();
+
+  Socket.on('connect', function (msg) {
+    console.log("in controller, connected msg,::", msg);
+    $http.post("/testExpressSocket", msg).then(function(response){
+      console.log('return of updateUserSocketId in controller connect, response.data', response.data);
+    });
+    var userToken = $window.localStorage.token;
+    console.log("in controller, in Socket on 'connect' before emit 'authenticate', userToken::", userToken);
+    Socket.emit('authenticate', {token: userToken}); // send the jwt
+  });
+  Socket.on('connectedSocketID', function (msg) {
+    console.log("in controller, connectedSocketID msg,::", msg);
+    WorkService.saveSocketId(msg);
+  });
+  Socket.on('socketToMe', function (msg) {
+    console.log("in controller, socketToMe msg,::", msg);
+    // WorkService.saveSocketId(msg);
+  });
+  Socket.on('authenticated', function (msg) {
+    console.log("in controller, authenticated", msg);
+  });
+  Socket.on('unauthorized', function(msg){
+    console.log("unauthorized: " + JSON.stringify(msg.data));
+    throw new Error(msg.data.type);
+  });
+  Socket.on('error', function (data) {
+  console.log('Socket.on error::' , data || 'error');
+  });
+  Socket.on('connect_failed', function (data) {
+      console.log("Socket.on connect_failed::" , data || 'connect_failed');
+  });
+
+  }]); //END of SocketIOController
+
 /*'bc.TelephoneFilter' is replaced by 'ngIntlTelInput'*/
 //ngPlacesAutocomplete ngAutocomplete
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){

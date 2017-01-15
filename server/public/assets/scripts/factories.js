@@ -537,10 +537,6 @@ myApp.factory("PlaidService", ["$http", "$location", "WorkService", function($ht
     };
 }]);
 
-// SOCKET
-myApp.factory("Socket", [ "socketFactory", function(socketFactory){
-    return socketFactory();
-}]);
 
 myApp.factory('SmartTableWorkService', ['$q', '$filter', '$timeout', '$http', function ($q, $filter, $timeout, $http) {
 

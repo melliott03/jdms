@@ -704,7 +704,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             socketRoom = $scope.work.language;
             // console.log("inside socket Socket.addListener newValue::", newValue);
           });
-          Socket.addListener($scope.newBookingForSocket, function(data) {
+          Socket.addListener($scope.newBookingForSocket, function(socketIOsocketIO) {
             console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
             if ($scope.bookings.indexOf(msg) == -1) {
                 $scope.bookings.unshift(msg);
@@ -1382,97 +1382,97 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           }]); //END of ShowController
 
 
-          myApp.controller("SocketIOController", ["$scope", "$interval", "$window", "$location", '$filter', '$http', '$log', "WorkService", 'uiGridConstants', 'stripe', '$mdDialog', 'Socket', function($scope, $interval, $window, $location, $filter, $http, $log, WorkService, uiGridConstants, stripe, $mdDialog, Socket){
-            console.log('Inside SocketIOController:::');
-            this.$onInit = function() {
-              this.state = 'Loaded!';
-            };
-            var workService = WorkService;
-
-
-            //Secket.io suff turning off to code further
-            Socket.connect();
-            // $scope.$on('$locationChangeStart', function(event){
-            //   console.log("$scope.$on('$locationChangeStart, event::", event);
-            //   // Socket.disconnect(true);
-            // })
-
-            Socket.on('connect', function (msg) {
-              console.log("in controller, connected msg,::", msg);
-              $http.post("/testExpressSocket", msg).then(function(response){
-                console.log('return of updateUserSocketId in controller connect, response.data', response.data);
-              });
-              var userToken = $window.localStorage.token;
-              console.log("in controller, in Socket on 'connect' before emit 'authenticate', userToken::", userToken);
-              Socket.emit('authenticate', {token: userToken}); // send the jwt
-            });
-            Socket.on('connectedSocketID', function (msg) {
-              console.log("in controller, connectedSocketID msg,::", msg);
-              WorkService.saveSocketId(msg);
-            });
-            Socket.on('socketToMe', function (msg) {
-              console.log("in controller, socketToMe msg,::", msg);
-              // WorkService.saveSocketId(msg);
-            });
-
-            Socket.on('socketToYou', function (msg) {
-              console.log("in controller, socketToYou msg, BEFORE::", msg);
-              $scope.myVar = true;
-              $scope.determinateTimeValue = 0;
-              var TimeValue = 1000;
-              // $scope.ding = WorkService.audioDing;
-              // function setDelay(i) {
-              //   $timeout(function(){
-              //     $scope.determinateTimeValue = i;
-              //     console.log(i);
-              //   }, 1000);
-              // };
-              //
-              // for (i = 1; i <= 100; ++i) {
-              //   setDelay(i);
-              // };
-
-
-
-              var iterrateVal = .1;
-              var i = 0;
-              $interval(function () {
-                if (i < TimeValue) {
-                  $scope.determinateTimeValue += iterrateVal;
-                  i++;
-                } else {
-
-                }
-
-              }, 100);
-              console.log("in controller, socketToYou msg, AFTER::", msg);
-
-              // WorkService.saveSocketId(msg);
-            });
-            Socket.on('authenticated', function (msg) {
-              //Do
-              console.log("in controller, authenticated", msg);
-            });
-            Socket.on('unauthorized', function(msg){
-              console.log("unauthorized: " + JSON.stringify(msg.data));
-              throw new Error(msg.data.type);
-            });
-            // .on('chat message', function (msg) {
-            //     console.log("msg");
-            //     // $('#messages').append($('<li>').text(msg));
-            // });
-            Socket.on('error', function (data) {
-            console.log('Socket.on error::' , data || 'error');
-            });
-
-            Socket.on('connect_failed', function (data) {
-                console.log("Socket.on connect_failed::" , data || 'connect_failed');
-            });
-
-
-
-
-            }]); //END of SocketIOController
+          // myApp.controller("SocketIOController", ["$scope", "$interval", "$window", "$location", '$filter', '$http', '$log', "WorkService", 'uiGridConstants', 'stripe', '$mdDialog', 'Socket', function($scope, $interval, $window, $location, $filter, $http, $log, WorkService, uiGridConstants, stripe, $mdDialog, Socket){
+          //   console.log('Inside SocketIOController:::');
+          //   this.$onInit = function() {
+          //     this.state = 'Loaded!';
+          //   };
+          //   var workService = WorkService;
+          //
+          //
+          //   //Secket.io suff turning off to code further
+          //   Socket.connect();
+          //   // $scope.$on('$locationChangeStart', function(event){
+          //   //   console.log("$scope.$on('$locationChangeStart, event::", event);
+          //   //   // Socket.disconnect(true);
+          //   // })
+          //
+          //   Socket.on('connect', function (msg) {
+          //     console.log("in controller, connected msg,::", msg);
+          //     $http.post("/testExpressSocket", msg).then(function(response){
+          //       console.log('return of updateUserSocketId in controller connect, response.data', response.data);
+          //     });
+          //     var userToken = $window.localStorage.token;
+          //     console.log("in controller, in Socket on 'connect' before emit 'authenticate', userToken::", userToken);
+          //     Socket.emit('authenticate', {token: userToken}); // send the jwt
+          //   });
+          //   Socket.on('connectedSocketID', function (msg) {
+          //     console.log("in controller, connectedSocketID msg,::", msg);
+          //     WorkService.saveSocketId(msg);
+          //   });
+          //   Socket.on('socketToMe', function (msg) {
+          //     console.log("in controller, socketToMe msg,::", msg);
+          //     // WorkService.saveSocketId(msg);
+          //   });
+          //
+          //   Socket.on('socketToYou', function (msg) {
+          //     console.log("in controller, socketToYou msg, BEFORE::", msg);
+          //     $scope.myVar = true;
+          //     $scope.determinateTimeValue = 0;
+          //     var TimeValue = 1000;
+          //     // $scope.ding = WorkService.audioDing;
+          //     // function setDelay(i) {
+          //     //   $timeout(function(){
+          //     //     $scope.determinateTimeValue = i;
+          //     //     console.log(i);
+          //     //   }, 1000);
+          //     // };
+          //     //
+          //     // for (i = 1; i <= 100; ++i) {
+          //     //   setDelay(i);
+          //     // };
+          //
+          //
+          //
+          //     var iterrateVal = .1;
+          //     var i = 0;
+          //     $interval(function () {
+          //       if (i < TimeValue) {
+          //         $scope.determinateTimeValue += iterrateVal;
+          //         i++;
+          //       } else {
+          //
+          //       }
+          //
+          //     }, 100);
+          //     console.log("in controller, socketToYou msg, AFTER::", msg);
+          //
+          //     // WorkService.saveSocketId(msg);
+          //   });
+          //   Socket.on('authenticated', function (msg) {
+          //     //Do
+          //     console.log("in controller, authenticated", msg);
+          //   });
+          //   Socket.on('unauthorized', function(msg){
+          //     console.log("unauthorized: " + JSON.stringify(msg.data));
+          //     throw new Error(msg.data.type);
+          //   });
+          //   // .on('chat message', function (msg) {
+          //   //     console.log("msg");
+          //   //     // $('#messages').append($('<li>').text(msg));
+          //   // });
+          //   Socket.on('error', function (data) {
+          //   console.log('Socket.on error::' , data || 'error');
+          //   });
+          //
+          //   Socket.on('connect_failed', function (data) {
+          //       console.log("Socket.on connect_failed::" , data || 'connect_failed');
+          //   });
+          //
+          //
+          //
+          //
+          //   }]); //END of SocketIOController
 
 
 
