@@ -698,7 +698,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             generateRandomData(numAvailible, ctrl.data);
             // numAvailible += parseInt(msg);
             socketRoom = $scope.work.language;
-            // console.log("inside socket Socket.addListener newValue::", newValue);
+            console.log("inside socket Socket.addListener after setting socketRoom::", socketRoom);
           });
 
 
