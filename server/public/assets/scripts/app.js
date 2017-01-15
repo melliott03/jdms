@@ -1,51 +1,6 @@
-var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad', 'btford.socket-io', 'myApp.SocketIOController', 'angularjs-dropdown-multiselect', 'myApp.core.services', 'myApp.core.directives', 'myApp.videochat', 'chart.js', 'duScroll', 'rx', 'angular-points-path', 'datetime'])
+var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.data.table', 'ngPlacesAutocomplete', 'ngMap', 'uiGmapgoogle-maps', 'googlechart', 'ngAnimate', 'ngTouch', 'ui.grid', 'smart-table', 'ui.bootstrap', 'wt.responsive', 'angularInlineEdit', 'xeditable', 'angular-plaid-link', 'angular-stripe', 'gavruk.card', 'gavruk.check', 'ngFileUpload', 'ngSignaturePad', 'btford.socket-io', 'angularjs-dropdown-multiselect', 'myApp.core.services', 'myApp.core.directives', 'myApp.videochat', 'chart.js', 'duScroll', 'rx', 'angular-points-path', 'datetime'])
 .value('duScrollDuration', 2000)
-.value('duScrollOffset', 30)
-.factory("Socket", [ "socketFactory", function(socketFactory){
-    return socketFactory();
-}]).
-.controller("SocketIOController", ['$http', 'Socket', function($http, Socket){
-  console.log('Inside SocketIOController:::');
-  this.$onInit = function() {
-    this.state = 'Loaded!';
-  };
-  var workService = WorkService;
-
-  Socket.connect();
-
-  Socket.on('connect', function (msg) {
-    console.log("in controller, connected msg,::", msg);
-    $http.post("/testExpressSocket", msg).then(function(response){
-      console.log('return of updateUserSocketId in controller connect, response.data', response.data);
-    });
-    var userToken = $window.localStorage.token;
-    console.log("in controller, in Socket on 'connect' before emit 'authenticate', userToken::", userToken);
-    Socket.emit('authenticate', {token: userToken}); // send the jwt
-  });
-  Socket.on('connectedSocketID', function (msg) {
-    console.log("in controller, connectedSocketID msg,::", msg);
-    WorkService.saveSocketId(msg);
-  });
-  Socket.on('socketToMe', function (msg) {
-    console.log("in controller, socketToMe msg,::", msg);
-    // WorkService.saveSocketId(msg);
-  });
-  Socket.on('authenticated', function (msg) {
-    console.log("in controller, authenticated", msg);
-  });
-  Socket.on('unauthorized', function(msg){
-    console.log("unauthorized: " + JSON.stringify(msg.data));
-    throw new Error(msg.data.type);
-  });
-  Socket.on('error', function (data) {
-  console.log('Socket.on error::' , data || 'error');
-  });
-  Socket.on('connect_failed', function (data) {
-      console.log("Socket.on connect_failed::" , data || 'connect_failed');
-  });
-
-  }]); //END of SocketIOController
-
+.value('duScrollOffset', 30);
 /*'bc.TelephoneFilter' is replaced by 'ngIntlTelInput'*/
 //ngPlacesAutocomplete ngAutocomplete
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
@@ -80,10 +35,92 @@ myApp.config(function(uiGmapGoogleMapApiProvider) {
 // });
 
 myApp.filter('capitalize', function() {
-    return function(input) {
-      return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
-    }
+  return function(input) {
+    return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+  }
 });
+
+// START SOCKET IO
+myApp.factory('Socket', ['$rootScope', function ($rootScope) {
+  var socket = io.connect();
+  console.log("socket created");
+
+  return {
+    on: function (eventName, callback) {
+      function wrapper() {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          callback.apply(socket, args);
+        });
+      }
+
+      socket.on(eventName, wrapper);
+
+      return function () {
+        socket.removeListener(eventName, wrapper);
+      };
+    },
+
+    emit: function (eventName, data, callback) {
+      socket.emit(eventName, data, function () {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          if(callback) {
+            callback.apply(socket, args);
+          }
+        });
+      });
+    },
+
+    removeListener: function (eventName, callback) {
+      function wrapper() {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          callback.apply(socket, args);
+        });
+      }
+
+      socket.on(eventName, wrapper);
+
+      return function () {
+        socket.removeListener(eventName, wrapper);
+      };
+    },
+
+    removeAllListeners: function (eventName, callback) {
+      function wrapper() {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          callback.apply(socket, args);
+        });
+      }
+
+      socket.on(eventName, wrapper);
+
+      return function () {
+        socket.removeListener(eventName, wrapper);
+      };
+    },
+
+    addListener: function (eventName, callback) {
+      function wrapper() {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          callback.apply(socket, args);
+        });
+      }
+
+      socket.on(eventName, wrapper);
+
+      return function () {
+        socket.removeListener(eventName, wrapper);
+      };
+    },
+
+  };
+}]);
+
+// END SOCKET IO
 
 
 //STARRT ANGULAR TWILIO TaskRouter STUFF
@@ -101,71 +138,71 @@ myApp.filter('capitalize', function() {
 /*
 myApp
 .run(['$rootScope', '$location', '$window', 'WorkService', 'Auth', function ($rootScope, $location, $window, WorkService, Auth) {
-    var workService = WorkService;
-    $rootScope.$on('$routeChangeStart', function (event) {
-        console.log('window.location.href::', window.location.href);
-        console.log('$location.path::', $location.path);
-        console.log('$location.path()::', $location.path());
-        console.log('$location.path().length::', $location.path().length);
-        console.log('$location.url()::', $location.url());
-        console.log('$location.url()::', $location.url());
-        console.log('Auth.isLoggedIn()::', Auth.isLoggedIn());
-        // debugger;
+var workService = WorkService;
+$rootScope.$on('$routeChangeStart', function (event) {
+console.log('window.location.href::', window.location.href);
+console.log('$location.path::', $location.path);
+console.log('$location.path()::', $location.path());
+console.log('$location.path().length::', $location.path().length);
+console.log('$location.url()::', $location.url());
+console.log('$location.url()::', $location.url());
+console.log('Auth.isLoggedIn()::', Auth.isLoggedIn());
+// debugger;
 
-        console.log('$location.absUrl()::',$location.absUrl());
-        console.log('does absUrl().includes(/assets/views/users.html?::',$location.absUrl().includes('/assets/views/users.html'));
-        // if (!workService.isLoggedIn() && $location.path() != "/home" && $location.path().length != 0) { //&& $location.path().length > 1
-        if (Auth.isLoggedIn() === false) { //&& $location.path().length > 1
-            console.log('inside if before redirect 1::');
-            console.log('DENY');
-            event.preventDefault();
-            // $location.path('/');
-            if ($location.absUrl().includes('/assets/views/users.html') ) {
-              console.log('inside if before redirect 2::');
-                // window.location.href = "/";
-            }else {
+console.log('$location.absUrl()::',$location.absUrl());
+console.log('does absUrl().includes(/assets/views/users.html?::',$location.absUrl().includes('/assets/views/users.html'));
+// if (!workService.isLoggedIn() && $location.path() != "/home" && $location.path().length != 0) { //&& $location.path().length > 1
+if (Auth.isLoggedIn() === false) { //&& $location.path().length > 1
+console.log('inside if before redirect 1::');
+console.log('DENY');
+event.preventDefault();
+// $location.path('/');
+if ($location.absUrl().includes('/assets/views/users.html') ) {
+console.log('inside if before redirect 2::');
+// window.location.href = "/";
+}else {
 
-            }
-            // window.location.href = "/";
-        }else {
-            console.log('ALLOW');
-            // $location.path('/home');
-        }
-    });
+}
+// window.location.href = "/";
+}else {
+console.log('ALLOW');
+// $location.path('/home');
+}
+});
 }])
 .factory('Auth', function(){
 var user;
 var aUser;
 var getUser = function(){
-    $http.get("/user/name").then(function(response){
-        console.log(response.data);
-        userObject.response = response.data;
-        console.log('userObject in factory', userObject);
-        if (userObject.response == "Unauthorized") {
-          userObject.isLogin = false;
-          // setUser(false)
-          aUser = false;
-        } else {
-          userObject.isLogin = true;
-          // setUser(true);
-          aUser = true;
-        }
-        console.log('userObject in factory 2', userObject);
-    });
+$http.get("/user/name").then(function(response){
+console.log(response.data);
+userObject.response = response.data;
+console.log('userObject in factory', userObject);
+if (userObject.response == "Unauthorized") {
+userObject.isLogin = false;
+// setUser(false)
+aUser = false;
+} else {
+userObject.isLogin = true;
+// setUser(true);
+aUser = true;
+}
+console.log('userObject in factory 2', userObject);
+});
 };
 
 return{
-    setUser : function(){
-      console.log('setting user to aUser::', aUser);
-        user = aUser;
-        // debugger;
-    },
-    isLoggedIn : function(){
-      console.log('inside isLoggedIn function, user::', user);
-        return(user)? user : false;
-        // debugger;
-    }
-  };
+setUser : function(){
+console.log('setting user to aUser::', aUser);
+user = aUser;
+// debugger;
+},
+isLoggedIn : function(){
+console.log('inside isLoggedIn function, user::', user);
+return(user)? user : false;
+// debugger;
+}
+};
 });
 */
 
@@ -203,6 +240,10 @@ return{
 
 myApp.config(["$routeProvider", function($routeProvider){
   $routeProvider.
+  when('/', {
+    templateUrl : '/',
+    controller : 'mainController'
+  }).
   when("/login", {
     // requireAuth: true,
     url: "/assets/views/users.html#/login", //assets/views/users.html#/home
@@ -354,39 +395,39 @@ myApp.config(["$routeProvider", function($routeProvider){
 // end Protecting routes
 myApp.config(function ($stateProvider) {
 
-  $stateProvider
-    .state('home', {
-      url: '/home',
-      // ...
-      data: {
-        requireLogin: false
-      }
-    })
-    .state('/', {
-      url: '/assets',
-      abstract: true,
-      // ...
-      data: {
-        requireLogin: true // this property will apply to all children of 'app'
-      }
-    })
-    .state('app.dashboard', {
-      // child state of `app`
-      // requireLogin === true
-    })
+$stateProvider
+.state('home', {
+url: '/home',
+// ...
+data: {
+requireLogin: false
+}
+})
+.state('/', {
+url: '/assets',
+abstract: true,
+// ...
+data: {
+requireLogin: true // this property will apply to all children of 'app'
+}
+})
+.state('app.dashboard', {
+// child state of `app`
+// requireLogin === true
+})
 
 });
 
 myApp.run(function ($rootScope) {
 
-  $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
-    var requireLogin = toState.data.requireLogin;
+$rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+var requireLogin = toState.data.requireLogin;
 
-    if (requireLogin && typeof $rootScope.userObject.isAuthenticated === false || $rootScope.userObject.isAuthenticated === 'undefined') {
-      event.preventDefault();
-      // get me a login modal!
-    }
-  });
+if (requireLogin && typeof $rootScope.userObject.isAuthenticated === false || $rootScope.userObject.isAuthenticated === 'undefined') {
+event.preventDefault();
+// get me a login modal!
+}
+});
 
 });
 // end Protecting routes
@@ -1192,42 +1233,42 @@ myApp.controller('XAccountCtrl3', ["$scope", "$location", '$anchorScroll','$filt
     workService.submitRecharge(recharge);
   }
 
-// START showRechargeDialog
-$scope.showRechargeDialog = function(ev) {
-  console.log("Inside showRechargeDialog function");
-  $mdDialog.show({
-    controller: RechargeDialogController,
-    templateUrl: 'routes/account/rechargeDialog.tmpl.html',
-    parent: angular.element(document.body),
-    targetEvent: ev,
-    clickOutsideToClose:true,
-    openFrom: {
-      top: -50,
-      width: 30,
-      height: 80
-    },
-    closeTo: {
-      top: 1500
-    }
-  })
-  .then(function(answer) {
-    $scope.status = 'You said the information was "' + answer + '".';
-  }, function() {
-    $scope.status = 'You cancelled the dialog.';
-  });
-};
-function RechargeDialogController($scope, $mdDialog) {
-  $scope.hide = function() {
-    $mdDialog.hide();
+  // START showRechargeDialog
+  $scope.showRechargeDialog = function(ev) {
+    console.log("Inside showRechargeDialog function");
+    $mdDialog.show({
+      controller: RechargeDialogController,
+      templateUrl: 'routes/account/rechargeDialog.tmpl.html',
+      parent: angular.element(document.body),
+      targetEvent: ev,
+      clickOutsideToClose:true,
+      openFrom: {
+        top: -50,
+        width: 30,
+        height: 80
+      },
+      closeTo: {
+        top: 1500
+      }
+    })
+    .then(function(answer) {
+      $scope.status = 'You said the information was "' + answer + '".';
+    }, function() {
+      $scope.status = 'You cancelled the dialog.';
+    });
   };
-  $scope.cancel = function() {
-    $mdDialog.cancel();
-  };
-  $scope.answer = function(answer) {
-    $mdDialog.hide(answer);
-  };
-}
-// END showTabDialog
+  function RechargeDialogController($scope, $mdDialog) {
+    $scope.hide = function() {
+      $mdDialog.hide();
+    };
+    $scope.cancel = function() {
+      $mdDialog.cancel();
+    };
+    $scope.answer = function(answer) {
+      $mdDialog.hide(answer);
+    };
+  }
+  // END showTabDialog
 
 }]);
 
@@ -1249,48 +1290,48 @@ myApp.controller('XAccountCtrl4', ["$scope", "$location", '$anchorScroll','$filt
   $scope.rechargeAmounts =
   var rechargeThresholdIncrements = [];
   var createRechargeThresholdArray = function(){
-    var finalNum = 1000;
-    for (var i = 0; i < finalNum;) {
-      var val = i+10;
-      rechargeThresholdIncrements.push(val);
-      console.log('rechargeThresholdIncrements::', rechargeThresholdIncrements);
-      i = i+10;
-    }
-    $scope.rechargeThresholds = rechargeThresholdIncrements;
-  }
-  createRechargeThresholdArray();
-  */
-  /*
-  var rechargeAmountIncrements = [];
-  var createRechargeAmountArray = function(){
-    var finalNum = 2000;
-    for (var i = 30; i <= finalNum;) {
-      var val = i;
-      rechargeAmountIncrements.push(val);
-      console.log('rechargeAmountIncrements::', rechargeAmountIncrements);
-      i = i+10;
-    }
-    $scope.rechargeAmounts = rechargeAmountIncrements;
-  }
-  createRechargeAmountArray();
-  */
+  var finalNum = 1000;
+  for (var i = 0; i < finalNum;) {
+  var val = i+10;
+  rechargeThresholdIncrements.push(val);
+  console.log('rechargeThresholdIncrements::', rechargeThresholdIncrements);
+  i = i+10;
+}
+$scope.rechargeThresholds = rechargeThresholdIncrements;
+}
+createRechargeThresholdArray();
+*/
+/*
+var rechargeAmountIncrements = [];
+var createRechargeAmountArray = function(){
+var finalNum = 2000;
+for (var i = 30; i <= finalNum;) {
+var val = i;
+rechargeAmountIncrements.push(val);
+console.log('rechargeAmountIncrements::', rechargeAmountIncrements);
+i = i+10;
+}
+$scope.rechargeAmounts = rechargeAmountIncrements;
+}
+createRechargeAmountArray();
+*/
 
-  $scope.$watch('autoRecharge.rechargeoffon', function(newVal, oldVal) {
-    console.log('newVal ::', newVal);
-    console.log('oldVal ::', oldVal);
-    if (newVal !== oldVal) {
-      console.log('newVal !== oldVal');
-      // var selected = $filter('filter')($scope.groups, {id: $scope.user.group});
-      // $scope.user.groupName = selected.length ? selected[0].text : null;
-      // console.log('$scope.user.acc_id::', $scope.user.acc_id);
-      // console.log('$scope.user::', $scope.user);
-      // console.log('$scope.user.groupName::', $scope.user.groupName);
-      // console.log('$scope.groups::', $scope.groups);
-      //
-      // workService.updateCustomerDefaultPaymentSource($scope.user);
+$scope.$watch('autoRecharge.rechargeoffon', function(newVal, oldVal) {
+  console.log('newVal ::', newVal);
+  console.log('oldVal ::', oldVal);
+  if (newVal !== oldVal) {
+    console.log('newVal !== oldVal');
+    // var selected = $filter('filter')($scope.groups, {id: $scope.user.group});
+    // $scope.user.groupName = selected.length ? selected[0].text : null;
+    // console.log('$scope.user.acc_id::', $scope.user.acc_id);
+    // console.log('$scope.user::', $scope.user);
+    // console.log('$scope.user.groupName::', $scope.user.groupName);
+    // console.log('$scope.groups::', $scope.groups);
+    //
+    // workService.updateCustomerDefaultPaymentSource($scope.user);
 
-    }
-  });
+  }
+});
 
 // START showAutoChargeDialog
 $scope.showChoiceChargeDialog = function(ev, chargeFormType) {
@@ -1382,7 +1423,7 @@ myApp.controller('xSelectCtrl', ["$scope", "$location", '$filter', '$http', "Wor
         }
         if (obj.id == default_source) {
           console.log('controller obj default_source::', obj);
-            userDefaultSource = {
+          userDefaultSource = {
             group: obj.object +' '+ obj.last4,
             groupName: obj.object +' '+ obj.last4, // original value
             acc_id: obj.id

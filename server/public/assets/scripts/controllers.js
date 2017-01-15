@@ -704,7 +704,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             socketRoom = $scope.work.language;
             // console.log("inside socket Socket.addListener newValue::", newValue);
           });
-          Socket.addListener($scope.newBookingForSocket, function(socketIOsocketIO) {
+          Socket.addListener($scope.newBookingForSocket, function(data) {
             console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
             if ($scope.bookings.indexOf(msg) == -1) {
                 $scope.bookings.unshift(msg);
