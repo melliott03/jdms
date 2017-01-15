@@ -704,14 +704,14 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             socketRoom = $scope.work.language;
             // console.log("inside socket Socket.addListener newValue::", newValue);
           });
-          Socket.addListener($scope.newBookingForSocket, function(msg) {
-            console.log("in AddController new Socket Alert newBookingForSocket, msg, data::", msg, data);
+          Socket.addListener($scope.newBookingForSocket, function(data) {
+            console.log("in AddController new Socket Alert newBookingForSocket, msg::", msg);
             if ($scope.bookings.indexOf(msg) == -1) {
                 $scope.bookings.unshift(msg);
             }
           });
-          Socket.addListener($scope.newRemoveBookingItem, function(msg) {
-            console.log("in AddController new Socket Alert newRemoveBookingItem, msg, data::", msg, data);
+          Socket.addListener($scope.newRemoveBookingItem, function(data) {
+            console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
             console.log("in AddController new Socket Alert newRemoveBookingItem, $scope.bookings::", $scope.bookings);
             var _id = msg._id;
             $scope.bookings = $scope.bookings.filter(function( obj ) {
