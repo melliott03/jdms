@@ -711,7 +711,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
               $scope.bookings.unshift(msg);
           }
         });
-        Socket.on($scope.newRemoveBookingItem, function(data) {
+        Socket.on($scope.newRemoveBookingItem, function(msg) {
           console.log("in AddController new Socket Alert newRemoveBookingItem, msg::", msg);
           console.log("in AddController new Socket Alert newRemoveBookingItem, $scope.bookings::", $scope.bookings);
           var _id = msg._id;
