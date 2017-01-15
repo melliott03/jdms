@@ -104,10 +104,10 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
         });
       }
 
-      socket.addListener(eventName, wrapper);
+      socket.on(eventName, wrapper);
 
       return function () {
-        socket.addListener(eventName, wrapper);
+        socket.on(eventName, wrapper);
       };
     },
 
