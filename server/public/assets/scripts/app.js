@@ -44,6 +44,11 @@ myApp.filter('capitalize', function() {
 myApp.factory('Socket', ['$rootScope', function ($rootScope) {
   var socket = io.connect();
   console.log("socket created, socket::", socket);
+  console.log("socket created, typeof socket::", typeof socket.on);
+  console.log("socket created, typeof socket.emit::", typeof socket.emit);
+  console.log("socket created, typeof socket.removeListener::", typeof socket.removeListener);
+  console.log("socket created, typeof socket.addListener::", typeof socket.addListener);
+  console.log("socket created, typeof socket.removeAllListeners::", typeof socket.removeAllListeners);
 
   return {
     on: function (eventName, callback) {
