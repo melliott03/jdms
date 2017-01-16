@@ -48,6 +48,7 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
   return {
     on: function (eventName, callback) {
       console.log('inside inside Socket Factory on, socket::', socket);
+      console.log('inside inside Socket Factory on, eventName::', eventName);
 
       function wrapper() {
         var args = arguments;
@@ -65,6 +66,8 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
 
     emit: function (eventName, data, callback) {
       console.log('inside inside Socket Factory emit, socket::', socket);
+      console.log('inside inside Socket Factory emit, eventName::', eventName);
+
       socket.emit(eventName, data, function () {
         var args = arguments;
         $rootScope.$apply(function () {
@@ -77,6 +80,8 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
 
     removeListener: function (eventName, callback) {
       console.log('inside inside Socket Factory removeListener, socket::', socket);
+      console.log('inside inside Socket Factory removeListener, eventName::', eventName);
+
       function wrapper() {
         var args = arguments;
         $rootScope.$apply(function () {
@@ -93,7 +98,7 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
 
     removeAllListeners: function (eventName) {
       console.log('inside inside Socket Factory removeAllListeners, socket::', socket);
-
+      console.log('inside inside Socket Factory removeAllListeners, eventName::', eventName);
 
       socket.removeAllListeners(eventName);
 
@@ -104,7 +109,7 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
 
     yellowFoot: function (eventName) {
       console.log('inside inside Socket Factory yellowFoot, socket::', socket);
-
+      console.log('inside inside Socket Factory yellowFoot, eventName::', eventName);
 
       socket.removeAllListeners(eventName);
 
@@ -115,6 +120,8 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
 
     addListener: function (eventName, callback) {
       console.log('inside inside Socket Factory addListener, socket::', socket);
+      console.log('inside inside Socket Factory addListener, eventName::', eventName);
+
       function wrapper() {
         var args = arguments;
         $rootScope.$apply(function () {
