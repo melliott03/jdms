@@ -679,14 +679,17 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           // Socket.removeAllListeners();
 
           if ($scope.previousLanguage) {
-            console.log("socket '$scope.previousLanguage' before closing for ::", $scope.previousLanguage);
+            console.log("in Controller before removeListener, '$scope.previousLanguage'::", $scope.previousLanguage);
+            console.log("in Controller before removeListener, Socket::", Socket);
             Socket.removeListener($scope.previousLanguage, callback);
+            console.log("in Controller after removeListener, Socket::", Socket);
           }
           $scope.previousLanguage = $scope.work.language;
 
-
+          console.log("in Controller before addListener, Socket::", Socket);
           Socket.addListener($scope.work.language, function(data) {
             console.log("socket '$scope.work.language' is opened data::", data);
+            console.log("in Controller after addListener, Socket::", Socket);
             if (data.num == 1) {
               numAvailible += 1;
             }else if (data.num == 0) {
