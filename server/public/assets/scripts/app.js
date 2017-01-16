@@ -47,6 +47,8 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
 
   return {
     on: function (eventName, callback) {
+      console.log('inside inside Socket Factory on, socket::', socket);
+
       function wrapper() {
         var args = arguments;
         $rootScope.$apply(function () {
@@ -62,6 +64,7 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
     },
 
     emit: function (eventName, data, callback) {
+      console.log('inside inside Socket Factory emit, socket::', socket);
       socket.emit(eventName, data, function () {
         var args = arguments;
         $rootScope.$apply(function () {
@@ -73,6 +76,7 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
     },
 
     removeListener: function (eventName, callback) {
+      console.log('inside inside Socket Factory removeListener, socket::', socket);
       function wrapper() {
         var args = arguments;
         $rootScope.$apply(function () {
@@ -88,6 +92,19 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
     },
 
     removeAllListeners: function (eventName) {
+      console.log('inside inside Socket Factory removeAllListeners, socket::', socket);
+
+
+      socket.removeAllListeners(eventName);
+
+      return function () {
+        socket.removeAllListeners(eventName);
+      };
+    },
+
+    yellowFoot: function (eventName) {
+      console.log('inside inside Socket Factory yellowFoot, socket::', socket);
+
 
       socket.removeAllListeners(eventName);
 
@@ -97,6 +114,7 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
     },
 
     addListener: function (eventName, callback) {
+      console.log('inside inside Socket Factory addListener, socket::', socket);
       function wrapper() {
         var args = arguments;
         $rootScope.$apply(function () {

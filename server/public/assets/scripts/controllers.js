@@ -649,7 +649,8 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         $scope.newBookingForSocket  = 'newBookingForSocket';
         $scope.newRemoveBookingItem = 'newRemoveBookingItem';
 
-        var socketRoom;
+        $scope.previousLanguage = false;
+
         var numAvailible;
         $scope.languageChanged = function(){
           $scope.showAvailablityDiv = true;
@@ -677,10 +678,11 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
           // Socket.removeAllListeners();
 
-          if (socketRoom) {
-            console.log("socket 'socketRoom' before closing for ::", socketRoom);
-            Socket.removeListener(socketRoom, callback);
+          if ($scope.previousLanguage) {
+            console.log("socket '$scope.previousLanguage' before closing for ::", $scope.previousLanguage);
+            Socket.removeListener($scope.previousLanguage, callback);
           }
+          $scope.previousLanguage = $scope.work.language;
 
 
           Socket.addListener($scope.work.language, function(data) {
