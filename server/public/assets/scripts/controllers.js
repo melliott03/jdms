@@ -667,7 +667,6 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           });
 
           console.log('Socket ::', Socket);
-          console.log('before if (socketRoom),  socketRoom::', socketRoom);
           // console.log('Socket.room bedfore leaving::', Socket.room);
 
           var callback = function(err, data) {
@@ -702,8 +701,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
             ctrl.data  = [];
             generateRandomData(numAvailible, ctrl.data);
             // numAvailible += parseInt(msg);
-            socketRoom = $scope.work.language;
-            console.log("inside socket Socket.addListener after setting socketRoom::", socketRoom);
+
           });
 
 
@@ -728,15 +726,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
 
         $scope.$on('$destroy', function () {
-            Socket.removeListener(socketRoom, function(msg) {
-              console.log("socket 'socketRoom' is closed::", socketRoom);
-              console.log("socket 'socketRoom' is closed msg::", msg);
 
-            });
-            Socket.removeListener($scope.work.language, function(msg) {
-              console.log("socket 'socketRoom' is closed::", $scope.work.language);
-              console.log("socket 'socketRoom' is closed msg::", msg);
-            });
         });
 
         var workService = WorkService;
