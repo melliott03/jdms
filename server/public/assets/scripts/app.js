@@ -47,9 +47,16 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
   console.log("socket created, typeof socket::", typeof socket.on);
   console.log("socket created, typeof socket.emit::", typeof socket.emit);
   console.log("socket created, typeof socket.removeListener::", typeof socket.removeListener);
-  console.log("socket created, socket.removeListener::", socket.removeListener);
+  console.log("socket created, typeof socket.off::", typeof socket.off);
+  console.log("socket created, typeof socket.removeEventListener::", typeof socket.removeEventListener);
   console.log("socket created, typeof socket.addListener::", typeof socket.addListener);
   console.log("socket created, typeof socket.removeAllListeners::", typeof socket.removeAllListeners);
+
+  console.log("socket created, socket.removeListener::", socket.removeListener);
+  console.log("socket created, socket.off::", socket.off);
+  console.log("socket created, socket.removeEventListener::", socket.removeEventListener);
+  console.log("socket created, socket.addListener::", socket.addListener);
+  console.log("socket created, socket.removeAllListeners::", socket.removeAllListeners);
 
   return {
     on: function (eventName, callback) {
@@ -85,8 +92,9 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
     },
 
     removeListener: function (eventName, callback) {
-      console.log('inside inside Socket Factory removeListener, socket::', socket);
+      console.log('inside inside Socket Factory before removeListener, socket._callbacks::', socket._callbacks);
       console.log('inside inside Socket Factory removeListener, eventName::', eventName);
+      console.log('inside inside Socket Factory removeListener, socket.removeListener::', socket.removeListener);
 
       function wrapper() {
         var args = arguments;
@@ -95,10 +103,11 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
         });
       }
 
-      socket.off(eventName, wrapper);
+      socket.removeListener(eventName, wrapper);
+      console.log('inside inside Socket Factory after removeListener, socket._callbacks::', socket._callbacks);
 
       return function () {
-        socket.off(eventName, wrapper);
+        socket.removeListener(eventName, wrapper);
       };
     },
 
