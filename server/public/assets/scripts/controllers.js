@@ -680,7 +680,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
           if ($scope.previousLanguage) {
             console.log("in Controller before removeListener, '$scope.previousLanguage'::", $scope.previousLanguage);
             console.log("in Controller before removeListener, Socket::", Socket);
-            Socket.removeListener($scope.previousLanguage, callback);
+            Socket.off($scope.previousLanguage);
             console.log("in Controller after removeListener, Socket::", Socket);
           }
           $scope.previousLanguage = $scope.work.language;

@@ -91,6 +91,26 @@ myApp.factory('Socket', ['$rootScope', function ($rootScope) {
       });
     },
 
+    off: function (eventName) {
+      console.log('inside inside Socket Factory before off, socket._callbacks::', socket._callbacks);
+      console.log('inside inside Socket Factory off, eventName::', eventName);
+      console.log('inside inside Socket Factory off, socket.off::', socket.off);
+
+      function wrapper() {
+        var args = arguments;
+        $rootScope.$apply(function () {
+          callback.apply(socket, args);
+        });
+      }
+
+      socket.off(eventName);
+      console.log('inside inside Socket Factory after socket.off, socket._callbacks::', socket._callbacks);
+
+      return function () {
+        socket.removeListener(eventName, wrapper);
+      };
+    },
+
     removeListener: function (eventName, callback) {
       console.log('inside inside Socket Factory before removeListener, socket._callbacks::', socket._callbacks);
       console.log('inside inside Socket Factory removeListener, eventName::', eventName);
