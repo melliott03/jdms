@@ -294,10 +294,10 @@ return(user)? user : false;
 
 myApp.config(["$routeProvider", function($routeProvider){
   $routeProvider.
-  // when('/', {
-  //   templateUrl : '/',
-  //   controller : 'mainController'
-  // }).
+  when('/', {
+    templateUrl : '/',
+    controller : 'mainController'
+  }).
   when("/login", {
     // requireAuth: true,
     url: "/assets/views/users.html#/login", //assets/views/users.html#/home
