@@ -161,7 +161,7 @@ myApp.factory("WorkService", ["$http",'$timeout', function($http, $timeout){ //,
     var getWorksTelBookings = function(){
         $http.get("/work/bookings").then(function(response){
             customerWorkTelBookingsObject.response = response.data;
-            console.log('RETRUN OF GET WROKS_TEL FUNCTION !!! !!!!!  ::  ', response);
+            console.log('RETRUN OF GET BOOKINGIDS FUNCTION !!! !!!!!  ::  ', response);
         });
     };
 
