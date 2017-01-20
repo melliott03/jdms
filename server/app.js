@@ -377,6 +377,7 @@ app.post('/updateUserSocketId', passport.authenticate('jwt', { session: false })
         // we have the updated user returned to us
         console.log('after updatng user new socketID array, user 3', user);
         console.log('after updatng user new socketID array, user.socketID 3', user.socketID);
+        res.send({'userSocketIDsaved' : true});
       });
 
     });
