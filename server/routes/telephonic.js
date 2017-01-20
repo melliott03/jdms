@@ -662,6 +662,8 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
       console.log('Duration:: '+minutes+' min '+secsremain+'sec');
       callSummaryBody.durationObj = {minutes: minutes, seconds: secsremain, roundedDurationUpInMins: roundedDurationUpInMins}
       theTeleWorkWithcall_sid.outboundSummary = callSummaryBody;
+      theTeleWorkWithcall_sid.conferenceConcluded = 'yes';
+
       // theTeleWorkWithcall_sid.outboundSummary.createdAt = Date.now(); //moment().unix().toDate()
       // theTeleWorkWithcall_sid.outboundSummary.createdAt = new Date(Date.now()).toISOString(); //moment().unix().toDate()
       var timeZone = zipcode_to_timezone.lookup(theTeleWorkWithcall_sid.outboundSummary.CalledZip);
@@ -738,7 +740,7 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
         var socketsids = aUserWithCustomer_ID.socketID;
         var obj = data.theTeleWorkWithcall_sid;
         console.log('before if statement to send to socket, obj::', obj);
-        
+
           socketsids.forEach(function(socketid){
             if(res.io.sockets.sockets[socketid]!=undefined){
               if (obj.inboundSummary && obj.outboundSummary) { // && obj.money && obj.money.customerCost //(money not yet in the db)   && obj.outboundSummary.createdAt
