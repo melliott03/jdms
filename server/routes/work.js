@@ -114,17 +114,20 @@ promised.then(function(work_Tels) {
   console.log('Work_Tels documents found for '+requser.role+' are ::', work_Tels);
   var newWork_tels = [];
   work_Tels.map(function(obj){
-    if (obj.bookingid && obj.conferenceConcluded == "no") {
+    if (obj.bookingid && obj.conferenceConcluded == "no" && obj.conferenceWorkerConnected == "yes") {
       console.log('bookings inside if (obj.inboundSummary && obj.outboundSummary && obj.money && obj.money.customerCost)::');
-      newWork_tels.push(obj);
+      newObj = {}
+      newObj.language = obj.language;
+      newObj.bookingid = obj.bookingid;
+      newObj.createdAt = obj.outboundSummary.createdAt;
+      newWork_tels.push(newObj);
     }
   });
+  newWork_tels.sort(function(aze,bze){return Date.parse(bze.outboundSummary.createdAt) - Date.parse(aze.outboundSummary.createdAt)});
   return newWork_tels;
 })
 .then(function(work_tels) {
   console.log('bookings inside the then work_tels::', work_tels);
-  work_tels.sort(function(aze,bze){return Date.parse(bze.outboundSummary.createdAt) - Date.parse(aze.outboundSummary.createdAt)});
-  console.log('bookings after sorting by date work_tels::', work_tels);
   res.send(work_tels);
 })
 .catch(function(err){
