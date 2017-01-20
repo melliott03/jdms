@@ -618,7 +618,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
         }
 
         $scope.bookings = [];
-        // $scope.bookings = WorkService.customerWorkTelBookingsObject.response;
+        $scope.bookings = WorkService.customerWorkTelBookingsObject.response;
 
 
         // http://ngmodules.org/modules/ngAutocomplete
