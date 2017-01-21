@@ -617,6 +617,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
         }
 
+        WorkService.getWorksTelBookings();
         $scope.bookings = [];
         $scope.bookings = WorkService.customerWorkTelBookingsObject.response;
 
