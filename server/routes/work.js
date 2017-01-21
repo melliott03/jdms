@@ -118,11 +118,11 @@ promised.then(function(work_Tels) {
       newObj = {}
       newObj.language = obj.language;
       newObj.bookingid = obj.bookingid;
-      newObj.createdAt = obj.outboundSummary.createdAt;
+      // newObj.createdAt = obj.outboundSummary.createdAt;
       newWork_tels.push(newObj);
     }
   });
-  newWork_tels.sort(function(aze,bze){return Date.parse(bze.createdAt) - Date.parse(aze.createdAt)});
+  // newWork_tels.sort(function(aze,bze){return Date.parse(bze.createdAt) - Date.parse(aze.createdAt)});
   return newWork_tels;
 })
 .then(function(work_tels) {
