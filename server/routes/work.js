@@ -107,7 +107,6 @@ if (requser.role == 'customer') {
 } else if (requser.role == 'admin'){
   params = {}
 }
-console.log("bookings == open tailable cursor");
 
 var promised = Work_Tel.find(params).exec();
 promised.then(function(work_Tels) {
@@ -115,7 +114,7 @@ promised.then(function(work_Tels) {
   var newWork_tels = [];
   work_Tels.map(function(obj){
     if (obj.bookingid && obj.conferenceConcluded == "no" && obj.conferenceWorkerConnected == "yes") {
-      console.log('bookings inside if (obj.inboundSummary && obj.outboundSummary && obj.money && obj.money.customerCost)::');
+      console.log('bookings inside if (obj.bookingid && obj.conferenceConcluded == "no" && obj.conferenceWorkerConnected == "yes")::');
       newObj = {}
       newObj.language = obj.language;
       newObj.bookingid = obj.bookingid;
