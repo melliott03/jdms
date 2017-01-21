@@ -748,7 +748,10 @@ router.post('/callSummary', twilio.webhook({validate: false}), (req, res) => {
                 res.io.to(socketid).emit('newTelWorkForSocket', obj);
               }
               if (obj.conferenceWorkerConnected == "yes") {
-                res.io.to(socketid).emit('newRemoveBookingItem', obj);
+                newObj = {}
+                newObj.language = obj.language;
+                newObj.bookingid = obj.bookingid;
+                res.io.to(socketid).emit('newRemoveBookingItem', newObj);
               }
             }else{
               console.log("Socket not connected");
@@ -1008,7 +1011,10 @@ router.post('/connectmessage', twilio.webhook({validate: false}), function (req,
     socketsids.forEach(function(socketid){
       if(res.io.sockets.sockets[socketid]!=undefined){
         console.log('sending newBookingForSocket, data.theTeleWorkWithtaskSid::', data.theTeleWorkWithtaskSid);
-        res.io.to(socketid).emit('newBookingForSocket', data.theTeleWorkWithtaskSid);
+        newObj = {}
+        newObj.language = obj.language;
+        newObj.bookingid = obj.bookingid;
+        res.io.to(socketid).emit('newBookingForSocket', newObj);
       }else{
         console.log("Socket not connected");
       }
