@@ -110,7 +110,7 @@ if (requser.role == 'customer') {
 
 var promised = Work_Tel.find(params).exec();
 promised.then(function(work_Tels) {
-  console.log('Work_Tels documents found for '+requser.role+' are ::', work_Tels);
+  console.log('Work_Tels bookingid documents found for '+requser.role+' are ::', work_Tels);
   var newWork_tels = [];
   work_Tels.map(function(obj){
     if (obj.bookingid && obj.conferenceConcluded == "no" && obj.conferenceWorkerConnected == "yes") {
@@ -126,12 +126,12 @@ promised.then(function(work_Tels) {
   return newWork_tels;
 })
 .then(function(work_tels) {
-  console.log('bookings inside the then work_tels::', work_tels);
+  console.log('bookings inside the then work_tels for live bookingid ::', work_tels);
   res.send(work_tels);
 })
 .catch(function(err){
   // just need one of these
-  console.log('bookings error:', err);
+  console.log('bookings finding error:', err);
 });
 });// END router.get
 
