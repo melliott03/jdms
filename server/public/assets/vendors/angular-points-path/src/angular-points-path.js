@@ -534,9 +534,9 @@ angular.module('angular-points-path')
 
           // ctrl.context.stroke();
 
-          timer = $timeout(function () {
-            drawDotOnCanvas(data);
-          }, 100);
+          // timer = $timeout(function () {
+          //   drawDotOnCanvas(data);
+          // }, 100);
 
       }
 
