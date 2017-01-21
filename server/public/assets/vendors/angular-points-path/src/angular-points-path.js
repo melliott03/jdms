@@ -528,11 +528,11 @@ angular.module('angular-points-path')
           // ctrl.context.shadowColor = "black";
 
           // ctrl.context.stroke();
-          */
+
           timer = $timeout(function () {
             drawDotOnCanvas(data);
           }, 100);
-
+          */
       }
 
       /**
