@@ -116,6 +116,7 @@ promised.then(function(work_Tels) {
     if (obj.bookingid && obj.conferenceConcluded == "no" && obj.conferenceWorkerConnected == "yes") {
       console.log('bookings inside if (obj.bookingid && obj.conferenceConcluded == "no" && obj.conferenceWorkerConnected == "yes")::');
       newObj = {}
+      newObj._id = obj._id;
       newObj.language = obj.language;
       newObj.bookingid = obj.bookingid;
       // newObj.createdAt = obj.outboundSummary.createdAt;

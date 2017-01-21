@@ -1008,10 +1008,12 @@ router.post('/connectmessage', twilio.webhook({validate: false}), function (req,
 
     console.log('conferenceWorkerConnected == "yes" about to send to socket, data.aUserWithTaskSid::', data.aUserWithTaskSid);
     console.log('conferenceWorkerConnected == "yes" about to send to socket, socketsids::', socketsids);
+    var obj = data.theTeleWorkWithtaskSid;
 
     socketsids.forEach(function(socketid){
       if(res.io.sockets.sockets[socketid]!=undefined){
         console.log('sending newBookingForSocket, data.theTeleWorkWithtaskSid::', data.theTeleWorkWithtaskSid);
+        
         newObj = {};
         newObj._id = obj._id;
         newObj.language = obj.language;
