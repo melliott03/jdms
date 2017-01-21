@@ -507,7 +507,7 @@ angular.module('angular-points-path')
              ctrl.context.drawImage(img,data.x,data.y);
           }
 
-          /*
+
           // $scope.$apply(function() {
           // });
 
@@ -536,7 +536,7 @@ angular.module('angular-points-path')
         ctrl.context.globalAlpha = alpha;
 
           ctrl.context.beginPath();
-          ctrl.context.arc(data.x, data.y, data.value, 0, 2 * Math.PI, false);
+          // ctrl.context.arc(data.x, data.y, data.value, 0, 2 * Math.PI, false);
           ctrl.context.fill();
           ctrl.context.lineWidth = 0;
           // ctrl.context.strokeStyle = "#707070";//#707070
@@ -550,7 +550,7 @@ angular.module('angular-points-path')
           // timer = $timeout(function () {
           //   drawDotOnCanvas(data);
           // }, 100);
-          */
+          
 
       }
 
