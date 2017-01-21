@@ -496,8 +496,8 @@ angular.module('angular-points-path')
           //   ctrl.context.drawImage(this, 0, 0);
           // }
 
-          ctrl.context.fillStyle = "#FFD700"; //#00ff00 limegreen, "#ccddff" baby blue;
-          ctrl.context.fillRect(40,60,20,20);
+          // ctrl.context.fillStyle = "#FFD700"; //#00ff00 limegreen, "#ccddff" baby blue;
+          // ctrl.context.fillRect(40,60,20,20);
 
           var img = new Image();
           // var coloredSvgXml = svgXml.replace(/#3080d0/g,'#e05030');
