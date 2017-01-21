@@ -533,7 +533,7 @@ angular.module('angular-points-path')
 
 
         /// set global alpha
-        ctrl.context.globalAlpha = alpha;
+        // ctrl.context.globalAlpha = alpha;
 
           ctrl.context.beginPath();
           // ctrl.context.arc(data.x, data.y, data.value, 0, 2 * Math.PI, false);
@@ -547,9 +547,9 @@ angular.module('angular-points-path')
 
           // ctrl.context.stroke();
 
-          timer = $timeout(function () {
-            drawDotOnCanvas(data);
-          }, 100);
+          // timer = $timeout(function () {
+          //   drawDotOnCanvas(data);
+          // }, 100);
 
 
       }
