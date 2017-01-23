@@ -539,16 +539,16 @@ angular.module('angular-points-path')
         // ctrl.context.globalAlpha = alpha;
 
           ctrl.context.beginPath();
-          // ctrl.context.arc(data.x, data.y, data.value, 0, 2 * Math.PI, false);
-          ctrl.context.fill();
+          ctrl.context.arc(data.x, data.y, data.value, 0, 2 * Math.PI, false);
+          // ctrl.context.fill();
           ctrl.context.lineWidth = 0;
-          // ctrl.context.strokeStyle = "#707070";//#707070
+          ctrl.context.strokeStyle = "#707070";//#707070
           //
-          ctrl.context.fillStyle = "#00ff00"; //#00ff00 limegreen, "#ccddff" baby blue;
+          // ctrl.context.fillStyle = "#00ff00"; //#00ff00 limegreen, "#ccddff" baby blue;
           // ctrl.context.shadowBlur = 5;
           // ctrl.context.shadowColor = "black";
 
-          // ctrl.context.stroke();
+          ctrl.context.stroke();
 
           // timer = $timeout(function () {
           //   drawDotOnCanvas(data);
