@@ -496,10 +496,10 @@ angular.module('angular-points-path')
           // img.src = "data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjMycHgiIGhlaWdodD0iMzJweCIgdmlld0JveD0iMCAwIDE2My42NDEgMTYzLjY0MSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMTYzLjY0MSAxNjMuNjQxOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxnPgoJPGc+CgkJPHBhdGggZD0iTTExMy44OCwxMDMuMTAyYzEwLjU1Mi0xMS4xMTksMTcuMjc0LTI2LjgyNiwxNy4yNzQtNDEuODJjMC0yNy4yNDktMjIuMDc5LTQ5LjM0MS00OS4zMzctNDkuMzQxICAgIGMtMjcuMjQ5LDAtNDkuMzM0LDIyLjA4NS00OS4zMzQsNDkuMzQxYzAsNi43NCwxLjQxNiwxMy41OTcsMy44NzMsMjAuMTQzYzYuMDYyLDEzLjY1OCwxNy45NjMsMjQuMjY2LDMzLjAzNCwyOC4xMTkgICAgYzIuOTg3LTMuNjg5LDcuNDktNS45LDEyLjQyOC01LjljOC44NTYsMCwxNi4wNjYsNy4yMDQsMTYuMDY2LDE2LjA2M2MwLDguODYtNy4yMSwxNi4wNTgtMTYuMDY2LDE2LjA1OCAgICBjLTYuMzA2LDAtMTEuODgzLTMuNjc4LTE0LjQ5OS05LjE3Yy0xMi45NTUtMi44NTEtMjQuMzE3LTkuMzU0LTMzLjE0Ni0xOC4yOGMtMTkuNDM5LDguMzA2LTMyLjA0NywyMS41MzEtMzIuMDQ3LDM2LjQ2MiAgICBjMCwyNS4xNTQsMTU5LjM4OSwyNS4xNTQsMTU5LjM4OSwwQzE2MS41MTUsMTI2LjE0MywxNDEuOTIsMTEwLjE1MiwxMTMuODgsMTAzLjEwMnoiIGZpbGw9IiMwMDAwMDAiLz4KCQk8cGF0aCBkPSJNNzEuNjQyLDEyMS42MzdjMC45MTEsNC44MDUsNS4xMTIsOC40MzksMTAuMTY5LDguNDM5YzUuNzMsMCwxMC4zNzMtNC42NDYsMTAuMzczLTEwLjM3cy00LjY0My0xMC4zNy0xMC4zNjYtMTAuMzcgICAgYy00LjQwMywwLTguMTM5LDIuNzUzLTkuNjQ2LDYuNjI1Yy0yNi4wNTktNC41ODQtNDUuOTMxLTI3LjMzNC00NS45MzEtNTQuNjg2YzAtMzAuNjQ3LDI0LjkzNi01NS41ODIsNTUuNTc2LTU1LjU4MiAgICBjMzAuNjU1LDAsNTUuNTg1LDI0LjkzNSw1NS41ODUsNTUuNTgyaDUuNjg3QzE0My4wODksMjcuNDkyLDExNS42MDMsMCw4MS44MTcsMGMtMzMuNzgzLDAtNjEuMjcsMjcuNDg2LTYxLjI3LDYxLjI3NSAgICBDMjAuNTQyLDkxLjU5Myw0Mi42OTcsMTE2Ljc2Niw3MS42NDIsMTIxLjYzN3oiIGZpbGw9IiMwMDAwMDAiLz4KCTwvZz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K"
           img.src = phoneIcon;
 
-          var thumbImg = document.createElement('img');
+          var thumbImg = img;
 
-          // thumbImg.src = 'path_to_image';
-          img.onload = function() {
+          thumbImg.src = phoneIcon;
+          thumbImg.onload = function() {
               ctrl.context.save();
               ctrl.context.beginPath();
               ctrl.context.arc(25, 25, 25, 0, Math.PI * 2, true);
@@ -526,10 +526,10 @@ angular.module('angular-points-path')
               ctrl.context.quadraticCurveTo(288, 288, 188, 150);
               ctrl.context.lineWidth = 10;
               ctrl.context.clip();
-              ctrl.context.drawImage(imageObj, 10, 50);
+              ctrl.context.drawImage(imageObj, 50, 50);
           };
 
-          imageObj.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
+          imageObj.src = phoneIcon;
 
           // /// create image
           // var img = new Image();
