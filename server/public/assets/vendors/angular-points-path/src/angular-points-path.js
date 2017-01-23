@@ -526,7 +526,7 @@ angular.module('angular-points-path')
               ctrl.context.quadraticCurveTo(288, 288, 188, 150);
               ctrl.context.lineWidth = 10;
               ctrl.context.clip();
-              ctrl.context.drawImage(imageObj, 50, 50);
+              ctrl.context.drawImage(imageObj, 10, 50);
           };
 
           imageObj.src = phoneIcon;
@@ -544,14 +544,6 @@ angular.module('angular-points-path')
 
 
           img.onload = function () {
-            ctrl.context.save();
-            ctrl.context.beginPath();
-            ctrl.context.moveTo(188, 150);
-            ctrl.context.quadraticCurveTo(288, 0, 388, 150);
-            ctrl.context.lineWidth = 10;
-            ctrl.context.quadraticCurveTo(288, 288, 188, 150);
-            ctrl.context.lineWidth = 10;
-            ctrl.context.clip();
              ctrl.context.drawImage(img,data.x,data.y);
           }
 
