@@ -491,15 +491,15 @@ angular.module('angular-points-path')
           var imageObj = new Image();
           imageObj.onload = function()
           {
-              context.save();
-              context.beginPath();
-              context.moveTo(188, 150);
-              context.quadraticCurveTo(288, 0, 388, 150);
-              context.lineWidth = 10;
-              context.quadraticCurveTo(288, 288, 188, 150);
-              context.lineWidth = 10;
-              context.clip();
-              context.drawImage(imageObj, 10, 50);
+              ctrl.context.save();
+              ctrl.context.beginPath();
+              ctrl.context.moveTo(188, 150);
+              ctrl.context.quadraticCurveTo(288, 0, 388, 150);
+              ctrl.context.lineWidth = 10;
+              ctrl.context.quadraticCurveTo(288, 288, 188, 150);
+              ctrl.context.lineWidth = 10;
+              ctrl.context.clip();
+              ctrl.context.drawImage(imageObj, 10, 50);
           };
 
           imageObj.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';
