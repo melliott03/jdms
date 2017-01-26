@@ -225,6 +225,9 @@
     <md-content class="md-padding">
       <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
         <md-nav-item ng-repeat="item in navItems" md-nav-click="goto('{{item.value}}')" name="{{item.value}}">{{item.label}}</md-nav-item>
+        <md-nav-item >Request</md-nav-item>
+        <md-nav-item >Logout</md-nav-item>
+
       </md-nav-bar>
       <span>{{currentNavItem}}</span>
     </md-content>
