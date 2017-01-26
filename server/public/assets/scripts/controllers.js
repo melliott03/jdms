@@ -518,6 +518,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
       myApp.controller("AddController", ["$scope", "$http", "$filter", "$timeout", "$log", "$location", "WorkService", "rx", "Socket", "datetime", function($scope, $http, $filter, $timeout, $log, $location, WorkService, rx, Socket, datetime){
 
         $scope.requestPath = function(path){
+          console.log('path::', path);
           $location.path(path);
         }
         $scope.show = 1;
