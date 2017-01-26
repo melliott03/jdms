@@ -519,7 +519,7 @@ myApp.config(['ChartJsProvider', function (ChartJsProvider) {
 
         $scope.requestPath = function(path){
           console.log('path::', path);
-          $location.path(path);
+          $location.path('addwork');
         }
         $scope.show = 1;
 
