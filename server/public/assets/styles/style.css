@@ -308,6 +308,15 @@ th.thsecond{
 th.searchfont{
     color: white;
   }
+.searchfont::-webkit-input-placeholder {
+    color: #00bcea;
+}
+.searchfont::-moz-placeholder {
+    color: #00bcea;
+}
+.searchfont:-ms-input-placeholder {
+    color: # 00 bcea;
+}
 tbody {
     overflow-y: scroll;
     display: inline-block;
