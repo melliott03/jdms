@@ -59,9 +59,9 @@
 
 
   <div layout-gt-sm="row" layout-align="center center">
-
+    <!-- KEEP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
     <!-- <div  flex-gt-sm> -->
-      <div class="" style="padding-right: 10px;" flex-gt-sm>
+      <!-- <div class="" style="padding-right: 10px;" flex-gt-sm>
         <label>Duration(mins)</label>
         <input ng-model="work.duration" type="number" min="5" step="1" style="padding-right:0px; text-align:left;" required></input>
       </div>
@@ -76,7 +76,7 @@
       <div class="" style="" ng-if="showFutureSpecific" flex-gt-sm>
         <label>End Time</label>
         <input type="text" datetime="shortTime" ng-model="work.endTime">
-      </div>
+      </div> -->
     <!-- </div> -->
 
 
@@ -173,11 +173,11 @@ value="{{worklatlon}}"
 
 
 <div layout="row">
-  <md-input-container class="md-block" flex>
+  <!-- KEEP!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+  <!-- <md-input-container class="md-block" flex>
     <label>Other Details</label>
-    <!-- <md-input ng-model="work.details"> -->
     <textarea ng-model="work.notes" rows="2" md-select-on-focus></textarea>
-  </md-input-container>
+  </md-input-container> -->
   <!-- <md-input-container class="md-block">
   <label>Biography</label>
   <textarea ng-model="user.notes" md-maxlength="150" rows="5" md-select-on-focus></textarea>
@@ -199,7 +199,7 @@ value="{{worklatlon}}"
   <md-button ng-click="submit(work)" class="md-raised">SUBMIT REQUEST</md-button>
 </section> -->
 <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
-  <md-button ng-click="submitCallRequest(work)" class="md-raised">SUBMIT CALL REQUEST</md-button>
+  <md-button ng-click="submitCallRequest(work)" class="md-raised">SEND CALL REQUEST</md-button>
 </section>
 </form>
 <!-- KEEP!!!!!!!!! -->
