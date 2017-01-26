@@ -221,7 +221,14 @@
 
 
 
-
+<div layout="row" layout-align="center" flex="70">
+    <md-content class="md-padding">
+      <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+        <md-nav-item ng-repeat="item in navItems" md-nav-click="goto('{{item.value}}')" name="{{item.value}}">{{item.label}}</md-nav-item>
+      </md-nav-bar>
+      <span>{{currentNavItem}}</span>
+    </md-content>
+</div>
 
 <div ng-controller="ShowController" layout="column" ng-cloak>
   <md-toolbar class="md-warn">
@@ -266,9 +273,9 @@
 
 </div>
 <div ng-if="customer()">
-  <md-button class="md-primary" ng-click="addTabDialog($event)">
+  <!-- <md-button class="md-primary" ng-click="addTabDialog($event)">
     ADD
-  </md-button>
+  </md-button> -->
   <md-button class="md-primary" href="#addwork">
     ADD-page
   </md-button>
