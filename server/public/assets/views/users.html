@@ -289,12 +289,11 @@
     ADD
   </md-button> -->
   <md-toolbar-item >
-    <md-button class="md-primary" ng-click="logout(#addwork)">
-      ADD-page
-    </md-button>
-    <md-button class="md-warn" ng-click="logout()">
-      logout
-    </md-button>
+    <div ng-controller="AddController">
+      <md-button class="md-primary" ng-click="requestWork(addwork)">
+        ADD-page
+      </md-button>
+    </div>
   </md-toolbar-item >
   <!-- <md-button><a href="#view">VIEW</a></md-button> -->
   <!-- <md-button><a href="#accountCust">ACCOUNT </a></md-button> -->
