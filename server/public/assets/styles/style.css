@@ -484,6 +484,7 @@ tfoot td {
 .rechargemodal-text {
   font-size: 11px;
   font: rgba(246, 246, 246, .99);
+  margin-right: 10px;
 }
 .radioButtondemoBasicUsage body {
   padding: 20px; }
