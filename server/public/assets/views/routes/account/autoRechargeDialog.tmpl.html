@@ -24,8 +24,8 @@
           <span class="rechargemodal-text">IF THE BALANCE FALLS BELOW</span>
           <md-input-container>
           <md-select ng-model="autoRecharge.fallsBelow" required="required">
-            <md-option value="{{threshold}}" ng-repeat="threshold in rechargeThresholds" >
-              {{threshold}}
+            <md-option value="{{fallsBelow}}" ng-repeat="fallsBelow in rechargeThresholds" >
+              {{fallsBelow}}
             </md-option>
           </md-select>
         </md-input-container>
@@ -34,8 +34,8 @@
         <span class="rechargemodal-text">RECHARGE THE BALANCE TO</span>
         <md-input-container>
         <md-select ng-model="autoRecharge.rechargeTo" required="required">
-          <md-option value="{{amount}}" ng-repeat="amount in rechargeAmounts" >
-            {{amount}}
+          <md-option value="{{rechargeTo}}" ng-repeat="rechargeTo in rechargeAmounts" >
+            {{rechargeTo}}
           </md-option>
         </md-select>
       </md-input-container>
