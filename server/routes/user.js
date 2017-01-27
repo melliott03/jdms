@@ -91,6 +91,7 @@ router.get("/name", function(req,res,next){
         telephonicID: req.user.telephonicID,
         telephonicPassCode: req.user.telephonicPassCode,
         autoRecharge: autoRecharge,
+        autoPaymentsChoice: req.user.autoPaymentsChoice,
         sources: {
           total_count: req.user.epirts.customer.sources.total_count,
           data: paymentSourcesNewArray,
