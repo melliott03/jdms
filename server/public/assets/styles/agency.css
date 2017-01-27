@@ -146,13 +146,21 @@ fieldset[disabled] .btn-xl.active {
   color: #fed136;
   background-color: white;
 }
+.navbar {
+  /*position: relative;*/
+  width: 100%;
+  z-index: 1000;
+  color: transparent !important;
+  border-bottom: transparent !important;
+  background-color: transparent !important;
+}
 .navbar-custom {
   background-color: transparent;
   border-color: transparent;
 }
 .navbar-custom .navbar-brand {
   color: rgb(254, 70, 53);
-  font-family: Arial, Helvetica, sans-serif;  
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 900;
 }
 .navbar-custom .navbar-brand:hover,
