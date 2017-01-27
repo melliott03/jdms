@@ -40,6 +40,18 @@ header {
   background-size: cover;
 }
 
+.navbar {
+  background-color: transparent;
+  color: transparent; /*!important;*/
+}
+.navbar {
+  /*position: relative;*/
+  width: 100%;
+  z-index: 1000;
+  color: #707070;
+  border-bottom: 1px solid #a3a3a3;
+  background-color: white;
+}
 .navbar a {
   color: #fff;
 }
