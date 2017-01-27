@@ -1343,8 +1343,8 @@ myApp.controller('XAccountCtrl4', ["$scope", "$location", '$anchorScroll','$filt
   if ($scope.autoRecharge == undefined) {
     $scope.autoRecharge = {};
   }
-  $scope.autoRecharge.rechargeTo = workService.userObject.response.autoPaymentsChoice.autoRecharge.rechargeTo;
-  $scope.autoRecharge.fallsBelow = workService.userObject.response.autoPaymentsChoice.autoRecharge.fallsBelow;
+  $scope.autoRecharge.rechargeTo = workService.userObject.response.autoPaymentsChoice.autoRecharge.rechargeTo/10;
+  $scope.autoRecharge.fallsBelow = workService.userObject.response.autoPaymentsChoice.autoRecharge.fallsBelow/10;
   $scope.autoRecharge.autoRecharge = workService.userObject.response.autoRecharge;
 
   /*
