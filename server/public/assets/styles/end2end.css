@@ -2639,7 +2639,7 @@ _:-o-prefocus, .nav-pill:after {
   display: none;
 }
 .navbar {
-  position: relative;
+  /*position: relative;*/
   width: 100%;
   z-index: 1000;
   color: #707070;
