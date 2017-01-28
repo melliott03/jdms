@@ -5,6 +5,12 @@ var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.
 //ngPlacesAutocomplete ngAutocomplete
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
   $mdThemingProvider.theme('default')
+  .backgroundPalette('grey', {
+    'default': 'A200',
+    'hue-1': '300',
+    'hue-2': '600',
+    'hue-3': '900'
+  });
   // .dark();
   // .primaryPalette('amber')
   // .accentPalette('grey');
