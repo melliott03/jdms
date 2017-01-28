@@ -4,13 +4,21 @@ var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.
 /*'bc.TelephoneFilter' is replaced by 'ngIntlTelInput'*/
 //ngPlacesAutocomplete ngAutocomplete
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
+  /*
   $mdThemingProvider.theme('default')
   .backgroundPalette('grey', {
     'default': 'A200',
     'hue-1': '300',
     'hue-2': '600',
-    'hue-3': '900'
-  });
+    'hue-3': 'A700'
+  })
+  .primaryPalette('grey', {
+    'default': '700', // by default use shade from the palette for primary intentions
+    'hue-1': 'A400', // use shade for the <code>md-hue-1</code> class
+    'hue-2': '600', // use shade for the <code>md-hue-2</code> class
+    'hue-3': 'A100' // use shade for the <code>md-hue-3</code> class
+})
+*/
   // .dark();
   // .primaryPalette('amber')
   // .accentPalette('grey');
@@ -18,6 +26,12 @@ myApp.config(['$mdThemingProvider', function($mdThemingProvider){
   // $mdThemingProvider.theme('altTheme')
   //      .primaryPalette('purple')
   //      .accentPalette('green');
+
+  $mdThemingProvider.theme('black')
+  .primaryPalette('grey', {
+      'default': '900', // by default use shade 900 from the grey palette for primary intentions
+  });
+  $mdThemingProvider.setDefaultTheme('black');
 }]);
 
 myApp.config(function($mdDateLocaleProvider) {
