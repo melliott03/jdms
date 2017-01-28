@@ -354,7 +354,7 @@ app.post('/updateUserSocketId', passport.authenticate('jwt', { session: false })
     console.log('after add new socketID to user 1', user);
     User.findOne({ _id: req.user._id }, function(err, user) {
       if (err) throw err;
-
+ 
       var socketsids = user.socketID;
       console.log('after add new socketID to user 2', user);
       console.log('after add new socketID to user, user.socketID 2', user.socketID);
