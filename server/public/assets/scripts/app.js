@@ -6,8 +6,8 @@ var myApp = angular.module("myApp", ['ngMaterial', 'ngMessages', 'ngRoute', 'md.
 myApp.config(['$mdThemingProvider', function($mdThemingProvider){
   $mdThemingProvider.theme('default')
   // .dark();
-  .primaryPalette('blue-grey')
-  .accentPalette('grey');
+  // .primaryPalette('amber')
+  // .accentPalette('grey');
 
   // $mdThemingProvider.theme('altTheme')
   //      .primaryPalette('purple')
